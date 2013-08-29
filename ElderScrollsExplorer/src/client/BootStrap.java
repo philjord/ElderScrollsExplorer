@@ -27,7 +27,6 @@ public class BootStrap
 
 	public static void startClient()
 	{
-
 		String jarpath = "";
 		jarpath += "." + ps + "ElderScrollsExplorer.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "jogamp" + ps + "jar" + ps + "joal.jar" + fs;

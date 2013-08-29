@@ -30,7 +30,6 @@ import javax.vecmath.Vector3f;
 import scrollsexplorer.simpleclient.BethRenderSettingsPanel;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
-import tools3d.universe.VisualPhysicalUniverse;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
 import utils.source.EsmSoundKeyToName;
@@ -54,9 +53,8 @@ import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
 import esmj3d.j3d.BethRenderSettings;
 
-public class ScrollsExplorer extends VisualPhysicalUniverse implements BethRenderSettings.UpdateListener
+public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener
 {
-	private static ScrollsExplorer multiCellDisplay;
 
 	private SimpleBethCellManager simpleBethCellManager;
 
@@ -99,8 +97,6 @@ public class ScrollsExplorer extends VisualPhysicalUniverse implements BethRende
 
 	public Preferences prefs;
 
-	private JFrame mainFrame = new JFrame();
-
 	private String scrollsFolder = "";
 
 	private String mainESMFile = "";
@@ -113,10 +109,9 @@ public class ScrollsExplorer extends VisualPhysicalUniverse implements BethRende
 
 			prefs = Preferences.userNodeForPackage(ScrollsExplorer.class);
 
-			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			mainFrame.getContentPane().setLayout(new BorderLayout(1, 1));
-			mainFrame.setVisible(true);
-			mainFrame.setSize(500, 1000);
+			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			this.getContentPane().setLayout(new BorderLayout(1, 1));
+			this.setSize(500, 1000);
 
 			mainPanel.setLayout(new GridLayout(-1, 1));
 
@@ -143,9 +138,9 @@ public class ScrollsExplorer extends VisualPhysicalUniverse implements BethRende
 				}
 			});
 
-			mainFrame.setJMenuBar(menuBar);
-			mainFrame.getContentPane().add(mainPanel, BorderLayout.CENTER);
-			mainFrame.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+			this.setJMenuBar(menuBar);
+			this.getContentPane().add(mainPanel, BorderLayout.CENTER);
+			this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
 			buttonPanel.add(oblivionButton);
 			buttonPanel.add(falloutButton);
@@ -209,16 +204,16 @@ public class ScrollsExplorer extends VisualPhysicalUniverse implements BethRende
 
 			BethRenderSettingsPanel bethRenderSettingsPanel = new BethRenderSettingsPanel();
 			BethRenderSettings.addUpdateListener(this);
-			mainFrame.getContentPane().add(bethRenderSettingsPanel, BorderLayout.NORTH);
+			this.getContentPane().add(bethRenderSettingsPanel, BorderLayout.NORTH);
 
-			mainFrame.getContentPane().invalidate();
-			mainFrame.getContentPane().validate();
-			mainFrame.getContentPane().doLayout();
-			mainFrame.invalidate();
-			mainFrame.validate();
-			mainFrame.doLayout();
+			this.getContentPane().invalidate();
+			this.getContentPane().validate();
+			this.getContentPane().doLayout();
+			this.invalidate();
+			this.validate();
+			this.doLayout();
 
-			mainFrame.addWindowListener(new WindowAdapter()
+			this.addWindowListener(new WindowAdapter()
 			{
 				@Override
 				public void windowClosing(WindowEvent arg0)
@@ -241,7 +236,7 @@ public class ScrollsExplorer extends VisualPhysicalUniverse implements BethRende
 
 	private void setFolders()
 	{
-		SetBethFoldersDialog setBethFoldersDialog = new SetBethFoldersDialog(mainFrame);
+		SetBethFoldersDialog setBethFoldersDialog = new SetBethFoldersDialog(this);
 		setBethFoldersDialog.setSize(300, 250);
 		setBethFoldersDialog.setVisible(true);
 		enableButtons();
@@ -333,7 +328,7 @@ public class ScrollsExplorer extends VisualPhysicalUniverse implements BethRende
 		{
 			public void mouseClicked(MouseEvent e)
 			{
-				multiCellDisplay.display(((Integer) tableModel.getValueAt(table.convertRowIndexToModel(table.getSelectedRow()), 1)));
+				display(((Integer) tableModel.getValueAt(table.convertRowIndexToModel(table.getSelectedRow()), 1)));
 			}
 
 		});
@@ -412,8 +407,7 @@ public class ScrollsExplorer extends VisualPhysicalUniverse implements BethRende
 
 		if (!CommonConstants.USEJOGL2)
 		{
-			//load up the native dlls!
-			System.out.println("Java3dLinker2");
+			//load up the native dlls!		 
 			new Java3dLinker2();
 		}
 
@@ -425,8 +419,9 @@ public class ScrollsExplorer extends VisualPhysicalUniverse implements BethRende
 		{
 			ScrollsExplorer.setDebug(false);
 		}
-		 
-		multiCellDisplay = new ScrollsExplorer();
+
+		ScrollsExplorer scrollsExplorer = new ScrollsExplorer();
+		scrollsExplorer.setVisible(true);
 	}
 
 }
