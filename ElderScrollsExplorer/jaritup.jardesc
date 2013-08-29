@@ -20,14 +20,14 @@
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.infoText"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation"/>
         <folder path="/ElderScrollsExplorer/META-INF"/>
-        <javaElement handleIdentifier="=3DTools/&lt;javax.media.j3d"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.camera.simple"/>
+        <javaElement handleIdentifier="=3DTools/&lt;javax.media.j3d"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d"/>
         <javaElement handleIdentifier="=esmj3d"/>
         <file path="/3DTools/.classpath"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet"/>
-        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders.ac3d"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools.image"/>
+        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders.ac3d"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;com.bulletphysics"/>
         <javaElement handleIdentifier="=ElderScrollsExplorer/src"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.rag"/>
@@ -40,8 +40,8 @@
         <javaElement handleIdentifier="=Tools"/>
         <file path="/3DTools/.project"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.rules.debug"/>
-        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.ac3d"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.environment.sky"/>
+        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.ac3d"/>
         <file path="/3DTools/.compatibility"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.loader"/>
         <javaElement handleIdentifier="=BSAManager"/>
@@ -56,8 +56,8 @@
         <javaElement handleIdentifier="=ESMLoader"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.convert"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.geography.gen"/>
-        <javaElement handleIdentifier="=esmj3dfo3"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;com.bulletphysics.util"/>
+        <javaElement handleIdentifier="=esmj3dfo3"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.camera"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.universe"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.camera.old"/>
@@ -66,8 +66,8 @@
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.scenegraph.old"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.tree"/>
         <javaElement handleIdentifier="=esmj3dtes4"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.biped"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.kin"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.biped"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.geography"/>
         <file path="/jnifjbullet/.classpath"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.environment"/>
