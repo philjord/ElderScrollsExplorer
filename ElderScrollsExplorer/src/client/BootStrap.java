@@ -29,7 +29,7 @@ public class BootStrap
 	{
 
 		String jarpath = "";
-		jarpath += "." + ps + "dune.jar" + fs;
+		jarpath += "." + ps + "ElderScrollsExplorer.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "jogamp" + ps + "jar" + ps + "joal.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "jogamp" + ps + "jar" + ps + "gluegen-rt.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "jftp.jar" + fs;
@@ -37,8 +37,13 @@ public class BootStrap
 		jarpath += "." + ps + "lib" + ps + "joalmixer.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "mp3spi1.9.5.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "tritonus_share.jar" + fs;
-		jarpath += "." + ps + "lib" + ps + "tinylaf.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "jai.jar" + fs;
+
+		jarpath += "." + ps + "lib" + ps + "jbullet.jar" + fs;
+		jarpath += "." + ps + "lib" + ps + "lwjglnative.jar" + fs;
+		jarpath += "." + ps + "lib" + ps + "lwjgl-2.8.5" + ps + "jar" + ps + "jinput.jar" + fs;
+		jarpath += "." + ps + "lib" + ps + "lwjgl-2.8.5" + ps + "jar" + ps + "lwjgl.jar" + fs;
+		jarpath += "." + ps + "lib" + ps + "lwjgl-2.8.5" + ps + "jar" + ps + "lwjgl_util.jar" + fs;
 
 		if (!CommonConstants.USEJOGL2)
 		{
@@ -52,8 +57,8 @@ public class BootStrap
 			jarpath += "." + ps + "lib" + ps + "jogamp" + ps + "jar" + ps + "jogl-all.jar" + fs;
 			jarpath += "." + ps + "lib" + ps + "java3djogl2.jar" + fs;
 		}
-		ProcessBuilder pb = new ProcessBuilder("java", "-Xmx512m", "-Xms256m", "-Dsun.java2d.noddraw=true", "-cp", jarpath,
-				"client.ClientMain");
+		ProcessBuilder pb = new ProcessBuilder("java", "-Xmx1024m", "-Xms512m", "-Dsun.java2d.noddraw=true", "-cp", jarpath,
+				"scrollsexplorer.ScrollsExplorer");
 
 		try
 		{
@@ -62,36 +67,6 @@ public class BootStrap
 			StreamPump streamPump = new StreamPump(p.getInputStream(), log);
 			streamPump.start();
 			File logErr = new File(".\\clientlog.err.txt");
-			StreamPump streamPumpErr = new StreamPump(p.getErrorStream(), logErr);
-			streamPumpErr.start();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-
-	}
-
-	public static void startServer()
-	{
-		String jarpath = "";
-		jarpath += "." + ps + "dune.jar" + fs;
-		jarpath += "." + ps + "lib" + ps + "cling" + ps + "cling-core-1.0.5.jar" + fs;
-		jarpath += "." + ps + "lib" + ps + "cling" + ps + "cling-support-1.0.5.jar" + fs;
-		jarpath += "." + ps + "lib" + ps + "cling" + ps + "teleal-common-1.0.13.jar" + fs;
-		jarpath += "." + ps + "lib" + ps + "jftp.jar" + fs;
-		jarpath += "." + ps + "lib" + ps + "vecmath.jar" + fs;
-		jarpath += "." + ps + "lib" + ps + "jai.jar" + fs;
-
-		ProcessBuilder pb = new ProcessBuilder("java", "-Xmx512m", "-Xms128m", "-cp", jarpath, "server.ServerMain");
-
-		try
-		{
-			Process p = pb.start();
-			File log = new File(".\\serverlog.txt");
-			StreamPump streamPump = new StreamPump(p.getInputStream(), log);
-			streamPump.start();
-			File logErr = new File(".\\serverlog.err.txt");
 			StreamPump streamPumpErr = new StreamPump(p.getErrorStream(), logErr);
 			streamPumpErr.start();
 		}

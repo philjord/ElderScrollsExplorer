@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 import java.util.zip.DataFormatException;
+import java3d.nativelinker.Java3dLinker2;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -44,6 +45,10 @@ import bsa.BSAFileSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
+
+import common.config.CommonConstants;
+import common.config.ConfigLoader;
+
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
@@ -388,9 +393,39 @@ public class ScrollsExplorer extends VisualPhysicalUniverse implements BethRende
 		//	simpleWalkSetup.warp(new Vector3f(0, 10000, 0));
 	}
 
+	private static void setDebug(boolean b)
+	{
+		if (b)
+		{
+			System.out.println("DEBUG ON");
+			// leave settings alone for optional debug parts
+		}
+		else
+		{
+
+		}
+	}
+
 	public static void main(String[] args)
 	{
-		//new Java3dLinker2();
+		ConfigLoader.loadConfig();
+
+		if (!CommonConstants.USEJOGL2)
+		{
+			//load up the native dlls!
+			System.out.println("Java3dLinker2");
+			new Java3dLinker2();
+		}
+
+		if (args.length > 0 && args[0].equals("debug"))
+		{
+			ScrollsExplorer.setDebug(true);
+		}
+		else
+		{
+			ScrollsExplorer.setDebug(false);
+		}
+		 
 		multiCellDisplay = new ScrollsExplorer();
 	}
 
