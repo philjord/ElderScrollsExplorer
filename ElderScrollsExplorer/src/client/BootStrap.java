@@ -20,7 +20,7 @@ public class BootStrap
 		//f.createNewFile();
 		//String pathToJar = ClientMain.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
 
-		ConfigLoader.loadConfig();
+		ConfigLoader.loadConfig(args);
 
 		startClient();
 	}
@@ -43,6 +43,7 @@ public class BootStrap
 		jarpath += "." + ps + "lib" + ps + "lwjgl-2.8.5" + ps + "jar" + ps + "jinput.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "lwjgl-2.8.5" + ps + "jar" + ps + "lwjgl.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "lwjgl-2.8.5" + ps + "jar" + ps + "lwjgl_util.jar" + fs;
+		jarpath += "." + ps + "lib" + ps + "j3d-org-java3d-all.jar" + fs;
 
 		if (!CommonConstants.USEJOGL2)
 		{

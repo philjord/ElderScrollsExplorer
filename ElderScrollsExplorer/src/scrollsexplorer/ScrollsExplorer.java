@@ -283,7 +283,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		esmManager = ESMManager.getESMManager(mainESMFile);
 		bsaFileSet = null;
-
+ 
 		new EsmSoundKeyToName(esmManager);
 
 		if (cbBsaMenuItem.isSelected())
@@ -311,11 +311,13 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		tableModel = new DefaultTableModel(columnNames, 0)
 		{
+			@Override
 			public boolean isCellEditable(int row, int column)
 			{
 				return false; // disallow editing of the table
 			}
 
+			@Override
 			@SuppressWarnings("unchecked")
 			public Class<? extends Object> getColumnClass(int c)
 			{
@@ -326,6 +328,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		table = new JTable(tableModel);
 		table.addMouseListener(new MouseAdapter()
 		{
+			@Override
 			public void mouseClicked(MouseEvent e)
 			{
 				display(((Integer) tableModel.getValueAt(table.convertRowIndexToModel(table.getSelectedRow()), 1)));
@@ -403,7 +406,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public static void main(String[] args)
 	{
-		ConfigLoader.loadConfig();
+		ConfigLoader.loadConfig(args);
 
 		if (!CommonConstants.USEJOGL2)
 		{
