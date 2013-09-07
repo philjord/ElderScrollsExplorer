@@ -173,6 +173,9 @@ public class SimpleBethCellManager
 				PluginRecord cell = esmManager.getWRLD(currentCellFormId);
 				if (cell != null)
 				{
+					//add skynow
+					simpleWalkSetup.addToVisualBranch(createBackground());
+
 					currentBethWorldVisualBranch = new BethWorldVisualBranch(currentCellFormId, cell.getEditorID(), j3dCellFactory);
 					simpleWalkSetup.addToVisualBranch(currentBethWorldVisualBranch);
 					if (avatarLocation != null)
@@ -189,10 +192,6 @@ public class SimpleBethCellManager
 						currentBethWorldPhysicalBranch.init(avatarLocation.getTransform());
 						avatarLocation.addAvatarLocationListener(currentBethWorldPhysicalBranch);
 					}
-
-					//add skynow
-
-					simpleWalkSetup.addToVisualBranch(createBackground());
 
 				}
 				else
