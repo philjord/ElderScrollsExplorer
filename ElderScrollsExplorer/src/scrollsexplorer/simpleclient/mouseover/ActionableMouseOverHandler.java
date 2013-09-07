@@ -58,15 +58,20 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 					// if the mouse release listener is working we can't change the currentActionable until it's finished
 					synchronized (currentActionableMonitor)
 					{
+						J3dRECOStatInst j3dRECOStatInst = (J3dRECOStatInst)currentActionable;
 						// sort out the actionable if  
-						XTEL xtel = ((J3dRECOStatInst) currentActionable).xtel;
+						XTEL xtel = j3dRECOStatInst.xtel;
 						if (xtel != null)
 						{
 							// doorFormId is not a cell id! use teh cell of from id call
 							SimpleBethCellManager.simpleBethCellManager.setCurrentCellFormIdOf(xtel.doorFormId);
 							SimpleBethCellManager.simpleBethCellManager.setLocation(xtel.x, xtel.y, xtel.z, xtel.rx, xtel.ry, xtel.rz);
-
 						}
+						else
+						{
+							//possibly a door that needs opening/closing
+						}
+						
 					}
 				}
 			}
