@@ -16,9 +16,11 @@ import tools3d.hud.old.HUDText;
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
 import com.bulletphysics.dynamics.RigidBody;
 
+import esmj3d.data.shared.records.CommonREFR;
 import esmj3d.data.shared.subrecords.XTEL;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 import esmj3d.j3d.j3drecords.inst.J3dRECOStatInst;
+import esmj3d.j3d.j3drecords.type.J3dRECOType;
 
 public class ActionableMouseOverHandler extends MouseOverHandler
 {
@@ -58,20 +60,25 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 					// if the mouse release listener is working we can't change the currentActionable until it's finished
 					synchronized (currentActionableMonitor)
 					{
-						J3dRECOStatInst j3dRECOStatInst = (J3dRECOStatInst)currentActionable;
+						J3dRECOStatInst j3dRECOStatInst = (J3dRECOStatInst) currentActionable;
 						// sort out the actionable if  
-						XTEL xtel = j3dRECOStatInst.xtel;
-						if (xtel != null)
+						if (j3dRECOStatInst.getInstRECO() instanceof CommonREFR)
 						{
-							// doorFormId is not a cell id! use teh cell of from id call
-							SimpleBethCellManager.simpleBethCellManager.setCurrentCellFormIdOf(xtel.doorFormId);
-							SimpleBethCellManager.simpleBethCellManager.setLocation(xtel.x, xtel.y, xtel.z, xtel.rx, xtel.ry, xtel.rz);
+							CommonREFR commonREFR = (CommonREFR) j3dRECOStatInst.getInstRECO();
+							XTEL xtel = commonREFR.XTEL;
+							if (xtel != null)
+							{
+								// doorFormId is not a cell id! use teh cell of from id call
+								SimpleBethCellManager.simpleBethCellManager.setCurrentCellFormIdOf(xtel.doorFormId);
+								SimpleBethCellManager.simpleBethCellManager.setLocation(xtel.x, xtel.y, xtel.z, xtel.rx, xtel.ry, xtel.rz);
+							}
+							else
+							{
+								//possibly a door that needs opening/closing
+								J3dRECOType j3dRECOType = j3dRECOStatInst.getJ3dRECOType();
+							}
 						}
-						else
-						{
-							//possibly a door that needs opening/closing
-						}
-						
+
 					}
 				}
 			}
@@ -136,29 +143,33 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 							synchronized (currentActionableMonitor)
 							{
 								// sort out the actionable if  
-								XTEL xtel = ((J3dRECOStatInst) j3dInstRECO).xtel;
-								if (xtel != null)
+								if (j3dInstRECO.getInstRECO() instanceof CommonREFR)
 								{
-									// if less than the max interact then set interactable
-									// if not then set hudtext (in light grey) but don't allow actions								
-
-									float distance = MAX_MOUSE_RAY_DIST * rayCallback.closestHitFraction;
-									if (distance < INTERACT_MAX_DIST)
+									CommonREFR commonREFR = (CommonREFR) j3dInstRECO.getInstRECO();
+									XTEL xtel = commonREFR.XTEL;
+									if (xtel != null)
 									{
+										// if less than the max interact then set interactable
+										// if not then set hudtext (in light grey) but don't allow actions								
 
-										HUDText.setText("DOOR to " + xtel.doorFormId);
-										currentActionable = j3dInstRECO;
+										float distance = MAX_MOUSE_RAY_DIST * rayCallback.closestHitFraction;
+										if (distance < INTERACT_MAX_DIST)
+										{
+
+											HUDText.setText("DOOR to " + xtel.doorFormId);
+											currentActionable = j3dInstRECO;
+										}
+										else
+										{
+											HUDText.setTextGreyed("DOOR to  " + xtel.doorFormId + " (dist)");
+											currentActionable = null; // nothing to action yet										
+										}
 									}
 									else
 									{
-										HUDText.setTextGreyed("DOOR to  " + xtel.doorFormId + " (dist)");
-										currentActionable = null; // nothing to action yet										
+										HUDText.setText("");
+										currentActionable = null;
 									}
-								}
-								else
-								{
-									HUDText.setText("");
-									currentActionable = null;
 								}
 							}
 
