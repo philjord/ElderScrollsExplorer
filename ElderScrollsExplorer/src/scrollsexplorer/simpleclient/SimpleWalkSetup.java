@@ -231,6 +231,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		universe.addToBehaviorBranch(behaviourBranch);
 
+		headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
+
 	}
 
 	@Override
@@ -278,10 +280,12 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		cameraMouseOver = new ActionableMouseOverHandler(clientPhysicsSystem);
 
 		cameraAdminMouseOverHandler = new AdminMouseOverHandler(clientPhysicsSystem);
+
 	}
 
 	public void setEnabled(boolean enable)
 	{
+		System.out.println("setEnabled " + enable);
 		// start the processor up ************************
 		navigationProcessor.setActive(enable);
 		currentPhysicsUpdateBehaviour.setEnable(enable);
@@ -291,6 +295,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			universe.addToBehaviorBranch(cameraMouseOver);
 			cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
 			universe.addToBehaviorBranch(cameraAdminMouseOverHandler);
+
 		}
 		else
 		{
@@ -299,7 +304,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			cameraAdminMouseOverHandler.setConfig(null);
 			universe.removeFromBehaviorBranch(cameraAdminMouseOverHandler);
 		}
-
 		cameraPanel.startRendering();
 	}
 

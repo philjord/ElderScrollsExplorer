@@ -368,10 +368,13 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 	{
 		for (J3dCELLGeneral cell : loadedNears.values())
 		{
-			J3dRECOInst jri = cell.getJ3dRECOs().get(recoId);
-			if (jri != null)
+			if (cell != null)
 			{
-				return jri;
+				J3dRECOInst jri = cell.getJ3dRECOs().get(recoId);
+				if (jri != null)
+				{
+					return jri;
+				}
 			}
 		}
 
