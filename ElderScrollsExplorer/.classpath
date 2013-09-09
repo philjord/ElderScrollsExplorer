@@ -17,7 +17,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/jnifjbullet"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Tools"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/jbullet-20101010/dist/jbullet.jar" sourcepath="E:/Java/workspace/external_jars/external jars/jbullet-20101010/src"/>
-	<classpathentry kind="lib" path="/external_jars/ext/jogl/jogl-all.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/java3djogl2.jar" sourcepath="E:/Java/3rd party jars/java3d/src"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/lwjglnative.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/lwjgl-2.8.5/jar/jinput.jar"/>
