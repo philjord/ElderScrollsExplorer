@@ -24,6 +24,7 @@ import esmj3d.j3d.cell.J3dCELLGeneral;
 import esmj3d.j3d.cell.J3dICELLPersistent;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
+import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 
 public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpdateListener
 {
@@ -327,6 +328,24 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			j3dCELLPersistent.handleRecordUpdate(record, updatedSubrecord);
 		}
 
+	}
+
+	public J3dRECOInst getJ3dInstRECO(int recordId)
+	{
+		for (J3dCELLGeneral cell : loadedNears.values())
+		{
+			if (cell != null)
+			{
+				J3dRECOInst jri = cell.getJ3dRECOs().get(recordId);
+				if (jri != null)
+				{
+					return jri;
+				}
+			}
+		}
+
+		//ok try the persistent cell as well, it'll return null if it's really not here
+		return j3dCELLPersistent.getJ3dInstRECO(recordId);
 	}
 
 }

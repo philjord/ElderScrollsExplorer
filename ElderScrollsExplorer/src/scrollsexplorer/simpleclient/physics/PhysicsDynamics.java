@@ -5,6 +5,7 @@ import java.util.HashMap;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Group;
 import javax.media.j3d.Transform3D;
+import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
 import nifbullet.BulletNifModel;
@@ -187,6 +188,7 @@ public class PhysicsDynamics extends DynamicsEngine
 			{
 				// the nif file will have mass of 0 making this kinematic
 				nb = new NBKinematicModel(physNifFile, meshSource, rootTrans);
+				dynamicsRootBranchGroup.addChild((NBKinematicModel)nb);
 			}
 			else
 			{
@@ -253,6 +255,37 @@ public class PhysicsDynamics extends DynamicsEngine
 		{
 			System.out.println("no model for createDynamic " + j3dRECOInst.getRecordId());
 		}
+	}
+
+	public synchronized void updateRECOROTR(J3dRECOInst j3dRECOInst, Transform3D newTrans)
+	{
+
+		BulletNifModel nifBullet = recoIdToNifBullet.get(j3dRECOInst.getRecordId());
+		if (nifBullet instanceof NBSimpleDynamicModel)
+		{
+			Quat4f q = new Quat4f();
+			Vector3f v = new Vector3f();
+			newTrans.get(q);
+			newTrans.get(v);
+			((NBSimpleDynamicModel) nifBullet).setTransform(q, v);
+		}
+		else if (nifBullet instanceof NBStaticModel || nifBullet instanceof NBKinematicModel)
+		{
+			//remove and readd
+			removeRECO(j3dRECOInst);
+			addRECO(j3dRECOInst);
+		}
+
+	}
+
+	public synchronized void updateRECOToggleOpen(J3dRECOInst j3dRECOInst, boolean isOpen)
+	{
+
+		NBKinematicModel nifBullet = (NBKinematicModel) recoIdToNifBullet.get(j3dRECOInst.getRecordId());
+		String seq = isOpen ? "Open" : "Close";// inst has already been updated (this is post)
+
+		nifBullet.getJ3dNiControllerManager().getSequence(seq).fireSequenceOnce();
+
 	}
 
 	protected void removeRECO(J3dRECOInst j3dRECOInst)

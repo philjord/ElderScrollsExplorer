@@ -31,6 +31,9 @@ public class SimpleBethCellManager
 	//TODO: bad form only for ActionableMouseOverHandler
 	public static BethWorldVisualBranch currentBethWorldVisualBranch;
 
+	//TODO: bad form only for ActionableMouseOverHandler
+	public static BethWorldPhysicalBranch currentBethWorldPhysicalBranch;
+
 	//TODO: more bad form only for ActionableMouseOverHandler
 	public static SimpleBethCellManager simpleBethCellManager;
 
@@ -39,8 +42,6 @@ public class SimpleBethCellManager
 	private AvatarLocation avatarLocation;
 
 	private int currentCellFormId = -1;
-
-	private BethWorldPhysicalBranch currentBethWorldPhysicalBranch;
 
 	private BethInteriorVisualBranch currentBethInteriorVisualBranch;
 

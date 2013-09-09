@@ -82,8 +82,20 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 								{
 									J3dDOOR j3dDOOR = (J3dDOOR) j3dRECOType;
 									j3dDOOR.toggleOpen();
-									
-									//TODO: now to tell physics all about it??
+
+									clientPhysicsSystem.getClientPhysics().updateRECOToggleOpen(j3dRECOStatInst, j3dDOOR.isOpen());
+
+									//also update physics view, but assume much
+									J3dRECOInst phyJ3dInstRECO = SimpleBethCellManager.currentBethWorldPhysicalBranch
+											.getJ3dInstRECO(j3dRECOStatInst.getRecordId());
+									if (phyJ3dInstRECO != null)
+									{
+										J3dRECOStatInst phyJ3dRECOStatInst = (J3dRECOStatInst) phyJ3dInstRECO;
+										J3dRECOType phyJ3dRECOType = phyJ3dRECOStatInst.getJ3dRECOType();
+										J3dDOOR phyJ3dDOOR = (J3dDOOR) phyJ3dRECOType;
+										phyJ3dDOOR.toggleOpen();
+									}
+
 								}
 
 							}
