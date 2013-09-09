@@ -20,6 +20,7 @@ import esmj3d.data.shared.records.CommonREFR;
 import esmj3d.data.shared.subrecords.XTEL;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 import esmj3d.j3d.j3drecords.inst.J3dRECOStatInst;
+import esmj3d.j3d.j3drecords.type.J3dDOOR;
 import esmj3d.j3d.j3drecords.type.J3dRECOType;
 
 public class ActionableMouseOverHandler extends MouseOverHandler
@@ -76,6 +77,15 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 							{
 								//possibly a door that needs opening/closing
 								J3dRECOType j3dRECOType = j3dRECOStatInst.getJ3dRECOType();
+
+								if (j3dRECOType instanceof J3dDOOR)
+								{
+									J3dDOOR j3dDOOR = (J3dDOOR) j3dRECOType;
+									j3dDOOR.toggleOpen();
+									
+									//TODO: now to tell physics all about it??
+								}
+
 							}
 						}
 
@@ -147,6 +157,9 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 								{
 									CommonREFR commonREFR = (CommonREFR) j3dInstRECO.getInstRECO();
 									XTEL xtel = commonREFR.XTEL;
+
+									J3dRECOType j3dRECOType = j3dInstRECO.getJ3dRECOType();
+
 									if (xtel != null)
 									{
 										// if less than the max interact then set interactable
@@ -162,6 +175,21 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 										else
 										{
 											HUDText.setTextGreyed("DOOR to  " + xtel.doorFormId + " (dist)");
+											currentActionable = null; // nothing to action yet										
+										}
+									}
+									else if (j3dRECOType instanceof J3dDOOR)
+									{
+										float distance = MAX_MOUSE_RAY_DIST * rayCallback.closestHitFraction;
+										if (distance < INTERACT_MAX_DIST)
+										{
+
+											HUDText.setText("Open/Close DOOR");
+											currentActionable = j3dInstRECO;
+										}
+										else
+										{
+											HUDText.setTextGreyed("Open/Close DOOR (dist)");
 											currentActionable = null; // nothing to action yet										
 										}
 									}
