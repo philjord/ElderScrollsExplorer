@@ -10,8 +10,8 @@ import nifbullet.NBRigidBody;
 import nifbullet.cha.NifBulletChar;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.physics.ClientPhysicsSystem;
-import tools3d.hud.Canvas3D2D;
-import tools3d.hud.old.HUDText;
+import tools3d.mixed3d2d.Canvas3D2D;
+import tools3d.mixed3d2d.hud.hudelements.HUDText;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
 import com.bulletphysics.dynamics.RigidBody;
@@ -116,7 +116,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 		//remove old hudtext
 		if (HUDText != null)
 		{
-			HUDText.destroy();
+			HUDText.removeFromCanvas();
 		}
 
 		// set up new canvas

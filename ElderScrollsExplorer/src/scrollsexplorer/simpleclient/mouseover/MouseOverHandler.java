@@ -15,7 +15,7 @@ import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 import scrollsexplorer.simpleclient.physics.ClientPhysicsSystem;
-import tools3d.hud.CanvasPickRayGen;
+import tools3d.mixed3d2d.CanvasPickRayGen;
 import tools3d.utils.Utils3D;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld;
