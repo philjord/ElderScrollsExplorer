@@ -43,6 +43,7 @@ public class SimpleBethCellManager
 
 	private int currentCellFormId = -1;
 
+	//TODO::!!!!! this and the static version above mean no mouse over in interal cells!!!
 	private BethInteriorVisualBranch currentBethInteriorVisualBranch;
 
 	private BethInteriorPhysicalBranch currentBethInteriorPhysicalBranch;
