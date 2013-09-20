@@ -36,7 +36,6 @@
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.audio"/>
         <javaElement handleIdentifier="=Tools"/>
         <file path="/3DTools/.project"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.rules.debug"/>
         <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.ac3d"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.environment.sky"/>
         <file path="/3DTools/.compatibility"/>
@@ -58,15 +57,11 @@
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.universe"/>
         <file path="/jnifjbullet/.compatibility"/>
         <javaElement handleIdentifier="=esmj3dtes5"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.scenegraph.old"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.tree"/>
         <javaElement handleIdentifier="=esmj3dtes4"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.kin"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.biped"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.geography"/>
         <file path="/jnifjbullet/.classpath"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.environment"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.picking"/>
         <file path="/jnifjbullet/.project"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;com.bulletphysics.dom"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.leafnode"/>
