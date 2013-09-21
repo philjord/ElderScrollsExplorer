@@ -312,6 +312,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				frame.setUndecorated(true);
 			frame.setResizable(false);
 
+			cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(dlg.isBooleanAARequired());
+
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			GraphicsDevice gd = ge.getDefaultScreenDevice();
 
@@ -327,6 +329,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				{
 					gd.setDisplayMode(desiredMode);
 				}
+
 			}
 			else
 			{

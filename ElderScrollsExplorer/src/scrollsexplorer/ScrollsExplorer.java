@@ -104,6 +104,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public ScrollsExplorer()
 	{
+		super("ScrollsExplorer");
 		try
 		{
 			PropertyLoader.load();
@@ -144,7 +145,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
 			buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-			
+
 			buttonPanel.add(oblivionButton);
 			buttonPanel.add(falloutButton);
 			buttonPanel.add(falloutNVButton);
@@ -231,7 +232,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 			enableButtons();
 
-			
 		}
 		catch (IOException e1)
 		{
