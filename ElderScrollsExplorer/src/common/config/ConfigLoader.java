@@ -29,6 +29,12 @@ public class ConfigLoader
 						CommonConstants.USEJOGL2 = Boolean.parseBoolean(s);
 						System.out.println("USEJOGL2 " + CommonConstants.USEJOGL2);
 					}
+					else if (configString.startsWith("FULL_SCREEN="))
+					{
+						String s = configString.substring("FULL_SCREEN=".length());
+						CommonConstants.FULL_SCREEN = Boolean.parseBoolean(s);
+						System.out.println("FULL_SCREEN " + CommonConstants.FULL_SCREEN);
+					}
 
 					configString = input.readLine();
 				}
@@ -42,6 +48,12 @@ public class ConfigLoader
 						String s = argConfigString.substring("-USEJOGL2=".length());
 						CommonConstants.USEJOGL2 = Boolean.parseBoolean(s);
 						System.out.println("USEJOGL2 " + CommonConstants.USEJOGL2);
+					}
+					else if (argConfigString.startsWith("FULL_SCREEN="))
+					{
+						String s = argConfigString.substring("FULL_SCREEN=".length());
+						CommonConstants.FULL_SCREEN = Boolean.parseBoolean(s);
+						System.out.println("FULL_SCREEN " + CommonConstants.FULL_SCREEN);
 					}
 				}
 

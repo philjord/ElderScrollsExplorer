@@ -1,7 +1,10 @@
 package scrollsexplorer;
 
 import java.awt.BorderLayout;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -227,6 +230,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			});
 
 			enableButtons();
+
+			
 		}
 		catch (IOException e1)
 		{
@@ -283,7 +288,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		esmManager = ESMManager.getESMManager(mainESMFile);
 		bsaFileSet = null;
- 
+
 		new EsmSoundKeyToName(esmManager);
 
 		if (cbBsaMenuItem.isSelected())

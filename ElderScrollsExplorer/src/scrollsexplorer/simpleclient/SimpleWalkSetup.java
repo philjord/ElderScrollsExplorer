@@ -1,5 +1,8 @@
 package scrollsexplorer.simpleclient;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -22,6 +25,8 @@ import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
+
+import common.config.CommonConstants;
 
 import nativeLinker.LWJGLLinker;
 import nifbullet.JumpKeyListener;
@@ -223,9 +228,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		cameraPanel.getCanvas3D2D().setFocusTraversalKeysEnabled(false);
 
 		frame.setTitle(frameName);
-		frame.setSize(900, 900);
-		frame.setVisible(true);
-		frame.setLocation(500, 0);
 		frame.getContentPane().add(cameraPanel);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -296,6 +298,29 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
 			universe.addToBehaviorBranch(cameraAdminMouseOverHandler);
 
+			if (CommonConstants.FULL_SCREEN && !frame.isDisplayable())
+			{
+				//	setUndecorated(true);
+				//	setLocation(0, 0);
+				//	setSize(Toolkit.getDefaultToolkit().getScreenSize());
+
+				GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+				GraphicsDevice gd = ge.getDefaultScreenDevice();
+
+				frame.setUndecorated(true);
+				frame.setResizable(false);
+				frame.setFocusable(true);
+				gd.setFullScreenWindow(frame);
+
+			}
+			else
+			{
+				frame.setSize(900, 900);
+				frame.setLocation(500, 0);
+			}
+			frame.setVisible(true);
+
+			
 		}
 		else
 		{
