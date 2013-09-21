@@ -1,11 +1,5 @@
 package scrollsexplorer.simpleclient;
 
-import java.awt.Dimension;
-import java.awt.DisplayMode;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -22,7 +16,6 @@ import javax.media.j3d.Light;
 import javax.media.j3d.WakeupCondition;
 import javax.media.j3d.WakeupOnElapsedFrames;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.vecmath.Color3f;
@@ -30,7 +23,6 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
-import nativeLinker.LWJGLLinker;
 import nifbullet.JumpKeyListener;
 import nifbullet.NavigationProcessorBullet;
 import nifbullet.NavigationProcessorBullet.NbccProvider;
@@ -52,6 +44,7 @@ import tools3d.navigation.NavigationTemporalBehaviour;
 import tools3d.universe.VisualPhysicalUniverse;
 import tools3d.utils.Utils3D;
 import tools3d.utils.resolution.DisplayDialog;
+import tools3d.utils.resolution.ScreenResolution;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 import utils.source.MeshSource;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
@@ -236,6 +229,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		universe.addToBehaviorBranch(behaviourBranch);
 
+		//TODO: HUD shape sized correctly for render
 		//headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
 
 	}
@@ -264,9 +258,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			}
 
 		};
-
-		// always load lwjgl for jbullet debug
-		new LWJGLLinker();
 
 		clientPhysicsSystem = new ClientPhysicsSystem(charChangeListener, avatarLocation, behaviourBranch, meshSource);
 
@@ -301,53 +292,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
 			universe.addToBehaviorBranch(cameraAdminMouseOverHandler);
 
-			DisplayDialog dlg = new DisplayDialog(null);
-			dlg.setVisible(true);
-			DisplayMode desiredMode = dlg.getDesiredDisplayMode();
-			if (desiredMode == null)
-				System.exit(0);
-			boolean runFullscreen = dlg.fullscreen();
-
-			if (runFullscreen)
-				frame.setUndecorated(true);
-			frame.setResizable(false);
-
-			cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(dlg.isBooleanAARequired());
-
-			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			GraphicsDevice gd = ge.getDefaultScreenDevice();
-
-			if (runFullscreen)
-			{
-				gd.setFullScreenWindow(frame);
-				if (gd.getFullScreenWindow() == null)
-					System.out.println("Did not get fullscreen exclusive mode");
-				else
-					System.out.println("Got fullscreen exclusive mode");
-
-				if (gd.isDisplayChangeSupported())
-				{
-					gd.setDisplayMode(desiredMode);
-				}
-
-			}
-			else
-			{
-				Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-				if (desiredMode.getWidth() > size.getWidth() || desiredMode.getHeight() > size.getHeight())
-				{
-					JOptionPane.showMessageDialog(null, "Resizing window to match desktop settings " + size, "Window Too Large",
-							JOptionPane.ERROR_MESSAGE);
-					frame.setSize(size);
-				}
-				else
-				{
-					frame.setSize(desiredMode.getWidth(), desiredMode.getHeight());
-					frame.setLocation(new Point((int) (size.getWidth() - frame.getWidth()) >> 1, (int) (size.getHeight() - frame
-							.getHeight()) >> 1));
-				}
-				frame.setVisible(true);
-			}
+			DisplayDialog dlg = ScreenResolution.organiseResolution(frame);
+			cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(dlg.isAARequired());
 
 		}
 		else
@@ -413,6 +359,16 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	public AvatarLocation getAvatarLocation()
 	{
 		return avatarLocation;
+	}
+
+	public JTextField getLocField()
+	{
+		return locField;
+	}
+
+	public void setPhysicsEnabled(boolean enable)
+	{
+		currentPhysicsUpdateBehaviour.setEnable(enable);
 	}
 
 	private class MiscKeyHandler extends KeyAdapter
@@ -493,16 +449,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				wakeupOn(FPSCriterion);
 			}
 		}
-	}
-
-	public JTextField getLocField()
-	{
-		return locField;
-	}
-
-	public void setPhysicsEnabled(boolean enable)
-	{
-		currentPhysicsUpdateBehaviour.setEnable(enable);
 	}
 
 }

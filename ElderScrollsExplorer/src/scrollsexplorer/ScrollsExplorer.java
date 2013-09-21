@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 import java.util.zip.DataFormatException;
+
 import java3d.nativelinker.Java3dLinker2;
 
 import javax.swing.BoxLayout;
@@ -28,6 +29,7 @@ import javax.swing.table.TableRowSorter;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
+import nativeLinker.LWJGLLinker;
 import scrollsexplorer.simpleclient.ESESettingsPanel;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
@@ -45,10 +47,8 @@ import bsa.BSAFileSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
-
 import common.config.CommonConstants;
 import common.config.ConfigLoader;
-
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
@@ -418,6 +418,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			//load up the native dlls!		 
 			new Java3dLinker2();
 		}
+		
+		// always load lwjgl for jbullet debug
+		new LWJGLLinker();
 
 		if (args.length > 0 && args[0].equals("debug"))
 		{
