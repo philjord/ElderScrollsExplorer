@@ -20,7 +20,7 @@ import esmj3d.j3d.BethRenderSettings;
  * @author Administrator
  *
  */
-public class BethRenderSettingsPanel extends JPanel
+public class ESESettingsPanel extends JPanel
 {
 	private JSlider FAR_LOAD_DISTSlider = new JSlider(0, 32, BethRenderSettings.getFarLoadGridCount());
 
@@ -42,8 +42,13 @@ public class BethRenderSettingsPanel extends JPanel
 
 	private JCheckBox showDistantTreesTick = new JCheckBox("Distant Trees", BethRenderSettings.isShowDistantTrees());
 
-	public BethRenderSettingsPanel()
+	private JCheckBox enablePhysicsTick = new JCheckBox("Enable Physics", true);
+
+	private SimpleWalkSetup simpleWalkSetup;
+
+	public ESESettingsPanel(SimpleWalkSetup _simpleWalkSetup)
 	{
+		this.simpleWalkSetup = _simpleWalkSetup;
 		this.setLayout(new GridLayout2(-1, 2));
 		FAR_LOAD_DISTSlider.setBorder(new TitledBorder("Far Load Grids"));
 		FAR_LOAD_DISTSlider.setMajorTickSpacing(4);
@@ -159,6 +164,16 @@ public class BethRenderSettingsPanel extends JPanel
 			public void actionPerformed(ActionEvent arg0)
 			{
 				BethRenderSettings.setShowDistantTrees(showDistantTreesTick.isSelected());
+			}
+		});
+
+		add(enablePhysicsTick);
+		enablePhysicsTick.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				simpleWalkSetup.setPhysicsEnabled(enablePhysicsTick.isSelected());
 			}
 		});
 	}

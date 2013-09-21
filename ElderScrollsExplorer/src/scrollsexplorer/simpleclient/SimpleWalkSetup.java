@@ -1,7 +1,10 @@
 package scrollsexplorer.simpleclient;
 
+import java.awt.Dimension;
+import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,14 +22,13 @@ import javax.media.j3d.Light;
 import javax.media.j3d.WakeupCondition;
 import javax.media.j3d.WakeupOnElapsedFrames;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
-
-import common.config.CommonConstants;
 
 import nativeLinker.LWJGLLinker;
 import nifbullet.JumpKeyListener;
@@ -49,6 +51,7 @@ import tools3d.navigation.NavigationInputAWTMouseLocked;
 import tools3d.navigation.NavigationTemporalBehaviour;
 import tools3d.universe.VisualPhysicalUniverse;
 import tools3d.utils.Utils3D;
+import tools3d.utils.resolution.DisplayDialog;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 import utils.source.MeshSource;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
@@ -233,7 +236,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		universe.addToBehaviorBranch(behaviourBranch);
 
-		headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
+		//headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
 
 	}
 
@@ -298,29 +301,51 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
 			universe.addToBehaviorBranch(cameraAdminMouseOverHandler);
 
-			if (CommonConstants.FULL_SCREEN && !frame.isDisplayable())
-			{
-				//	setUndecorated(true);
-				//	setLocation(0, 0);
-				//	setSize(Toolkit.getDefaultToolkit().getScreenSize());
+			DisplayDialog dlg = new DisplayDialog(null);
+			dlg.setVisible(true);
+			DisplayMode desiredMode = dlg.getDesiredDisplayMode();
+			if (desiredMode == null)
+				System.exit(0);
+			boolean runFullscreen = dlg.fullscreen();
 
-				GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-				GraphicsDevice gd = ge.getDefaultScreenDevice();
-
+			if (runFullscreen)
 				frame.setUndecorated(true);
-				frame.setResizable(false);
-				frame.setFocusable(true);
-				gd.setFullScreenWindow(frame);
+			frame.setResizable(false);
 
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			GraphicsDevice gd = ge.getDefaultScreenDevice();
+
+			if (runFullscreen)
+			{
+				gd.setFullScreenWindow(frame);
+				if (gd.getFullScreenWindow() == null)
+					System.out.println("Did not get fullscreen exclusive mode");
+				else
+					System.out.println("Got fullscreen exclusive mode");
+
+				if (gd.isDisplayChangeSupported())
+				{
+					gd.setDisplayMode(desiredMode);
+				}
 			}
 			else
 			{
-				frame.setSize(900, 900);
-				frame.setLocation(500, 0);
+				Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+				if (desiredMode.getWidth() > size.getWidth() || desiredMode.getHeight() > size.getHeight())
+				{
+					JOptionPane.showMessageDialog(null, "Resizing window to match desktop settings " + size, "Window Too Large",
+							JOptionPane.ERROR_MESSAGE);
+					frame.setSize(size);
+				}
+				else
+				{
+					frame.setSize(desiredMode.getWidth(), desiredMode.getHeight());
+					frame.setLocation(new Point((int) (size.getWidth() - frame.getWidth()) >> 1, (int) (size.getHeight() - frame
+							.getHeight()) >> 1));
+				}
+				frame.setVisible(true);
 			}
-			frame.setVisible(true);
 
-			
 		}
 		else
 		{
@@ -470,6 +495,11 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	public JTextField getLocField()
 	{
 		return locField;
+	}
+
+	public void setPhysicsEnabled(boolean enable)
+	{
+		currentPhysicsUpdateBehaviour.setEnable(enable);
 	}
 
 }

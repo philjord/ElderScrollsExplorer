@@ -1,10 +1,7 @@
 package scrollsexplorer;
 
 import java.awt.BorderLayout;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -16,6 +13,7 @@ import java.util.prefs.Preferences;
 import java.util.zip.DataFormatException;
 import java3d.nativelinker.Java3dLinker2;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
@@ -30,7 +28,7 @@ import javax.swing.table.TableRowSorter;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
-import scrollsexplorer.simpleclient.BethRenderSettingsPanel;
+import scrollsexplorer.simpleclient.ESESettingsPanel;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
 import tools3d.utils.YawPitch;
@@ -145,6 +143,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 			this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
+			buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+			
 			buttonPanel.add(oblivionButton);
 			buttonPanel.add(falloutButton);
 			buttonPanel.add(falloutNVButton);
@@ -205,9 +205,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			buttonPanel.add(simpleWalkSetup.getLocField());
 			simpleBethCellManager = new SimpleBethCellManager(simpleWalkSetup);
 
-			BethRenderSettingsPanel bethRenderSettingsPanel = new BethRenderSettingsPanel();
+			ESESettingsPanel eseSettingsPanel = new ESESettingsPanel(simpleWalkSetup);
 			BethRenderSettings.addUpdateListener(this);
-			this.getContentPane().add(bethRenderSettingsPanel, BorderLayout.NORTH);
+			this.getContentPane().add(eseSettingsPanel, BorderLayout.NORTH);
 
 			this.getContentPane().invalidate();
 			this.getContentPane().validate();
