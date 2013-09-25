@@ -229,8 +229,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		universe.addToBehaviorBranch(behaviourBranch);
 
-		//TODO: HUD shape sized correctly for render
-		//headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
+		headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
 
 	}
 
