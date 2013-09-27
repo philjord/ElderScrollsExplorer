@@ -16,6 +16,7 @@ import javax.media.j3d.Light;
 import javax.media.j3d.WakeupCondition;
 import javax.media.j3d.WakeupOnElapsedFrames;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.vecmath.Color3f;
@@ -385,7 +386,15 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		public void keyPressed(KeyEvent e)
 		{
-			if (e.getKeyCode() == KeyEvent.VK_H)
+			if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+			{
+				int result = JOptionPane.showConfirmDialog(null, "Are you sure you wish to exit?");
+				if (result == JOptionPane.OK_OPTION)
+				{
+					System.exit(0);
+				}
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_H)
 			{
 				toggleHavok();
 			}
