@@ -44,7 +44,7 @@ import tools3d.navigation.NavigationInputAWTMouseLocked;
 import tools3d.navigation.NavigationTemporalBehaviour;
 import tools3d.universe.VisualPhysicalUniverse;
 import tools3d.utils.Utils3D;
-import tools3d.utils.resolution.DisplayDialog;
+import tools3d.utils.resolution.GraphicsSettings;
 import tools3d.utils.resolution.ScreenResolution;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 import utils.source.MeshSource;
@@ -277,6 +277,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		cameraAdminMouseOverHandler = new AdminMouseOverHandler(clientPhysicsSystem);
 
+		GraphicsSettings dlg = ScreenResolution.organiseResolution(frame, false, true);
+		cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(dlg.isAaRequired());
 	}
 
 	public void setEnabled(boolean enable)
@@ -291,10 +293,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			universe.addToBehaviorBranch(cameraMouseOver);
 			cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
 			universe.addToBehaviorBranch(cameraAdminMouseOverHandler);
-
-			DisplayDialog dlg = ScreenResolution.organiseResolution(frame);
-			cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(dlg.isAARequired());
-
+			frame.setVisible(true);
 		}
 		else
 		{
@@ -302,6 +301,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			universe.removeFromBehaviorBranch(cameraMouseOver);
 			cameraAdminMouseOverHandler.setConfig(null);
 			universe.removeFromBehaviorBranch(cameraAdminMouseOverHandler);
+			frame.setVisible(false);
 		}
 		cameraPanel.startRendering();
 	}
