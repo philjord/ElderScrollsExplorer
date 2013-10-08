@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Enumeration;
+import java.util.prefs.Preferences;
 
 import javax.media.j3d.AmbientLight;
 import javax.media.j3d.Behavior;
@@ -277,7 +278,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		cameraAdminMouseOverHandler = new AdminMouseOverHandler(clientPhysicsSystem);
 
-		GraphicsSettings dlg = ScreenResolution.organiseResolution(frame, false, true);
+		GraphicsSettings dlg = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false, true, false);
 		cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(dlg.isAaRequired());
 	}
 
