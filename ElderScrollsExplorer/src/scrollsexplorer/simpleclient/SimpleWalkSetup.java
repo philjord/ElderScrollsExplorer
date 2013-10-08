@@ -278,8 +278,16 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		cameraAdminMouseOverHandler = new AdminMouseOverHandler(clientPhysicsSystem);
 
-		GraphicsSettings dlg = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false, true, false);
-		cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(dlg.isAaRequired());
+		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
+				true, false);
+		cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(gs.isAaRequired());
+	}
+
+	public void resetGraphicsSetting()
+	{
+		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
+				true, true);
+		cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(gs.isAaRequired());
 	}
 
 	public void setEnabled(boolean enable)

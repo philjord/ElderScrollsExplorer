@@ -11,7 +11,6 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 import java.util.zip.DataFormatException;
-
 import java3d.nativelinker.Java3dLinker2;
 
 import javax.swing.BoxLayout;
@@ -47,8 +46,10 @@ import bsa.BSAFileSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
+
 import common.config.CommonConstants;
 import common.config.ConfigLoader;
+
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
@@ -96,6 +97,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public JMenuItem setFolders = new JMenuItem("Set Folders");
 
+	public JMenuItem setGraphics = new JMenuItem("Set Graphics");
+
 	public Preferences prefs;
 
 	private String scrollsFolder = "";
@@ -137,6 +140,16 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				public void actionPerformed(ActionEvent arg0)
 				{
 					setFolders();
+				}
+			});
+
+			menu.add(setGraphics);
+			setGraphics.addActionListener(new ActionListener()
+			{
+				@Override
+				public void actionPerformed(ActionEvent arg0)
+				{
+					simpleWalkSetup.resetGraphicsSetting();
 				}
 			});
 
@@ -418,7 +431,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			//load up the native dlls!		 
 			new Java3dLinker2();
 		}
-		
+
 		// always load lwjgl for jbullet debug
 		new LWJGLLinker();
 
