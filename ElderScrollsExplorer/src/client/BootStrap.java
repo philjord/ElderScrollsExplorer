@@ -63,10 +63,10 @@ public class BootStrap
 		try
 		{
 			Process p = pb.start();
-			File log = new File(".\\clientlog.txt");
+			File log = new File(".\\logs\\clientlog.txt");
 			StreamPump streamPump = new StreamPump(p.getInputStream(), log);
 			streamPump.start();
-			File logErr = new File(".\\clientlog.err.txt");
+			File logErr = new File(".\\logs\\clientlog.err.txt");
 			StreamPump streamPumpErr = new StreamPump(p.getErrorStream(), logErr);
 			streamPumpErr.start();
 		}
