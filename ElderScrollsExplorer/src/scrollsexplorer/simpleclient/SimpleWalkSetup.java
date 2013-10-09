@@ -229,10 +229,13 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		frame.getContentPane().add(cameraPanel);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+
 		universe.addToBehaviorBranch(behaviourBranch);
 
 		headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
-
+	
+		
+		
 	}
 
 	@Override
