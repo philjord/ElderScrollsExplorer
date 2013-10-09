@@ -287,7 +287,9 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	{
 		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
 				false, true);
-		cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(gs.isAaRequired());
+		//possibly this is called way early
+		if (cameraPanel.getCanvas3D2D() != null)
+			cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(gs.isAaRequired());
 	}
 
 	public void setEnabled(boolean enable)
