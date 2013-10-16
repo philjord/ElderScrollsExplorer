@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 import java.util.zip.DataFormatException;
+
 import java3d.nativelinker.Java3dLinker2;
 
 import javax.swing.BoxLayout;
@@ -32,6 +33,7 @@ import nativeLinker.LWJGLLinker;
 import scrollsexplorer.simpleclient.ESESettingsPanel;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
+import tools3d.resolution.QueryProperties;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
 import utils.source.EsmSoundKeyToName;
@@ -46,10 +48,8 @@ import bsa.BSAFileSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
-
 import common.config.CommonConstants;
 import common.config.ConfigLoader;
-
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
@@ -424,6 +424,12 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public static void main(String[] args)
 	{
+		//DDS requires no installed java3D
+		if (QueryProperties.checkForInstalledJ3d())
+		{
+			System.exit(0);
+		}
+
 		ConfigLoader.loadConfig(args);
 
 		if (!CommonConstants.USEJOGL2)

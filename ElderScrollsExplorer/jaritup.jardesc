@@ -14,6 +14,7 @@
         <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders.resourcepools"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.stat"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.resolution"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.particles"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.infoText"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation"/>
@@ -44,7 +45,6 @@
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.util"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.audio"/>
         <file path="/esmj3dtes5/.classpath"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.resolution"/>
         <javaElement handleIdentifier="=Tools"/>
         <file path="/esmj3dtes5/.project"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.mixed3d2d"/>
@@ -88,6 +88,7 @@
         <javaElement handleIdentifier="=esmj3dtes5/src"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.geography"/>
         <file path="/jnifjbullet/.classpath"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.old"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.environment"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.rules.deprecated.picking"/>
         <file path="/jnifjbullet/.project"/>
