@@ -1,6 +1,7 @@
 package scrollsexplorer.simpleclient;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.zip.DataFormatException;
 
 import javax.media.j3d.Appearance;
@@ -23,7 +24,9 @@ import com.sun.j3d.utils.geometry.Sphere;
 
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
+import esmLoader.common.data.plugin.PluginSubrecord;
 import esmLoader.loader.ESMManager;
+import esmj3d.data.shared.subrecords.LString;
 import esmj3d.j3d.cell.J3dICellFactory;
 
 public class SimpleBethCellManager
@@ -114,6 +117,47 @@ public class SimpleBethCellManager
 		}
 
 		System.out.println("j3dCellFactory = " + j3dCellFactory);
+	}
+
+	public String getCellNameFormIdOf(int doorFormId)
+	{
+		int cellFormID = esmManager.getCellFormIdForPersistenetFormID(doorFormId);
+		if (cellFormID != -1)
+		{
+			try
+			{
+				PluginRecord pr = esmManager.getWRLD(cellFormID);
+				if (pr == null)
+				{
+					pr = esmManager.getInteriorCELL(cellFormID);
+				}
+
+				if (pr != null)
+				{
+					List<PluginSubrecord> subrecords = pr.getSubrecords();
+					for (PluginSubrecord subrec : subrecords)
+					{
+						if (subrec.getSubrecordType().equals("FULL"))
+							return new LString(subrec.getSubrecordData()).str;
+					}
+					return pr.getEditorID();
+
+				}
+			}
+			catch (DataFormatException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			catch (PluginException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return "Unknown Cell";
 	}
 
 	/**
@@ -354,4 +398,5 @@ public class SimpleBethCellManager
 		transform.get(q);
 		simpleWalkSetup.getAvatarLocation().setRotation(q);
 	}
+
 }

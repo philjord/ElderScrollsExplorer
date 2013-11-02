@@ -61,6 +61,7 @@ public class AdminMouseOverHandler extends MouseOverHandler
 
 				if (body != null)
 				{
+
 					BulletNifModel bnm = null;
 
 					// might be one of 2 ways to get teh model out of the user pointer

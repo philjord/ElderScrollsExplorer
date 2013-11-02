@@ -212,9 +212,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			});
 
 			simpleWalkSetup = new SimpleWalkSetup("SimpleBethCellManager");
-			YawPitch yp = YawPitch.parse(PropertyLoader.properties.getProperty("YawPitch", new YawPitch().toString()));
-			Vector3f t = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans", new Vector3f().toString()));
-			simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), t);
 
 			buttonPanel.add(simpleWalkSetup.getLocField());
 			simpleBethCellManager = new SimpleBethCellManager(simpleWalkSetup);
@@ -235,11 +232,16 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				@Override
 				public void windowClosing(WindowEvent arg0)
 				{
-					PropertyLoader.properties.setProperty("YawPitch",
-							new YawPitch(simpleWalkSetup.getAvatarLocation().getTransform()).toString());
-					PropertyLoader.properties.setProperty("Trans",
-							"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));
-					PropertyLoader.save();
+					closingTime();
+				}
+			});
+
+			simpleWalkSetup.getJFrame().addWindowListener(new WindowAdapter()
+			{
+				@Override
+				public void windowClosing(WindowEvent arg0)
+				{
+					closingTime();
 				}
 			});
 
@@ -249,6 +251,18 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		catch (IOException e1)
 		{
 			e1.printStackTrace();
+		}
+	}
+
+	public void closingTime()
+	{
+		if (esmManager != null)
+		{
+			PropertyLoader.properties.setProperty("YawPitch" + esmManager.getName(), new YawPitch(simpleWalkSetup.getAvatarLocation()
+					.getTransform()).toString());
+			PropertyLoader.properties.setProperty("Trans" + esmManager.getName(),
+					"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));
+			PropertyLoader.save();
 		}
 	}
 
@@ -301,6 +315,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		esmManager = ESMManager.getESMManager(mainESMFile);
 		bsaFileSet = null;
+		if (esmManager != null)
+		{
+			YawPitch yp = YawPitch
+					.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), new YawPitch().toString()));
+			Vector3f t = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
+					new Vector3f().toString()));
+			simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), t);
+		}
 
 		new EsmSoundKeyToName(esmManager);
 

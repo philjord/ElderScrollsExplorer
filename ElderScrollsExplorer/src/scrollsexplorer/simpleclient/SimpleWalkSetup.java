@@ -226,14 +226,23 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		cameraPanel.getCanvas3D2D().setFocusTraversalKeysEnabled(false);
 
 		frame.setTitle(frameName);
-		frame.getContentPane().add(cameraPanel);		
+		frame.getContentPane().add(cameraPanel);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
-		
+
 		universe.addToBehaviorBranch(behaviourBranch);
 
-		headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
+		//FIXME: good for testing hud shape
+	//	headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
 
+	}
+
+	/**
+	 * Only for listening to shutdown
+	 * @return
+	 */
+	public JFrame getJFrame()
+	{
+		return frame;
 	}
 
 	@Override
@@ -278,12 +287,12 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		cameraMouseOver = new ActionableMouseOverHandler(clientPhysicsSystem);
 
 		cameraAdminMouseOverHandler = new AdminMouseOverHandler(clientPhysicsSystem);
-		
+
 		cameraPanel.startRendering();//JRE7 crash bug work around
 		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
 				true, false);
 		cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(gs.isAaRequired());
-		
+
 	}
 
 	public void resetGraphicsSetting()

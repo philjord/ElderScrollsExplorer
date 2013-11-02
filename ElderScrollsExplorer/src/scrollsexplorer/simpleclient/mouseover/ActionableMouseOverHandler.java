@@ -33,6 +33,8 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 	private HUDText HUDText;
 
+	private int hudWidth = 250;
+
 	public ActionableMouseOverHandler(ClientPhysicsSystem clientPhysicsSystem)
 	{
 		super(clientPhysicsSystem);
@@ -44,7 +46,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 		super.doMouseMoved(e);
 		if (canvas3D != null && HUDText != null)
 		{
-			HUDText.setLocation((canvas3D.getWidth() / 2) - 70, (canvas3D.getHeight() / 2));
+			HUDText.setLocation((canvas3D.getWidth() / 2) - (250 / 2), (canvas3D.getHeight() / 2));
 		}
 	}
 
@@ -122,8 +124,8 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 		// set up new canvas
 		if (canvas3D != null)
 		{
-			HUDText = new HUDText((Canvas3D2D) canvas3D,
-					new Rectangle((canvas3D.getWidth() / 2) - 70, (canvas3D.getHeight() / 2), 140, 60), 16);
+			HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle((canvas3D.getWidth() / 2) - (250 / 2), (canvas3D.getHeight() / 2),
+					250, 60), 16);
 		}
 
 	}
@@ -134,8 +136,10 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 		if (clientPhysicsSystem != null)
 		{
 			ClosestRayResultCallback rayCallback = findRayIntersect(mouseEvent);
+
 			if (rayCallback != null && rayCallback.hasHit())
 			{
+
 				RigidBody body = RigidBody.upcast(rayCallback.collisionObject);
 
 				if (body != null)
@@ -172,21 +176,21 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 									J3dRECOType j3dRECOType = j3dInstRECO.getJ3dRECOType();
 
-									if (xtel != null)
+									if (xtel != null && xtel.doorFormId != 0)
 									{
-										// if less than the max interact then set interactable
-										// if not then set hudtext (in light grey) but don't allow actions								
+										String cellName = SimpleBethCellManager.simpleBethCellManager.getCellNameFormIdOf(xtel.doorFormId);
 
+										// if less than the max interact then set interactable
+										// if not then set hudtext (in light grey) but don't allow actions
 										float distance = MAX_MOUSE_RAY_DIST * rayCallback.closestHitFraction;
 										if (distance < INTERACT_MAX_DIST)
 										{
-
-											HUDText.setText("DOOR to " + xtel.doorFormId);
+											HUDText.setText("To " + cellName + " via " + xtel.doorFormId);
 											currentActionable = j3dInstRECO;
 										}
 										else
 										{
-											HUDText.setTextGreyed("DOOR to  " + xtel.doorFormId + " (dist)");
+											HUDText.setText("To " + cellName + " via " + xtel.doorFormId + " (dist)");
 											currentActionable = null; // nothing to action yet										
 										}
 									}
