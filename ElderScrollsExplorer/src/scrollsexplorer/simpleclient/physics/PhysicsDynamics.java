@@ -140,6 +140,7 @@ public class PhysicsDynamics extends DynamicsEngine
 
 	public void addRECO(J3dRECOInst j3dRECOInst)
 	{
+
 		if (j3dRECOInst instanceof J3dLAND)
 		{
 			createLand((J3dLAND) j3dRECOInst);
@@ -149,7 +150,7 @@ public class PhysicsDynamics extends DynamicsEngine
 			J3dRECOType j3dRECOType = j3dRECOInst.getJ3dRECOType();
 			if (j3dRECOType != null && j3dRECOType.physNifFile != null)
 			{
-				createStatic(j3dRECOInst, j3dRECOType.physNifFile);
+				createStaticOrDynamic(j3dRECOInst, j3dRECOType.physNifFile);
 			}
 		}
 		//System.out.println("add called total= " + nifBulletToRecoId.size());
@@ -172,13 +173,14 @@ public class PhysicsDynamics extends DynamicsEngine
 		}
 	}
 
-	private void createStatic(J3dRECOInst j3dRECOInst, String physNifFile)
+	private void createStaticOrDynamic(J3dRECOInst j3dRECOInst, String physNifFile)
 	{
 		Transform3D rootTrans = j3dRECOInst.getLocation(new Transform3D());
 
 		if (physNifFile != null && physNifFile.length() > 0)
 		{
 			BulletNifModel nb = null;
+
 			if (BulletNifModelClassifier.isStaticModel(physNifFile, meshSource))
 			{
 				// the nif file will have mass of 0 making this static
@@ -188,11 +190,15 @@ public class PhysicsDynamics extends DynamicsEngine
 			{
 				// the nif file will have mass of 0 making this kinematic
 				nb = new NBKinematicModel(physNifFile, meshSource, rootTrans);
-				dynamicsRootBranchGroup.addChild((NBKinematicModel)nb);
+				dynamicsRootBranchGroup.addChild((NBKinematicModel) nb);
+			}
+			else if (BulletNifModelClassifier.isSimpleDynamicModel(physNifFile, new FileMeshSource()))
+			{
+				createDynamic(j3dRECOInst, physNifFile);
 			}
 			else
 			{
-				// probably just smoke effect etc
+				// probably just smoke effect etc, complex dynamic rag doll
 			}
 
 			if (nb != null)

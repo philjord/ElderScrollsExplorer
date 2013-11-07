@@ -56,19 +56,19 @@ public class ClientPhysicsSystem extends PhysicsSystem implements NbccProvider
 	}
 
 	public void loadJ3dGridSpace(GridSpace cell)
-	{		
+	{
 		// add the items
 		for (J3dRECOInst instReco : cell.getJ3dRECOsById().values())
-		{			
+		{
 			physicsLocaleDynamics.addRECO(instReco);
 		}
 	}
 
 	public void unloadJ3dGridSpace(GridSpace cell)
-	{		
+	{
 		// add the items
 		for (J3dRECOInst instReco : cell.getJ3dRECOsById().values())
-		{			
+		{
 			physicsLocaleDynamics.removeRECO(instReco);
 		}
 	}

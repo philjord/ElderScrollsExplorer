@@ -8,9 +8,9 @@ public abstract class PhysicsSystem
 {
 	public static Vector3f gravity = new Vector3f(0f, -9.8f, 0f);
 
-	private long MIN_TIME_BETWEEN_BOUND_UPDATES_MS = 50;
+	private long MIN_TIME_BETWEEN_BOUND_UPDATES_MS = 25;
 
-	private long MIN_TIME_BETWEEN_STEPS_MS = 30;
+	private long MIN_TIME_BETWEEN_STEPS_MS = 25;
 
 	protected PhysicsDynamics physicsLocaleDynamics;
 

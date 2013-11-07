@@ -265,7 +265,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			@Override
 			public void applyCharChange(J3dRECOInst instReco, Quat4f newRotation, Vector3f newTranslation)
 			{
-				System.out.println("do somethig here?");
+				//System.out.println("do somethig here?");
 			}
 
 		};

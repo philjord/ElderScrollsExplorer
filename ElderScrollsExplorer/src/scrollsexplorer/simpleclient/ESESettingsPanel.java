@@ -60,7 +60,6 @@ public class ESESettingsPanel extends JPanel
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setFarLoadGridCount(FAR_LOAD_DISTSlider.getValue());
-
 			}
 		});
 
@@ -74,7 +73,6 @@ public class ESESettingsPanel extends JPanel
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setNearLoadGridCount(NEAR_LOAD_DISTSlider.getValue());
-
 			}
 		});
 
@@ -88,7 +86,6 @@ public class ESESettingsPanel extends JPanel
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setCHAR_MOVE_UPDATE_DIST(CHAR_MOVE_UPDATE_DISTSlider.getValue());
-
 			}
 		});
 
@@ -102,7 +99,6 @@ public class ESESettingsPanel extends JPanel
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setActorFade(actorFade.getValue());
-
 			}
 		});
 		itemFade.setBorder(new TitledBorder("Item Fade"));
