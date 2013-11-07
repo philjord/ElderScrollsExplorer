@@ -22,7 +22,7 @@ import esmj3d.j3d.BethRenderSettings;
  */
 public class ESESettingsPanel extends JPanel
 {
-	private JSlider FAR_LOAD_DISTSlider = new JSlider(0, 32, BethRenderSettings.getFarLoadGridCount());
+	private JSlider FAR_LOAD_DISTSlider = new JSlider(0, 64, BethRenderSettings.getFarLoadGridCount());
 
 	private JSlider NEAR_LOAD_DISTSlider = new JSlider(0, 16, BethRenderSettings.getNearLoadGridCount());
 
@@ -51,7 +51,7 @@ public class ESESettingsPanel extends JPanel
 		this.simpleWalkSetup = _simpleWalkSetup;
 		this.setLayout(new GridLayout2(-1, 2));
 		FAR_LOAD_DISTSlider.setBorder(new TitledBorder("Far Load Grids"));
-		FAR_LOAD_DISTSlider.setMajorTickSpacing(4);
+		FAR_LOAD_DISTSlider.setMajorTickSpacing(8);
 		FAR_LOAD_DISTSlider.setPaintTicks(true);
 		FAR_LOAD_DISTSlider.setPaintLabels(true);
 		add(FAR_LOAD_DISTSlider);
