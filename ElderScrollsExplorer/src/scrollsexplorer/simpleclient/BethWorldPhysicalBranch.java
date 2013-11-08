@@ -13,7 +13,7 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
-import scrollsexplorer.simpleclient.physics.ClientPhysicsSystem;
+import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools.QueuingThread;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 import esmLoader.common.data.record.Record;
@@ -46,7 +46,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 
 	private J3dICellFactory j3dCellFactory;
 
-	private ClientPhysicsSystem clientPhysicsSystem;
+	private PhysicsSystem clientPhysicsSystem;
 
 	private BethRenderSettings.UpdateListener listener = new BethRenderSettings.UpdateListener()
 	{
@@ -56,7 +56,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 		}
 	};
 
-	public BethWorldPhysicalBranch(ClientPhysicsSystem clientPhysicsSystem, int worldFormId, J3dICellFactory j3dCellFactory)
+	public BethWorldPhysicalBranch(PhysicsSystem clientPhysicsSystem, int worldFormId, J3dICellFactory j3dCellFactory)
 	{
 		this.clientPhysicsSystem = clientPhysicsSystem;
 		this.worldFormId = worldFormId;

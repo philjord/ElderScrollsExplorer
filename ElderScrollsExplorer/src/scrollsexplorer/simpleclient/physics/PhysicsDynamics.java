@@ -85,6 +85,11 @@ public class PhysicsDynamics extends DynamicsEngine
 		this.displayDebug = displayDebug;
 	}
 
+	boolean isDisplayDebug()
+	{
+		return this.displayDebug;
+	}
+
 	@Override
 	protected void dynamicsPreStep()
 	{

@@ -8,7 +8,7 @@ import javax.media.j3d.Canvas3D;
 import nifbullet.BulletNifModel;
 import nifbullet.NBRigidBody;
 import nifbullet.cha.NifBulletChar;
-import scrollsexplorer.simpleclient.physics.ClientPhysicsSystem;
+import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.mixed3d2d.hud.hudelements.HUDText;
 
@@ -21,7 +21,7 @@ public class AdminMouseOverHandler extends MouseOverHandler
 
 	private BulletNifModel currentBulletNifModel;
 
-	public AdminMouseOverHandler(ClientPhysicsSystem clientPhysicsSystem)
+	public AdminMouseOverHandler(PhysicsSystem clientPhysicsSystem)
 	{
 		super(clientPhysicsSystem);
 	}

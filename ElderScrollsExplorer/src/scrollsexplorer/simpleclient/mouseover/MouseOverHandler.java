@@ -14,7 +14,7 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
-import scrollsexplorer.simpleclient.physics.ClientPhysicsSystem;
+import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools3d.mixed3d2d.CanvasPickRayGen;
 import tools3d.utils.Utils3D;
 
@@ -36,7 +36,7 @@ public abstract class MouseOverHandler extends BranchGroup
 
 	protected MouseEvent lastMouseEvent;
 
-	protected ClientPhysicsSystem clientPhysicsSystem;
+	protected PhysicsSystem clientPhysicsSystem;
 
 	private MouseOverTimer mouseOverTimer = new MouseOverTimer();
 
@@ -61,7 +61,7 @@ public abstract class MouseOverHandler extends BranchGroup
 		}
 	};
 
-	public MouseOverHandler(ClientPhysicsSystem clientPhysicsSystem)
+	public MouseOverHandler(PhysicsSystem clientPhysicsSystem)
 	{
 		this.clientPhysicsSystem = clientPhysicsSystem;
 		setCapability(BranchGroup.ALLOW_DETACH);

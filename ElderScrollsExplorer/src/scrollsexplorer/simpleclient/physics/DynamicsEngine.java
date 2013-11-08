@@ -31,7 +31,7 @@ public abstract class DynamicsEngine
 
 	protected DynamicsWorld dynamicsWorld;
 
-	private boolean paused = false;
+	private boolean paused = true;
 
 	/**
 	 * Note this requries the dynamicsUpdate to be called on a regular basis by whatever teh mian thread is
@@ -136,19 +136,11 @@ public abstract class DynamicsEngine
 
 	public void pause()
 	{
-		if (isPaused())
-		{
-			System.err.println("Pause called, but already paused? for physics " + this);
-		}
 		paused = true;
 	}
 
 	public void unpause()
 	{
-		if (!isPaused())
-		{
-			System.err.println("Unpause called, but not paused? for physics " + this);
-		}
 		paused = false;
 	}
 

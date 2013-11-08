@@ -9,7 +9,7 @@ import nifbullet.BulletNifModel;
 import nifbullet.NBRigidBody;
 import nifbullet.cha.NifBulletChar;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
-import scrollsexplorer.simpleclient.physics.ClientPhysicsSystem;
+import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.mixed3d2d.hud.hudelements.HUDText;
 
@@ -35,7 +35,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 	private int hudWidth = 250;
 
-	public ActionableMouseOverHandler(ClientPhysicsSystem clientPhysicsSystem)
+	public ActionableMouseOverHandler(PhysicsSystem clientPhysicsSystem)
 	{
 		super(clientPhysicsSystem);
 	}

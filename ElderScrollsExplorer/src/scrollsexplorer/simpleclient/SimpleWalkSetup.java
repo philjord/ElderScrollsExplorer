@@ -4,18 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Enumeration;
 import java.util.prefs.Preferences;
 
 import javax.media.j3d.AmbientLight;
-import javax.media.j3d.Behavior;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.DirectionalLight;
 import javax.media.j3d.Group;
 import javax.media.j3d.Light;
-import javax.media.j3d.WakeupCondition;
-import javax.media.j3d.WakeupOnElapsedFrames;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -31,8 +27,8 @@ import nifbullet.NavigationProcessorBullet.NbccProvider;
 import nifbullet.cha.NBControlledChar;
 import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
 import scrollsexplorer.simpleclient.mouseover.AdminMouseOverHandler;
-import scrollsexplorer.simpleclient.physics.ClientPhysicsSystem;
 import scrollsexplorer.simpleclient.physics.InstRECOStore;
+import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools3d.camera.CameraPanel;
 import tools3d.camera.HeadCamDolly;
 import tools3d.mixed3d2d.hud.hudelements.HUDCompass;
@@ -46,7 +42,6 @@ import tools3d.navigation.NavigationTemporalBehaviour;
 import tools3d.resolution.GraphicsSettings;
 import tools3d.resolution.ScreenResolution;
 import tools3d.universe.VisualPhysicalUniverse;
-import tools3d.utils.Utils3D;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 import utils.source.MeshSource;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
@@ -105,13 +100,11 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private HUDCompass hudcompass;
 
-	private ClientPhysicsSystem clientPhysicsSystem;
+	private PhysicsSystem physicsSystem;
 
 	private ActionableMouseOverHandler cameraMouseOver;
 
 	private AdminMouseOverHandler cameraAdminMouseOverHandler;
-
-	private PhysicsUpdateBehaviour currentPhysicsUpdateBehaviour;
 
 	private JTextField locField = new JTextField("0000,0000,0000");
 
@@ -120,7 +113,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		@Override
 		public NBControlledChar getNBControlledChar()
 		{
-			return clientPhysicsSystem.getNBControlledChar();
+			return physicsSystem.getNBControlledChar();
 		}
 	};
 
@@ -232,7 +225,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		universe.addToBehaviorBranch(behaviourBranch);
 
 		//FIXME: good for testing hud shape
-	//	headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
+		//	headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
 
 	}
 
@@ -253,7 +246,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	public void warp(Vector3f origin)
 	{
-		clientPhysicsSystem.getNBControlledChar().getCharacterController().warp(origin);
+		physicsSystem.getNBControlledChar().getCharacterController().warp(origin);
 
 	}
 
@@ -270,23 +263,11 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		};
 
-		clientPhysicsSystem = new ClientPhysicsSystem(charChangeListener, avatarLocation, behaviourBranch, meshSource);
+		physicsSystem = new PhysicsSystem(charChangeListener, avatarLocation, behaviourBranch, meshSource);
 
-		currentPhysicsUpdateBehaviour = new PhysicsUpdateBehaviour(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				clientPhysicsSystem.physicsTick();
-			}
-		});
-		BranchGroup bg = new BranchGroup();
-		bg.addChild(currentPhysicsUpdateBehaviour);
-		behaviourBranch.addChild(bg);
+		cameraMouseOver = new ActionableMouseOverHandler(physicsSystem);
 
-		cameraMouseOver = new ActionableMouseOverHandler(clientPhysicsSystem);
-
-		cameraAdminMouseOverHandler = new AdminMouseOverHandler(clientPhysicsSystem);
+		cameraAdminMouseOverHandler = new AdminMouseOverHandler(physicsSystem);
 
 		cameraPanel.startRendering();//JRE7 crash bug work around
 		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
@@ -309,13 +290,13 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		System.out.println("setEnabled " + enable);
 		// start the processor up ************************
 		navigationProcessor.setActive(enable);
-		currentPhysicsUpdateBehaviour.setEnable(enable);
 		if (enable)
 		{
 			cameraMouseOver.setConfig(cameraPanel.getCanvas3D2D());
 			universe.addToBehaviorBranch(cameraMouseOver);
 			cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
 			universe.addToBehaviorBranch(cameraAdminMouseOverHandler);
+			physicsSystem.unpause();
 			frame.setVisible(true);
 		}
 		else
@@ -324,6 +305,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			universe.removeFromBehaviorBranch(cameraMouseOver);
 			cameraAdminMouseOverHandler.setConfig(null);
 			universe.removeFromBehaviorBranch(cameraAdminMouseOverHandler);
+			physicsSystem.pause();
 			frame.setVisible(false);
 		}
 		cameraPanel.startRendering();
@@ -331,16 +313,16 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	public void setFreeFly(boolean ff)
 	{
-		if (clientPhysicsSystem.getNBControlledChar() != null)
+		if (physicsSystem.getNBControlledChar() != null)
 		{
-			clientPhysicsSystem.getNBControlledChar().getCharacterController().setFreeFly(ff);
+			physicsSystem.getNBControlledChar().getCharacterController().setFreeFly(ff);
 		}
 		keyNavigationInputAWT.setAllowVerticalMovement(ff);
 	}
 
-	public ClientPhysicsSystem getClientPhysicsSystem()
+	public PhysicsSystem getPhysicsSystem()
 	{
-		return clientPhysicsSystem;
+		return physicsSystem;
 	}
 
 	public void addToVisualBranch(Group newGroup)
@@ -391,7 +373,10 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	public void setPhysicsEnabled(boolean enable)
 	{
-		currentPhysicsUpdateBehaviour.setEnable(enable);
+		if (enable)
+			physicsSystem.unpause();
+		else
+			physicsSystem.pause();
 	}
 
 	private class MiscKeyHandler extends KeyAdapter
@@ -432,7 +417,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_J)
 			{
-				clientPhysicsSystem.getPhysicsLocaleDynamics().setDisplayDebug(true);
+				physicsSystem.getPhysicsLocaleDynamics().setDisplayDebug(true);
 			}
 
 			else if (e.getKeyCode() == KeyEvent.VK_TAB)
@@ -445,39 +430,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				{
 					mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
 				}
-			}
-		}
-	}
-
-	public class PhysicsUpdateBehaviour extends Behavior
-	{
-		private WakeupCondition FPSCriterion = new WakeupOnElapsedFrames(0, false);
-
-		private Runnable runner;
-
-		public PhysicsUpdateBehaviour(Runnable runner)
-		{
-			this.runner = runner;
-			setSchedulingBounds(Utils3D.defaultBounds);
-			setEnable(false);
-		}
-
-		public void initialize()
-		{
-			wakeupOn(FPSCriterion);
-		}
-
-		@SuppressWarnings(
-		{ "unchecked", "rawtypes" })
-		public void processStimulus(Enumeration criteria)
-		{
-			if (runner != null)
-			{
-				long start = System.currentTimeMillis();
-				runner.run();
-				if ((System.currentTimeMillis() - start) > 50)
-					System.out.println("Update behave took " + (System.currentTimeMillis() - start));
-				wakeupOn(FPSCriterion);
 			}
 		}
 	}

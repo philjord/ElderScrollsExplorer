@@ -230,8 +230,8 @@ public class SimpleBethCellManager
 						avatarLocation.addAvatarLocationListener(currentBethWorldVisualBranch);
 					}
 
-					currentBethWorldPhysicalBranch = new BethWorldPhysicalBranch(simpleWalkSetup.getClientPhysicsSystem(),
-							currentCellFormId, j3dCellFactory);
+					currentBethWorldPhysicalBranch = new BethWorldPhysicalBranch(simpleWalkSetup.getPhysicsSystem(), currentCellFormId,
+							j3dCellFactory);
 					simpleWalkSetup.addToPhysicalBranch(currentBethWorldPhysicalBranch);
 					if (avatarLocation != null)
 					{
@@ -250,7 +250,7 @@ public class SimpleBethCellManager
 								j3dCellFactory);
 						simpleWalkSetup.addToVisualBranch(currentBethInteriorVisualBranch);
 
-						currentBethInteriorPhysicalBranch = new BethInteriorPhysicalBranch(simpleWalkSetup.getClientPhysicsSystem(),
+						currentBethInteriorPhysicalBranch = new BethInteriorPhysicalBranch(simpleWalkSetup.getPhysicsSystem(),
 								currentCellFormId, j3dCellFactory);
 						simpleWalkSetup.addToPhysicalBranch(currentBethInteriorPhysicalBranch);
 					}

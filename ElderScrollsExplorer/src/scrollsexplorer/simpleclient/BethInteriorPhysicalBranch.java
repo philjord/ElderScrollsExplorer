@@ -3,8 +3,7 @@ package scrollsexplorer.simpleclient;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Group;
 
-import scrollsexplorer.simpleclient.physics.ClientPhysicsSystem;
-
+import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import esmLoader.common.data.record.Record;
 import esmLoader.common.data.record.Subrecord;
 import esmj3d.j3d.cell.J3dCELLGeneral;
@@ -18,7 +17,7 @@ public class BethInteriorPhysicalBranch extends BranchGroup
 
 	private J3dCELLGeneral j3dCELLTemporary;
 
-	public BethInteriorPhysicalBranch(ClientPhysicsSystem clientPhysicsSystem, int interiorCellFormId, J3dICellFactory j3dCellFactory)
+	public BethInteriorPhysicalBranch(PhysicsSystem clientPhysicsSystem, int interiorCellFormId, J3dICellFactory j3dCellFactory)
 	{
 		this.setCapability(BranchGroup.ALLOW_DETACH);
 		this.setCapability(Group.ALLOW_CHILDREN_WRITE);
