@@ -135,12 +135,9 @@ public abstract class MouseOverHandler extends BranchGroup
 			Vector3f rayFrom = new Vector3f(o);
 			Vector3f rayTo = new Vector3f(o);
 			rayTo.add(diff);
-
-			CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(rayFrom, rayTo);
-
-			DynamicsWorld dynamicsWorld = clientPhysicsSystem.getClientPhysics().getDynamicsWorld();
-			dynamicsWorld.rayTest(rayFrom, rayTo, rayCallback);
-			return rayCallback;
+				  
+			CollisionWorld.ClosestRayResultCallback rayCallback = clientPhysicsSystem.findRayIntersect(rayFrom, rayTo);
+			return rayCallback;			
 		}
 		return null;
 	}

@@ -146,6 +146,11 @@ public class PhysicsDynamics extends DynamicsEngine
 	public void addRECO(J3dRECOInst j3dRECOInst)
 	{
 
+		if (recoIdToNifBullet.containsKey(j3dRECOInst.getRecordId()))
+		{
+			System.out.println("I already have loaded " + j3dRECOInst);
+		}
+
 		if (j3dRECOInst instanceof J3dLAND)
 		{
 			createLand((J3dLAND) j3dRECOInst);
@@ -354,7 +359,7 @@ public class PhysicsDynamics extends DynamicsEngine
 	public ClosestRayResultCallback findRayIntersect(Vector3f rayFrom, Vector3f rayTo)
 	{
 		CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(rayFrom, rayTo);
-		getDynamicsWorld().rayTest(rayFrom, rayTo, rayCallback);
+		dynamicsWorld.rayTest(rayFrom, rayTo, rayCallback);
 		return rayCallback;
 	}
 

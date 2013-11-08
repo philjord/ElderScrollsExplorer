@@ -129,11 +129,6 @@ public abstract class DynamicsEngine
 	{
 	}
 
-	public DynamicsWorld getDynamicsWorld()
-	{
-		return dynamicsWorld;
-	}
-
 	public void pause()
 	{
 		paused = true;

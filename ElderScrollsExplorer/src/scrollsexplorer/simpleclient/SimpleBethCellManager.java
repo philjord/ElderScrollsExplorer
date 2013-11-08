@@ -122,7 +122,7 @@ public class SimpleBethCellManager
 	public String getCellNameFormIdOf(int doorFormId)
 	{
 		int cellFormID = esmManager.getCellFormIdForPersistenetFormID(doorFormId);
-		if (cellFormID != -1)
+		if (cellFormID != -1 && cellFormID != 0)
 		{
 			try
 			{
