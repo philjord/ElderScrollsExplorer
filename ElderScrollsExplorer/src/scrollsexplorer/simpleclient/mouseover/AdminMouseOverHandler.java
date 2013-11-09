@@ -21,9 +21,23 @@ public class AdminMouseOverHandler extends MouseOverHandler
 
 	private BulletNifModel currentBulletNifModel;
 
+	private int hudWidth = 500;
+
+	private int hudHeight = 60;
+
 	public AdminMouseOverHandler(PhysicsSystem clientPhysicsSystem)
 	{
 		super(clientPhysicsSystem);
+	}
+
+	@Override
+	public void doMouseMoved(MouseEvent e)
+	{
+		super.doMouseMoved(e);
+		if (canvas3D != null && HUDText != null)
+		{
+			HUDText.setLocation(canvas3D.getWidth() - hudWidth, canvas3D.getHeight() - hudHeight);
+		}
 	}
 
 	@Override
@@ -45,7 +59,8 @@ public class AdminMouseOverHandler extends MouseOverHandler
 		// set up new canvas
 		if (canvas3D != null)
 		{
-			HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle(canvas3D.getWidth() - 500, canvas3D.getHeight() - 50, 490, 30), 10);
+			HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle(canvas3D.getWidth() - hudWidth, canvas3D.getHeight() - hudHeight,
+					hudWidth, hudHeight), 10);
 		}
 	}
 

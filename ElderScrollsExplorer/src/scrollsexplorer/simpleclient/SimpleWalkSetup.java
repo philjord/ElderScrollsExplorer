@@ -224,7 +224,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		universe.addToBehaviorBranch(behaviourBranch);
 
-		//FIXME: good for testing hud shape, definately speeds up renderering!
+		//definately speeds up renderering!
 		headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
 
 	}
