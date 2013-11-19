@@ -57,7 +57,7 @@ public class BootStrap
 			jarpath += "." + ps + "lib" + ps + "jogamp" + ps + "jar" + ps + "jogl-all.jar" + fs;
 			jarpath += "." + ps + "lib" + ps + "java3djogl2.jar" + fs;
 		}
-		ProcessBuilder pb = new ProcessBuilder("java", "-Xmx1024m", "-Xms512m", "-Dsun.java2d.noddraw=true", "-cp", jarpath,
+		ProcessBuilder pb = new ProcessBuilder("java", "-Xmx1200m", "-Xms1024m", "-Dsun.java2d.noddraw=true", "-cp", jarpath,
 				"scrollsexplorer.ScrollsExplorer");
 
 		try
