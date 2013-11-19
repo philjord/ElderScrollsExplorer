@@ -185,6 +185,8 @@ public class PhysicsDynamics extends DynamicsEngine
 
 	private void createStaticOrDynamic(J3dRECOInst j3dRECOInst, String physNifFile)
 	{
+		//root should have scale in it		
+
 		Transform3D rootTrans = j3dRECOInst.getLocation(new Transform3D());
 
 		if (physNifFile != null && physNifFile.length() > 0)
