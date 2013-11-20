@@ -40,7 +40,7 @@ public class BethInteriorPhysicalBranch extends BranchGroup
 	{
 		if (j3dCELLPersistent != null)
 		{
-			j3dCELLPersistent.handleRecordCreate(record);
+			j3dCELLPersistent.getGridSpaces().handleRecordCreate(record);
 		}
 	}
 
@@ -48,7 +48,7 @@ public class BethInteriorPhysicalBranch extends BranchGroup
 	{
 		if (j3dCELLPersistent != null)
 		{
-			j3dCELLPersistent.handleRecordDelete(record);
+			j3dCELLPersistent.getGridSpaces().handleRecordDelete(record);
 		}
 	}
 
@@ -56,7 +56,7 @@ public class BethInteriorPhysicalBranch extends BranchGroup
 	{
 		if (j3dCELLPersistent != null)
 		{
-			j3dCELLPersistent.handleRecordUpdate(record, updatedSubrecord);
+			j3dCELLPersistent.getGridSpaces().handleRecordUpdate(record, updatedSubrecord);
 		}
 
 	}

@@ -131,7 +131,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			update(p.x, -p.z);
 			if (j3dCELLPersistent != null)
 			{
-				j3dCELLPersistent.update(p.x, -p.z, J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount());
+				j3dCELLPersistent.getGridSpaces().update(p.x, -p.z, J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount());
 			}
 		}
 	}
@@ -150,11 +150,11 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			float loadDist = J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount();
 
 			// because j3dcellpersistent is in a lower project I have to do this here, bum			
-			List<GridSpace> gridsToRemove = j3dCELLPersistent.getGridSpacesToRemove(charX, charY, loadDist);
-			List<GridSpace> gridsToAdd = j3dCELLPersistent.getGridSpacesToAdd(charX, charY, loadDist);
+			List<GridSpace> gridsToRemove = j3dCELLPersistent.getGridSpaces().getGridSpacesToRemove(charX, charY, loadDist);
+			List<GridSpace> gridsToAdd = j3dCELLPersistent.getGridSpaces().getGridSpacesToAdd(charX, charY, loadDist);
 
 			//done after gathering the lists above so we now do the grid changes
-			j3dCELLPersistent.update(charX, charY, loadDist);
+			j3dCELLPersistent.getGridSpaces().update(charX, charY, loadDist);
 
 			for (GridSpace gridSpace : gridsToRemove)
 			{
@@ -309,7 +309,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 	{
 		if (j3dCELLPersistent != null)
 		{
-			j3dCELLPersistent.handleRecordCreate(record);
+			j3dCELLPersistent.getGridSpaces().handleRecordCreate(record);
 		}
 	}
 
@@ -317,7 +317,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 	{
 		if (j3dCELLPersistent != null)
 		{
-			j3dCELLPersistent.handleRecordDelete(record);
+			j3dCELLPersistent.getGridSpaces().handleRecordDelete(record);
 		}
 	}
 
@@ -325,7 +325,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 	{
 		if (j3dCELLPersistent != null)
 		{
-			j3dCELLPersistent.handleRecordUpdate(record, updatedSubrecord);
+			j3dCELLPersistent.getGridSpaces().handleRecordUpdate(record, updatedSubrecord);
 		}
 
 	}
@@ -345,7 +345,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 		}
 
 		//ok try the persistent cell as well, it'll return null if it's really not here
-		return j3dCELLPersistent.getJ3dInstRECO(recordId);
+		return j3dCELLPersistent.getGridSpaces().getJ3dInstRECO(recordId);
 	}
 
 }
