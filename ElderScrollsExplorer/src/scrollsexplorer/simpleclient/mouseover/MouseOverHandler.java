@@ -1,5 +1,7 @@
 package scrollsexplorer.simpleclient.mouseover;
 
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -20,11 +22,10 @@ import tools3d.utils.Utils3D;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
-import com.bulletphysics.dynamics.DynamicsWorld;
 
 //TODO: this and the copy in space trader could have the clientphysics replaced with a dynamicsworld object (if avaible?)
 //and this would be totally generic and able to be put in nifbullet
-public abstract class MouseOverHandler extends BranchGroup
+public abstract class MouseOverHandler extends BranchGroup implements ComponentListener
 {
 	public static final float MAX_MOUSE_RAY_DIST = 100f;// max pick dist 100 meters?
 
@@ -92,6 +93,7 @@ public abstract class MouseOverHandler extends BranchGroup
 		{
 			canvas3D.removeMouseListener(mouseAdapter);
 			canvas3D.removeMouseMotionListener(mouseMotionAdapter);
+			canvas3D.removeComponentListener(this);
 		}
 
 		// set up new canvas
@@ -103,6 +105,7 @@ public abstract class MouseOverHandler extends BranchGroup
 
 			canvas3D.addMouseListener(mouseAdapter);
 			canvas3D.addMouseMotionListener(mouseMotionAdapter);
+			canvas3D.addComponentListener(this);
 		}
 
 	}
@@ -135,9 +138,9 @@ public abstract class MouseOverHandler extends BranchGroup
 			Vector3f rayFrom = new Vector3f(o);
 			Vector3f rayTo = new Vector3f(o);
 			rayTo.add(diff);
-				  
+
 			CollisionWorld.ClosestRayResultCallback rayCallback = clientPhysicsSystem.findRayIntersect(rayFrom, rayTo);
-			return rayCallback;			
+			return rayCallback;
 		}
 		return null;
 	}
@@ -182,4 +185,33 @@ public abstract class MouseOverHandler extends BranchGroup
 		}
 	}
 
+	/**
+	 * Override to change pos etc
+	 */
+	protected void screenResized()
+	{
+
+	}
+
+	@Override
+	public void componentResized(ComponentEvent e)
+	{
+		screenResized();
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent e)
+	{
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e)
+	{
+		screenResized();
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent e)
+	{
+	}
 }

@@ -34,22 +34,12 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 	private HUDText HUDText;
 
 	private int hudWidth = 250;
+
 	private int hudHeight = 60;
-	
 
 	public ActionableMouseOverHandler(PhysicsSystem clientPhysicsSystem)
 	{
 		super(clientPhysicsSystem);
-	}
-
-	@Override
-	public void doMouseMoved(MouseEvent e)
-	{
-		super.doMouseMoved(e);
-		if (canvas3D != null && HUDText != null)
-		{
-			HUDText.setLocation((canvas3D.getWidth() / 2) - (hudWidth / 2), (canvas3D.getHeight() / 2) - (hudHeight / 2));
-		}
 	}
 
 	@Override
@@ -126,8 +116,8 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 		// set up new canvas
 		if (canvas3D != null)
 		{
-			HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle((canvas3D.getWidth() / 2) - (hudWidth / 2), (canvas3D.getHeight() / 2)
-					- (hudHeight / 2), hudWidth, hudHeight), 16);
+			HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle((canvas3D.getWidth() / 2) - (hudWidth / 2),
+					(canvas3D.getHeight() / 2) - (hudHeight / 2), hudWidth, hudHeight), 16);
 		}
 
 	}
@@ -240,6 +230,13 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 				}
 			}
 		}
+
+	}
+
+	@Override
+	protected void screenResized()
+	{
+		HUDText.setLocation((canvas3D.getWidth() / 2) - (hudWidth / 2), (canvas3D.getHeight() / 2) - (hudHeight / 2));
 
 	}
 }

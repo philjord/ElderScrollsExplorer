@@ -116,7 +116,7 @@ public class SimpleBethCellManager
 			System.out.println("Bad esm version! " + version + " in " + esmManager.getName());
 		}
 
-		System.out.println("j3dCellFactory = " + j3dCellFactory);
+		//System.out.println("j3dCellFactory = " + j3dCellFactory);
 	}
 
 	public String getCellNameFormIdOf(int doorFormId)

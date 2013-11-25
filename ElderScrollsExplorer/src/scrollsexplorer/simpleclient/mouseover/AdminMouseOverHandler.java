@@ -19,25 +19,13 @@ public class AdminMouseOverHandler extends MouseOverHandler
 {
 	private HUDText HUDText;
 
-	private BulletNifModel currentBulletNifModel;
-
 	private int hudWidth = 500;
 
-	private int hudHeight = 60;
+	private int hudHeight = 50;
 
 	public AdminMouseOverHandler(PhysicsSystem clientPhysicsSystem)
 	{
 		super(clientPhysicsSystem);
-	}
-
-	@Override
-	public void doMouseMoved(MouseEvent e)
-	{
-		super.doMouseMoved(e);
-		if (canvas3D != null && HUDText != null)
-		{
-			HUDText.setLocation(canvas3D.getWidth() - hudWidth, canvas3D.getHeight() - hudHeight);
-		}
 	}
 
 	@Override
@@ -50,18 +38,25 @@ public class AdminMouseOverHandler extends MouseOverHandler
 	public void setConfig(Canvas3D canvas)
 	{
 		super.setConfig(canvas);
-		currentBulletNifModel = null;
+
 		//remove old hudtext
 		if (HUDText != null)
 		{
 			HUDText.removeFromCanvas();
+
 		}
 		// set up new canvas
 		if (canvas3D != null)
 		{
-			HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle(canvas3D.getWidth() - hudWidth, canvas3D.getHeight() - hudHeight,
-					hudWidth, hudHeight), 10);
+			HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle((int) (canvas3D.getWidth() * 0.8f) - hudWidth,
+					(int) (canvas3D.getHeight() * 0.8f) - hudHeight, hudWidth, hudHeight), 10);
 		}
+	}
+
+	@Override
+	protected void screenResized()
+	{
+		HUDText.setLocation((int) (canvas3D.getWidth() * 0.8f) - hudWidth, (int) (canvas3D.getHeight() * 0.8f) - hudHeight);
 	}
 
 	@Override
@@ -96,26 +91,23 @@ public class AdminMouseOverHandler extends MouseOverHandler
 						int recoId = clientPhysicsSystem.getClientPhysics().getRecordId(bnm);
 
 						// show a name for the pointed at thing, in a general way
-						// detach and change info only if we are pointing at a new object3d
-						if (currentBulletNifModel != bnm)
-						{
-							float distance = MAX_MOUSE_RAY_DIST * rayCallback.closestHitFraction;
-							HUDText.setText("" + recoId + " : " + distance + " : " + bnm.toString());
-						}
-						currentBulletNifModel = bnm;
+
+						float distance = MAX_MOUSE_RAY_DIST * rayCallback.closestHitFraction;
+						HUDText.setText("" + recoId + " : " + distance + " : " + bnm.toString());
+						//System.out.println("" + recoId + " : " + distance + " : " + bnm.toString());
+
 					}
 					else
 					{
 						HUDText.setText("");
-						currentBulletNifModel = null;
 					}
 				}
 				else
 				{
 					HUDText.setText("");
-					currentBulletNifModel = null;
 				}
 			}
 		}
 	}
+
 }

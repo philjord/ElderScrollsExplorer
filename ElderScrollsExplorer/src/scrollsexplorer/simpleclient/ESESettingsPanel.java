@@ -6,6 +6,8 @@ package scrollsexplorer.simpleclient;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -22,6 +24,13 @@ import esmj3d.j3d.BethRenderSettings;
  */
 public class ESESettingsPanel extends JPanel
 {
+
+	private JButton lowSettings = new JButton("Low");
+
+	private JButton medSettings = new JButton("Med");
+
+	private JButton highSettings = new JButton("High");
+
 	private JSlider FAR_LOAD_DISTSlider = new JSlider(0, 64, BethRenderSettings.getFarLoadGridCount());
 
 	private JSlider NEAR_LOAD_DISTSlider = new JSlider(0, 16, BethRenderSettings.getNearLoadGridCount());
@@ -49,7 +58,55 @@ public class ESESettingsPanel extends JPanel
 	public ESESettingsPanel(SimpleWalkSetup _simpleWalkSetup)
 	{
 		this.simpleWalkSetup = _simpleWalkSetup;
-		this.setLayout(new GridLayout2(-1, 2));
+		this.setLayout(new GridLayout2(-1, 3));
+
+		ButtonGroup setG = new ButtonGroup();
+		setG.add(lowSettings);
+		setG.add(medSettings);
+		setG.add(highSettings);
+		add(lowSettings);
+		add(medSettings);
+		add(highSettings);
+		lowSettings.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				System.out.println("low");
+				NEAR_LOAD_DISTSlider.setValue(1);
+				FAR_LOAD_DISTSlider.setValue(2);
+				actorFade.setValue(25);
+				itemFade.setValue(50);
+				objectFade.setValue(50);
+			}
+		});
+		medSettings.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				System.out.println("med");
+				NEAR_LOAD_DISTSlider.setValue(2);
+				FAR_LOAD_DISTSlider.setValue(4);
+				actorFade.setValue(50);
+				itemFade.setValue(100);
+				objectFade.setValue(100);
+			}
+		});
+		highSettings.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				System.out.println("high");
+				NEAR_LOAD_DISTSlider.setValue(4);
+				FAR_LOAD_DISTSlider.setValue(8);
+				actorFade.setValue(100);
+				itemFade.setValue(200);
+				objectFade.setValue(200);
+			}
+		});
+
 		FAR_LOAD_DISTSlider.setBorder(new TitledBorder("Far Load Grids"));
 		FAR_LOAD_DISTSlider.setMajorTickSpacing(8);
 		FAR_LOAD_DISTSlider.setPaintTicks(true);
