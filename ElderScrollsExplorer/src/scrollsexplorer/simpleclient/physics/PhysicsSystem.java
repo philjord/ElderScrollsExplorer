@@ -72,7 +72,7 @@ public class PhysicsSystem implements NbccProvider
 				}
 				catch (Exception e)
 				{
-					System.out.println("PhysicsSystem exception " + e.getMessage() + " in " + this);
+					System.out.println("PhysicsSystem.physicsTick() exception " + e.getMessage() + " in " + this);
 				}
 			}
 		});
@@ -95,7 +95,7 @@ public class PhysicsSystem implements NbccProvider
 		{
 			physicsLocaleDynamics = new PhysicsDynamics(instRECOStore, gravity, behaviourRoot, avatarLocation, meshSource);
 			loadJ3dCELL(cell);
-			System.out.println("3Physics objects loaded for cell " + cellId);
+			System.out.println("Physics objects loaded for cell " + cellId);
 		}
 	}
 
@@ -211,12 +211,12 @@ public class PhysicsSystem implements NbccProvider
 		System.out.println("Physics stopped");
 	}
 
-	public void addRECO(J3dRECOInst j3dRECOInst)
+	protected void addRECO(J3dRECOInst j3dRECOInst)
 	{
 		physicsLocaleDynamics.addRECO(j3dRECOInst);
 	}
 
-	public void removeRECO(J3dRECOInst j3dRECOInst)
+	protected void removeRECO(J3dRECOInst j3dRECOInst)
 	{
 		physicsLocaleDynamics.removeRECO(j3dRECOInst);
 	}
@@ -236,7 +236,6 @@ public class PhysicsSystem implements NbccProvider
 						// assumes cell id and stmodel set properly by now
 						loadFromModelImpl(pu.collection);
 					}
-
 					else if (pu.type == PhysicsUpdate.UPDATE_TYPE.UNLOAD_FROM_MODEL)
 					{
 						// assumes cell id and stmodel set properly by now

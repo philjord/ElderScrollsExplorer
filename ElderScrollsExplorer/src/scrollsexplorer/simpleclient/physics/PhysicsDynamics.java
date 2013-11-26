@@ -148,7 +148,7 @@ public class PhysicsDynamics extends DynamicsEngine
 
 		if (recoIdToNifBullet.containsKey(j3dRECOInst.getRecordId()))
 		{
-			System.out.println("I already have loaded " + j3dRECOInst);
+			System.out.println("PhysicsDynamics, already loaded " + j3dRECOInst);
 		}
 
 		if (j3dRECOInst instanceof J3dLAND)
@@ -158,6 +158,7 @@ public class PhysicsDynamics extends DynamicsEngine
 		else
 		{
 			J3dRECOType j3dRECOType = j3dRECOInst.getJ3dRECOType();
+
 			if (j3dRECOType != null && j3dRECOType.physNifFile != null)
 			{
 				createStaticOrDynamic(j3dRECOInst, j3dRECOType.physNifFile);
@@ -298,11 +299,14 @@ public class PhysicsDynamics extends DynamicsEngine
 
 	public synchronized void updateRECOToggleOpen(J3dRECOInst j3dRECOInst, boolean isOpen)
 	{
+		BulletNifModel nifBullet = recoIdToNifBullet.get(j3dRECOInst.getRecordId());
+		if (nifBullet instanceof NBKinematicModel)
+		{
+			NBKinematicModel nbKinematicModel = (NBKinematicModel) nifBullet;
+			String seq = isOpen ? "Open" : "Close";// inst has already been updated (this is post)
 
-		NBKinematicModel nifBullet = (NBKinematicModel) recoIdToNifBullet.get(j3dRECOInst.getRecordId());
-		String seq = isOpen ? "Open" : "Close";// inst has already been updated (this is post)
-
-		nifBullet.getJ3dNiControllerManager().getSequence(seq).fireSequenceOnce();
+			nbKinematicModel.getJ3dNiControllerManager().getSequence(seq).fireSequenceOnce();
+		}
 
 	}
 

@@ -153,6 +153,8 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 										J3dCONT phyJ3dCONT = (J3dCONT) phyJ3dRECOType;
 										phyJ3dCONT.setOpen(true);
 									}
+									
+									System.out.println("Big Fat container opening thingy now!");
 								}
 								//TODO: type   FLOR, MISC etc
 
