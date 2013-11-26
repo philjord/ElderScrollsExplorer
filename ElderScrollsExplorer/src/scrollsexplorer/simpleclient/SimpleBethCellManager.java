@@ -37,6 +37,10 @@ public class SimpleBethCellManager
 	//TODO: bad form only for ActionableMouseOverHandler
 	public static BethWorldPhysicalBranch currentBethWorldPhysicalBranch;
 
+	public static BethInteriorVisualBranch currentBethInteriorVisualBranch;
+
+	public static BethInteriorPhysicalBranch currentBethInteriorPhysicalBranch;
+
 	//TODO: more bad form only for ActionableMouseOverHandler
 	public static SimpleBethCellManager simpleBethCellManager;
 
@@ -45,11 +49,6 @@ public class SimpleBethCellManager
 	private AvatarLocation avatarLocation;
 
 	private int currentCellFormId = -1;
-
-	//TODO::!!!!! this and the static version above mean no mouse over in interal cells!!!
-	private BethInteriorVisualBranch currentBethInteriorVisualBranch;
-
-	private BethInteriorPhysicalBranch currentBethInteriorPhysicalBranch;
 
 	private J3dICellFactory j3dCellFactory;
 
@@ -121,7 +120,7 @@ public class SimpleBethCellManager
 
 	public String getCellNameFormIdOf(int doorFormId)
 	{
-		int cellFormID = esmManager.getCellFormIdForPersistenetFormID(doorFormId);
+		int cellFormID = esmManager.getCellIdOfPersistentTarget(doorFormId);
 		if (cellFormID != -1 && cellFormID != 0)
 		{
 			try
@@ -162,21 +161,30 @@ public class SimpleBethCellManager
 
 	/**
 	 * ONLY for teleport, so MUST be persistent so only need check wrld and cell pers children
-	 * @param formInNewCellId
+	 * @param targetFormId
+	 * @return true if a cell was found and changed to
 	 */
-	public void setCurrentCellFormIdOf(int formInNewCellId)
+	public boolean changeToCellOfTarget(int targetFormId)
 	{
-		int cellFormID = esmManager.getCellFormIdForPersistenetFormID(formInNewCellId);
-		if (cellFormID != -1)
+		int cellFormID = esmManager.getCellIdOfPersistentTarget(targetFormId);
+		System.out.println("cellFormID " + cellFormID);
+		if (cellFormID > 0)
 		{
 			setCurrentCellFormId(cellFormID);
+			return true;
 		}
+		else
+		{
+			System.out.println("No persistence form of id " + targetFormId + ". So no cell change :(");
+		}
+
+		return false;
 	}
 
 	public void setCurrentCellFormId(int newCellFormId)
 	{
 
-		//tODO: On change persistent cells seem to have bad gridspaces?
+		//TODO: On change persistent cells seem to have bad gridspaces?
 		System.out.println("Moving to cell " + newCellFormId);
 		if (currentCellFormId != -1 && currentCellFormId != newCellFormId)
 		{

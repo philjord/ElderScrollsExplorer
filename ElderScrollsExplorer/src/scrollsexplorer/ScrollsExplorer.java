@@ -67,7 +67,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private static DefaultTableModel tableModel;
 
 	private static String[] columnNames = new String[]
-	{ "Int/Ext", "Cell Id", "Name", "Description" };
+	{ "Int/Ext", "Cell Id", "Name" };
 
 	private SoundSource soundSource;
 
@@ -386,14 +386,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			{
 				PluginRecord pr = esmManager.getWRLD(formId);
 				tableModel.addRow(new Object[]
-				{ "Ext", formId, pr, "" });
+				{ "Ext", formId, pr });
 			}
 
 			for (Integer formId : esmManager.getAllInteriorCELLFormIds())
 			{
 				PluginRecord pr = esmManager.getInteriorCELL(formId);
 				tableModel.addRow(new Object[]
-				{ "Int", formId, pr, "" });
+				{ "Int", formId, pr });
 			}
 		}
 		catch (DataFormatException e1)

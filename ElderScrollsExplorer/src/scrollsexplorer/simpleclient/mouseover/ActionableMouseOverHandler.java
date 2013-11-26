@@ -20,6 +20,7 @@ import esmj3d.data.shared.records.CommonREFR;
 import esmj3d.data.shared.subrecords.XTEL;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 import esmj3d.j3d.j3drecords.inst.J3dRECOStatInst;
+import esmj3d.j3d.j3drecords.type.J3dCONT;
 import esmj3d.j3d.j3drecords.type.J3dDOOR;
 import esmj3d.j3d.j3drecords.type.J3dRECOType;
 
@@ -27,7 +28,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 {
 	public static final float INTERACT_MAX_DIST = 2.6f;
 
-	private J3dRECOInst currentActionable = null;
+	private CurrentActionTargetData currentActionTargetData = new CurrentActionTargetData();
 
 	private static Object currentActionableMonitor = new Object();
 
@@ -43,69 +44,10 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 	}
 
 	@Override
-	public void doMouseReleased(MouseEvent e)
-	{
-		// the show info call below on the java3d behavior thread might change currentactionable on us
-		synchronized (currentActionableMonitor)
-		{
-			if (currentActionable != null && e.getButton() == MouseEvent.BUTTON1)
-			{
-				if (currentActionable instanceof J3dRECOStatInst)
-				{
-					// if the mouse release listener is working we can't change the currentActionable until it's finished
-					synchronized (currentActionableMonitor)
-					{
-						J3dRECOStatInst j3dRECOStatInst = (J3dRECOStatInst) currentActionable;
-						// sort out the actionable if  
-						if (j3dRECOStatInst.getInstRECO() instanceof CommonREFR)
-						{
-							CommonREFR commonREFR = (CommonREFR) j3dRECOStatInst.getInstRECO();
-							XTEL xtel = commonREFR.XTEL;
-							if (xtel != null)
-							{
-								// doorFormId is not a cell id! use teh cell of from id call
-								SimpleBethCellManager.simpleBethCellManager.setCurrentCellFormIdOf(xtel.doorFormId);
-								SimpleBethCellManager.simpleBethCellManager.setLocation(xtel.x, xtel.y, xtel.z, xtel.rx, xtel.ry, xtel.rz);
-							}
-							else
-							{
-								//possibly a door that needs opening/closing
-								J3dRECOType j3dRECOType = j3dRECOStatInst.getJ3dRECOType();
-
-								if (j3dRECOType instanceof J3dDOOR)
-								{
-									J3dDOOR j3dDOOR = (J3dDOOR) j3dRECOType;
-									j3dDOOR.toggleOpen();
-
-									clientPhysicsSystem.getClientPhysics().updateRECOToggleOpen(j3dRECOStatInst, j3dDOOR.isOpen());
-
-									//also update physics view, but assume much
-									J3dRECOInst phyJ3dInstRECO = SimpleBethCellManager.currentBethWorldPhysicalBranch
-											.getJ3dInstRECO(j3dRECOStatInst.getRecordId());
-									if (phyJ3dInstRECO != null)
-									{
-										J3dRECOStatInst phyJ3dRECOStatInst = (J3dRECOStatInst) phyJ3dInstRECO;
-										J3dRECOType phyJ3dRECOType = phyJ3dRECOStatInst.getJ3dRECOType();
-										J3dDOOR phyJ3dDOOR = (J3dDOOR) phyJ3dRECOType;
-										phyJ3dDOOR.toggleOpen();
-									}
-
-								}
-
-							}
-						}
-
-					}
-				}
-			}
-		}
-	}
-
-	@Override
 	public void setConfig(Canvas3D canvas)
 	{
 		super.setConfig(canvas);
-		currentActionable = null;
+		currentActionTargetData = new CurrentActionTargetData();
 
 		//remove old hudtext
 		if (HUDText != null)
@@ -120,6 +62,107 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 					(canvas3D.getHeight() / 2) - (hudHeight / 2), hudWidth, hudHeight), 16);
 		}
 
+	}
+
+	@Override
+	public void doMouseReleased(MouseEvent e)
+	{
+		// the show info call below on the java3d behavior thread might change currentactionable on us
+		synchronized (currentActionableMonitor)
+		{
+			if (currentActionTargetData != null && e.getButton() == MouseEvent.BUTTON1)
+			{
+				if (currentActionTargetData.currentActionable != null
+						&& currentActionTargetData.currentActionable instanceof J3dRECOStatInst)
+				{
+					// if the mouse release listener is working we can't change the currentActionable until it's finished
+					synchronized (currentActionableMonitor)
+					{
+						J3dRECOStatInst j3dRECOStatInst = (J3dRECOStatInst) currentActionTargetData.currentActionable;
+						// sort out the actionable if  
+						if (j3dRECOStatInst.getInstRECO() instanceof CommonREFR)
+						{
+							CommonREFR commonREFR = (CommonREFR) j3dRECOStatInst.getInstRECO();
+							XTEL xtel = commonREFR.XTEL;
+							if (xtel != null)
+							{
+								if (SimpleBethCellManager.simpleBethCellManager.changeToCellOfTarget(xtel.doorFormId))
+								{
+									SimpleBethCellManager.simpleBethCellManager.setLocation(xtel.x, xtel.y, xtel.z, xtel.rx, xtel.ry,
+											xtel.rz);
+								}
+							}
+							else
+							{
+
+								J3dRECOType j3dRECOType = j3dRECOStatInst.getJ3dRECOType();
+
+								//possibly a door that needs opening/closing etc
+								if (j3dRECOType instanceof J3dDOOR)
+								{
+									J3dDOOR j3dDOOR = (J3dDOOR) j3dRECOType;
+									j3dDOOR.toggleOpen();
+
+									clientPhysicsSystem.getClientPhysics().updateRECOToggleOpen(j3dRECOStatInst, j3dDOOR.isOpen());
+
+									//also update physics view, but assume much
+									J3dRECOInst phyJ3dInstRECO = null;
+									if (SimpleBethCellManager.currentBethWorldVisualBranch != null)
+									{
+										phyJ3dInstRECO = SimpleBethCellManager.currentBethWorldPhysicalBranch
+												.getJ3dInstRECO(j3dRECOStatInst.getRecordId());
+									}
+									else if (SimpleBethCellManager.currentBethInteriorVisualBranch != null)
+									{
+										phyJ3dInstRECO = SimpleBethCellManager.currentBethInteriorVisualBranch
+												.getJ3dInstRECO(j3dRECOStatInst.getRecordId());
+									}
+									if (phyJ3dInstRECO != null)
+									{
+										J3dRECOStatInst phyJ3dRECOStatInst = (J3dRECOStatInst) phyJ3dInstRECO;
+										J3dRECOType phyJ3dRECOType = phyJ3dRECOStatInst.getJ3dRECOType();
+										J3dDOOR phyJ3dDOOR = (J3dDOOR) phyJ3dRECOType;
+										phyJ3dDOOR.toggleOpen();
+									}
+
+								}
+								else if (j3dRECOType instanceof J3dCONT)
+								{
+									J3dCONT j3dCONT = (J3dCONT) j3dRECOType;
+									j3dCONT.setOpen(true);
+
+									clientPhysicsSystem.getClientPhysics().updateRECOToggleOpen(j3dRECOStatInst, true);
+
+									//also update physics view, but assume much
+									J3dRECOInst phyJ3dInstRECO = null;
+									if (SimpleBethCellManager.currentBethWorldVisualBranch != null)
+									{
+										phyJ3dInstRECO = SimpleBethCellManager.currentBethWorldPhysicalBranch
+												.getJ3dInstRECO(j3dRECOStatInst.getRecordId());
+									}
+									else if (SimpleBethCellManager.currentBethInteriorVisualBranch != null)
+									{
+										phyJ3dInstRECO = SimpleBethCellManager.currentBethInteriorVisualBranch
+												.getJ3dInstRECO(j3dRECOStatInst.getRecordId());
+									}
+
+									if (phyJ3dInstRECO != null)
+									{
+										J3dRECOStatInst phyJ3dRECOStatInst = (J3dRECOStatInst) phyJ3dInstRECO;
+										J3dRECOType phyJ3dRECOType = phyJ3dRECOStatInst.getJ3dRECOType();
+										J3dCONT phyJ3dCONT = (J3dCONT) phyJ3dRECOType;
+										phyJ3dCONT.setOpen(true);
+									}
+								}
+								//TODO: type   FLOR, MISC etc
+
+							}
+						}
+
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -153,7 +196,21 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 					{
 						int recoId = clientPhysicsSystem.getClientPhysics().getRecordId(bnm);
 
-						J3dRECOInst j3dInstRECO = SimpleBethCellManager.currentBethWorldVisualBranch.getJ3dInstRECO(recoId);
+						if (recoId != currentActionTargetData.recoId)
+						{
+							currentActionTargetData.clear();
+							currentActionTargetData.recoId = recoId;
+						}
+
+						J3dRECOInst j3dInstRECO = null;
+						if (SimpleBethCellManager.currentBethWorldVisualBranch != null)
+						{
+							j3dInstRECO = SimpleBethCellManager.currentBethWorldVisualBranch.getJ3dInstRECO(recoId);
+						}
+						else if (SimpleBethCellManager.currentBethInteriorVisualBranch != null)
+						{
+							j3dInstRECO = SimpleBethCellManager.currentBethInteriorVisualBranch.getJ3dInstRECO(recoId);
+						}
 
 						if (j3dInstRECO != null && j3dInstRECO instanceof J3dRECOStatInst)
 						{
@@ -167,68 +224,82 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 									XTEL xtel = commonREFR.XTEL;
 
 									J3dRECOType j3dRECOType = j3dInstRECO.getJ3dRECOType();
+									currentActionTargetData.distance = MAX_MOUSE_RAY_DIST * rayCallback.closestHitFraction;
 
 									if (xtel != null && xtel.doorFormId != 0)
 									{
-										String cellName = SimpleBethCellManager.simpleBethCellManager.getCellNameFormIdOf(xtel.doorFormId);
+										if (currentActionTargetData.cellName == null)
+										{
+											currentActionTargetData.cellName = SimpleBethCellManager.simpleBethCellManager
+													.getCellNameFormIdOf(xtel.doorFormId);
+										}
 
 										// if less than the max interact then set interactable
 										// if not then set hudtext (in light grey) but don't allow actions
-										float distance = MAX_MOUSE_RAY_DIST * rayCallback.closestHitFraction;
-										if (distance < INTERACT_MAX_DIST)
+										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
 										{
-											HUDText.setText("To " + cellName + " via " + xtel.doorFormId);
-											currentActionable = j3dInstRECO;
+											currentActionTargetData.hudText = "To " + currentActionTargetData.cellName + " via "
+													+ xtel.doorFormId;
+											currentActionTargetData.currentActionable = j3dInstRECO;
 										}
 										else
 										{
-											HUDText.setText("To " + cellName + " via " + xtel.doorFormId + " (dist)");
-											currentActionable = null; // nothing to action yet										
+											currentActionTargetData.hudText = "To " + currentActionTargetData.cellName + " via "
+													+ xtel.doorFormId + " (dist)";
+											currentActionTargetData.currentActionable = null; // nothing to action yet										
 										}
 									}
 									else if (j3dRECOType instanceof J3dDOOR)
 									{
-										float distance = MAX_MOUSE_RAY_DIST * rayCallback.closestHitFraction;
-										if (distance < INTERACT_MAX_DIST)
-										{
 
-											HUDText.setText("Open/Close DOOR");
-											currentActionable = j3dInstRECO;
+										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
+										{
+											currentActionTargetData.hudText = "Open/Close DOOR";
+											currentActionTargetData.currentActionable = j3dInstRECO;
 										}
 										else
 										{
-											HUDText.setTextGreyed("Open/Close DOOR (dist)");
-											currentActionable = null; // nothing to action yet										
+											currentActionTargetData.hudText = "Open/Close DOOR (dist)";
+											currentActionTargetData.currentActionable = null; // nothing to action yet										
+										}
+									}
+									else if (j3dRECOType instanceof J3dCONT)
+									{
+
+										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
+										{
+											currentActionTargetData.hudText = "Open Container";
+											currentActionTargetData.currentActionable = j3dInstRECO;
+										}
+										else
+										{
+											currentActionTargetData.hudText = "Open Container (dist)";
+											currentActionTargetData.currentActionable = null; // nothing to action yet										
 										}
 									}
 									else
 									{
-										HUDText.setText("");
-										currentActionable = null;
+										currentActionTargetData.clear();
 									}
 								}
 							}
-
 						}
 						else
 						{
-							HUDText.setText("");
-							currentActionable = null;
+							currentActionTargetData.clear();
 						}
-
 					}
 					else
 					{
-						HUDText.setText("");
-						currentActionable = null;
+						currentActionTargetData.clear();
 					}
 				}
 				else
 				{
-					HUDText.setText("");
-					currentActionable = null;
+					currentActionTargetData.clear();
 				}
 			}
+			HUDText.setText(currentActionTargetData.hudText);
 		}
 
 	}
@@ -238,5 +309,26 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 	{
 		HUDText.setLocation((canvas3D.getWidth() / 2) - (hudWidth / 2), (canvas3D.getHeight() / 2) - (hudHeight / 2));
 
+	}
+
+	private class CurrentActionTargetData
+	{
+		public String hudText = "";
+
+		public int recoId;
+
+		public J3dRECOInst currentActionable = null;
+
+		public float distance = 999;
+
+		public String cellName = "";
+
+		public void clear()
+		{
+			hudText = "";
+			currentActionable = null;
+			distance = 999;
+			cellName = null;
+		}
 	}
 }
