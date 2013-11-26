@@ -5,31 +5,28 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.util.Enumeration;
 
-import javax.media.j3d.Behavior;
-import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.PickRay;
-import javax.media.j3d.WakeupOnElapsedFrames;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
+import tools.clock.PeriodicThread;
+import tools.clock.PeriodicallyUpdated;
 import tools3d.mixed3d2d.CanvasPickRayGen;
-import tools3d.utils.Utils3D;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
 
 //TODO: this and the copy in space trader could have the clientphysics replaced with a dynamicsworld object (if avaible?)
 //and this would be totally generic and able to be put in nifbullet
-public abstract class MouseOverHandler extends BranchGroup implements ComponentListener
+public abstract class MouseOverHandler implements ComponentListener
 {
 	public static final float MAX_MOUSE_RAY_DIST = 100f;// max pick dist 100 meters?
 
-	public static final int FREQUENCY = 15;
+	private static final long MIN_TIME_BETWEEN_STEPS_MS = 100;
 
 	protected Canvas3D canvas3D;
 
@@ -39,7 +36,7 @@ public abstract class MouseOverHandler extends BranchGroup implements ComponentL
 
 	protected PhysicsSystem clientPhysicsSystem;
 
-	private MouseOverTimer mouseOverTimer = new MouseOverTimer();
+	private PeriodicThread mouseOverHandlerThread;
 
 	private MouseAdapter mouseAdapter = new MouseAdapter()
 	{
@@ -65,11 +62,33 @@ public abstract class MouseOverHandler extends BranchGroup implements ComponentL
 	public MouseOverHandler(PhysicsSystem clientPhysicsSystem)
 	{
 		this.clientPhysicsSystem = clientPhysicsSystem;
-		setCapability(BranchGroup.ALLOW_DETACH);
-		// add the picking timer to the universe
-		mouseOverTimer.setSchedulingBounds(Utils3D.defaultBounds);
-		mouseOverTimer.setEnable(true);
-		addChild(mouseOverTimer);
+
+		mouseOverHandlerThread = new PeriodicThread("MouseOverHandler Thread", MIN_TIME_BETWEEN_STEPS_MS, new PeriodicallyUpdated()
+		{
+			public void runUpdate()
+			{
+				try
+				{
+					if (lastMouseEvent != null)
+					{
+						try
+						{
+							processMouseOver(lastMouseEvent);
+						}
+						catch (Exception e)
+						{
+							System.out.println("MouseOverHandler.processMouseOver exception: " + e);
+							e.printStackTrace();
+						}
+					}
+				}
+				catch (Exception e)
+				{
+					System.out.println("PhysicsSystem exception " + e.getMessage() + " in " + this);
+				}
+			}
+		});
+		mouseOverHandlerThread.start();
 
 	}
 
@@ -146,44 +165,6 @@ public abstract class MouseOverHandler extends BranchGroup implements ComponentL
 	}
 
 	protected abstract void processMouseOver(MouseEvent mouseEvent);
-
-	private class MouseOverTimer extends Behavior
-	{
-		private WakeupOnElapsedFrames FPSWakeUp = new WakeupOnElapsedFrames(FREQUENCY);
-
-		@Override
-		public void initialize()
-		{
-			wakeupOn(FPSWakeUp);
-		}
-
-		@SuppressWarnings("rawtypes")
-		@Override
-		public void processStimulus(Enumeration critera)
-		{
-			if (lastMouseEvent != null)
-			{
-				//TODO: bugger bugger bugger, not on physics thread, the process code will drop NPE form time to time
-				// I'm going to have to do all this on the physics stepping thread proper
-				// or is that the navprocessbullet updated by a temporal behavior itself?
-				// in which case whose calling really add and remove?
-				// cos also AI is asking physics for GroundY and stuff too
-				//TODO: Until we get every body talking to physics on the same clock this crap will happen
-				try
-				{
-					processMouseOver(lastMouseEvent);
-				}
-				catch (Exception e)
-				{
-					System.out.println("MouseOverHandler.processMouseOver exception: " + e);
-					e.printStackTrace();
-				}
-			}
-
-			// Set the trigger for the behavior
-			wakeupOn(FPSWakeUp);
-		}
-	}
 
 	/**
 	 * Override to change pos etc

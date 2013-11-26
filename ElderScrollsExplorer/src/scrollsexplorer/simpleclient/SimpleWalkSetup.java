@@ -293,18 +293,14 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		if (enable)
 		{
 			cameraMouseOver.setConfig(cameraPanel.getCanvas3D2D());
-			universe.addToBehaviorBranch(cameraMouseOver);
 			cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
-			universe.addToBehaviorBranch(cameraAdminMouseOverHandler);
 			physicsSystem.unpause();
 			frame.setVisible(true);
 		}
 		else
 		{
 			cameraMouseOver.setConfig(null);
-			universe.removeFromBehaviorBranch(cameraMouseOver);
 			cameraAdminMouseOverHandler.setConfig(null);
-			universe.removeFromBehaviorBranch(cameraAdminMouseOverHandler);
 			physicsSystem.pause();
 			frame.setVisible(false);
 		}
