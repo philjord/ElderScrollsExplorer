@@ -35,7 +35,7 @@ public class ESESettingsPanel extends JPanel
 
 	private JSlider NEAR_LOAD_DISTSlider = new JSlider(0, 16, BethRenderSettings.getNearLoadGridCount());
 
-	private JSlider CHAR_MOVE_UPDATE_DISTSlider = new JSlider(0, 32, (int) BethRenderSettings.getCHAR_MOVE_UPDATE_DIST());
+	private JSlider LOD_LOAD_DIST_MAXSlider = new JSlider(0, 192, BethRenderSettings.getLOD_LOAD_DIST_MAX());
 
 	private JSlider actorFade = new JSlider(0, BethRenderSettings.ACTOR_FADE_MAX, BethRenderSettings.ACTOR_FADE_DEFAULT);
 
@@ -133,16 +133,16 @@ public class ESESettingsPanel extends JPanel
 			}
 		});
 
-		CHAR_MOVE_UPDATE_DISTSlider.setBorder(new TitledBorder("CHAR_MOVE_UPDATE_DIST"));
-		CHAR_MOVE_UPDATE_DISTSlider.setMajorTickSpacing(4);
-		CHAR_MOVE_UPDATE_DISTSlider.setPaintTicks(true);
-		CHAR_MOVE_UPDATE_DISTSlider.setPaintLabels(true);
-		add(CHAR_MOVE_UPDATE_DISTSlider);
-		CHAR_MOVE_UPDATE_DISTSlider.addChangeListener(new ChangeListener()
+		LOD_LOAD_DIST_MAXSlider.setBorder(new TitledBorder("LOD_LOAD_DIST_MAX"));
+		LOD_LOAD_DIST_MAXSlider.setMajorTickSpacing(32);
+		LOD_LOAD_DIST_MAXSlider.setPaintTicks(true);
+		LOD_LOAD_DIST_MAXSlider.setPaintLabels(true);
+		add(LOD_LOAD_DIST_MAXSlider);
+		LOD_LOAD_DIST_MAXSlider.addChangeListener(new ChangeListener()
 		{
 			public void stateChanged(ChangeEvent e)
 			{
-				BethRenderSettings.setCHAR_MOVE_UPDATE_DIST(CHAR_MOVE_UPDATE_DISTSlider.getValue());
+				BethRenderSettings.setLOD_LOAD_DIST_MAX(LOD_LOAD_DIST_MAXSlider.getValue());
 			}
 		});
 

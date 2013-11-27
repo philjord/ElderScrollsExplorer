@@ -12,6 +12,7 @@ import javax.media.j3d.Transform3D;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
+import scrollsexplorer.ScrollsExplorer;
 import tools3d.navigation.AvatarLocation;
 import tools3d.utils.Utils3D;
 import utils.ESConfig;
@@ -54,11 +55,7 @@ public class SimpleBethCellManager
 
 	private ESMManager esmManager;
 
-	private MeshSource meshSource;
-
 	private TextureSource textureSource;
-
-	private SoundSource soundSource;
 
 	public SimpleBethCellManager(SimpleWalkSetup simpleWalkSetup2)
 	{
@@ -84,9 +81,7 @@ public class SimpleBethCellManager
 	public void setSources(ESMManager esmManager, MeshSource meshSource, TextureSource textureSource, SoundSource soundSource)
 	{
 		this.esmManager = esmManager;
-		this.meshSource = meshSource;
 		this.textureSource = textureSource;
-		this.soundSource = soundSource;
 
 		float version = esmManager.getVersion();
 
@@ -224,6 +219,7 @@ public class SimpleBethCellManager
 			if (currentCellFormId != -1)
 			{
 				System.out.println("loading...");
+				ScrollsExplorer.dashboard.setCellLoading(1);
 				PluginRecord cell = esmManager.getWRLD(currentCellFormId);
 				if (cell != null)
 				{
@@ -269,7 +265,7 @@ public class SimpleBethCellManager
 					}
 
 				}
-
+				ScrollsExplorer.dashboard.setCellLoading(-1);
 			}
 
 		}

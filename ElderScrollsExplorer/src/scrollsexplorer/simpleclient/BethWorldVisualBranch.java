@@ -13,6 +13,7 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
+import scrollsexplorer.ScrollsExplorer;
 import tools.QueuingThread;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 import esmLoader.common.data.record.Record;
@@ -70,6 +71,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		this.setCapability(Group.ALLOW_CHILDREN_WRITE);
 		this.setCapability(Group.ALLOW_CHILDREN_EXTEND);
 
+		ScrollsExplorer.dashboard.setLodLoading(1);
 		if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
 		{
 			beth32LodManager = new Beth32LodManager(worldFormId, worldFormName, j3dCellFactory);
@@ -80,6 +82,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			beth32_4LodManager = new Beth32_4LodManager(worldFormId, worldFormName, j3dCellFactory);
 			addChild(beth32_4LodManager);
 		}
+		ScrollsExplorer.dashboard.setLodLoading(-1);
 
 		// set up to listener for changes to teh static render settings
 		BethRenderSettings.addUpdateListener(listener);
@@ -96,16 +99,23 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 					Point3f currentCharPoint = new Point3f(lastUpdatedTranslation.x, 0, lastUpdatedTranslation.z);
 					if (currentCharPoint.distance(p) < BethRenderSettings.getFarLoadGridCount())
 					{
+						ScrollsExplorer.dashboard.setNearLoading(1);
 						if (j3dCELLPersistent != null)
 						{
-							j3dCELLPersistent.getGridSpaces().update(p.x, -p.z, J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount());
+							j3dCELLPersistent.getGridSpaces().update(p.x, -p.z,
+									J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount());
 						}
 
 						updateNear(p.x, -p.z);
+						ScrollsExplorer.dashboard.setNearLoading(-1);
+						ScrollsExplorer.dashboard.setFarLoading(1);
 						updateFar(p.x, -p.z);
+						ScrollsExplorer.dashboard.setFarLoading(-1);
 						if (isWRLD)
 						{
+							ScrollsExplorer.dashboard.setLodLoading(1);
 							updateGross(p.x, -p.z);
+							ScrollsExplorer.dashboard.setLodLoading(-1);
 						}
 
 					}
@@ -137,6 +147,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 	{
 		if (isWRLD)
 		{
+			ScrollsExplorer.dashboard.setNearLoading(1);
 			Vector3f v = new Vector3f();
 			charLocation.get(v);
 			Point3f p = new Point3f(v);
@@ -156,6 +167,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 				Point3f updatePoint = new Point3f(lastUpdatedTranslation.x, 0, lastUpdatedTranslation.z);
 				updateThread.addToQueue(updatePoint);
 			}
+			ScrollsExplorer.dashboard.setNearLoading(-1);
 		}
 	}
 
@@ -328,7 +340,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			newTranslation.set(trans);
 			p1.set(newTranslation);
 			p2.set(lastUpdatedTranslation);
-			if (p1.distance(p2) > BethRenderSettings.getCHAR_MOVE_UPDATE_DIST())
+			if (p1.distance(p2) > 2)
 			{
 				lastUpdatedTranslation.set(newTranslation);
 

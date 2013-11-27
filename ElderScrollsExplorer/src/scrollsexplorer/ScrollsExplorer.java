@@ -57,6 +57,7 @@ import esmj3d.j3d.BethRenderSettings;
 
 public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener
 {
+	public static Dashboard dashboard = new Dashboard();
 
 	private SimpleBethCellManager simpleBethCellManager;
 
@@ -226,6 +227,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			this.invalidate();
 			this.validate();
 			this.doLayout();
+			
+			
+			this.getContentPane().add(dashboard, BorderLayout.WEST);
+
+			
 
 			this.addWindowListener(new WindowAdapter()
 			{
@@ -308,6 +314,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	 */
 	private void loadUpPickers()
 	{
+		ScrollsExplorer.dashboard.setEsmLoading(1);
 		prefs.put("use.bsa", Boolean.toString(cbBsaMenuItem.isSelected()));
 		prefs.put("load.all", Boolean.toString(cbLoadAllMenuItem.isSelected()));
 
@@ -416,19 +423,31 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		mainPanel.invalidate();
 		mainPanel.doLayout();
 		mainPanel.repaint();
+		
+		ScrollsExplorer.dashboard.setEsmLoading(-1);
 	}
 
-	private void display(int cellformid)
+	private void display(final int cellformid)
 	{
+		Thread t = new Thread()
+		{
+			public void run()
+			{
+				//crappy no doubles system
+				synchronized (simpleBethCellManager)
+				{
+					simpleWalkSetup.setEnabled(false);
+					System.out.println("loading and displaying cell " + cellformid);
+					System.out.println("esm version == " + esmManager.getVersion());
+					simpleBethCellManager.setCurrentCellFormId(cellformid);
 
-		simpleWalkSetup.setEnabled(false);
-		System.out.println("loading and displaying cell " + cellformid);
-		System.out.println("esm version == " + esmManager.getVersion());
-		simpleBethCellManager.setCurrentCellFormId(cellformid);
-
-		System.out.println("Cell loaded and dispalyed " + cellformid);
-		simpleWalkSetup.setEnabled(true);
-		//	simpleWalkSetup.warp(new Vector3f(0, 10000, 0));
+					System.out.println("Cell loaded and dispalyed " + cellformid);
+					simpleWalkSetup.setEnabled(true);
+					//	simpleWalkSetup.warp(new Vector3f(0, 10000, 0));
+				}
+			}
+		};
+		t.start();
 	}
 
 	private static void setDebug(boolean b)

@@ -295,7 +295,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			newTranslation.set(trans);
 			p1.set(newTranslation);
 			p2.set(lastUpdatedTranslation);
-			if (p1.distance(p2) > BethRenderSettings.getCHAR_MOVE_UPDATE_DIST())
+			if (p1.distance(p2) > 2)
 			{
 				lastUpdatedTranslation.set(newTranslation);
 				Point3f updatePoint = new Point3f(newTranslation.x, 0, newTranslation.z);
