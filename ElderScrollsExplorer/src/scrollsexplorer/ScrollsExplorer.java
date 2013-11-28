@@ -227,11 +227,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			this.invalidate();
 			this.validate();
 			this.doLayout();
-			
-			
-			this.getContentPane().add(dashboard, BorderLayout.WEST);
 
-			
+			this.getContentPane().add(dashboard, BorderLayout.WEST);
 
 			this.addWindowListener(new WindowAdapter()
 			{
@@ -314,117 +311,128 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	 */
 	private void loadUpPickers()
 	{
-		ScrollsExplorer.dashboard.setEsmLoading(1);
-		prefs.put("use.bsa", Boolean.toString(cbBsaMenuItem.isSelected()));
-		prefs.put("load.all", Boolean.toString(cbLoadAllMenuItem.isSelected()));
 
-		mainPanel.removeAll();
-
-		esmManager = ESMManager.getESMManager(mainESMFile);
-		bsaFileSet = null;
-		if (esmManager != null)
+		Thread t = new Thread()
 		{
-			YawPitch yp = YawPitch
-					.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), new YawPitch().toString()));
-			Vector3f t = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
-					new Vector3f().toString()));
-			simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), t);
-		}
-
-		new EsmSoundKeyToName(esmManager);
-
-		if (cbBsaMenuItem.isSelected())
-		{
-			if (bsaFileSet == null)
-				bsaFileSet = new BSAFileSet(scrollsFolder, cbLoadAllMenuItem.isSelected(), false);
-
-			soundSource = new BsaSoundSource(bsaFileSet, new EsmSoundKeyToName(esmManager));
-			textureSource = new BsaTextureSource(bsaFileSet);
-			meshSource = new BsaMeshSource(bsaFileSet);
-		}
-		else
-		{
-			FileMediaRoots.setMediaRoots(new String[]
-			{ scrollsFolder });
-			soundSource = new FileSoundSource();
-			textureSource = new FileTextureSource();
-			meshSource = new FileMeshSource();
-		}
-
-		simpleWalkSetup.configure(meshSource);
-		simpleWalkSetup.setEnabled(false);
-
-		simpleBethCellManager.setSources(esmManager, meshSource, textureSource, soundSource);
-
-		tableModel = new DefaultTableModel(columnNames, 0)
-		{
-			@Override
-			public boolean isCellEditable(int row, int column)
+			public void run()
 			{
-				return false; // disallow editing of the table
-			}
+				synchronized (mainESMFile)
+				{
+					ScrollsExplorer.dashboard.setEsmLoading(1);
+					prefs.put("use.bsa", Boolean.toString(cbBsaMenuItem.isSelected()));
+					prefs.put("load.all", Boolean.toString(cbLoadAllMenuItem.isSelected()));
 
-			@Override
-			@SuppressWarnings("unchecked")
-			public Class<? extends Object> getColumnClass(int c)
-			{
-				return getValueAt(0, c).getClass();
+					mainPanel.removeAll();
+
+					esmManager = ESMManager.getESMManager(mainESMFile);
+					bsaFileSet = null;
+					if (esmManager != null)
+					{
+						YawPitch yp = YawPitch.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(),
+								new YawPitch().toString()));
+						Vector3f t = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
+								new Vector3f().toString()));
+						simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), t);
+					}
+
+					new EsmSoundKeyToName(esmManager);
+
+					if (cbBsaMenuItem.isSelected())
+					{
+						if (bsaFileSet == null)
+							bsaFileSet = new BSAFileSet(scrollsFolder, cbLoadAllMenuItem.isSelected(), false);
+
+						soundSource = new BsaSoundSource(bsaFileSet, new EsmSoundKeyToName(esmManager));
+						textureSource = new BsaTextureSource(bsaFileSet);
+						meshSource = new BsaMeshSource(bsaFileSet);
+					}
+					else
+					{
+						FileMediaRoots.setMediaRoots(new String[]
+						{ scrollsFolder });
+						soundSource = new FileSoundSource();
+						textureSource = new FileTextureSource();
+						meshSource = new FileMeshSource();
+					}
+
+					simpleWalkSetup.configure(meshSource);
+					simpleWalkSetup.setEnabled(false);
+
+					simpleBethCellManager.setSources(esmManager, meshSource, textureSource, soundSource);
+
+					tableModel = new DefaultTableModel(columnNames, 0)
+					{
+						@Override
+						public boolean isCellEditable(int row, int column)
+						{
+							return false; // disallow editing of the table
+						}
+
+						@Override
+						@SuppressWarnings("unchecked")
+						public Class<? extends Object> getColumnClass(int c)
+						{
+							return getValueAt(0, c).getClass();
+						}
+					};
+
+					table = new JTable(tableModel);
+					table.addMouseListener(new MouseAdapter()
+					{
+						@Override
+						public void mouseClicked(MouseEvent e)
+						{
+							display(((Integer) tableModel.getValueAt(table.convertRowIndexToModel(table.getSelectedRow()), 1)));
+						}
+
+					});
+
+					table.setRowSorter(new TableRowSorter<DefaultTableModel>(tableModel));
+
+					mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
+
+					try
+					{
+						for (Integer formId : esmManager.getAllWRLDTopGroupFormIds())
+						{
+							PluginRecord pr = esmManager.getWRLD(formId);
+							tableModel.addRow(new Object[]
+							{ "Ext", formId, pr });
+						}
+
+						for (Integer formId : esmManager.getAllInteriorCELLFormIds())
+						{
+							PluginRecord pr = esmManager.getInteriorCELL(formId);
+							tableModel.addRow(new Object[]
+							{ "Int", formId, pr });
+						}
+					}
+					catch (DataFormatException e1)
+					{
+						e1.printStackTrace();
+					}
+					catch (IOException e1)
+					{
+						e1.printStackTrace();
+					}
+					catch (PluginException e1)
+					{
+						e1.printStackTrace();
+					}
+
+					table.getColumnModel().getColumn(0).setMaxWidth(30);
+					table.getColumnModel().getColumn(1).setMaxWidth(60);
+
+					mainPanel.validate();
+					mainPanel.invalidate();
+					mainPanel.doLayout();
+					mainPanel.repaint();
+
+					ScrollsExplorer.dashboard.setEsmLoading(-1);
+				}
 			}
 		};
-
-		table = new JTable(tableModel);
-		table.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				display(((Integer) tableModel.getValueAt(table.convertRowIndexToModel(table.getSelectedRow()), 1)));
-			}
-
-		});
-
-		table.setRowSorter(new TableRowSorter<DefaultTableModel>(tableModel));
-
-		mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
-
-		try
-		{
-			for (Integer formId : esmManager.getAllWRLDTopGroupFormIds())
-			{
-				PluginRecord pr = esmManager.getWRLD(formId);
-				tableModel.addRow(new Object[]
-				{ "Ext", formId, pr });
-			}
-
-			for (Integer formId : esmManager.getAllInteriorCELLFormIds())
-			{
-				PluginRecord pr = esmManager.getInteriorCELL(formId);
-				tableModel.addRow(new Object[]
-				{ "Int", formId, pr });
-			}
-		}
-		catch (DataFormatException e1)
-		{
-			e1.printStackTrace();
-		}
-		catch (IOException e1)
-		{
-			e1.printStackTrace();
-		}
-		catch (PluginException e1)
-		{
-			e1.printStackTrace();
-		}
-
-		table.getColumnModel().getColumn(0).setMaxWidth(30);
-		table.getColumnModel().getColumn(1).setMaxWidth(60);
-
-		mainPanel.validate();
-		mainPanel.invalidate();
-		mainPanel.doLayout();
-		mainPanel.repaint();
-		
-		ScrollsExplorer.dashboard.setEsmLoading(-1);
+		t.start();
 	}
 
 	private void display(final int cellformid)
