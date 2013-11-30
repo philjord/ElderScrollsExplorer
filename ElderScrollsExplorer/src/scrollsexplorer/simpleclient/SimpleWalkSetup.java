@@ -246,7 +246,10 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	public void warp(Vector3f origin)
 	{
-		physicsSystem.getNBControlledChar().getCharacterController().warp(origin);
+		if (physicsSystem != null && physicsSystem.getNBControlledChar() != null)
+		{
+			physicsSystem.getNBControlledChar().getCharacterController().warp(origin);
+		}
 
 	}
 
