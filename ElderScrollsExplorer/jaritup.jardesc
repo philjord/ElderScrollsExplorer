@@ -56,6 +56,7 @@
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.compound"/>
         <file path="/3DTools/.compatibility"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;utils"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools.ddstexture.utils"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.loader"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.interp.data"/>
         <javaElement handleIdentifier="=BSAManager"/>
@@ -65,7 +66,6 @@
         <file path="/jnifj3d/.classpath"/>
         <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.ac3d.tree"/>
         <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.resourcepools"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools.texture"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.util.debug.opengl"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.scenegraph"/>
         <javaElement handleIdentifier="=ESMLoader"/>
@@ -93,6 +93,7 @@
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.rules.deprecated.picking"/>
         <file path="/jnifjbullet/.project"/>
         <file path="/esmj3dtes5/.gitignore"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools.ddstexture"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;com.bulletphysics.dom"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.leafnode"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;utils.source"/>
