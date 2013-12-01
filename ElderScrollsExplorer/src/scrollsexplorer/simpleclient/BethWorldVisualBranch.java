@@ -90,6 +90,12 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		isWRLD = j3dCellFactory.isWRLD(worldFormId);
 		if (isWRLD)
 		{
+
+			//load the general children of this wrld space
+
+			j3dCELLPersistent = j3dCellFactory.makeBGWRLDPersistent(worldFormId, false);
+			addChild((J3dCELLGeneral) j3dCELLPersistent);
+
 			QueuingThread.CallBack callBack = new QueuingThread.CallBack()
 			{
 				public void run(Object parameter)
@@ -126,11 +132,6 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			updateThread.setName("Beth Vis update thread");
 			updateThread.setDaemon(true);
 			updateThread.start();
-
-			//load the general children of this wrld space
-
-			j3dCELLPersistent = j3dCellFactory.makeBGWRLDPersistent(worldFormId, false);
-			addChild((J3dCELLGeneral) j3dCELLPersistent);
 
 		}
 		else

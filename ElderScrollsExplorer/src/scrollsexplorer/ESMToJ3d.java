@@ -102,26 +102,26 @@ public class ESMToJ3d
 					{
 						if (esmManager.getName().equals("Skyrim.esm"))
 						{
-							return new esmj3dtes5.j3d.cell.J3dCELLPersistent(esmManager, new Record(record, formId), childRecords,
+							return new esmj3dtes5.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
 									makePhys, meshSource, textureSource, soundSource);
 
 						}
 						else
 						{
-							return new esmj3dfo3.j3d.cell.J3dCELLPersistent(esmManager, new Record(record, formId), childRecords, makePhys,
-									meshSource, textureSource, soundSource);
+							return new esmj3dfo3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
+									makePhys, meshSource, textureSource, soundSource);
 						}
 					}
 					else if (version == 1.32f)
 					{
 						//TODO: is FONV significantly different in esm format to warrant anoth project
-						return new esmj3dfo3.j3d.cell.J3dCELLPersistent(esmManager, new Record(record, formId), childRecords, makePhys,
-								meshSource, textureSource, soundSource);
+						return new esmj3dfo3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
+								makePhys, meshSource, textureSource, soundSource);
 					}
 					else if (version == 1.0f || version == 0.8f)
 					{
-						return new esmj3dtes4.j3d.cell.J3dCELLPersistent(esmManager, new Record(record, formId), childRecords, makePhys,
-								meshSource, textureSource, soundSource);
+						return new esmj3dtes4.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
+								makePhys, meshSource, textureSource, soundSource);
 					}
 					else
 					{

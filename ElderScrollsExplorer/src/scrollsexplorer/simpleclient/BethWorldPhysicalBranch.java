@@ -69,9 +69,19 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 		// set up to listen for changes to the static render settings
 		BethRenderSettings.addUpdateListener(listener);
 
+		// load the general children of this wrld space
+
+		
+		
 		isWRLD = j3dCellFactory.isWRLD(worldFormId);
 		if (isWRLD)
 		{
+			
+			j3dCELLPersistent = j3dCellFactory.makeBGWRLDPersistent(worldFormId, true);
+			addChild((J3dCELLGeneral) j3dCELLPersistent);
+			clientPhysicsSystem.cellChanged(worldFormId, (J3dCELLGeneral) j3dCELLPersistent);
+			//this persistent is just a super cluster of vague things, not related to position at all
+			
 			QueuingThread.CallBack callBack = new QueuingThread.CallBack()
 			{
 				public void run(Object parameter)
@@ -92,12 +102,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			updateThread.setDaemon(true);
 			updateThread.start();
 
-			// load the general children of this wrld space
-
-			j3dCELLPersistent = j3dCellFactory.makeBGWRLDPersistent(worldFormId, true);
-			addChild((J3dCELLGeneral) j3dCELLPersistent);
-			clientPhysicsSystem.cellChanged(worldFormId, (J3dCELLGeneral) j3dCELLPersistent);
-			//this persistent is just a super cluster of vague things, not related to position at all
+			
 			 
 
 		}
