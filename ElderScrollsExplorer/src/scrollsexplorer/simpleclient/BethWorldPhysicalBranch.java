@@ -98,7 +98,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			addChild((J3dCELLGeneral) j3dCELLPersistent);
 			clientPhysicsSystem.cellChanged(worldFormId, (J3dCELLGeneral) j3dCELLPersistent);
 			//this persistent is just a super cluster of vague things, not related to position at all
-			// real data is just in temps below
+			 
 
 		}
 		else

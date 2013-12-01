@@ -116,7 +116,7 @@ public class PhysicsSystem implements NbccProvider
 
 	public void loadJ3dGridSpace(GridSpace cell)
 	{
-		//System.out.println("load request for GridSpace " + cell.getName());
+		//System.out.println("load request for GridSpace " + cell.getName() + " recos count = " + cell.getJ3dRECOsById().values().size());
 		eventsToProcess.add(PhysicsUpdate.createLFM(cell.getJ3dRECOsById().values()));
 	}
 

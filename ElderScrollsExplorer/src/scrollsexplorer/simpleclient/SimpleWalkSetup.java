@@ -29,6 +29,7 @@ import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
 import scrollsexplorer.simpleclient.mouseover.AdminMouseOverHandler;
 import scrollsexplorer.simpleclient.physics.InstRECOStore;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
+import tools.ddstexture.DDSTextureLoader;
 import tools3d.camera.CameraPanel;
 import tools3d.camera.HeadCamDolly;
 import tools3d.mixed3d2d.hud.hudelements.HUDCompass;
@@ -90,7 +91,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private MiscKeyHandler miscKeyHandler = new MiscKeyHandler();
 
-	private boolean showHavok = true;
+	private boolean showHavok = false;
 
 	private boolean showVisual = true;
 
@@ -132,7 +133,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		physicsGroup.setCapability(BranchGroup.ALLOW_DETACH);
 		physicsGroup.setCapability(Group.ALLOW_CHILDREN_EXTEND);
 		physicsGroup.setCapability(Group.ALLOW_CHILDREN_WRITE);
-		modelGroup.addChild(physicsGroup);
+		//modelGroup.addChild(physicsGroup); added if toggled on
 
 		visualGroup = new BranchGroup();
 		visualGroup.setCapability(BranchGroup.ALLOW_DETACH);
@@ -272,10 +273,12 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		cameraAdminMouseOverHandler = new AdminMouseOverHandler(physicsSystem);
 
-		cameraPanel.startRendering();//JRE7 crash bug work around
+		cameraPanel.startRendering();//JRE7 crash bug work around, doesn't work some times:(
 		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
 				true, false);
-		cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(gs.isAaRequired());
+
+		DDSTextureLoader.setAnisotropicFilterDegree(gs.getAnisotropicFilterDegree());
+		cameraPanel.setSceneAntialiasingEnable(gs.isAaRequired());
 
 	}
 
@@ -283,6 +286,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	{
 		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
 				false, true);
+		DDSTextureLoader.setAnisotropicFilterDegree(16);
 		//possibly this is called way early
 		if (cameraPanel.getCanvas3D2D() != null)
 			cameraPanel.getCanvas3D2D().getView().setSceneAntialiasingEnable(gs.isAaRequired());
@@ -403,6 +407,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_H)
 			{
+				//TODO: physics line rendering makes fps drop by 25%???
 				toggleHavok();
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_L)
