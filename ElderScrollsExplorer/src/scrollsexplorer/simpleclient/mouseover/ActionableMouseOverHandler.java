@@ -153,7 +153,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 										J3dCONT phyJ3dCONT = (J3dCONT) phyJ3dRECOType;
 										phyJ3dCONT.setOpen(true);
 									}
-									
+
 									System.out.println("Big Fat container opening thingy now!");
 								}
 								//TODO: type   FLOR, MISC etc
@@ -240,14 +240,12 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 										// if not then set hudtext (in light grey) but don't allow actions
 										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
 										{
-											currentActionTargetData.hudText = "To " + currentActionTargetData.cellName + " via "
-													+ xtel.doorFormId;
+											currentActionTargetData.hudText = "To " + currentActionTargetData.cellName;
 											currentActionTargetData.currentActionable = j3dInstRECO;
 										}
 										else
 										{
-											currentActionTargetData.hudText = "To " + currentActionTargetData.cellName + " via "
-													+ xtel.doorFormId + " (dist)";
+											currentActionTargetData.hudText = "To " + currentActionTargetData.cellName + " (dist)";
 											currentActionTargetData.currentActionable = null; // nothing to action yet										
 										}
 									}
