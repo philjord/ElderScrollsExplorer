@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import tools.io.StreamPump;
-
 import common.config.CommonConstants;
 import common.config.ConfigLoader;
 
@@ -23,6 +22,20 @@ public class BootStrap
 		ConfigLoader.loadConfig(args);
 
 		startClient();
+	}
+	
+	private static String createJavaExeStr()
+	{
+		String javaExe = "java";// just call the path version by default
+
+		//find out if a JRE folder exists, and use it if possible
+		File possibleJreFolder = new File(".\\jre");
+		if (possibleJreFolder.exists() && possibleJreFolder.isDirectory())
+		{
+			javaExe = ".\\jre\\bin\\java";
+		}
+
+		return javaExe;
 	}
 
 	public static void startClient()
@@ -57,7 +70,7 @@ public class BootStrap
 			jarpath += "." + ps + "lib" + ps + "jogamp" + ps + "jar" + ps + "jogl-all.jar" + fs;
 			jarpath += "." + ps + "lib" + ps + "java3djogl2.jar" + fs;
 		}
-		ProcessBuilder pb = new ProcessBuilder("java", "-Xmx1200m", "-Xms1024m", "-Dsun.java2d.noddraw=true", "-cp", jarpath,
+		ProcessBuilder pb = new ProcessBuilder(createJavaExeStr(), "-Xmx1200m", "-Xms1024m", "-Dsun.java2d.noddraw=true", "-cp", jarpath,
 				"scrollsexplorer.ScrollsExplorer");
 
 		try

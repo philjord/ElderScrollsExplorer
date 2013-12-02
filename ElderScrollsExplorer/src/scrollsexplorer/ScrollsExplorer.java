@@ -483,6 +483,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		if (!CommonConstants.USEJOGL2)
 		{
+			System.out.println("WARNING WARNING NON JOGL is not a good idea!");
 			//load up the native dlls!		 
 			new Java3dLinker2();
 		}
