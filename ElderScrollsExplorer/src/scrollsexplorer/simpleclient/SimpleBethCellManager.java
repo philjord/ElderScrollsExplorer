@@ -226,7 +226,7 @@ public class SimpleBethCellManager
 					//add skynow
 					simpleWalkSetup.addToVisualBranch(createBackground());
 
-					currentBethWorldVisualBranch = new BethWorldVisualBranch(currentCellFormId, cell.getEditorID(), j3dCellFactory);
+					currentBethWorldVisualBranch = new BethWorldVisualBranch(currentCellFormId, j3dCellFactory);
 					simpleWalkSetup.addToVisualBranch(currentBethWorldVisualBranch);
 					if (avatarLocation != null)
 					{

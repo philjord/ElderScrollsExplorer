@@ -29,10 +29,7 @@ import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 
 public class BethWorldVisualBranch extends BranchGroup implements LocationUpdateListener
 {
-
 	private int worldFormId;
-
-	private String worldFormName;
 
 	private J3dICELLPersistent j3dCELLPersistent;
 
@@ -60,11 +57,9 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		}
 	};
 
-	public BethWorldVisualBranch(int worldFormId, String worldFormName, J3dICellFactory j3dCellFactory)
+	public BethWorldVisualBranch(int worldFormId, J3dICellFactory j3dCellFactory)
 	{
-
 		this.worldFormId = worldFormId;
-		this.worldFormName = worldFormName;
 		this.j3dCellFactory = j3dCellFactory;
 
 		this.setCapability(BranchGroup.ALLOW_DETACH);
@@ -74,12 +69,12 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		ScrollsExplorer.dashboard.setLodLoading(1);
 		if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
 		{
-			beth32LodManager = new Beth32LodManager(worldFormId, worldFormName, j3dCellFactory);
+			beth32LodManager = new Beth32LodManager(worldFormId, j3dCellFactory);
 			addChild(beth32LodManager);
 		}
 		else
 		{
-			beth32_4LodManager = new Beth32_4LodManager(worldFormId, worldFormName, j3dCellFactory);
+			beth32_4LodManager = new Beth32_4LodManager(worldFormId, j3dCellFactory);
 			addChild(beth32_4LodManager);
 		}
 		ScrollsExplorer.dashboard.setLodLoading(-1);
