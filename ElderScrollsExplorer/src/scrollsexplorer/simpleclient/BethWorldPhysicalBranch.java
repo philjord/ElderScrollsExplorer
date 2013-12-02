@@ -255,6 +255,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			loadedNears.put(key, j3dCELLTemporary);
 			if (j3dCELLTemporary != null)
 			{
+				j3dCELLTemporary.compile();// better to be done not on the j3d thread?
 				addChild(j3dCELLTemporary);
 				clientPhysicsSystem.loadJ3dCELL(j3dCELLTemporary);
 			}
@@ -266,6 +267,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			loadedFars.put(key, cell);
 			if (cell != null)
 			{
+				cell.compile();// better to be done not on the j3d thread?
 				addChild(cell);
 				//not added to physics only added to the view for rendering
 			}

@@ -234,6 +234,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 						//NOTE nears own the detailed land					
 						if (bg != null)
 						{
+							bg.compile();// better to be done not on the j3d thread?
 							addChild(bg);
 						}
 					}
@@ -298,6 +299,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 					if (bg != null)
 					{
 						//Note fars own trees
+						bg.compile();// better to be done not on the j3d thread?
 						addChild(bg);
 						//System.out.println("updateFar3 " + key + " " + (System.currentTimeMillis() - start));
 					}
