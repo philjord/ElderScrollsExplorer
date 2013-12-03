@@ -23,38 +23,28 @@ public class ConfigLoader
 				while (configString != null)
 				{
 
-					if (configString.startsWith("USEJOGL2="))
+				/*	if (configString.startsWith("USEJOGL2="))
 					{
 						String s = configString.substring("USEJOGL2=".length());
 						CommonConstants.USEJOGL2 = Boolean.parseBoolean(s);
 						System.out.println("USEJOGL2 " + CommonConstants.USEJOGL2);
 					}
-					else if (configString.startsWith("FULL_SCREEN="))
-					{
-						String s = configString.substring("FULL_SCREEN=".length());
-						CommonConstants.FULL_SCREEN = Boolean.parseBoolean(s);
-						System.out.println("FULL_SCREEN " + CommonConstants.FULL_SCREEN);
-					}
-
+					
+*/
 					configString = input.readLine();
 				}
 
 				// Now do command line overrides			 
 				for (String argConfigString : args)
 				{
-					System.out.println("Command line override " + argConfigString);
+					/*System.out.println("Command line override " + argConfigString);
 					if (argConfigString.startsWith("-USEJOGL2="))
 					{
 						String s = argConfigString.substring("-USEJOGL2=".length());
 						CommonConstants.USEJOGL2 = Boolean.parseBoolean(s);
 						System.out.println("USEJOGL2 " + CommonConstants.USEJOGL2);
-					}
-					else if (argConfigString.startsWith("FULL_SCREEN="))
-					{
-						String s = argConfigString.substring("FULL_SCREEN=".length());
-						CommonConstants.FULL_SCREEN = Boolean.parseBoolean(s);
-						System.out.println("FULL_SCREEN " + CommonConstants.FULL_SCREEN);
-					}
+					}*/
+					
 				}
 
 			}

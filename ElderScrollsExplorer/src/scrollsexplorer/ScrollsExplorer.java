@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.util.prefs.Preferences;
 import java.util.zip.DataFormatException;
 
-import java3d.nativelinker.Java3dLinker2;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -48,8 +46,9 @@ import bsa.BSAFileSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
-import common.config.CommonConstants;
+
 import common.config.ConfigLoader;
+
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
@@ -473,6 +472,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public static void main(String[] args)
 	{
+
 		//DDS requires no installed java3D
 		if (QueryProperties.checkForInstalledJ3d())
 		{
@@ -480,13 +480,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		}
 
 		ConfigLoader.loadConfig(args);
-
-		if (!CommonConstants.USEJOGL2)
-		{
-			System.out.println("WARNING WARNING NON JOGL is not a good idea!");
-			//load up the native dlls!		 
-			new Java3dLinker2();
-		}
 
 		// always load lwjgl for jbullet debug
 		new LWJGLLinker();

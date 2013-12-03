@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import tools.io.StreamPump;
-import common.config.CommonConstants;
+
 import common.config.ConfigLoader;
 
 public class BootStrap
@@ -23,7 +23,7 @@ public class BootStrap
 
 		startClient();
 	}
-	
+
 	private static String createJavaExeStr()
 	{
 		String javaExe = "java";// just call the path version by default
@@ -58,18 +58,9 @@ public class BootStrap
 		jarpath += "." + ps + "lib" + ps + "lwjgl-2.8.5" + ps + "jar" + ps + "lwjgl_util.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "j3d-org-java3d-all.jar" + fs;
 
-		if (!CommonConstants.USEJOGL2)
-		{
-			jarpath += "." + ps + "lib" + ps + "j3dcore.jar" + fs;
-			jarpath += "." + ps + "lib" + ps + "j3dutils.jar" + fs;
-			jarpath += "." + ps + "lib" + ps + "vecmath.jar" + fs;
-			jarpath += "." + ps + "lib" + ps + "j3dnative.jar" + fs;
-		}
-		else
-		{
-			jarpath += "." + ps + "lib" + ps + "jogamp" + ps + "jar" + ps + "jogl-all.jar" + fs;
-			jarpath += "." + ps + "lib" + ps + "java3djogl2.jar" + fs;
-		}
+		jarpath += "." + ps + "lib" + ps + "jogamp" + ps + "jar" + ps + "jogl-all.jar" + fs;
+		jarpath += "." + ps + "lib" + ps + "java3djogl2.jar" + fs;
+
 		ProcessBuilder pb = new ProcessBuilder(createJavaExeStr(), "-Xmx1200m", "-Xms1024m", "-Dsun.java2d.noddraw=true", "-cp", jarpath,
 				"scrollsexplorer.ScrollsExplorer");
 
