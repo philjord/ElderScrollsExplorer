@@ -11,93 +11,107 @@
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
-        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders.resourcepools"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.stat"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.resolution"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.particles"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.infoText"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation"/>
         <file path="/jnifj3d/.project"/>
         <file path="/jnifj3d/.gitignore"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.rules.deprecated"/>
         <folder path="/ElderScrollsExplorer/META-INF"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.camera.simple"/>
-        <javaElement handleIdentifier="=3DTools/&lt;javax.media.j3d"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d"/>
-        <javaElement handleIdentifier="=esmj3d"/>
+        <file path="/esmj3dtes4/.gitignore"/>
+        <file path="/ElderScrollsUtils/.project"/>
         <file path="/3DTools/.classpath"/>
-        <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools.image"/>
         <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders.ac3d"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools.image"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;com.bulletphysics"/>
-        <javaElement handleIdentifier="=ElderScrollsExplorer/src"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;utils.source.file"/>
-        <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.rag"/>
-        <javaElement handleIdentifier="=jnifj3d/&lt;nif.gui.util"/>
-        <file path="/jnifj3d/.compatibility"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.interp"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.dyn"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.mixed3d2d.hud"/>
-        <javaElement handleIdentifier="=jnif"/>
-        <javaElement handleIdentifier="=ElderScrollsUtils"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.audio"/>
-        <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.util"/>
         <file path="/esmj3dtes5/.classpath"/>
-        <javaElement handleIdentifier="=Tools"/>
-        <file path="/esmj3dtes5/.project"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.mixed3d2d"/>
+        <file path="/esmj3dtes5/.project"/>
+        <file path="/esmj3d/.classpath"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.mixed3d2d.hud.hudelements"/>
         <file path="/3DTools/.project"/>
         <file path="/3DTools/.gitignore"/>
-        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.ac3d"/>
-        <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.compound"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.environment.sky"/>
-        <file path="/3DTools/.compatibility"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;utils"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.loader"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.interp.data"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools.ddstexture.utils"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;utils.convert"/>
-        <javaElement handleIdentifier="=BSAManager"/>
-        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.rules"/>
         <file path="/jnifj3d/.classpath"/>
-        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.resourcepools"/>
-        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.ac3d.tree"/>
+        <file path="/esmj3dfo3/.classpath"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.util.debug.opengl"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.scenegraph"/>
-        <javaElement handleIdentifier="=ESMLoader"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.convert"/>
-        <javaElement handleIdentifier="=jnifj3d/&lt;nif.character"/>
+        <file path="/esmj3dfo3/.gitignore"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.animation.interp"/>
+        <javaElement handleIdentifier="=jnifj3d/&lt;nif.character"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.gui"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.mixed3d2d.overlay.swing"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.rules.deprecated.debug"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;com.bulletphysics.util"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.geography.gen"/>
-        <javaElement handleIdentifier="=esmj3dfo3"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.camera"/>
-        <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.animation"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.universe"/>
-        <javaElement handleIdentifier="=jnifj3d/&lt;nif"/>
-        <file path="/jnifjbullet/.compatibility"/>
-        <javaElement handleIdentifier="=esmj3dtes4"/>
+        <file path="/esmj3dtes4/.project"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.kin"/>
-        <javaElement handleIdentifier="=esmj3dtes5/src"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.geography"/>
-        <file path="/jnifjbullet/.classpath"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.old"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.environment"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.rules.deprecated.picking"/>
         <file path="/jnifjbullet/.project"/>
         <file path="/esmj3dtes5/.gitignore"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools.ddstexture"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;com.bulletphysics.dom"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.leafnode"/>
-        <javaElement handleIdentifier="=jnifj3d/&lt;utils.source"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.other"/>
+        <javaElement handleIdentifier="=jnifj3d/&lt;utils.source"/>
+        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders.resourcepools"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.resolution"/>
+        <javaElement handleIdentifier="=esmj3d/src"/>
+        <file path="/esmj3d/.project"/>
+        <javaElement handleIdentifier="=esmj3dtes4/src"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.rules.deprecated"/>
+        <javaElement handleIdentifier="=3DTools/&lt;javax.media.j3d"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.camera.simple"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d"/>
+        <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet"/>
+        <javaElement handleIdentifier="=ElderScrollsExplorer/src"/>
+        <file path="/ElderScrollsUtils/.gitignore"/>
+        <javaElement handleIdentifier="=ElderScrollsUtils/src"/>
+        <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.rag"/>
+        <file path="/esmj3dfo3/.project"/>
+        <javaElement handleIdentifier="=jnifj3d/&lt;nif.gui.util"/>
+        <file path="/jnifj3d/.compatibility"/>
+        <javaElement handleIdentifier="=esmj3dfo3/src"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.mixed3d2d.hud"/>
+        <javaElement handleIdentifier="=jnif"/>
+        <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.util"/>
+        <javaElement handleIdentifier="=Tools"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.environment.sky"/>
+        <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.compound"/>
+        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.ac3d"/>
+        <file path="/3DTools/.compatibility"/>
+        <file path="/esmj3dtes4/.classpath"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools.ddstexture.utils"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.loader"/>
+        <javaElement handleIdentifier="=BSAManager"/>
+        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders"/>
+        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.ac3d.tree"/>
+        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.resourcepools"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.scenegraph"/>
+        <javaElement handleIdentifier="=ESMLoader"/>
+        <file path="/ElderScrollsUtils/.classpath"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.mixed3d2d.overlay.swing"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.rules.deprecated.debug"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.geography.gen"/>
+        <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.animation"/>
+        <file path="/esmj3d/.gitignore"/>
+        <javaElement handleIdentifier="=jnifj3d/&lt;nif"/>
+        <file path="/jnifjbullet/.compatibility"/>
+        <javaElement handleIdentifier="=esmj3dtes5/src"/>
+        <file path="/jnifjbullet/.classpath"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.environment"/>
+        <file path="/esmj3dfo3/.compatibility"/>
+        <file path="/esmj3dtes4/.compatibility"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.leafnode"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.cha"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.treetest"/>
     </selectedElements>
