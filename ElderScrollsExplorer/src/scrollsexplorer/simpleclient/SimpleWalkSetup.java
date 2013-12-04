@@ -303,6 +303,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
 			physicsSystem.unpause();
 			frame.setVisible(true);
+			cameraPanel.startRendering();
 		}
 		else
 		{
@@ -310,8 +311,9 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			cameraAdminMouseOverHandler.setConfig(null);
 			physicsSystem.pause();
 			frame.setVisible(false);
+			cameraPanel.stopRendering();
 		}
-		cameraPanel.startRendering();
+
 	}
 
 	public void setFreeFly(boolean ff)
