@@ -14,7 +14,7 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/jnifjbullet"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Tools"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/jbullet-20101010/dist/jbullet.jar" sourcepath="E:/Java/workspace/external_jars/external jars/jbullet-20101010/src"/>
+	<classpathentry kind="lib" path="/external_jars/external jars/jbullet-20101010/dist/jbullet.jar" sourcepath="E:/Java/3rd party jars/jbullet-20101010/src"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/lwjglnative.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/lwjgl-2.8.5/jar/jinput.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/lwjgl-2.8.5/jar/lwjgl_util.jar"/>

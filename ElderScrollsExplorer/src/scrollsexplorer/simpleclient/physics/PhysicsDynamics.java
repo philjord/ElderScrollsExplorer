@@ -173,12 +173,12 @@ public class PhysicsDynamics extends DynamicsEngine
 		NBStaticModel nb = new NBStaticModel(j3dLAND.getGeometryInfo(), rootTrans);
 		if (nb != null)
 		{
-			// Note we don't listen for physics updates
-			recoIdToNifBullet.put(j3dLAND.getRecordId(), nb);
-			nifBulletToRecoId.put(nb, j3dLAND.getRecordId());
 
 			synchronized (dynamicsWorld)
 			{
+				// Note we don't listen for physics updates
+				recoIdToNifBullet.put(j3dLAND.getRecordId(), nb);
+				nifBulletToRecoId.put(nb, j3dLAND.getRecordId());
 				nb.addToDynamicsWorld(dynamicsWorld);
 			}
 		}
@@ -216,12 +216,12 @@ public class PhysicsDynamics extends DynamicsEngine
 
 			if (nb != null)
 			{
-				// Note we don't listen for physics updates
-				recoIdToNifBullet.put(j3dRECOInst.getRecordId(), nb);
-				nifBulletToRecoId.put(nb, j3dRECOInst.getRecordId());
 
 				synchronized (dynamicsWorld)
 				{
+					// Note we don't listen for physics updates
+					recoIdToNifBullet.put(j3dRECOInst.getRecordId(), nb);
+					nifBulletToRecoId.put(nb, j3dRECOInst.getRecordId());
 					nb.addToDynamicsWorld(dynamicsWorld);
 				}
 			}
@@ -256,11 +256,12 @@ public class PhysicsDynamics extends DynamicsEngine
 				{
 					instRecoBulletBindings.put(j3dRECOInst.getRecordId(), irnbb);
 				}
-				recoIdToNifBullet.put(j3dRECOInst.getRecordId(), nb);
-				nifBulletToRecoId.put(nb, j3dRECOInst.getRecordId());
-				dynamicsRootBranchGroup.addChild(nb);
+
 				synchronized (dynamicsWorld)
 				{
+					recoIdToNifBullet.put(j3dRECOInst.getRecordId(), nb);
+					nifBulletToRecoId.put(nb, j3dRECOInst.getRecordId());
+					dynamicsRootBranchGroup.addChild(nb);
 					nb.addToDynamicsWorld(dynamicsWorld);
 				}
 			}
@@ -320,11 +321,12 @@ public class PhysicsDynamics extends DynamicsEngine
 			synchronized (dynamicsWorld)
 			{
 				nifBullet.removeFromDynamicsWorld(dynamicsWorld);
+				nifBullet.destroy();
+				instRecoBulletBindings.remove(recordId);
+				nifBulletToRecoId.remove(nifBullet);
+				recoIdToNifBullet.remove(recordId);
 			}
-			nifBullet.destroy();
-			instRecoBulletBindings.remove(recordId);
-			nifBulletToRecoId.remove(nifBullet);
-			recoIdToNifBullet.remove(recordId);
+
 		}
 		//System.out.println("remove called total= " + nifBulletToRecoId.size());
 
@@ -367,6 +369,41 @@ public class PhysicsDynamics extends DynamicsEngine
 		CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(rayFrom, rayTo);
 		dynamicsWorld.rayTest(rayFrom, rayTo, rayCallback);
 		return rayCallback;
+	}
+
+	public PhysicsStatus getPhysicsStatus()
+	{
+		PhysicsStatus ret = new PhysicsStatus();
+		synchronized (dynamicsWorld)
+		{
+			for (BulletNifModel bnm : recoIdToNifBullet.values())
+			{
+				if (bnm instanceof NBSimpleDynamicModel)
+				{
+					ret.dynCount++;
+				}
+				else if (bnm instanceof NBKinematicModel)
+				{
+					ret.kinCount++;
+				}
+				else if (bnm instanceof NBStaticModel)
+				{
+					ret.staCount++;
+				}
+			}
+		}
+		return ret;
+	}
+
+	public static class PhysicsStatus
+	{
+		public int dynCount = 0;
+
+		public int kinCount = 0;
+
+		public int staCount = 0;
+
+		public long averageStepTimeMS = 0;
 	}
 
 }

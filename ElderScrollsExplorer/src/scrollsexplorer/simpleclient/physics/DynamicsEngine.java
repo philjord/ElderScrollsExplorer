@@ -10,6 +10,7 @@ import com.bulletphysics.collision.dispatch.CollisionDispatcher;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.dispatch.DefaultNearCallback;
 import com.bulletphysics.collision.dispatch.GhostPairCallback;
+import com.bulletphysics.dynamics.ActionInterface;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
@@ -32,6 +33,8 @@ public abstract class DynamicsEngine
 	protected DynamicsWorld dynamicsWorld;
 
 	private boolean paused = true;
+
+	private boolean skipStepSim = false;
 
 	/**
 	 * Note this requries the dynamicsUpdate to be called on a regular basis by whatever teh mian thread is
@@ -69,6 +72,16 @@ public abstract class DynamicsEngine
 
 	}
 
+	public boolean isSkipStepSim()
+	{
+		return skipStepSim;
+	}
+
+	public void setSkipStepSim(boolean skipStepSim)
+	{
+		this.skipStepSim = skipStepSim;
+	}
+
 	public void dynamicsTick()
 	{
 		long dtms = timeKeeper.getTimeMicroseconds();
@@ -84,7 +97,19 @@ public abstract class DynamicsEngine
 				//note timeStep is seconds not ms AND you must have a sub step count! make him 5ish
 				synchronized (dynamicsWorld)
 				{
-					dynamicsWorld.stepSimulation(dtms / 1000000f, 5);
+					if (!skipStepSim)
+					{
+						dynamicsWorld.stepSimulation(dtms / 1000000f, 5);
+					}
+					else
+					{
+						//fire actions any way?
+						for (int a = 0; a < dynamicsWorld.getNumActions(); a++)
+						{
+							ActionInterface ai = dynamicsWorld.getAction(a);
+							ai.updateAction(dynamicsWorld, dtms / 1000000f);
+						}
+					}
 				}
 				if ((timeKeeper.getTimeMicroseconds() - dtms2) > 20000)
 				{

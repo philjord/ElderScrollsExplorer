@@ -329,9 +329,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					{
 						YawPitch yp = YawPitch.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(),
 								new YawPitch().toString()));
-						Vector3f t = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
+						Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
 								new Vector3f().toString()));
-						simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), t);
+						simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
 					}
 
 					new EsmSoundKeyToName(esmManager);

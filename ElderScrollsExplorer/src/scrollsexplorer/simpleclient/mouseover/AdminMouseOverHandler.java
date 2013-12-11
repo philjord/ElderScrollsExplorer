@@ -88,7 +88,7 @@ public class AdminMouseOverHandler extends MouseOverHandler
 					if (bnm != null)
 					{
 
-						int recoId = clientPhysicsSystem.getClientPhysics().getRecordId(bnm);
+						int recoId = clientPhysicsSystem.getPhysicsLocaleDynamics().getRecordId(bnm);
 
 						// show a name for the pointed at thing, in a general way
 

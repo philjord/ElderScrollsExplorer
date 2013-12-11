@@ -103,7 +103,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 									J3dDOOR j3dDOOR = (J3dDOOR) j3dRECOType;
 									j3dDOOR.toggleOpen();
 
-									clientPhysicsSystem.getClientPhysics().updateRECOToggleOpen(j3dRECOStatInst, j3dDOOR.isOpen());
+									clientPhysicsSystem.getPhysicsLocaleDynamics().updateRECOToggleOpen(j3dRECOStatInst, j3dDOOR.isOpen());
 
 									//also update physics view, but assume much
 									J3dRECOInst phyJ3dInstRECO = null;
@@ -131,7 +131,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 									J3dCONT j3dCONT = (J3dCONT) j3dRECOType;
 									j3dCONT.setOpen(true);
 
-									clientPhysicsSystem.getClientPhysics().updateRECOToggleOpen(j3dRECOStatInst, true);
+									clientPhysicsSystem.getPhysicsLocaleDynamics().updateRECOToggleOpen(j3dRECOStatInst, true);
 
 									//also update physics view, but assume much
 									J3dRECOInst phyJ3dInstRECO = null;
@@ -196,7 +196,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 					if (bnm != null)
 					{
-						int recoId = clientPhysicsSystem.getClientPhysics().getRecordId(bnm);
+						int recoId = clientPhysicsSystem.getPhysicsLocaleDynamics().getRecordId(bnm);
 
 						if (recoId != currentActionTargetData.recoId)
 						{

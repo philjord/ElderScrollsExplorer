@@ -11,6 +11,7 @@ import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallb
 import nifbullet.BulletNifModel;
 import nifbullet.NavigationProcessorBullet.NbccProvider;
 import nifbullet.cha.NBControlledChar;
+import scrollsexplorer.simpleclient.physics.PhysicsDynamics.PhysicsStatus;
 import tools.PendingList;
 import tools.clock.PeriodicThread;
 import tools.clock.PeriodicallyUpdated;
@@ -49,6 +50,8 @@ public class PhysicsSystem implements NbccProvider
 
 	// Note in one list to ensure time ordering
 	private PendingList<PhysicsUpdate> eventsToProcess = new PendingList<PhysicsUpdate>();
+
+	
 
 	/**
 	 * starts paused for loading
@@ -97,11 +100,6 @@ public class PhysicsSystem implements NbccProvider
 			loadJ3dCELL(cell);
 			System.out.println("Physics objects loaded for cell " + cellId);
 		}
-	}
-
-	public PhysicsDynamics getClientPhysics()
-	{
-		return physicsLocaleDynamics;
 	}
 
 	@Override
@@ -179,6 +177,8 @@ public class PhysicsSystem implements NbccProvider
 		}
 	}
 
+	
+
 	protected void setMinTimeForBoundUpdate(long newTime)
 	{
 		MIN_TIME_BETWEEN_BOUND_UPDATES_MS = newTime;
@@ -255,7 +255,11 @@ public class PhysicsSystem implements NbccProvider
 
 				if (!isPaused())
 				{
+					
+						
+					
 					physicsLocaleDynamics.dynamicsTick();
+					 
 					physicsToModelTick();
 				}
 			}
@@ -351,6 +355,22 @@ public class PhysicsSystem implements NbccProvider
 			}
 		}
 		return -1;
+	}
+
+	public PhysicsStatus getPhysicsStatus()
+	{
+
+		if (physicsLocaleDynamics != null)
+		{
+			PhysicsStatus ret = physicsLocaleDynamics.getPhysicsStatus();
+			//TODO: 10 long array etc
+			ret.averageStepTimeMS = -999;
+			return ret;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	public static class PhysicsUpdate

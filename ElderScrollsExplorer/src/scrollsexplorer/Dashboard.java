@@ -7,6 +7,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
+import scrollsexplorer.simpleclient.physics.PhysicsSystem;
+import scrollsexplorer.simpleclient.physics.PhysicsSystemStatus;
+
 public class Dashboard extends JPanel
 {
 	private JLabel esmLoadingLabel = new JLabel("Esm");
@@ -18,6 +21,8 @@ public class Dashboard extends JPanel
 	private JLabel farLoadingLabel = new JLabel("Far");
 
 	private JLabel lodLoadingLabel = new JLabel("Lod");
+
+	private PhysicsSystemStatus physicsSystemStatus;
 
 	private int esmLoading = 0;
 
@@ -52,6 +57,16 @@ public class Dashboard extends JPanel
 		lodLoadingLabel.setBackground(Color.red);
 		lodLoadingLabel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.gray, Color.DARK_GRAY));
 		lodLoadingLabel.setOpaque(false);
+
+	}
+
+	public void setPhysicSystem(PhysicsSystem physicsSystem)
+	{
+		physicsSystemStatus = new PhysicsSystemStatus(physicsSystem);
+		add(physicsSystemStatus);
+		invalidate();
+		doLayout();
+		repaint();
 	}
 
 	public void setEsmLoading(int isLoading)

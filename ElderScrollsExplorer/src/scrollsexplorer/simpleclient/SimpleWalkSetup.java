@@ -25,6 +25,7 @@ import nifbullet.JumpKeyListener;
 import nifbullet.NavigationProcessorBullet;
 import nifbullet.NavigationProcessorBullet.NbccProvider;
 import nifbullet.cha.NBControlledChar;
+import scrollsexplorer.ScrollsExplorer;
 import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
 import scrollsexplorer.simpleclient.mouseover.AdminMouseOverHandler;
 import scrollsexplorer.simpleclient.physics.InstRECOStore;
@@ -269,6 +270,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		physicsSystem = new PhysicsSystem(charChangeListener, avatarLocation, behaviourBranch, meshSource);
 
+		ScrollsExplorer.dashboard.setPhysicSystem(physicsSystem);
+
 		cameraMouseOver = new ActionableMouseOverHandler(physicsSystem);
 
 		cameraAdminMouseOverHandler = new AdminMouseOverHandler(physicsSystem);
@@ -378,10 +381,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	public void setPhysicsEnabled(boolean enable)
 	{
-		if (enable)
-			physicsSystem.unpause();
-		else
-			physicsSystem.pause();
+		physicsSystem.getPhysicsLocaleDynamics().setSkipStepSim(!enable);
 	}
 
 	private class MiscKeyHandler extends KeyAdapter
