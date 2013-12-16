@@ -41,7 +41,9 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 
 	private HashMap<Point, J3dCELLGeneral> loadedFars = new HashMap<Point, J3dCELLGeneral>();
 
-	private QueuingThread updateThread;
+	private QueuingThread nearUpdateThread;
+
+	private QueuingThread grossUpdateThread;
 
 	private J3dICellFactory j3dCellFactory;
 
@@ -91,11 +93,12 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			j3dCELLPersistent = j3dCellFactory.makeBGWRLDPersistent(worldFormId, false);
 			addChild((J3dCELLGeneral) j3dCELLPersistent);
 
-			QueuingThread.CallBack callBack = new QueuingThread.CallBack()
+			QueuingThread.CallBack nearCallBack = new QueuingThread.CallBack()
 			{
 				public void run(Object parameter)
 				{
 					Point3f p = (Point3f) parameter;
+
 					//in case of warp fix up the old but ignore new?
 					Point3f currentCharPoint = new Point3f(lastUpdatedTranslation.x, 0, lastUpdatedTranslation.z);
 					if (currentCharPoint.distance(p) < BethRenderSettings.getFarLoadGridCount())
@@ -112,21 +115,33 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 						ScrollsExplorer.dashboard.setFarLoading(1);
 						updateFar(p.x, -p.z);
 						ScrollsExplorer.dashboard.setFarLoading(-1);
-						if (isWRLD)
-						{
-							ScrollsExplorer.dashboard.setLodLoading(1);
-							updateGross(p.x, -p.z);
-							ScrollsExplorer.dashboard.setLodLoading(-1);
-						}
-
 					}
 				}
 			};
 
-			updateThread = new QueuingThread(callBack);
-			updateThread.setName("Beth Vis update thread");
-			updateThread.setDaemon(true);
-			updateThread.start();
+			nearUpdateThread = new QueuingThread(nearCallBack);
+			nearUpdateThread.setName("Beth Vis near update thread");
+			nearUpdateThread.setDaemon(true);
+			nearUpdateThread.start();
+
+			QueuingThread.CallBack grossCallBack = new QueuingThread.CallBack()
+			{
+				public void run(Object parameter)
+				{
+					Point3f p = (Point3f) parameter;
+					if (isWRLD)
+					{
+						ScrollsExplorer.dashboard.setLodLoading(1);
+						updateGross(p.x, -p.z);
+						ScrollsExplorer.dashboard.setLodLoading(-1);
+					}
+				}
+			};
+
+			grossUpdateThread = new QueuingThread(grossCallBack);
+			grossUpdateThread.setName("Beth Vis gross update thread");
+			grossUpdateThread.setDaemon(true);
+			grossUpdateThread.start();
 
 		}
 		else
@@ -161,7 +176,8 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			if (isWRLD)
 			{
 				Point3f updatePoint = new Point3f(lastUpdatedTranslation.x, 0, lastUpdatedTranslation.z);
-				updateThread.addToQueue(updatePoint);
+				nearUpdateThread.addToQueue(updatePoint);
+				grossUpdateThread.addToQueue(updatePoint);
 			}
 			ScrollsExplorer.dashboard.setNearLoading(-1);
 		}
@@ -225,6 +241,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 				//	if (x == -4 && y == 1)
 				{
 					Point key = new Point(x, y);
+					 
 					if (!loadedNears.containsKey(key))
 					{
 						//Persistent are loaded in  the CELL that is makeBGWRLD all xy based persistents are empty
@@ -319,7 +336,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		if (isWRLD)
 		{
 			Point3f updatePoint = new Point3f(lastUpdatedTranslation.x, 0, lastUpdatedTranslation.z);
-			updateThread.addToQueue(updatePoint);
+			nearUpdateThread.addToQueue(updatePoint);
 		}
 	}
 
@@ -343,7 +360,8 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 				lastUpdatedTranslation.set(newTranslation);
 
 				Point3f updatePoint = new Point3f(newTranslation.x, 0, newTranslation.z);
-				updateThread.addToQueue(updatePoint);
+				nearUpdateThread.addToQueue(updatePoint);
+				grossUpdateThread.addToQueue(updatePoint);
 			}
 		}
 

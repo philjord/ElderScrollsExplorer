@@ -163,12 +163,12 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 
 			for (GridSpace gridSpace : gridsToRemove)
 			{
-				clientPhysicsSystem.unloadJ3dGridSpace(gridSpace);
+				clientPhysicsSystem.unloadJ3dGridSpace(gridSpace);			
 			}
 
 			for (GridSpace gridSpace : gridsToAdd)
 			{
-				clientPhysicsSystem.loadJ3dGridSpace(gridSpace);
+				clientPhysicsSystem.loadJ3dGridSpace(gridSpace);				
 			}
 
 		}
