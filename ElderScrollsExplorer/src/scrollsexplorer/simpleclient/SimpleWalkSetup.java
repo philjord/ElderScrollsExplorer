@@ -12,6 +12,8 @@ import javax.media.j3d.BranchGroup;
 import javax.media.j3d.DirectionalLight;
 import javax.media.j3d.Group;
 import javax.media.j3d.Light;
+import javax.media.j3d.ShaderError;
+import javax.media.j3d.ShaderErrorListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -32,6 +34,7 @@ import scrollsexplorer.simpleclient.physics.InstRECOStore;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools.ddstexture.DDSTextureLoader;
 import tools3d.camera.CameraPanel;
+import tools3d.camera.HMDCameraPanel;
 import tools3d.camera.HeadCamDolly;
 import tools3d.mixed3d2d.hud.hudelements.HUDCompass;
 import tools3d.mixed3d2d.hud.hudelements.HUDFPSCounter;
@@ -59,6 +62,7 @@ import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
  */
 public class SimpleWalkSetup implements LocationUpdateListener
 {
+	public static boolean HMD_MODE = false;
 
 	private JFrame frame = new JFrame();
 
@@ -171,7 +175,14 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		behaviourBranch.addChild(navigationTemporalBehaviour);
 
 		//create the camera panel ************************
-		cameraPanel = new CameraPanel(universe);
+		if (!HMD_MODE)
+		{
+			cameraPanel = new CameraPanel(universe);
+		}
+		else
+		{
+			cameraPanel = new HMDCameraPanel(universe);
+		}
 		// and the dolly it rides on
 		headCamDolly = new HeadCamDolly(avatarCollisionInfo);
 		cameraPanel.setDolly(headCamDolly);
@@ -225,6 +236,16 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		universe.addToBehaviorBranch(behaviourBranch);
+
+		// Add a ShaderErrorListener
+		universe.addShaderErrorListener(new ShaderErrorListener()
+		{
+			public void errorOccurred(ShaderError error)
+			{
+				error.printVerbose();
+				JOptionPane.showMessageDialog(null, error.toString(), "ShaderError", JOptionPane.ERROR_MESSAGE);
+			}
+		});
 
 		//definately speeds up renderering!
 		headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
