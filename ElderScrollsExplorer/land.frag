@@ -10,8 +10,8 @@ void main()
  
    // cf = intensity * (gl_FrontMaterial.diffuse).rgb +
    //               gl_FrontMaterial.ambient.rgb;  
-   cf = gl_FrontMaterial.diffuse.rgb +
-                  gl_FrontMaterial.ambient.rgb;  
+   cf = (gl_FrontMaterial.diffuse.rgb +
+                  gl_FrontMaterial.ambient.rgb)/2.0;  
                      
     texel = texture2D(tex,gl_TexCoord[0].st); 
     ct = texel.rgb;

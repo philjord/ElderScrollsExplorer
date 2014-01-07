@@ -57,5 +57,6 @@ void main() {
     position = pos.xyz / pos.w;
     worldNormal = waveNormal(pos.x, pos.z);
     eyeNormal = gl_NormalMatrix * worldNormal;
+    gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
     gl_Position = gl_ModelViewProjectionMatrix * pos;
 }

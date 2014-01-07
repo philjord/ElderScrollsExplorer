@@ -17,7 +17,6 @@ import nifbullet.stat.NBStaticModel;
 import nifbullet.util.debug.opengl.DebugOutput;
 import nifbullet.util.debug.opengl.LWJGL;
 import tools3d.navigation.AvatarLocation;
-import tools3d.universe.HeadlessUniverse;
 import utils.source.MeshSource;
 import utils.source.file.FileMeshSource;
 
@@ -30,7 +29,7 @@ import esmj3d.j3d.j3drecords.type.J3dRECOType;
 
 public class PhysicsDynamics extends DynamicsEngine
 {
-	public static HeadlessUniverse headlessUniverse = new HeadlessUniverse();
+	//public static HeadlessUniverse headlessUniverse = new HeadlessUniverse();
 
 	protected InstRECOStore instRecoToNif;
 

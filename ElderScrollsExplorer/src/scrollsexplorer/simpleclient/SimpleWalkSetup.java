@@ -16,6 +16,7 @@ import javax.media.j3d.ShaderError;
 import javax.media.j3d.ShaderErrorListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.vecmath.Color3f;
@@ -34,8 +35,11 @@ import scrollsexplorer.simpleclient.physics.InstRECOStore;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools.ddstexture.DDSTextureLoader;
 import tools3d.camera.CameraPanel;
+import tools3d.camera.Dolly;
+import tools3d.camera.HMDCamDolly;
 import tools3d.camera.HMDCameraPanel;
 import tools3d.camera.HeadCamDolly;
+import tools3d.camera.ICameraPanel;
 import tools3d.mixed3d2d.hud.hudelements.HUDCompass;
 import tools3d.mixed3d2d.hud.hudelements.HUDFPSCounter;
 import tools3d.mixed3d2d.hud.hudelements.HUDPosition;
@@ -62,7 +66,7 @@ import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
  */
 public class SimpleWalkSetup implements LocationUpdateListener
 {
-	public static boolean HMD_MODE = false;
+	public static boolean HMD_MODE = true;
 
 	private JFrame frame = new JFrame();
 
@@ -80,9 +84,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private NavigationProcessorBullet navigationProcessor;
 
-	private CameraPanel cameraPanel;
-
-	private HeadCamDolly headCamDolly;
+	private ICameraPanel cameraPanel;
 
 	private AvatarLocation avatarLocation = new AvatarLocation();
 
@@ -178,16 +180,29 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		if (!HMD_MODE)
 		{
 			cameraPanel = new CameraPanel(universe);
+			// and the dolly it rides on
+			HeadCamDolly headCamDolly = new HeadCamDolly(avatarCollisionInfo);
+			((CameraPanel) cameraPanel).setDolly(headCamDolly);
+
+			avatarLocation.addAvatarLocationListener(headCamDolly);
+			headCamDolly.locationUpdated(avatarLocation.get(new Quat4f()), avatarLocation.get(new Vector3f()));
+
+			//definately speeds up renderering!
+			headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
 		}
 		else
 		{
 			cameraPanel = new HMDCameraPanel(universe);
+			// and the dolly it rides on
+			HMDCamDolly hcd = new HMDCamDolly(avatarCollisionInfo);
+			((HMDCameraPanel) cameraPanel).setHMDCamDolly(hcd);
+
+			avatarLocation.addAvatarLocationListener(hcd);
+			hcd.locationUpdated(avatarLocation.get(new Quat4f()), avatarLocation.get(new Vector3f()));
+
+			//definately speeds up renderering!
+			hcd.addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
 		}
-		// and the dolly it rides on
-		headCamDolly = new HeadCamDolly(avatarCollisionInfo);
-		cameraPanel.setDolly(headCamDolly);
-		avatarLocation.addAvatarLocationListener(headCamDolly);
-		headCamDolly.locationUpdated(avatarLocation.get(new Quat4f()), avatarLocation.get(new Vector3f()));
 
 		//now we have timekeep and camera panel add mouse and keyboard inputs ************************
 		keyNavigationInputAWT = new NavigationInputAWTKey(navigationProcessor);
@@ -232,7 +247,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		cameraPanel.getCanvas3D2D().setFocusTraversalKeysEnabled(false);
 
 		frame.setTitle(frameName);
-		frame.getContentPane().add(cameraPanel);
+		frame.getContentPane().add((JPanel) cameraPanel);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		universe.addToBehaviorBranch(behaviourBranch);
@@ -246,9 +261,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				JOptionPane.showMessageDialog(null, error.toString(), "ShaderError", JOptionPane.ERROR_MESSAGE);
 			}
 		});
-
-		//definately speeds up renderering!
-		headCamDolly.getPlatformGeometry().addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
 
 	}
 
