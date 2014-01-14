@@ -35,7 +35,6 @@ import scrollsexplorer.simpleclient.physics.InstRECOStore;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools.ddstexture.DDSTextureLoader;
 import tools3d.camera.CameraPanel;
-import tools3d.camera.Dolly;
 import tools3d.camera.HMDCamDolly;
 import tools3d.camera.HMDCameraPanel;
 import tools3d.camera.HeadCamDolly;
@@ -127,6 +126,9 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private boolean freefly = false;
 
+	//TODO: just for now
+	private HMDCamDolly hcd = new HMDCamDolly(avatarCollisionInfo);
+
 	public SimpleWalkSetup(String frameName)
 	{
 		//kick off with a universe ***************************
@@ -174,6 +176,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		//jbullet
 		navigationProcessor = new NavigationProcessorBullet(nbccProvider, avatarLocation);
 		navigationTemporalBehaviour.addNavigationProcessor(navigationProcessor);
+		navigationTemporalBehaviour.addNavigationProcessor(hcd);
 		behaviourBranch.addChild(navigationTemporalBehaviour);
 
 		//create the camera panel ************************
@@ -194,7 +197,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		{
 			cameraPanel = new HMDCameraPanel(universe);
 			// and the dolly it rides on
-			HMDCamDolly hcd = new HMDCamDolly(avatarCollisionInfo);
+
 			((HMDCameraPanel) cameraPanel).setHMDCamDolly(hcd);
 
 			avatarLocation.addAvatarLocationListener(hcd);
@@ -457,6 +460,15 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			else if (e.getKeyCode() == KeyEvent.VK_J)
 			{
 				physicsSystem.getPhysicsLocaleDynamics().setDisplayDebug(true);
+			}
+			//HMD stuff
+			else if (e.getKeyCode() == KeyEvent.VK_V)
+			{
+				hcd.changeIPD(0.95f);
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_B)
+			{
+				hcd.changeIPD(1.05f);
 			}
 
 			else if (e.getKeyCode() == KeyEvent.VK_TAB)
