@@ -177,6 +177,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY);
 					mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Oblivion.esm";
 					loadUpPickers();
+					simpleWalkSetup.getAvatarCollisionInfo().setAvatarYHeight(2.28f);
 				}
 			});
 			falloutButton.addActionListener(new ActionListener()
@@ -187,6 +188,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.FALLOUT3_FOLDER_KEY);
 					mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Fallout3.esm";
 					loadUpPickers();
+					simpleWalkSetup.getAvatarCollisionInfo().setAvatarYHeight(1.8f);
 				}
 			});
 
@@ -198,6 +200,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY);
 					mainESMFile = scrollsFolder + PropertyLoader.fileSep + "FalloutNV.esm";
 					loadUpPickers();
+					simpleWalkSetup.getAvatarCollisionInfo().setAvatarYHeight(1.8f);
 				}
 			});
 			skyrimButton.addActionListener(new ActionListener()

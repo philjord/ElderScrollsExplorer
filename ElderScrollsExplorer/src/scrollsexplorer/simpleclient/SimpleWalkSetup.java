@@ -205,6 +205,9 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 			//definately speeds up renderering!
 			hcd.addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
+
+			//disable pitch in body
+			navigationProcessor.setNoPitch(true);
 		}
 
 		//now we have timekeep and camera panel add mouse and keyboard inputs ************************
@@ -420,16 +423,24 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		physicsSystem.getPhysicsLocaleDynamics().setSkipStepSim(!enable);
 	}
 
+	public AvatarCollisionInfo getAvatarCollisionInfo()
+	{
+		return avatarCollisionInfo;
+	}
+
 	private class MiscKeyHandler extends KeyAdapter
 	{
 
 		public MiscKeyHandler()
 		{
+			System.out.println("Esc exit");
 			System.out.println("H toggle havok display");
 			System.out.println("L toggle visual display");
 			System.out.println("TAB toggle mouse lock");
 			System.out.println("F toggle freefly");
 			System.out.println("J display jbullet debug");
+			System.out.println("V,B move eye dist");
+			System.out.println("N reset or");
 
 		}
 
@@ -469,6 +480,11 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			else if (e.getKeyCode() == KeyEvent.VK_B)
 			{
 				hcd.changeIPD(1.05f);
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_N)
+			{
+				System.out.println("resetting Rift");
+				HMDCamDolly.getOculusRift().reset();
 			}
 
 			else if (e.getKeyCode() == KeyEvent.VK_TAB)
