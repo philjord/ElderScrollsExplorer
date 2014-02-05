@@ -127,7 +127,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	private boolean freefly = false;
 
 	//TODO: just for now
-	private HMDCamDolly hcd = new HMDCamDolly(avatarCollisionInfo);
+	private HMDCamDolly hcd;
 
 	public SimpleWalkSetup(String frameName)
 	{
@@ -176,7 +176,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		//jbullet
 		navigationProcessor = new NavigationProcessorBullet(nbccProvider, avatarLocation);
 		navigationTemporalBehaviour.addNavigationProcessor(navigationProcessor);
-		navigationTemporalBehaviour.addNavigationProcessor(hcd);
 		behaviourBranch.addChild(navigationTemporalBehaviour);
 
 		//create the camera panel ************************
@@ -197,17 +196,17 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		{
 			cameraPanel = new HMDCameraPanel(universe);
 			// and the dolly it rides on
-
+			hcd = new HMDCamDolly(avatarCollisionInfo);
+			//definately speeds up renderering!
+			hcd.setHudShape(cameraPanel.getCanvas3D2D().getHudShapeRoot());
 			((HMDCameraPanel) cameraPanel).setHMDCamDolly(hcd);
 
 			avatarLocation.addAvatarLocationListener(hcd);
 			hcd.locationUpdated(avatarLocation.get(new Quat4f()), avatarLocation.get(new Vector3f()));
 
-			//definately speeds up renderering!
-			hcd.addChild(cameraPanel.getCanvas3D2D().getHudShapeRoot());
-
 			//disable pitch in body
 			navigationProcessor.setNoPitch(true);
+			navigationTemporalBehaviour.addNavigationProcessor(hcd);
 		}
 
 		//now we have timekeep and camera panel add mouse and keyboard inputs ************************
@@ -484,7 +483,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			else if (e.getKeyCode() == KeyEvent.VK_N)
 			{
 				System.out.println("resetting Rift");
-				HMDCamDolly.getOculusRift().reset();
+				hcd.reset();
 			}
 
 			else if (e.getKeyCode() == KeyEvent.VK_TAB)

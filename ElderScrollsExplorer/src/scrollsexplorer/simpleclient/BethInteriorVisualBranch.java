@@ -27,6 +27,7 @@ public class BethInteriorVisualBranch extends BranchGroup
 		this.setCapability(Group.ALLOW_CHILDREN_EXTEND);
 
 		j3dCELLPersistent = j3dCellFactory.makeBGInteriorCELLPersistent(interiorCellFormId, false);
+		j3dCELLPersistent.getGridSpaces().update(0, 0, 100000);//force add all
 		addChild((J3dCELLGeneral) j3dCELLPersistent);
 		interiorCELLTemporary = j3dCellFactory.makeBGInteriorCELLTemporary(interiorCellFormId, false);
 		addChild(interiorCELLTemporary);

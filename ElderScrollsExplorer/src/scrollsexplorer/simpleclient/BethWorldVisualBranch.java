@@ -146,41 +146,36 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		}
 		else
 		{
-			j3dCELLPersistent = j3dCellFactory.makeBGInteriorCELLPersistent(worldFormId, false);
-			addChild((J3dCELLGeneral) j3dCELLPersistent);
-			addChild(j3dCellFactory.makeBGInteriorCELLTemporary(worldFormId, false));
-			addChild(j3dCellFactory.makeBGInteriorCELLDistant(worldFormId, false));
+			System.out.println("WHATAA!!! why is this " + this + " being used for interior!");
 		}
 
 	}
 
 	public void init(Transform3D charLocation)
 	{
-		if (isWRLD)
+
+		ScrollsExplorer.dashboard.setNearLoading(1);
+		Vector3f v = new Vector3f();
+		charLocation.get(v);
+		Point3f p = new Point3f(v);
+		charLocation.get(newTranslation);
+		lastUpdatedTranslation.set(newTranslation);
+
+		//Note not on a seperate thread				 
+		updateNear(p.x, -p.z);
+		if (j3dCELLPersistent != null)
 		{
-			ScrollsExplorer.dashboard.setNearLoading(1);
-			Vector3f v = new Vector3f();
-			charLocation.get(v);
-			Point3f p = new Point3f(v);
-			charLocation.get(newTranslation);
-			lastUpdatedTranslation.set(newTranslation);
-
-			//Note not on a seperate thread				 
-			updateNear(p.x, -p.z);
-			if (j3dCELLPersistent != null)
-			{
-				j3dCELLPersistent.getGridSpaces().update(p.x, -p.z, J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount());
-			}
-
-			// on a seperate thread
-			if (isWRLD)
-			{
-				Point3f updatePoint = new Point3f(lastUpdatedTranslation.x, 0, lastUpdatedTranslation.z);
-				nearUpdateThread.addToQueue(updatePoint);
-				grossUpdateThread.addToQueue(updatePoint);
-			}
-			ScrollsExplorer.dashboard.setNearLoading(-1);
+			j3dCELLPersistent.getGridSpaces().update(p.x, -p.z, J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount());
 		}
+
+		// on a seperate thread
+
+		Point3f updatePoint = new Point3f(lastUpdatedTranslation.x, 0, lastUpdatedTranslation.z);
+		nearUpdateThread.addToQueue(updatePoint);
+		grossUpdateThread.addToQueue(updatePoint);
+
+		ScrollsExplorer.dashboard.setNearLoading(-1);
+
 	}
 
 	private void updateGross(float charX, float charY)
@@ -241,7 +236,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 				//	if (x == -4 && y == 1)
 				{
 					Point key = new Point(x, y);
-					 
+
 					if (!loadedNears.containsKey(key))
 					{
 						//Persistent are loaded in  the CELL that is makeBGWRLD all xy based persistents are empty

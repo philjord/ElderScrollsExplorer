@@ -58,8 +58,16 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 		// set up new canvas
 		if (canvas3D != null)
 		{
-			HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle((canvas3D.getWidth() / 2) - (hudWidth / 2),
-					(canvas3D.getHeight() / 2) - (hudHeight / 2), hudWidth, hudHeight), 16);
+
+			if (!canvas3D.getView().getCompatibilityModeEnable())
+			{
+				HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle((canvas3D.getWidth() / 2) - (hudWidth / 2),
+						(canvas3D.getHeight() / 2) - (hudHeight / 2), hudWidth, hudHeight), 16);
+			}
+			else
+			{
+				HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle(0, 80, hudWidth, hudHeight), 16);
+			}
 		}
 
 	}
@@ -78,6 +86,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 					// if the mouse release listener is working we can't change the currentActionable until it's finished
 					synchronized (currentActionableMonitor)
 					{
+
 						J3dRECOStatInst j3dRECOStatInst = (J3dRECOStatInst) currentActionTargetData.currentActionable;
 						// sort out the actionable if  
 						if (j3dRECOStatInst.getInstRECO() instanceof CommonREFR)
@@ -307,8 +316,10 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 	@Override
 	protected void screenResized()
 	{
-		HUDText.setLocation((canvas3D.getWidth() / 2) - (hudWidth / 2), (canvas3D.getHeight() / 2) - (hudHeight / 2));
-
+		if (!canvas3D.getView().getCompatibilityModeEnable())
+			HUDText.setLocation((canvas3D.getWidth() / 2) - (hudWidth / 2), (canvas3D.getHeight() / 2) - (hudHeight / 2));
+		else
+			HUDText.setLocation(0, 80);
 	}
 
 	private class CurrentActionTargetData
