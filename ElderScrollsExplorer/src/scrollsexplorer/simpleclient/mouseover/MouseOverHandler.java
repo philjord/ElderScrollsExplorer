@@ -63,31 +63,32 @@ public abstract class MouseOverHandler implements ComponentListener
 	{
 		this.clientPhysicsSystem = clientPhysicsSystem;
 
-		mouseOverHandlerThread = new PeriodicThread("MouseOverHandler Thread", MIN_TIME_BETWEEN_STEPS_MS, new PeriodicallyUpdated()
-		{
-			public void runUpdate()
-			{
-				try
+		mouseOverHandlerThread = new PeriodicThread("Thread For " + this.getClass().getSimpleName(), MIN_TIME_BETWEEN_STEPS_MS,
+				new PeriodicallyUpdated()
 				{
-					if (lastMouseEvent != null)
+					public void runUpdate()
 					{
 						try
 						{
-							processMouseOver(lastMouseEvent);
+							if (lastMouseEvent != null)
+							{
+								try
+								{
+									processMouseOver(lastMouseEvent);
+								}
+								catch (Exception e)
+								{
+									System.out.println("MouseOverHandler.processMouseOver exception: " + e);
+									e.printStackTrace();
+								}
+							}
 						}
 						catch (Exception e)
 						{
-							System.out.println("MouseOverHandler.processMouseOver exception: " + e);
-							e.printStackTrace();
+							System.out.println("PhysicsSystem exception " + e.getMessage() + " in " + this);
 						}
 					}
-				}
-				catch (Exception e)
-				{
-					System.out.println("PhysicsSystem exception " + e.getMessage() + " in " + this);
-				}
-			}
-		});
+				});
 		mouseOverHandlerThread.start();
 
 	}
@@ -95,7 +96,7 @@ public abstract class MouseOverHandler implements ComponentListener
 	public void doMouseMoved(MouseEvent e)
 	{
 		// record the mouse move for the picker to use when it next wakes up
-		lastMouseEvent = e;
+		lastMouseEvent = e;	
 	}
 
 	public void doMouseExited(@SuppressWarnings("unused") MouseEvent e)

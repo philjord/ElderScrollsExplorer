@@ -359,6 +359,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 					simpleWalkSetup.configure(meshSource);
 					simpleWalkSetup.setEnabled(false);
+					//add skynow
+					simpleWalkSetup.addToVisualBranch(SimpleBethCellManager.createBackground(textureSource));
 
 					simpleBethCellManager.setSources(esmManager, meshSource, textureSource, soundSource);
 
@@ -449,6 +451,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					simpleWalkSetup.setEnabled(false);
 					System.out.println("loading and displaying cell " + cellformid);
 					System.out.println("esm version == " + esmManager.getVersion());
+					
 					simpleBethCellManager.setCurrentCellFormId(cellformid);
 
 					System.out.println("Cell loaded and dispalyed " + cellformid);

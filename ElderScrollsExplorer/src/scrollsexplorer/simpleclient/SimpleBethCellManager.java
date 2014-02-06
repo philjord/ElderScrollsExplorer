@@ -35,7 +35,6 @@ public class SimpleBethCellManager
 	//TODO: bad form only for ActionableMouseOverHandler
 	public static BethWorldVisualBranch currentBethWorldVisualBranch;
 
-	//TODO: bad form only for ActionableMouseOverHandler
 	public static BethWorldPhysicalBranch currentBethWorldPhysicalBranch;
 
 	public static BethInteriorVisualBranch currentBethInteriorVisualBranch;
@@ -54,8 +53,6 @@ public class SimpleBethCellManager
 	private J3dICellFactory j3dCellFactory;
 
 	private ESMManager esmManager;
-
-	private TextureSource textureSource;
 
 	public SimpleBethCellManager(SimpleWalkSetup simpleWalkSetup2)
 	{
@@ -81,7 +78,6 @@ public class SimpleBethCellManager
 	public void setSources(ESMManager esmManager, MeshSource meshSource, TextureSource textureSource, SoundSource soundSource)
 	{
 		this.esmManager = esmManager;
-		this.textureSource = textureSource;
 
 		float version = esmManager.getVersion();
 
@@ -178,8 +174,6 @@ public class SimpleBethCellManager
 
 	public void setCurrentCellFormId(int newCellFormId)
 	{
-
-		//TODO: On change persistent cells seem to have bad gridspaces?
 		System.out.println("Moving to cell " + newCellFormId);
 		if (currentCellFormId != -1 && currentCellFormId != newCellFormId)
 		{
@@ -187,11 +181,13 @@ public class SimpleBethCellManager
 			// unload current
 			if (currentBethWorldVisualBranch != null)
 			{
+				currentBethWorldVisualBranch.unload();
 				currentBethWorldVisualBranch.detach();
 				if (avatarLocation != null)
 				{
 					avatarLocation.removeAvatarLocationListener(currentBethWorldVisualBranch);
 				}
+				currentBethWorldVisualBranch = null;
 			}
 			if (currentBethWorldPhysicalBranch != null)
 			{
@@ -200,21 +196,23 @@ public class SimpleBethCellManager
 				{
 					avatarLocation.removeAvatarLocationListener(currentBethWorldPhysicalBranch);
 				}
+				currentBethWorldPhysicalBranch = null;
 			}
 			if (currentBethInteriorVisualBranch != null)
 			{
 				currentBethInteriorVisualBranch.detach();
+				currentBethInteriorVisualBranch = null;
 			}
 			if (currentBethInteriorPhysicalBranch != null)
 			{
 				currentBethInteriorPhysicalBranch.detach();
+				currentBethInteriorPhysicalBranch = null;
 			}
 		}
 		currentCellFormId = newCellFormId;
 
 		try
 		{
-
 			// now load new
 			if (currentCellFormId != -1)
 			{
@@ -223,9 +221,6 @@ public class SimpleBethCellManager
 				PluginRecord cell = esmManager.getWRLD(currentCellFormId);
 				if (cell != null)
 				{
-					//add skynow
-					simpleWalkSetup.addToVisualBranch(createBackground());
-
 					currentBethWorldVisualBranch = new BethWorldVisualBranch(currentCellFormId, j3dCellFactory);
 					simpleWalkSetup.addToVisualBranch(currentBethWorldVisualBranch);
 					if (avatarLocation != null)
@@ -242,7 +237,6 @@ public class SimpleBethCellManager
 						currentBethWorldPhysicalBranch.init(avatarLocation.getTransform());
 						avatarLocation.addAvatarLocationListener(currentBethWorldPhysicalBranch);
 					}
-
 				}
 				else
 				{
@@ -263,11 +257,9 @@ public class SimpleBethCellManager
 						System.out.println("unknown cell id " + currentCellFormId);
 
 					}
-
 				}
 				ScrollsExplorer.dashboard.setCellLoading(-1);
 			}
-
 		}
 		catch (DataFormatException e)
 		{
@@ -295,7 +287,7 @@ public class SimpleBethCellManager
 	  * apply a texture image onto the inside of the Sphere
 	  * to serve as a graphical backdrop for the scene.
 	  */
-	public BranchGroup createBackground()
+	public static BranchGroup createBackground(TextureSource textureSource)
 	{
 
 		/*Background background = new Background();

@@ -21,6 +21,7 @@ import esmLoader.common.data.record.Subrecord;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.cell.Beth32LodManager;
 import esmj3d.j3d.cell.Beth32_4LodManager;
+import esmj3d.j3d.cell.BethLodManager;
 import esmj3d.j3d.cell.J3dCELLGeneral;
 import esmj3d.j3d.cell.J3dICELLPersistent;
 import esmj3d.j3d.cell.J3dICellFactory;
@@ -47,9 +48,8 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 
 	private J3dICellFactory j3dCellFactory;
 
-	private Beth32LodManager beth32LodManager;
-
-	private Beth32_4LodManager beth32_4LodManager;
+	//  on change don't dump gross until we forcable need a different one
+	private static BethLodManager bethLodManager;
 
 	private BethRenderSettings.UpdateListener listener = new BethRenderSettings.UpdateListener()
 	{
@@ -69,16 +69,22 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		this.setCapability(Group.ALLOW_CHILDREN_EXTEND);
 
 		ScrollsExplorer.dashboard.setLodLoading(1);
-		if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
+		//Expensive to load, so keep it around and only change when must
+		if (bethLodManager == null)
 		{
-			beth32LodManager = new Beth32LodManager(worldFormId, j3dCellFactory);
-			addChild(beth32LodManager);
+			if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
+			{
+				bethLodManager = new Beth32LodManager(j3dCellFactory);
+			}
+			else
+			{
+				bethLodManager = new Beth32_4LodManager(j3dCellFactory);
+			}
 		}
-		else
-		{
-			beth32_4LodManager = new Beth32_4LodManager(worldFormId, j3dCellFactory);
-			addChild(beth32_4LodManager);
-		}
+		bethLodManager.detach();
+		bethLodManager.setWorldFormId(worldFormId);
+		addChild(bethLodManager);
+
 		ScrollsExplorer.dashboard.setLodLoading(-1);
 
 		// set up to listener for changes to teh static render settings
@@ -151,6 +157,11 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 
 	}
 
+	public void unload()
+	{
+		bethLodManager.detach();
+	}
+
 	public void init(Transform3D charLocation)
 	{
 
@@ -180,14 +191,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 
 	private void updateGross(float charX, float charY)
 	{
-		if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
-		{
-			beth32LodManager.updateGross(charX, charY);
-		}
-		else
-		{
-			beth32_4LodManager.updateGross(charX, charY);
-		}
+		bethLodManager.updateGross(charX, charY);
 	}
 
 	private void updateNear(float charX, float charY)
@@ -405,4 +409,5 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		return j3dCELLPersistent.getGridSpaces().getJ3dInstRECO(recoId);
 
 	}
+
 }

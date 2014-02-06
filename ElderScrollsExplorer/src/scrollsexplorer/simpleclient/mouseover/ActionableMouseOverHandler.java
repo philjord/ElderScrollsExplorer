@@ -190,6 +190,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 				if (body != null)
 				{
+
 					BulletNifModel bnm = null;
 
 					// might be one of 2 ways to get teh model out of the user pointer
@@ -205,6 +206,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 					if (bnm != null)
 					{
+
 						int recoId = clientPhysicsSystem.getPhysicsLocaleDynamics().getRecordId(bnm);
 
 						if (recoId != currentActionTargetData.recoId)
