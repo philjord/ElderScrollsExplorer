@@ -111,7 +111,7 @@ public abstract class DynamicsEngine
 						}
 					}
 				}
-				if ((timeKeeper.getTimeMicroseconds() - dtms2) > 20000)
+				if ((timeKeeper.getTimeMicroseconds() - dtms2) > 40000)
 				{
 					System.out.println("dynamicsTick step took millisecs of " + ((timeKeeper.getTimeMicroseconds() - dtms2) / 1000));
 					System.out.println("dynamicsWorld.getNumCollisionObjects() " + dynamicsWorld.getNumCollisionObjects());
