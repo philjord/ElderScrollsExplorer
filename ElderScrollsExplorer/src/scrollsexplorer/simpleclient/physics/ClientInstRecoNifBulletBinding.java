@@ -4,6 +4,7 @@ import javax.media.j3d.Transform3D;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
+import tools3d.utils.Utils3D;
 import nifbullet.dyn.NBSimpleDynamicModel;
 import nifbullet.dyn.NifBulletTransformListener;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
@@ -35,7 +36,7 @@ public class ClientInstRecoNifBulletBinding implements NifBulletBinding, NifBull
 	public void transformChanged(Transform3D newTrans, Vector3f linearVelocity, Vector3f rotationalVelocity)
 	{
 		newTrans.get(newTranslation);
-		newTrans.get(newRotation);
+		Utils3D.safeGetQuat(newTrans, newRotation);
 
 		if (Float.isNaN(newTranslation.x))
 		{

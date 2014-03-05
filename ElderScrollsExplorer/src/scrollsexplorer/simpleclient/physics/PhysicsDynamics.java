@@ -17,6 +17,7 @@ import nifbullet.stat.NBStaticModel;
 import nifbullet.util.debug.opengl.DebugOutput;
 import nifbullet.util.debug.opengl.LWJGL;
 import tools3d.navigation.AvatarLocation;
+import tools3d.utils.Utils3D;
 import utils.source.MeshSource;
 import utils.source.file.FileMeshSource;
 
@@ -284,7 +285,7 @@ public class PhysicsDynamics extends DynamicsEngine
 		{
 			Quat4f q = new Quat4f();
 			Vector3f v = new Vector3f();
-			newTrans.get(q);
+			Utils3D.safeGetQuat(newTrans, q);
 			newTrans.get(v);
 			((NBSimpleDynamicModel) nifBullet).setTransform(q, v);
 		}

@@ -391,7 +391,7 @@ public class SimpleBethCellManager
 		simpleWalkSetup.warp(new Vector3f(x * ESConfig.ES_TO_METERS_SCALE, z * ESConfig.ES_TO_METERS_SCALE, -y
 				* ESConfig.ES_TO_METERS_SCALE));
 		Quat4f q = new Quat4f();
-		transform.get(q);
+		Utils3D.safeGetQuat(transform, q);
 		simpleWalkSetup.getAvatarLocation().setRotation(q);
 	}
 
