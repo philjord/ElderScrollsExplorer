@@ -3,7 +3,7 @@ package scrollsexplorer.simpleclient.physics;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
-import nifbullet.cha.KinematicCharacterController2.CharacterPositionListener;
+import nifbullet.cha.KinematicCharacterController3.CharacterPositionListener;
 import nifbullet.cha.NBControlledChar;
 import tools3d.navigation.AvatarLocation;
 
