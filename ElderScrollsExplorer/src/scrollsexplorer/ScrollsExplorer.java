@@ -35,6 +35,7 @@ import tools3d.resolution.QueryProperties;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
 import utils.source.EsmSoundKeyToName;
+import utils.source.MediaSources;
 import utils.source.MeshSource;
 import utils.source.SoundSource;
 import utils.source.TextureSource;
@@ -69,11 +70,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private static String[] columnNames = new String[]
 	{ "Int/Ext", "Cell Id", "Name" };
 
-	private SoundSource soundSource;
-
-	private TextureSource textureSource;
-
-	private MeshSource meshSource;
+	private MediaSources mediaSources;
 
 	public ESMManager esmManager;
 
@@ -338,31 +335,37 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					}
 
 					new EsmSoundKeyToName(esmManager);
+					MeshSource meshSource;
+					TextureSource textureSource;
+					SoundSource soundSource;
 
 					if (cbBsaMenuItem.isSelected())
 					{
 						if (bsaFileSet == null)
 							bsaFileSet = new BSAFileSet(scrollsFolder, cbLoadAllMenuItem.isSelected(), false);
 
-						soundSource = new BsaSoundSource(bsaFileSet, new EsmSoundKeyToName(esmManager));
-						textureSource = new BsaTextureSource(bsaFileSet);
 						meshSource = new BsaMeshSource(bsaFileSet);
+						textureSource = new BsaTextureSource(bsaFileSet);
+						soundSource = new BsaSoundSource(bsaFileSet, new EsmSoundKeyToName(esmManager));
 					}
 					else
 					{
 						FileMediaRoots.setMediaRoots(new String[]
 						{ scrollsFolder });
-						soundSource = new FileSoundSource();
-						textureSource = new FileTextureSource();
 						meshSource = new FileMeshSource();
+						textureSource = new FileTextureSource();
+						soundSource = new FileSoundSource();
+
 					}
+
+					mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
 					simpleWalkSetup.configure(meshSource);
 					simpleWalkSetup.setEnabled(false);
 					//add skynow
 					simpleWalkSetup.addToVisualBranch(SimpleBethCellManager.createBackground(textureSource));
 
-					simpleBethCellManager.setSources(esmManager, meshSource, textureSource, soundSource);
+					simpleBethCellManager.setSources(esmManager, mediaSources);
 
 					tableModel = new DefaultTableModel(columnNames, 0)
 					{
@@ -451,7 +454,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					simpleWalkSetup.setEnabled(false);
 					System.out.println("loading and displaying cell " + cellformid);
 					System.out.println("esm version == " + esmManager.getVersion());
-					
+
 					simpleBethCellManager.setCurrentCellFormId(cellformid);
 
 					System.out.println("Cell loaded and dispalyed " + cellformid);

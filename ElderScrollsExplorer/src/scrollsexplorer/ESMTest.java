@@ -26,6 +26,7 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import utils.source.EsmSoundKeyToName;
+import utils.source.MediaSources;
 import bsa.BSAFileSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
@@ -161,9 +162,11 @@ public class ESMTest
 		ESMManager esmManager = ESMManager.getESMManager(esmFile);
 		BSAFileSet bsaFileSet = new BSAFileSet(esmFile, false, false);
 
-		BsaSoundSource ss = new BsaSoundSource(bsaFileSet.getSoundArchives(), new EsmSoundKeyToName(esmManager));
-		BsaTextureSource ts = new BsaTextureSource(bsaFileSet.getTextureArchives());
 		BsaMeshSource ms = new BsaMeshSource(bsaFileSet.getMeshArchives());
+		BsaTextureSource ts = new BsaTextureSource(bsaFileSet.getTextureArchives());
+		BsaSoundSource ss = new BsaSoundSource(bsaFileSet.getSoundArchives(), new EsmSoundKeyToName(esmManager));
+
+		MediaSources mediaSources = new MediaSources(ms, ts, ss);
 
 		if (cellformid == 0)
 		{
@@ -178,7 +181,7 @@ public class ESMTest
 				if (interiorCELLTopGroup.interiorCELLByFormId.containsKey(cellformid))
 				{
 					System.out.println("loading " + cellformid);
-					BranchGroup bg = ESMToJ3d.makeBGCELL(esmManager, PluginGroup.CELL_TEMPORARY, cellformid, false, ms, ts, ss);
+					BranchGroup bg = ESMToJ3d.makeBGCELL(esmManager, PluginGroup.CELL_TEMPORARY, cellformid, false, mediaSources);
 					transformGroup.removeAllChildren();
 					Runtime.getRuntime().gc();
 					transformGroup.addChild(bg);
@@ -192,7 +195,7 @@ public class ESMTest
 				{
 					CELLPointer cp = wRLDTopGroup.WRLDExtBlockCELLByFormId.get(cellformid);
 					System.out.println("loading " + cp.formId);
-					BranchGroup bg = ESMToJ3d.makeBGCELL(esmManager, PluginGroup.CELL_TEMPORARY, cp.formId, false, ms, ts, ss);
+					BranchGroup bg = ESMToJ3d.makeBGCELL(esmManager, PluginGroup.CELL_TEMPORARY, cp.formId, false, mediaSources);
 					transformGroup.removeAllChildren();
 					Runtime.getRuntime().gc();
 					transformGroup.addChild(bg);
@@ -216,6 +219,7 @@ public class ESMTest
 		BsaTextureSource ts = new BsaTextureSource(bsaFileSet.getTextureArchives());
 		BsaMeshSource ms = new BsaMeshSource(bsaFileSet.getMeshArchives());
 
+		MediaSources mediaSources = new MediaSources(ms, ts, ss);
 		//01002FCE is the bridge from the zeta esm 16789454
 
 		// 00024512 Vault101a
@@ -224,7 +228,7 @@ public class ESMTest
 			for (Integer formId : interiorCELLTopGroup.interiorCELLByFormId.keySet())
 			{
 				System.out.println("loading " + formId);
-				BranchGroup bg = ESMToJ3d.makeBGCELL(esmManager, PluginGroup.CELL_TEMPORARY, formId, false, ms, ts, ss);
+				BranchGroup bg = ESMToJ3d.makeBGCELL(esmManager, PluginGroup.CELL_TEMPORARY, formId, false, mediaSources);
 				transformGroup.removeAllChildren();
 				transformGroup.addChild(bg);
 
@@ -236,7 +240,7 @@ public class ESMTest
 			for (CELLPointer cp : wRLDTopGroup.WRLDExtBlockCELLByFormId.values())
 			{
 				System.out.println("loading " + cp.formId);
-				BranchGroup bg = ESMToJ3d.makeBGCELL(esmManager, PluginGroup.CELL_TEMPORARY, cp.formId, false, ms, ts, ss);
+				BranchGroup bg = ESMToJ3d.makeBGCELL(esmManager, PluginGroup.CELL_TEMPORARY, cp.formId, false, mediaSources);
 				transformGroup.removeAllChildren();
 				Runtime.getRuntime().gc();
 				transformGroup.addChild(bg);

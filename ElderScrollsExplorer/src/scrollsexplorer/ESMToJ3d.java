@@ -6,9 +6,7 @@ import java.util.zip.DataFormatException;
 
 import javax.media.j3d.BranchGroup;
 
-import utils.source.MeshSource;
-import utils.source.SoundSource;
-import utils.source.TextureSource;
+import utils.source.MediaSources;
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginGroup;
 import esmLoader.common.data.plugin.PluginRecord;
@@ -18,13 +16,13 @@ import esmLoader.loader.ESMManager;
 public class ESMToJ3d
 {
 	public static BranchGroup makeBGWRLDExtBlockCELL(ESMManager esmManager, int cellType, int wrldFormId, int x, int y, boolean makePhys,
-			MeshSource meshSource, TextureSource textureSource, SoundSource soundSource)
+			MediaSources mediaSources)
 	{
 
 		int formId = esmManager.getWRLDExtBlockCELLId(wrldFormId, x, y);
 		if (formId != -1)
 		{
-			return makeBGCELL(esmManager, cellType, formId, makePhys, meshSource, textureSource, soundSource);
+			return makeBGCELL(esmManager, cellType, formId, makePhys, mediaSources);
 		}
 		else
 		{
@@ -33,8 +31,7 @@ public class ESMToJ3d
 		}
 	}
 
-	public static BranchGroup makeBGCELL(ESMManager esmManager, int cellType, int formId, boolean makePhys, MeshSource meshSource,
-			TextureSource textureSource, SoundSource soundSource)
+	public static BranchGroup makeBGCELL(ESMManager esmManager, int cellType, int formId, boolean makePhys, MediaSources mediaSources)
 	{
 		try
 		{
@@ -71,24 +68,24 @@ public class ESMToJ3d
 						if (esmManager.getName().equals("Skyrim.esm"))
 						{
 							return new esmj3dtes5.j3d.cell.J3dCELLTemporary(esmManager, new Record(record, formId), childRecords, makePhys,
-									meshSource, textureSource, soundSource);
+									mediaSources);
 
 						}
 						else
 						{
 							return new esmj3dfo3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record, formId), childRecords, makePhys,
-									meshSource, textureSource, soundSource);
+									mediaSources);
 						}
 					}
 					else if (version == 1.32f)
 					{
 						return new esmj3dfo3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record, formId), childRecords, makePhys,
-								meshSource, textureSource, soundSource);
+								mediaSources);
 					}
 					else if (version == 1.0f || version == 0.8f)
 					{
 						return new esmj3dtes4.j3d.cell.J3dCELLTemporary(esmManager, new Record(record, formId), childRecords, makePhys,
-								meshSource, textureSource, soundSource);
+								mediaSources);
 					}
 					else
 					{
@@ -103,25 +100,25 @@ public class ESMToJ3d
 						if (esmManager.getName().equals("Skyrim.esm"))
 						{
 							return new esmj3dtes5.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
-									makePhys, meshSource, textureSource, soundSource);
+									makePhys, mediaSources);
 
 						}
 						else
 						{
 							return new esmj3dfo3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
-									makePhys, meshSource, textureSource, soundSource);
+									makePhys, mediaSources);
 						}
 					}
 					else if (version == 1.32f)
 					{
 						//TODO: is FONV significantly different in esm format to warrant anoth project
 						return new esmj3dfo3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
-								makePhys, meshSource, textureSource, soundSource);
+								makePhys, mediaSources);
 					}
 					else if (version == 1.0f || version == 0.8f)
 					{
 						return new esmj3dtes4.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
-								makePhys, meshSource, textureSource, soundSource);
+								makePhys, mediaSources);
 					}
 					else
 					{

@@ -69,9 +69,13 @@ public class BootStrap
 		{
 			Process p = pb.start();
 			File log = new File(".\\logs\\clientlog.txt");
+			if (!log.exists())
+				log.getParentFile().mkdirs();
 			StreamPump streamPump = new StreamPump(p.getInputStream(), log);
 			streamPump.start();
 			File logErr = new File(".\\logs\\clientlog.err.txt");
+			if (!logErr.exists())
+				logErr.getParentFile().mkdirs();
 			StreamPump streamPumpErr = new StreamPump(p.getErrorStream(), logErr);
 			streamPumpErr.start();
 		}

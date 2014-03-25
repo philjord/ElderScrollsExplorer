@@ -19,7 +19,6 @@ import nifbullet.util.debug.opengl.LWJGL;
 import tools3d.navigation.AvatarLocation;
 import tools3d.utils.Utils3D;
 import utils.source.MeshSource;
-import utils.source.file.FileMeshSource;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
@@ -199,13 +198,13 @@ public class PhysicsDynamics extends DynamicsEngine
 				// the nif file will have mass of 0 making this static
 				nb = new NBStaticModel(physNifFile, meshSource, rootTrans);
 			}
-			else if (BulletNifModelClassifier.isKinematicModel(physNifFile, new FileMeshSource()))
+			else if (BulletNifModelClassifier.isKinematicModel(physNifFile, meshSource))
 			{
 				// the nif file will have mass of 0 making this kinematic
 				nb = new NBKinematicModel(physNifFile, meshSource, rootTrans);
 				dynamicsRootBranchGroup.addChild((NBKinematicModel) nb);
 			}
-			else if (BulletNifModelClassifier.isSimpleDynamicModel(physNifFile, new FileMeshSource()))
+			else if (BulletNifModelClassifier.isSimpleDynamicModel(physNifFile, meshSource))
 			{
 				createDynamic(j3dRECOInst, physNifFile);
 			}
