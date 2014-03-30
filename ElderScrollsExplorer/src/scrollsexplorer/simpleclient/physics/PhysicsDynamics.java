@@ -204,7 +204,7 @@ public class PhysicsDynamics extends DynamicsEngine
 				nb = new NBKinematicModel(physNifFile, meshSource, rootTrans);
 				dynamicsRootBranchGroup.addChild((NBKinematicModel) nb);
 			}
-			else if (BulletNifModelClassifier.isSimpleDynamicModel(physNifFile, meshSource))
+			else if (BulletNifModelClassifier.isSimpleDynamicModel(physNifFile, meshSource, 0))
 			{
 				createDynamic(j3dRECOInst, physNifFile);
 			}
@@ -237,7 +237,7 @@ public class PhysicsDynamics extends DynamicsEngine
 
 			//VELO velo = instReco.velocity;
 
-			NBSimpleDynamicModel nb = new NBSimpleDynamicModel(model, meshSource);
+			NBSimpleDynamicModel nb = new NBSimpleDynamicModel(model, meshSource, 0);
 
 			if (nb != null)
 			{
