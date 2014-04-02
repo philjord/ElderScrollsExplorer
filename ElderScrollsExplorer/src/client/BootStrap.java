@@ -51,7 +51,6 @@ public class BootStrap
 		jarpath += "." + ps + "lib" + ps + "tritonus_share.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "jai.jar" + fs;
 
-		jarpath += "." + ps + "lib" + ps + "jbullet.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "lwjglnative.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "lwjgl-2.8.5" + ps + "jar" + ps + "jinput.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "lwjgl-2.8.5" + ps + "jar" + ps + "lwjgl.jar" + fs;
