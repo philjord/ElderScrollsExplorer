@@ -19,6 +19,7 @@
         <file path="/jnifj3d/.gitignore"/>
         <folder path="/ElderScrollsExplorer/META-INF"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d"/>
+        <javaElement handleIdentifier="=jbullet1.1/src"/>
         <file path="/esmj3dtes4/.gitignore"/>
         <file path="/ElderScrollsUtils/.project"/>
         <file path="/3DTools/.classpath"/>
@@ -59,7 +60,6 @@
         <file path="/jnifjbullet/.project"/>
         <file path="/esmj3dtes5/.gitignore"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools.ddstexture"/>
-        <javaElement handleIdentifier="=jnifjbullet/&lt;com.bulletphysics.dom"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.other"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;utils.source"/>
         <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders.resourcepools"/>
@@ -77,7 +77,6 @@
         <javaElement handleIdentifier="=ElderScrollsExplorer/src"/>
         <file path="/ElderScrollsUtils/.gitignore"/>
         <javaElement handleIdentifier="=ElderScrollsUtils/src"/>
-        <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.rag"/>
         <file path="/esmj3dfo3/.project"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.gui.util"/>
         <file path="/jnifj3d/.compatibility"/>
