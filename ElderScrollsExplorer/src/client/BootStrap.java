@@ -63,6 +63,8 @@ public class BootStrap
 		ProcessBuilder pb = new ProcessBuilder(createJavaExeStr(), "-Xmx1200m", "-Xms1024m", "-Dsun.java2d.noddraw=true",
 				"-Dj3d.sharedctx=true", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseG1GC", "-cp", jarpath,
 				"scrollsexplorer.ScrollsExplorer");
+		
+		//TODO: add the -server arg when the jre is my own deployed one as a server jvm
 
 		try
 		{
