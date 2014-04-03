@@ -8,6 +8,8 @@ import javax.media.j3d.Transform3D;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
+import nif.j3d.animation.J3dNiControllerManager;
+import nif.j3d.animation.J3dNiControllerSequence;
 import nifbullet.BulletNifModel;
 import nifbullet.BulletNifModelClassifier;
 import nifbullet.cha.NBControlledChar;
@@ -305,7 +307,15 @@ public class PhysicsDynamics extends DynamicsEngine
 			NBKinematicModel nbKinematicModel = (NBKinematicModel) nifBullet;
 			String seq = isOpen ? "Open" : "Close";// inst has already been updated (this is post)
 
-			nbKinematicModel.getJ3dNiControllerManager().getSequence(seq).fireSequenceOnce();
+			J3dNiControllerManager ncm = nbKinematicModel.getJ3dNiControllerManager();
+			if (ncm != null)
+			{
+				J3dNiControllerSequence s = ncm.getSequence(seq);
+				if (s != null)
+				{
+					s.fireSequenceOnce();
+				}
+			}
 		}
 
 	}
