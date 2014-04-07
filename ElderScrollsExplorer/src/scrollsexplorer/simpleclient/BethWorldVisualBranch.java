@@ -406,8 +406,10 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		}
 
 		//ok try the persistent cell as well, it'll return null if it's really not here
-		return j3dCELLPersistent.getGridSpaces().getJ3dInstRECO(recoId);
-
+		if (j3dCELLPersistent.getGridSpaces() != null)
+			return j3dCELLPersistent.getGridSpaces().getJ3dInstRECO(recoId);
+		else
+			return null;
 	}
 
 }
