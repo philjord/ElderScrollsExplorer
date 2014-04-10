@@ -329,7 +329,7 @@ public class PhysicsDynamics extends DynamicsEngine
 			// remove from physics simulation
 			synchronized (dynamicsWorld)
 			{
-				nifBullet.removeFromDynamicsWorld(dynamicsWorld);
+				nifBullet.removeFromDynamicsWorld();
 				nifBullet.destroy();
 				instRecoBulletBindings.remove(recordId);
 				nifBulletToRecoId.remove(nifBullet);
