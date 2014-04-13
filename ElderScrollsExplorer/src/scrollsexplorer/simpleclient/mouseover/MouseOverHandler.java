@@ -85,7 +85,7 @@ public abstract class MouseOverHandler implements ComponentListener
 						}
 						catch (Exception e)
 						{
-							System.out.println("PhysicsSystem exception " + e.getMessage() + " in " + this);
+							System.out.println("PhysicsSystem exception " + e + " " + e.getStackTrace()[0]);
 						}
 					}
 				});

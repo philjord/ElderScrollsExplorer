@@ -75,7 +75,7 @@ public class PhysicsSystem implements NbccProvider
 				}
 				catch (Exception e)
 				{
-					System.out.println("PhysicsSystem.physicsTick() exception " + e.getMessage() + " in " + this);
+					System.out.println("PhysicsSystem.physicsTick() exception " + e + " " + e.getStackTrace()[0]);
 				}
 			}
 		});

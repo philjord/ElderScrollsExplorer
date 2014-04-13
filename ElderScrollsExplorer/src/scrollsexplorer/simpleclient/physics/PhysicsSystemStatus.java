@@ -44,7 +44,7 @@ public class PhysicsSystemStatus extends JPanel
 				catch (Exception e)
 				{
 					e.printStackTrace();
-					System.out.println("PhysicsSystemStatus.update() exception " + e.getMessage() + " in " + this);
+					System.out.println("PhysicsSystemStatus.update() exception "+ e + " " + e.getStackTrace()[0]);
 				}
 			}
 

@@ -120,7 +120,7 @@ public abstract class DynamicsEngine
 			catch (NullPointerException e)
 			{
 				//DbvtBroadphase.setAabb being a dick
-				System.out.println("" + e.getMessage());
+				System.out.println("" + e + " " + e.getStackTrace()[0]);
 			}
 			catch (ClassCastException e)
 			{
@@ -132,7 +132,7 @@ public abstract class DynamicsEngine
 
 				//seems like this guy GImpactCollisionAlgorithm.registerAlgorithm(dispatcher);
 
-				System.out.println("" + e.getMessage());
+				System.out.println("" + e + " " + e.getStackTrace()[0]);
 			}
 
 		}

@@ -14,8 +14,7 @@ import nifbullet.BulletNifModel;
 import nifbullet.BulletNifModelClassifier;
 import nifbullet.cha.NBControlledChar;
 import nifbullet.dyn.NBSimpleDynamicModel;
-import nifbullet.kin.NBKinematicModel;
-import nifbullet.stat.NBStaticModel;
+import nifbullet.simple.NBSimpleModel;
 import nifbullet.util.debug.opengl.DebugOutput;
 import nifbullet.util.debug.opengl.LWJGL;
 import tools3d.navigation.AvatarLocation;
@@ -171,7 +170,7 @@ public class PhysicsDynamics extends DynamicsEngine
 	private void createLand(J3dLAND j3dLAND)
 	{
 		Transform3D rootTrans = j3dLAND.getLocation(new Transform3D());
-		NBStaticModel nb = new NBStaticModel(j3dLAND.getGeometryInfo(), rootTrans);
+		NBSimpleModel nb = new NBSimpleModel(j3dLAND.getGeometryInfo(), rootTrans);
 		if (nb != null)
 		{
 
@@ -198,13 +197,13 @@ public class PhysicsDynamics extends DynamicsEngine
 			if (BulletNifModelClassifier.isStaticModel(physNifFile, meshSource))
 			{
 				// the nif file will have mass of 0 making this static
-				nb = new NBStaticModel(physNifFile, meshSource, rootTrans);
+				nb = new NBSimpleModel(physNifFile, meshSource, rootTrans);
 			}
 			else if (BulletNifModelClassifier.isKinematicModel(physNifFile, meshSource))
 			{
 				// the nif file will have mass of 0 making this kinematic
-				nb = new NBKinematicModel(physNifFile, meshSource, rootTrans);
-				dynamicsRootBranchGroup.addChild((NBKinematicModel) nb);
+				nb = new NBSimpleModel(physNifFile, meshSource, rootTrans);
+				dynamicsRootBranchGroup.addChild((NBSimpleModel) nb);
 			}
 			else if (BulletNifModelClassifier.isSimpleDynamicModel(physNifFile, meshSource, 0))
 			{
@@ -290,7 +289,7 @@ public class PhysicsDynamics extends DynamicsEngine
 			newTrans.get(v);
 			((NBSimpleDynamicModel) nifBullet).setTransform(q, v);
 		}
-		else if (nifBullet instanceof NBStaticModel || nifBullet instanceof NBKinematicModel)
+		else if (nifBullet instanceof NBSimpleModel)
 		{
 			//remove and readd
 			removeRECO(j3dRECOInst);
@@ -302,9 +301,9 @@ public class PhysicsDynamics extends DynamicsEngine
 	public synchronized void updateRECOToggleOpen(J3dRECOInst j3dRECOInst, boolean isOpen)
 	{
 		BulletNifModel nifBullet = recoIdToNifBullet.get(j3dRECOInst.getRecordId());
-		if (nifBullet instanceof NBKinematicModel)
+		if (nifBullet instanceof NBSimpleModel)
 		{
-			NBKinematicModel nbKinematicModel = (NBKinematicModel) nifBullet;
+			NBSimpleModel nbKinematicModel = (NBSimpleModel) nifBullet;
 			String seq = isOpen ? "Open" : "Close";// inst has already been updated (this is post)
 
 			J3dNiControllerManager ncm = nbKinematicModel.getJ3dNiControllerManager();
@@ -391,12 +390,9 @@ public class PhysicsDynamics extends DynamicsEngine
 				{
 					ret.dynCount++;
 				}
-				else if (bnm instanceof NBKinematicModel)
+				else if (bnm instanceof NBSimpleModel)
 				{
 					ret.kinCount++;
-				}
-				else if (bnm instanceof NBStaticModel)
-				{
 					ret.staCount++;
 				}
 			}
