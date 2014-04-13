@@ -7,5 +7,5 @@ import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 
 public interface InstRECOStore
 {
-	public void applyCharChange(J3dRECOInst instReco, Quat4f newRotation, Vector3f newTranslation);
+	public void applyUpdate(J3dRECOInst instReco, Quat4f newRotation, Vector3f newTranslation);
 }

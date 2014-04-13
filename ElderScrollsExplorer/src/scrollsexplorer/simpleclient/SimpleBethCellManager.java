@@ -13,6 +13,7 @@ import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
 import scrollsexplorer.ScrollsExplorer;
+import scrollsexplorer.simpleclient.physics.InstRECOStore;
 import tools3d.navigation.AvatarLocation;
 import tools3d.utils.Utils3D;
 import utils.ESConfig;
@@ -28,8 +29,10 @@ import esmLoader.common.data.plugin.PluginSubrecord;
 import esmLoader.loader.ESMManager;
 import esmj3d.data.shared.subrecords.LString;
 import esmj3d.j3d.cell.J3dICellFactory;
+import esmj3d.j3d.j3drecords.inst.J3dRECODynInst;
+import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 
-public class SimpleBethCellManager
+public class SimpleBethCellManager implements InstRECOStore
 {
 	//TODO: bad form only for ActionableMouseOverHandler
 	public static BethWorldVisualBranch currentBethWorldVisualBranch;
@@ -394,4 +397,32 @@ public class SimpleBethCellManager
 		simpleWalkSetup.getAvatarLocation().setRotation(q);
 	}
 
+	@Override
+	public void applyUpdate(J3dRECOInst instReco, Quat4f newRotation, Vector3f newTranslation)
+	{ 
+		if (instReco instanceof J3dRECODynInst)
+		{
+			J3dRECODynInst dynInst = ((J3dRECODynInst) instReco);
+			Transform3D t = new Transform3D(newRotation, newTranslation, 1f);
+			dynInst.setLocation(t);
+
+			// must find teh visual equiv and updte it's root trasnforms
+			if (currentBethWorldVisualBranch != null)
+			{
+				J3dRECODynInst wv = (J3dRECODynInst) currentBethWorldVisualBranch.getJ3dInstRECO(instReco.getRecordId());
+				if (wv != null)
+					wv.setLocation(t);
+			}
+			else if (currentBethInteriorVisualBranch != null)
+			{
+				J3dRECODynInst iv = (J3dRECODynInst) currentBethInteriorVisualBranch.getJ3dInstRECO(instReco.getRecordId());
+				if (iv != null)
+					iv.setLocation(t);
+			}
+		}
+		else
+		{
+			System.out.println("do somethig here? " + instReco);
+		}
+	}
 }

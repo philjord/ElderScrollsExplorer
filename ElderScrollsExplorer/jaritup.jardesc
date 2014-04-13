@@ -17,13 +17,13 @@
         <file path="/jnifj3d/.project"/>
         <file path="/jnifj3d/.gitignore"/>
         <folder path="/ElderScrollsExplorer/META-INF"/>
-        <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d"/>
         <javaElement handleIdentifier="=jbullet1.1/src"/>
+        <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d"/>
         <file path="/esmj3dtes4/.gitignore"/>
         <file path="/ElderScrollsUtils/.project"/>
         <file path="/3DTools/.classpath"/>
-        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders.ac3d"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools.image"/>
+        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders.ac3d"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;utils.source.file"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.interp"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.dyn"/>
@@ -44,8 +44,8 @@
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.util.debug.opengl"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.convert"/>
         <file path="/esmj3dfo3/.gitignore"/>
-        <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.animation.interp"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.character"/>
+        <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.animation.interp"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.gui"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.camera"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.universe"/>
@@ -56,18 +56,18 @@
         <file path="/jnifjbullet/.project"/>
         <file path="/esmj3dtes5/.gitignore"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools.ddstexture"/>
-        <javaElement handleIdentifier="=jnifj3d/&lt;nif.other"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;utils.source"/>
+        <javaElement handleIdentifier="=jnifj3d/&lt;nif.other"/>
         <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders.resourcepools"/>
-        <javaElement handleIdentifier="=3DTools/&lt;de.fruitfly.ovr"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.resolution"/>
+        <javaElement handleIdentifier="=3DTools/&lt;de.fruitfly.ovr"/>
         <javaElement handleIdentifier="=esmj3d/src"/>
         <file path="/esmj3d/.project"/>
-        <javaElement handleIdentifier="=esmj3dtes4/src"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation"/>
+        <javaElement handleIdentifier="=esmj3dtes4/src"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.rules.deprecated"/>
-        <javaElement handleIdentifier="=3DTools/&lt;javax.media.j3d"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.camera.simple"/>
+        <javaElement handleIdentifier="=3DTools/&lt;javax.media.j3d"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet"/>
         <javaElement handleIdentifier="=ElderScrollsExplorer/src"/>
@@ -81,17 +81,17 @@
         <javaElement handleIdentifier="=jnif"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.util"/>
         <javaElement handleIdentifier="=Tools"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools3d.environment.sky"/>
-        <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.compound"/>
         <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.ac3d"/>
+        <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.compound"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools3d.environment.sky"/>
         <file path="/3DTools/.compatibility"/>
         <file path="/esmj3dtes4/.classpath"/>
-        <javaElement handleIdentifier="=3DTools/&lt;tools.ddstexture.utils"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.loader"/>
+        <javaElement handleIdentifier="=3DTools/&lt;tools.ddstexture.utils"/>
         <javaElement handleIdentifier="=BSAManager"/>
         <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders"/>
-        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.ac3d.tree"/>
         <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.resourcepools"/>
+        <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.j3d.loaders.ac3d.tree"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.scenegraph"/>
         <javaElement handleIdentifier="=ESMLoader"/>
         <file path="/ElderScrollsUtils/.classpath"/>

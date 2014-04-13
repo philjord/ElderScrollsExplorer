@@ -53,7 +53,6 @@ import tools3d.resolution.ScreenResolution;
 import tools3d.universe.VisualPhysicalUniverse;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 import utils.source.MeshSource;
-import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 
 /**
  * A class to pull teh keyboard nav, bullet phys, nif displayable, canvas2d3d overlays, 
@@ -254,20 +253,11 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	}
 
-	public void configure(MeshSource meshSource)
+	public void configure(MeshSource meshSource, InstRECOStore instRECOStore)
 	{
 		// set up and run the physics system************************************************
-		InstRECOStore charChangeListener = new InstRECOStore()
-		{
-			@Override
-			public void applyCharChange(J3dRECOInst instReco, Quat4f newRotation, Vector3f newTranslation)
-			{
-				//System.out.println("do somethig here?");
-			}
 
-		};
-
-		physicsSystem = new PhysicsSystem(charChangeListener, avatarLocation, behaviourBranch, meshSource);
+		physicsSystem = new PhysicsSystem(instRECOStore, avatarLocation, behaviourBranch, meshSource);
 
 		ScrollsExplorer.dashboard.setPhysicSystem(physicsSystem);
 
@@ -330,7 +320,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			navigationProcessor.setNoPitch(true);
 			navigationTemporalBehaviour.addNavigationProcessor(hcd);
 			cameraPanel.getCanvas3D2D().addKeyListener(new HMDKeyHandler(hcd));
-			 
+
 		}
 
 		avatarLocation.addAvatarLocationListener(cameraPanel.getDolly());
@@ -556,4 +546,5 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		}
 	}
 
+	
 }

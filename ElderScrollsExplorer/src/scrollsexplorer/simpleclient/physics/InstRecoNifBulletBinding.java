@@ -9,20 +9,16 @@ import nifbullet.dyn.NBSimpleDynamicModel;
 import nifbullet.dyn.NifBulletTransformListener;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 
-/**
- * Direct connect to slave model all physics just get dumped straight across, the slave model will only update visual etc
- * @author philip
- *
- */
-public class ClientInstRecoNifBulletBinding implements NifBulletBinding, NifBulletTransformListener
+
+public class InstRecoNifBulletBinding implements NifBulletBinding, NifBulletTransformListener
 {
-	private InstRECOStore spaceTraderModel;
+	private InstRECOStore instRecoStore;
 
 	private J3dRECOInst instReco;
 
-	public ClientInstRecoNifBulletBinding(J3dRECOInst instReco, InstRECOStore spaceTraderModel, NBSimpleDynamicModel nifBullet)
+	public InstRecoNifBulletBinding(J3dRECOInst instReco, InstRECOStore instRecoStore, NBSimpleDynamicModel nifBullet)
 	{
-		this.spaceTraderModel = spaceTraderModel;
+		this.instRecoStore = instRecoStore;
 		this.instReco = instReco;
 		nifBullet.setTransformChangeListener(this);
 	}
@@ -34,7 +30,7 @@ public class ClientInstRecoNifBulletBinding implements NifBulletBinding, NifBull
 
 	@Override
 	public void transformChanged(Transform3D newTrans, Vector3f linearVelocity, Vector3f rotationalVelocity)
-	{
+	{		
 		newTrans.get(newTranslation);
 		Utils3D.safeGetQuat(newTrans, newRotation);
 
@@ -44,13 +40,14 @@ public class ClientInstRecoNifBulletBinding implements NifBulletBinding, NifBull
 			return;
 		}
 
-		spaceTraderModel.applyCharChange(instReco, newRotation, newTranslation);
+		instRecoStore.applyUpdate(instReco, newRotation, newTranslation);
 	}
 
 	@Override
 	public void applyToModel()
 	{
 		//ignored due to instant updates to client model
+		//System.out.println("applying bindings to model??");
 	}
 
 }

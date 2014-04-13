@@ -250,7 +250,7 @@ public class PhysicsDynamics extends DynamicsEngine
 				//velo.getVelocities(linearVelocity, rotationalVelocity);
 				nb.forceUpdate(rootTrans, linearVelocity, rotationalVelocity);
 
-				NifBulletBinding irnbb = new ClientInstRecoNifBulletBinding(j3dRECOInst, instRecoToNif, nb);
+				NifBulletBinding irnbb = new InstRecoNifBulletBinding(j3dRECOInst, instRecoToNif, nb);
 
 				if (irnbb != null)
 				{
