@@ -12,7 +12,6 @@
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils"/>
-        <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.stat"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.particles"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.infoText"/>
         <file path="/jnifj3d/.project"/>
@@ -25,7 +24,6 @@
         <file path="/3DTools/.classpath"/>
         <javaElement handleIdentifier="=3DTools/&lt;org.newdawn.loaders.ac3d"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools.image"/>
-        <javaElement handleIdentifier="=jnifjbullet/&lt;com.bulletphysics"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;utils.source.file"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.interp"/>
         <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.dyn"/>
@@ -49,11 +47,9 @@
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.animation.interp"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.character"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.gui"/>
-        <javaElement handleIdentifier="=jnifjbullet/&lt;com.bulletphysics.util"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.camera"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.universe"/>
         <file path="/esmj3dtes4/.project"/>
-        <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.kin"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.geography"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.utils.old"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.rules.deprecated.picking"/>
@@ -103,11 +99,12 @@
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.navigation.rules.deprecated.debug"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.geography.gen"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif.j3d.animation"/>
-        <file path="/esmj3d/.gitignore"/>
         <javaElement handleIdentifier="=jnifj3d/&lt;nif"/>
+        <file path="/esmj3d/.gitignore"/>
         <file path="/jnifjbullet/.compatibility"/>
         <javaElement handleIdentifier="=esmj3dtes5/src"/>
         <file path="/jnifjbullet/.classpath"/>
+        <javaElement handleIdentifier="=jnifjbullet/&lt;nifbullet.simple"/>
         <javaElement handleIdentifier="=3DTools/&lt;tools3d.environment"/>
         <file path="/esmj3dfo3/.compatibility"/>
         <file path="/esmj3dtes4/.compatibility"/>
