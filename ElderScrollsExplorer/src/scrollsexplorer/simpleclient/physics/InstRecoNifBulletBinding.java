@@ -9,7 +9,6 @@ import nifbullet.dyn.NBSimpleDynamicModel;
 import nifbullet.dyn.NifBulletTransformListener;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 
-
 public class InstRecoNifBulletBinding implements NifBulletBinding, NifBulletTransformListener
 {
 	private InstRECOStore instRecoStore;
@@ -28,19 +27,26 @@ public class InstRecoNifBulletBinding implements NifBulletBinding, NifBulletTran
 
 	private Quat4f newRotation = new Quat4f();
 
+	private Transform3D prevRotation = new Transform3D();
+
 	@Override
 	public void transformChanged(Transform3D newTrans, Vector3f linearVelocity, Vector3f rotationalVelocity)
-	{		
-		newTrans.get(newTranslation);
-		Utils3D.safeGetQuat(newTrans, newRotation);
-
-		if (Float.isNaN(newTranslation.x))
+	{
+		if (!newTrans.epsilonEquals(prevRotation, 0.0001))
 		{
-			System.out.println("NAN detected in ClientInstRecoNifBulletBinding.setTransform position!");
-			return;
+			newTrans.get(newTranslation);
+
+			if (Float.isNaN(newTranslation.x))
+			{
+				System.out.println("NAN detected in ClientInstRecoNifBulletBinding.setTransform position!");
+				return;
+			}
+			Utils3D.safeGetQuat(newTrans, newRotation);
+			instRecoStore.applyUpdate(instReco, newRotation, newTranslation);
+
+			prevRotation.set(newTrans);
 		}
 
-		instRecoStore.applyUpdate(instReco, newRotation, newTranslation);
 	}
 
 	@Override

@@ -145,10 +145,10 @@ public class PhysicsDynamics extends DynamicsEngine
 
 	public void addRECO(J3dRECOInst j3dRECOInst)
 	{
-
 		if (recoIdToNifBullet.containsKey(j3dRECOInst.getRecordId()))
 		{
 			System.out.println("PhysicsDynamics, already loaded " + j3dRECOInst);
+			//new Throwable("Thread:" + Thread.currentThread()).printStackTrace();
 		}
 
 		if (j3dRECOInst instanceof J3dLAND)

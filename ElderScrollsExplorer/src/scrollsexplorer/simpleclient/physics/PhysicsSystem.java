@@ -51,8 +51,6 @@ public class PhysicsSystem implements NbccProvider
 	// Note in one list to ensure time ordering
 	private PendingList<PhysicsUpdate> eventsToProcess = new PendingList<PhysicsUpdate>();
 
-	
-
 	/**
 	 * starts paused for loading
 	 */
@@ -65,7 +63,7 @@ public class PhysicsSystem implements NbccProvider
 		this.meshSource = meshSource;
 		setMinTimeForBoundUpdate(CLIENT_MIN_TIME_BETWEEN_BOUND_UPDATES_MS);
 
-		physicsSimThread = new PeriodicThread("ST Physics Sim Thread", MIN_TIME_BETWEEN_STEPS_MS, new PeriodicallyUpdated()
+		physicsSimThread = new PeriodicThread("Physics Sim Thread", MIN_TIME_BETWEEN_STEPS_MS, new PeriodicallyUpdated()
 		{
 			public void runUpdate()
 			{
@@ -76,6 +74,7 @@ public class PhysicsSystem implements NbccProvider
 				catch (Exception e)
 				{
 					System.out.println("PhysicsSystem.physicsTick() exception " + e + " " + e.getStackTrace()[0]);
+					e.printStackTrace();
 				}
 			}
 		});
@@ -136,16 +135,22 @@ public class PhysicsSystem implements NbccProvider
 
 	private void loadFromModelImpl(Collection<J3dRECOInst> collection)
 	{
-
-		// add the items
-		for (J3dRECOInst instReco : collection)
+		try
 		{
-			physicsLocaleDynamics.addRECO(instReco);
-		}
+			// add the items
+			for (J3dRECOInst instReco : collection)
+			{
+				physicsLocaleDynamics.addRECO(instReco);
+			}
 
-		// tell the statemodel we want to know about movements
-		//System.out.println("1Physics objects loaded for cell " + cellId);
-		physicsLocaleDynamics.unpause();
+			// tell the statemodel we want to know about movements
+			//System.out.println("1Physics objects loaded for cell " + cellId);
+			physicsLocaleDynamics.unpause();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 
 	}
 
@@ -176,8 +181,6 @@ public class PhysicsSystem implements NbccProvider
 			this.cellId = -1;
 		}
 	}
-
-	
 
 	protected void setMinTimeForBoundUpdate(long newTime)
 	{
@@ -255,11 +258,9 @@ public class PhysicsSystem implements NbccProvider
 
 				if (!isPaused())
 				{
-					
-						
-					
+
 					physicsLocaleDynamics.dynamicsTick();
-					 
+
 					physicsToModelTick();
 				}
 			}
@@ -406,7 +407,7 @@ public class PhysicsSystem implements NbccProvider
 		{
 			PhysicsUpdate pu = new PhysicsUpdate();
 			pu.type = UPDATE_TYPE.LOAD_FROM_MODEL;
-			pu.collection = collection;
+			pu.collection = new ArrayList<J3dRECOInst>(collection);
 			return pu;
 		}
 
@@ -414,7 +415,7 @@ public class PhysicsSystem implements NbccProvider
 		{
 			PhysicsUpdate pu = new PhysicsUpdate();
 			pu.type = UPDATE_TYPE.UNLOAD_FROM_MODEL;
-			pu.collection = collection;
+			pu.collection = new ArrayList<J3dRECOInst>(collection);
 			return pu;
 		}
 	}

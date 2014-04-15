@@ -12,7 +12,6 @@ import esmj3d.j3d.cell.J3dICellFactory;
 
 public class BethInteriorPhysicalBranch extends BranchGroup
 {
-
 	private J3dICELLPersistent j3dCELLPersistent;
 
 	private J3dCELLGeneral j3dCELLTemporary;

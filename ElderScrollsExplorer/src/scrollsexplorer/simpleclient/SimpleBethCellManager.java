@@ -422,7 +422,7 @@ public class SimpleBethCellManager implements InstRECOStore
 		}
 		else
 		{
-			System.out.println("do somethig here? " + instReco);
+			//System.out.println("do somethig here? " + instReco);
 		}
 	}
 }

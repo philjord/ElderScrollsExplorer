@@ -71,17 +71,15 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 
 		// load the general children of this wrld space
 
-		
-		
 		isWRLD = j3dCellFactory.isWRLD(worldFormId);
 		if (isWRLD)
 		{
-			
+
 			j3dCELLPersistent = j3dCellFactory.makeBGWRLDPersistent(worldFormId, true);
 			addChild((J3dCELLGeneral) j3dCELLPersistent);
 			clientPhysicsSystem.cellChanged(worldFormId, (J3dCELLGeneral) j3dCELLPersistent);
 			//this persistent is just a super cluster of vague things, not related to position at all
-			
+
 			QueuingThread.CallBack callBack = new QueuingThread.CallBack()
 			{
 				public void run(Object parameter)
@@ -101,9 +99,6 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			updateThread.setName("Obliv Phys update thread");
 			updateThread.setDaemon(true);
 			updateThread.start();
-
-			
-			 
 
 		}
 		else
@@ -148,128 +143,134 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 	 */
 	private void update(float charX, float charY)
 	{
-		long start = System.currentTimeMillis();
-
-		if (j3dCELLPersistent != null)
+		synchronized (loadedNears)
 		{
-			float loadDist = J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount();
+			long start = System.currentTimeMillis();
 
-			// because j3dcellpersistent is in a lower project I have to do this here, bum			
-			List<GridSpace> gridsToRemove = j3dCELLPersistent.getGridSpaces().getGridSpacesToRemove(charX, charY, loadDist);
-			List<GridSpace> gridsToAdd = j3dCELLPersistent.getGridSpaces().getGridSpacesToAdd(charX, charY, loadDist);
-
-			//done after gathering the lists above so we now do the grid changes
-			j3dCELLPersistent.getGridSpaces().update(charX, charY, loadDist);
-
-			for (GridSpace gridSpace : gridsToRemove)
+			if (j3dCELLPersistent != null)
 			{
-				clientPhysicsSystem.unloadJ3dGridSpace(gridSpace);			
-			}
+				float loadDist = J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount();
 
-			for (GridSpace gridSpace : gridsToAdd)
-			{
-				clientPhysicsSystem.loadJ3dGridSpace(gridSpace);				
-			}
+				// because j3dcellpersistent is in a lower project I have to do this here, bum			
+				List<GridSpace> gridsToRemove = j3dCELLPersistent.getGridSpaces().getGridSpacesToRemove(charX, charY, loadDist);
+				List<GridSpace> gridsToAdd = j3dCELLPersistent.getGridSpaces().getGridSpacesToAdd(charX, charY, loadDist);
 
-		}
+				//done after gathering the lists above so we now do the grid changes
+				j3dCELLPersistent.getGridSpaces().update(charX, charY, loadDist);
 
-		/*int lowX = (int) Math.floor((charX - (J3dLAND.LAND_SIZE * 0.5)) / J3dLAND.LAND_SIZE);
-		int lowY = (int) Math.floor((charY - (J3dLAND.LAND_SIZE * 0.5)) / J3dLAND.LAND_SIZE);
-		int highX = (int) Math.ceil((charX + (J3dLAND.LAND_SIZE * 0.5)) / J3dLAND.LAND_SIZE);
-		int highY = (int) Math.ceil((charY + (J3dLAND.LAND_SIZE * 0.5)) / J3dLAND.LAND_SIZE);*/
-
-		int lowX = (int) Math.floor(charX / J3dLAND.LAND_SIZE) - 1;
-		int lowY = (int) Math.floor(charY / J3dLAND.LAND_SIZE) - 1;
-		int highX = (int) Math.floor(charX / J3dLAND.LAND_SIZE) + 1;//grids load out toward positive
-		int highY = (int) Math.floor(charY / J3dLAND.LAND_SIZE) + 1;
-
-		// lets remove those loaded nears not in the range
-		Iterator<Point> keys = loadedNears.keySet().iterator();
-		ArrayList<Point> keysToRemove = new ArrayList<Point>();
-		while (keys.hasNext())
-		{
-			Point key = keys.next();
-			if (key.x < lowX || key.x > highX || key.y < lowY || key.y > highY)
-			{
-				keysToRemove.add(key);
-			}
-		}
-
-		for (int i = 0; i < keysToRemove.size(); i++)
-		{
-			Point key = keysToRemove.get(i);
-			J3dCELLGeneral cell = loadedNears.remove(key);
-			if (cell != null)
-			{
-				removeChild(cell);
-				clientPhysicsSystem.unloadJ3dCELL(cell);
-			}
-
-		}
-
-		// lets remove those loaded fars not in the range
-		keys = loadedFars.keySet().iterator();
-		keysToRemove = new ArrayList<Point>();
-		while (keys.hasNext())
-		{
-			Point key = keys.next();
-			if (key.x < lowX || key.x > highX || key.y < lowY || key.y > highY)
-			{
-				keysToRemove.add(key);
-			}
-		}
-
-		for (int i = 0; i < keysToRemove.size(); i++)
-		{
-			Point key = keysToRemove.get(i);
-			J3dCELLGeneral cell = loadedFars.remove(key);
-			if (cell != null)
-			{
-				removeChild(cell);
-			}
-
-		}
-
-		for (int x = lowX; x <= highX; x++)
-		{
-			for (int y = lowY; y <= highY; y++)
-			{
-				//if(x==1&&y==1)
+				for (GridSpace gridSpace : gridsToRemove)
 				{
-					load(x, y);
+					clientPhysicsSystem.unloadJ3dGridSpace(gridSpace);
+				}
+
+				for (GridSpace gridSpace : gridsToAdd)
+				{
+					clientPhysicsSystem.loadJ3dGridSpace(gridSpace);
+				}
+
+			}
+
+			/*int lowX = (int) Math.floor((charX - (J3dLAND.LAND_SIZE * 0.5)) / J3dLAND.LAND_SIZE);
+			int lowY = (int) Math.floor((charY - (J3dLAND.LAND_SIZE * 0.5)) / J3dLAND.LAND_SIZE);
+			int highX = (int) Math.ceil((charX + (J3dLAND.LAND_SIZE * 0.5)) / J3dLAND.LAND_SIZE);
+			int highY = (int) Math.ceil((charY + (J3dLAND.LAND_SIZE * 0.5)) / J3dLAND.LAND_SIZE);*/
+
+			int lowX = (int) Math.floor(charX / J3dLAND.LAND_SIZE) - 1;
+			int lowY = (int) Math.floor(charY / J3dLAND.LAND_SIZE) - 1;
+			int highX = (int) Math.floor(charX / J3dLAND.LAND_SIZE) + 1;//grids load out toward positive
+			int highY = (int) Math.floor(charY / J3dLAND.LAND_SIZE) + 1;
+
+			// lets remove those loaded nears not in the range
+			Iterator<Point> keys = loadedNears.keySet().iterator();
+			ArrayList<Point> keysToRemove = new ArrayList<Point>();
+			while (keys.hasNext())
+			{
+				Point key = keys.next();
+				if (key.x < lowX || key.x > highX || key.y < lowY || key.y > highY)
+				{
+					keysToRemove.add(key);
 				}
 			}
-		}
 
-		if ((System.currentTimeMillis() - start) > 50)
-			System.out.println("BethWorldPhysicalBranch.update took " + (System.currentTimeMillis() - start) + "ms");
+			for (int i = 0; i < keysToRemove.size(); i++)
+			{
+				Point key = keysToRemove.get(i);
+				J3dCELLGeneral cell = loadedNears.remove(key);
+				if (cell != null)
+				{
+					removeChild(cell);
+					clientPhysicsSystem.unloadJ3dCELL(cell);
+				}
+
+			}
+
+			// lets remove those loaded fars not in the range
+			keys = loadedFars.keySet().iterator();
+			keysToRemove = new ArrayList<Point>();
+			while (keys.hasNext())
+			{
+				Point key = keys.next();
+				if (key.x < lowX || key.x > highX || key.y < lowY || key.y > highY)
+				{
+					keysToRemove.add(key);
+				}
+			}
+
+			for (int i = 0; i < keysToRemove.size(); i++)
+			{
+				Point key = keysToRemove.get(i);
+				J3dCELLGeneral cell = loadedFars.remove(key);
+				if (cell != null)
+				{
+					removeChild(cell);
+				}
+
+			}
+
+			for (int x = lowX; x <= highX; x++)
+			{
+				for (int y = lowY; y <= highY; y++)
+				{
+					//if(x==1&&y==1)
+					{
+						load(x, y);
+					}
+				}
+			}
+
+			if ((System.currentTimeMillis() - start) > 50)
+				System.out.println("BethWorldPhysicalBranch.update took " + (System.currentTimeMillis() - start) + "ms");
+		}
 	}
 
 	private void load(int x, int y)
 	{
-		Point key = new Point(x, y);
-		if (!loadedNears.containsKey(key))
+		synchronized (loadedNears)
 		{
-			//Persistent are loaded in  the CELL that is makeBGWRLD all xy based persistents are empty
-			j3dCELLTemporary = j3dCellFactory.makeBGWRLDTemporary(worldFormId, x, y, true);
-			loadedNears.put(key, j3dCELLTemporary);
-			if (j3dCELLTemporary != null)
+			Point key = new Point(x, y);
+			if (!loadedNears.containsKey(key))
 			{
-				j3dCELLTemporary.compile();// better to be done not on the j3d thread?
-				addChild(j3dCELLTemporary);
-				clientPhysicsSystem.loadJ3dCELL(j3dCELLTemporary);
+				//Persistent are loaded in  the CELL that is makeBGWRLD all xy based persistents are empty
+				j3dCELLTemporary = j3dCellFactory.makeBGWRLDTemporary(worldFormId, x, y, true);
+				loadedNears.put(key, j3dCELLTemporary);
+				if (j3dCELLTemporary != null)
+				{
+					j3dCELLTemporary.compile();// better to be done not on the j3d thread?
+					addChild(j3dCELLTemporary);
+					clientPhysicsSystem.loadJ3dCELL(j3dCELLTemporary);
+				}
 			}
-		}
 
-		if (!loadedFars.containsKey(key))
-		{
-			J3dCELLGeneral cell = j3dCellFactory.makeBGWRLDDistant(worldFormId, x, y, true);
-			loadedFars.put(key, cell);
-			if (cell != null)
+			if (!loadedFars.containsKey(key))
 			{
-				cell.compile();// better to be done not on the j3d thread?
-				addChild(cell);
-				//not added to physics only added to the view for rendering
+				J3dCELLGeneral cell = j3dCellFactory.makeBGWRLDDistant(worldFormId, x, y, true);
+				loadedFars.put(key, cell);
+				if (cell != null)
+				{
+					cell.compile();// better to be done not on the j3d thread?
+					addChild(cell);
+					//not added to physics only added to the view for rendering
+				}
 			}
 		}
 	}
@@ -339,14 +340,17 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 
 	public J3dRECOInst getJ3dInstRECO(int recordId)
 	{
-		for (J3dCELLGeneral cell : loadedNears.values())
+		synchronized (loadedNears)
 		{
-			if (cell != null)
+			for (J3dCELLGeneral cell : loadedNears.values())
 			{
-				J3dRECOInst jri = cell.getJ3dRECOs().get(recordId);
-				if (jri != null)
+				if (cell != null)
 				{
-					return jri;
+					J3dRECOInst jri = cell.getJ3dRECOs().get(recordId);
+					if (jri != null)
+					{
+						return jri;
+					}
 				}
 			}
 		}
