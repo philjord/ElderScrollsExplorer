@@ -31,7 +31,6 @@ import nativeLinker.LWJGLLinker;
 import scrollsexplorer.simpleclient.ESESettingsPanel;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
-import scrollsexplorer.simpleclient.physics.InstRECOStore;
 import tools3d.resolution.QueryProperties;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
@@ -55,8 +54,6 @@ import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
 import esmj3d.j3d.BethRenderSettings;
-import esmj3d.j3d.j3drecords.inst.J3dRECODynInst;
-import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 
 public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener
 {
