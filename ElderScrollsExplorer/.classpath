@@ -23,5 +23,6 @@
 	<classpathentry kind="lib" path="/external_jars/external jars/jogamp/jar/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/jogamp/jar/joal.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/jogamp/jar/jogl-all.jar"/>
+	<classpathentry kind="lib" path="/external_jars/external jars/j3d/j3d-org-java3d-all.jar" sourcepath="E:/Java/3rd party jars/j3d/src"/>
 	<classpathentry kind="output" path="output"/>
 </classpath>
