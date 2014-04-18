@@ -27,33 +27,32 @@ public class InstRecoNifBulletBinding implements NifBulletBinding, NifBulletTran
 
 	private Quat4f newRotation = new Quat4f();
 
-	private Transform3D prevRotation = new Transform3D();
+	private Transform3D prevTrans = new Transform3D();
+
+	private Transform3D nextTrans = new Transform3D();
 
 	@Override
 	public void transformChanged(Transform3D newTrans, Vector3f linearVelocity, Vector3f rotationalVelocity)
 	{
-		if (!newTrans.epsilonEquals(prevRotation, 0.0001))
-		{
-			newTrans.get(newTranslation);
-
-			if (Float.isNaN(newTranslation.x))
-			{
-				System.out.println("NAN detected in ClientInstRecoNifBulletBinding.setTransform position!");
-				return;
-			}
-			Utils3D.safeGetQuat(newTrans, newRotation);
-			instRecoStore.applyUpdate(instReco, newRotation, newTranslation);
-
-			prevRotation.set(newTrans);
-		}
-
+		nextTrans.set(newTrans);
 	}
 
 	@Override
 	public void applyToModel()
 	{
-		//ignored due to instant updates to client model
-		//System.out.println("applying bindings to model??");
+		if (!nextTrans.epsilonEquals(prevTrans, 0.0001))
+		{
+			nextTrans.get(newTranslation);
+			Utils3D.safeGetQuat(nextTrans, newRotation);
+			if (Float.isNaN(newTranslation.x))
+			{
+				System.out.println("NAN detected in ClientInstRecoNifBulletBinding.setTransform position!");
+				return;
+			}
+			instRecoStore.applyUpdate(instReco, newRotation, newTranslation);
+
+			prevTrans.set(nextTrans);
+		}
 	}
 
 }

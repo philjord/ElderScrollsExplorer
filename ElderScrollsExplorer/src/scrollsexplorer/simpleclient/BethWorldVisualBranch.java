@@ -197,71 +197,75 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 	private void updateNear(float charX, float charY)
 	{
 
-		synchronized (loadedNears)
+		Rectangle bounds = null;
+		if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
 		{
-			Rectangle bounds = null;
-			if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
-			{
-				bounds = Beth32LodManager.getBounds(charX, charY, BethRenderSettings.getNearLoadGridCount());
-			}
-			else
-			{
-				bounds = Beth32_4LodManager.getNearBounds(charX, charY, BethRenderSettings.getNearLoadGridCount());
-			}
+			bounds = Beth32LodManager.getBounds(charX, charY, BethRenderSettings.getNearLoadGridCount());
+		}
+		else
+		{
+			bounds = Beth32_4LodManager.getNearBounds(charX, charY, BethRenderSettings.getNearLoadGridCount());
+		}
 
-			long start = System.currentTimeMillis();
+		long start = System.currentTimeMillis();
 
-			// lets remove those loaded nears not in the range
-			Iterator<Point> keys = loadedNears.keySet().iterator();
-			ArrayList<Point> keysToRemove = new ArrayList<Point>();
-			while (keys.hasNext())
+		// lets remove those loaded nears not in the range
+		Iterator<Point> keys = loadedNears.keySet().iterator();
+		ArrayList<Point> keysToRemove = new ArrayList<Point>();
+		while (keys.hasNext())
+		{
+			Point key = keys.next();
+			if (key.x < bounds.x || key.x > bounds.x + bounds.width || key.y < bounds.y || key.y > bounds.y + bounds.height)
 			{
-				Point key = keys.next();
-				if (key.x < bounds.x || key.x > bounds.x + bounds.width || key.y < bounds.y || key.y > bounds.y + bounds.height)
-				{
-					keysToRemove.add(key);
-				}
+				keysToRemove.add(key);
 			}
+		}
 
-			for (int i = 0; i < keysToRemove.size(); i++)
+		for (int i = 0; i < keysToRemove.size(); i++)
+		{
+			Point key = keysToRemove.get(i);
+			BranchGroup bg = loadedNears.get(key);
+			if (bg != null)
 			{
-				Point key = keysToRemove.get(i);
-				BranchGroup bg = loadedNears.get(key);
-				if (bg != null)
-				{
-					removeChild(bg);
-				}
+				removeChild(bg);
+			}
+			synchronized (loadedNears)
+			{
 				loadedNears.remove(key);
 			}
+		}
 
-			for (int x = bounds.x; x <= bounds.x + bounds.width; x++)
+		for (int x = bounds.x; x <= bounds.x + bounds.width; x++)
+		{
+			for (int y = bounds.y; y <= bounds.y + bounds.height; y++)
 			{
-				for (int y = bounds.y; y <= bounds.y + bounds.height; y++)
+				//tester  
+				//	if (x == -4 && y == 1)
 				{
-					//tester  
-					//	if (x == -4 && y == 1)
+					Point key = new Point(x, y);
+
+					if (!loadedNears.containsKey(key))
 					{
-						Point key = new Point(x, y);
+						//Persistent are loaded in  the CELL that is makeBGWRLD all xy based persistents are empty
 
-						if (!loadedNears.containsKey(key))
+						J3dCELLGeneral bg = j3dCellFactory.makeBGWRLDTemporary(worldFormId, x, y, false);
+						synchronized (loadedNears)
 						{
-							//Persistent are loaded in  the CELL that is makeBGWRLD all xy based persistents are empty
-
-							J3dCELLGeneral bg = j3dCellFactory.makeBGWRLDTemporary(worldFormId, x, y, false);
 							loadedNears.put(key, bg);
-							//NOTE nears own the detailed land					
-							if (bg != null)
-							{
-								bg.compile();// better to be done not on the j3d thread?
-								addChild(bg);
-							}
+						}
+						//NOTE nears own the detailed land					
+						if (bg != null)
+						{
+							bg.compile();// better to be done not on the j3d thread?
+							addChild(bg);
 						}
 					}
 				}
 			}
-			if ((System.currentTimeMillis() - start) > 50)
-				System.out.println("BethWorldVisualBranch.updateNear " + (System.currentTimeMillis() - start));
 		}
+		if ((System.currentTimeMillis() - start) > 50)
+			System.out.println("BethWorldVisualBranch.updateNear " + (System.currentTimeMillis() - start));
+
 	}
 
 	/**
@@ -396,11 +400,12 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 
 	public J3dRECOInst getJ3dInstRECO(int recoId)
 	{
+
 		synchronized (loadedNears)
 		{
 			for (J3dCELLGeneral cell : loadedNears.values())
 			{
-				if (cell != null)
+				if (cell != null && cell.getParent() != null)
 				{
 					J3dRECOInst jri = cell.getJ3dRECOs().get(recoId);
 					if (jri != null)
@@ -410,7 +415,6 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 				}
 			}
 		}
-
 		//ok try the persistent cell as well, it'll return null if it's really not here
 		if (j3dCELLPersistent.getGridSpaces() != null)
 			return j3dCELLPersistent.getGridSpaces().getJ3dInstRECO(recoId);

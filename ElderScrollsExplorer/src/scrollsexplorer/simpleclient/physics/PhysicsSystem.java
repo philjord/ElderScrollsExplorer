@@ -48,6 +48,8 @@ public class PhysicsSystem implements NbccProvider
 
 	private PeriodicThread physicsSimThread;
 
+	private PeriodicThread physicsToModelThread;
+
 	// Note in one list to ensure time ordering
 	private PendingList<PhysicsUpdate> eventsToProcess = new PendingList<PhysicsUpdate>();
 
@@ -79,6 +81,24 @@ public class PhysicsSystem implements NbccProvider
 			}
 		});
 		physicsSimThread.start();
+
+		physicsToModelThread = new PeriodicThread("Physics To Model Thread", MIN_TIME_BETWEEN_STEPS_MS, new PeriodicallyUpdated()
+		{
+			public void runUpdate()
+			{
+				try
+				{
+					physicsToModelTick();
+				}
+				catch (Exception e)
+				{
+					System.out.println("PhysicsSystem.physicsTick() exception " + e + " " + e.getStackTrace()[0]);
+					e.printStackTrace();
+				}
+			}
+		});
+		physicsToModelThread.start();
+
 	}
 
 	/**
@@ -156,7 +176,6 @@ public class PhysicsSystem implements NbccProvider
 
 	private void unloadFromModelImpl(Collection<J3dRECOInst> collection)
 	{
-
 		// add the items
 		for (J3dRECOInst instReco : collection)
 		{
@@ -166,20 +185,16 @@ public class PhysicsSystem implements NbccProvider
 		// tell the statemodel we want to know about movements
 		//System.out.println("2Physics objects loaded for cell " + cellId);
 		physicsLocaleDynamics.unpause();
-
 	}
 
 	protected void unload()
 	{
-		synchronized (this)
+		if (physicsLocaleDynamics != null)
 		{
-			if (physicsLocaleDynamics != null)
-			{
-				physicsLocaleDynamics.pause();
-				physicsLocaleDynamics.destroy();
-			}
-			this.cellId = -1;
+			physicsLocaleDynamics.pause();
+			physicsLocaleDynamics.destroy();
 		}
+		this.cellId = -1;
 	}
 
 	protected void setMinTimeForBoundUpdate(long newTime)
@@ -228,41 +243,37 @@ public class PhysicsSystem implements NbccProvider
 	{
 		if (physicsLocaleDynamics != null)
 		{
-			synchronized (this)
+
+			// notice no pause check so we can load up while paused
+			ArrayList<PhysicsUpdate> cpl = eventsToProcess.getCurrentPendingList();
+			for (PhysicsUpdate pu : cpl)
 			{
-				// notice no pause check so we can load up while paused
-				ArrayList<PhysicsUpdate> cpl = eventsToProcess.getCurrentPendingList();
-				for (PhysicsUpdate pu : cpl)
+				if (pu.type == PhysicsUpdate.UPDATE_TYPE.LOAD_FROM_MODEL)
 				{
-					if (pu.type == PhysicsUpdate.UPDATE_TYPE.LOAD_FROM_MODEL)
-					{
-						// assumes cell id and stmodel set properly by now
-						loadFromModelImpl(pu.collection);
-					}
-					else if (pu.type == PhysicsUpdate.UPDATE_TYPE.UNLOAD_FROM_MODEL)
-					{
-						// assumes cell id and stmodel set properly by now
-						unloadFromModelImpl(pu.collection);
-					}
-					else if (pu.type == PhysicsUpdate.UPDATE_TYPE.ADD)
-					{
-						physicsLocaleDynamics.addRECO(pu.reco);
-					}
-					else if (pu.type == PhysicsUpdate.UPDATE_TYPE.REMOVE)
-					{
-						physicsLocaleDynamics.removeRECO(pu.reco);
-					}
-
+					// assumes cell id and stmodel set properly by now
+					loadFromModelImpl(pu.collection);
 				}
-				cpl.clear();
-
-				if (!isPaused())
+				else if (pu.type == PhysicsUpdate.UPDATE_TYPE.UNLOAD_FROM_MODEL)
 				{
-
-					physicsLocaleDynamics.dynamicsTick();
-
-					physicsToModelTick();
+					// assumes cell id and stmodel set properly by now
+					unloadFromModelImpl(pu.collection);
 				}
+				else if (pu.type == PhysicsUpdate.UPDATE_TYPE.ADD)
+				{
+					physicsLocaleDynamics.addRECO(pu.reco);
+				}
+				else if (pu.type == PhysicsUpdate.UPDATE_TYPE.REMOVE)
+				{
+					physicsLocaleDynamics.removeRECO(pu.reco);
+				}
+
+			}
+			cpl.clear();
+
+			if (!isPaused())
+			{
+				physicsLocaleDynamics.dynamicsTick();
+
 			}
 
 		}
@@ -316,10 +327,7 @@ public class PhysicsSystem implements NbccProvider
 	{
 		if (physicsLocaleDynamics != null)
 		{
-			synchronized (this)
-			{
-				return physicsLocaleDynamics.findRayIntersect(rayFrom, rayTo);
-			}
+			return physicsLocaleDynamics.findRayIntersect(rayFrom, rayTo);
 		}
 		else
 		{
@@ -338,10 +346,7 @@ public class PhysicsSystem implements NbccProvider
 	{
 		if (physicsLocaleDynamics != null)
 		{
-			synchronized (this)
-			{
-				return physicsLocaleDynamics.getNifBullet(recordId);
-			}
+			return physicsLocaleDynamics.getNifBullet(recordId);
 		}
 		return null;
 	}
@@ -350,10 +355,7 @@ public class PhysicsSystem implements NbccProvider
 	{
 		if (physicsLocaleDynamics != null)
 		{
-			synchronized (this)
-			{
-				return physicsLocaleDynamics.getRecordId(nifBullet);
-			}
+			return physicsLocaleDynamics.getRecordId(nifBullet);
 		}
 		return -1;
 	}

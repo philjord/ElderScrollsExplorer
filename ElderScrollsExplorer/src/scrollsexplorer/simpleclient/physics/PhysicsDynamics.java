@@ -1,5 +1,6 @@
 package scrollsexplorer.simpleclient.physics;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.media.j3d.BranchGroup;
@@ -173,7 +174,6 @@ public class PhysicsDynamics extends DynamicsEngine
 		NBSimpleModel nb = new NBSimpleModel(j3dLAND.getGeometryInfo(), rootTrans);
 		if (nb != null)
 		{
-
 			synchronized (dynamicsWorld)
 			{
 				// Note we don't listen for physics updates
@@ -277,7 +277,7 @@ public class PhysicsDynamics extends DynamicsEngine
 		}
 	}
 
-	public synchronized void updateRECOROTR(J3dRECOInst j3dRECOInst, Transform3D newTrans)
+	public void updateRECOROTR(J3dRECOInst j3dRECOInst, Transform3D newTrans)
 	{
 
 		BulletNifModel nifBullet = recoIdToNifBullet.get(j3dRECOInst.getRecordId());
@@ -298,7 +298,7 @@ public class PhysicsDynamics extends DynamicsEngine
 
 	}
 
-	public synchronized void updateRECOToggleOpen(J3dRECOInst j3dRECOInst, boolean isOpen)
+	public void updateRECOToggleOpen(J3dRECOInst j3dRECOInst, boolean isOpen)
 	{
 		BulletNifModel nifBullet = recoIdToNifBullet.get(j3dRECOInst.getRecordId());
 		if (nifBullet instanceof NBSimpleModel)
@@ -342,10 +342,14 @@ public class PhysicsDynamics extends DynamicsEngine
 
 	public void applyPhysicsToModel()
 	{
-		for (NifBulletBinding instRecoNifBulletBinding : instRecoBulletBindings.values())
+		synchronized (dynamicsWorld)
 		{
-			instRecoNifBulletBinding.applyToModel();
+			for (NifBulletBinding instRecoNifBulletBinding : instRecoBulletBindings.values())
+			{
+				instRecoNifBulletBinding.applyToModel();
+			}
 		}
+
 	}
 
 	/**
@@ -374,9 +378,12 @@ public class PhysicsDynamics extends DynamicsEngine
 
 	public ClosestRayResultCallback findRayIntersect(Vector3f rayFrom, Vector3f rayTo)
 	{
-		CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(rayFrom, rayTo);
-		dynamicsWorld.rayTest(rayFrom, rayTo, rayCallback);
-		return rayCallback;
+		synchronized (dynamicsWorld)
+		{
+			CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(rayFrom, rayTo);
+			dynamicsWorld.rayTest(rayFrom, rayTo, rayCallback);
+			return rayCallback;
+		}
 	}
 
 	public PhysicsStatus getPhysicsStatus()
