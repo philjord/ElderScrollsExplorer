@@ -486,6 +486,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		//Arguments for goodness
 		//-Xmx1200m -Xms900m -Dsun.java2d.noddraw=true -Dj3d.sharedctx=true -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC
 
+		//jogl recomends for non phones 
+		System.setProperty("jogl.disable.opengles","true");
+
 		//DDS requires no installed java3D
 		if (QueryProperties.checkForInstalledJ3d())
 		{

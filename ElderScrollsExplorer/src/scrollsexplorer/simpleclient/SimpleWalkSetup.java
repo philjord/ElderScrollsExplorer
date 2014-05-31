@@ -48,6 +48,7 @@ import tools3d.navigation.AvatarLocation;
 import tools3d.navigation.NavigationInputAWTKey;
 import tools3d.navigation.NavigationInputAWTMouseLocked;
 import tools3d.navigation.NavigationTemporalBehaviour;
+import tools3d.ovr.OculusException;
 import tools3d.resolution.GraphicsSettings;
 import tools3d.resolution.ScreenResolution;
 import tools3d.universe.VisualPhysicalUniverse;
@@ -268,7 +269,10 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		//cameraPanel.startRendering();//JRE7 crash bug work around, doesn't work some times:(
 		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
 				true, false);
-		setupGraphicsSetting(gs);
+		if (gs != null)
+		{
+			setupGraphicsSetting(gs);
+		}
 	}
 
 	public void setupGraphicsSetting(GraphicsSettings gs)
@@ -301,26 +305,36 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		HMD_MODE = gs.isOculusView();
 
 		//create the camera panel ************************
-		if (!HMD_MODE)
+		if (HMD_MODE)
+		{
+			System.out.println("HMD mode");
+			try
+			{
+				cameraPanel = new HMDCameraPanel(universe);
+				// and the dolly it rides on
+				HMDCamDolly hcd = new HMDCamDolly(avatarCollisionInfo);
+				cameraPanel.setDolly(hcd);
+
+				//disable pitch in body
+				navigationProcessor.setNoPitch(true);
+				navigationTemporalBehaviour.addNavigationProcessor(hcd);
+				cameraPanel.getCanvas3D2D().addKeyListener(new HMDKeyHandler(hcd));
+			}
+			catch (OculusException e)
+			{
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "No Oculus or failure", "Oculus", JOptionPane.ERROR_MESSAGE);
+			}
+
+		}
+
+		//if HMD fails or not HMD
+		if (cameraPanel == null)
 		{
 			cameraPanel = new CameraPanel(universe);
 			// and the dolly it rides on
 			HeadCamDolly headCamDolly = new HeadCamDolly(avatarCollisionInfo);
 			cameraPanel.setDolly(headCamDolly);
-		}
-		else
-		{
-			System.out.println("HMD mode");
-			cameraPanel = new HMDCameraPanel(universe);
-			// and the dolly it rides on
-			HMDCamDolly hcd = new HMDCamDolly(avatarCollisionInfo);
-			cameraPanel.setDolly(hcd);
-
-			//disable pitch in body
-			navigationProcessor.setNoPitch(true);
-			navigationTemporalBehaviour.addNavigationProcessor(hcd);
-			cameraPanel.getCanvas3D2D().addKeyListener(new HMDKeyHandler(hcd));
-
 		}
 
 		avatarLocation.addAvatarLocationListener(cameraPanel.getDolly());
@@ -353,7 +367,10 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	{
 		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
 				false, true);
-		setupGraphicsSetting(gs);
+		if (gs != null)
+		{
+			setupGraphicsSetting(gs);
+		}
 	}
 
 	public void setEnabled(boolean enable)
@@ -546,5 +563,4 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		}
 	}
 
-	
 }

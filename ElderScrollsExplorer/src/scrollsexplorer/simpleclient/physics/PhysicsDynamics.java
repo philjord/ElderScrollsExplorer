@@ -73,10 +73,10 @@ public class PhysicsDynamics extends DynamicsEngine
 
 		Transform3D rootTrans = new Transform3D(avatarLocation.getTransform());
 		myNifBulletChar = new NBControlledChar(rootTrans);
-		clientNifBulletCharBinding = new ClientNifBulletCharBinding(avatarLocation, myNifBulletChar);
-		instRecoBulletBindings.put(-999, clientNifBulletCharBinding);
 		synchronized (dynamicsWorld)
 		{
+			clientNifBulletCharBinding = new ClientNifBulletCharBinding(avatarLocation, myNifBulletChar);
+			instRecoBulletBindings.put(-999, clientNifBulletCharBinding);
 			myNifBulletChar.addToDynamicsWorld(dynamicsWorld);
 		}
 	}
@@ -251,14 +251,14 @@ public class PhysicsDynamics extends DynamicsEngine
 				nb.forceUpdate(rootTrans, linearVelocity, rotationalVelocity);
 
 				NifBulletBinding irnbb = new InstRecoNifBulletBinding(j3dRECOInst, instRecoToNif, nb);
-
-				if (irnbb != null)
-				{
-					instRecoBulletBindings.put(j3dRECOInst.getRecordId(), irnbb);
-				}
-
+				
 				synchronized (dynamicsWorld)
 				{
+					if (irnbb != null)
+					{
+						instRecoBulletBindings.put(j3dRECOInst.getRecordId(), irnbb);
+					}
+
 					recoIdToNifBullet.put(j3dRECOInst.getRecordId(), nb);
 					nifBulletToRecoId.put(nb, j3dRECOInst.getRecordId());
 					dynamicsRootBranchGroup.addChild(nb);
@@ -365,14 +365,17 @@ public class PhysicsDynamics extends DynamicsEngine
 
 	public int getRecordId(BulletNifModel nifBullet)
 	{
-		Integer id = nifBulletToRecoId.get(nifBullet);
-		if (id == null)
+		synchronized (dynamicsWorld)
 		{
-			return -1;
-		}
-		else
-		{
-			return id.intValue();
+			Integer id = nifBulletToRecoId.get(nifBullet);
+			if (id == null)
+			{
+				return -1;
+			}
+			else
+			{
+				return id.intValue();
+			}
 		}
 	}
 
