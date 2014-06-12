@@ -15,7 +15,7 @@ import tools3d.navigation.AvatarLocation;
  */
 public class ClientNifBulletCharBinding implements NifBulletBinding, CharacterPositionListener
 {
-	protected boolean updateRequired = false;
+	protected boolean updateRequired = true;
 
 	protected Vector3f newTranslation = new Vector3f();
 
@@ -65,8 +65,8 @@ public class ClientNifBulletCharBinding implements NifBulletBinding, CharacterPo
 		{
 			System.out.println("NAN detected in ServerNifBulletBinding.setTransform position!");
 			return;
-		}
-
+		}		
+		
 		this.newTranslation.set(newPosition2);
 		this.newRotation.set(newRotation2);
 
