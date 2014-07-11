@@ -1,6 +1,5 @@
 package scrollsexplorer.simpleclient.physics;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.media.j3d.BranchGroup;

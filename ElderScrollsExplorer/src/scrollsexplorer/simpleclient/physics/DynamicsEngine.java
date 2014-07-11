@@ -2,6 +2,8 @@ package scrollsexplorer.simpleclient.physics;
 
 import javax.vecmath.Vector3f;
 
+import tools3d.mixed3d2d.hud.hudelements.HUDPhysicsState.HUDPhysicsStateData;
+
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.broadphase.HashedOverlappingPairCache;
@@ -18,7 +20,7 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.extras.gimpact.GImpactCollisionAlgorithm;
 import com.bulletphysics.linearmath.Clock;
 
-public abstract class DynamicsEngine
+public abstract class DynamicsEngine implements HUDPhysicsStateData
 {
 	protected Clock timeKeeper = new Clock();
 
@@ -35,6 +37,10 @@ public abstract class DynamicsEngine
 	private boolean paused = true;
 
 	private boolean skipStepSim = false;
+
+	private long[] recentStepTimes = new long[10];
+
+	private int recentStepTimesHead = 0;
 
 	/**
 	 * Note this requries the dynamicsUpdate to be called on a regular basis by whatever teh mian thread is
@@ -111,11 +117,9 @@ public abstract class DynamicsEngine
 						}
 					}
 				}
-				if ((timeKeeper.getTimeMicroseconds() - dtms2) > 40000)
-				{
-					System.out.println("dynamicsTick step took millisecs of " + ((timeKeeper.getTimeMicroseconds() - dtms2) / 1000));
-					System.out.println("dynamicsWorld.getNumCollisionObjects() " + dynamicsWorld.getNumCollisionObjects());
-				}
+
+				// chuck it in the recent step time
+				addStepTime(((timeKeeper.getTimeMicroseconds() - dtms2) / 1000));
 			}
 			catch (NullPointerException e)
 			{
@@ -169,4 +173,26 @@ public abstract class DynamicsEngine
 		return paused;
 	}
 
+	private void addStepTime(long time)
+	{
+		recentStepTimes[recentStepTimesHead] = time;
+		recentStepTimesHead++;
+		recentStepTimesHead = recentStepTimesHead >= recentStepTimes.length ? 0 : recentStepTimesHead;
+
+	}
+
+	public int getAverageStepTimeMS()
+	{
+		int average = 0;
+
+		for (long time : recentStepTimes)
+			average += time;
+
+		return average / recentStepTimes.length;
+	}
+
+	public int getNumCollisionObjects()
+	{
+		return dynamicsWorld.getNumCollisionObjects();
+	}
 }

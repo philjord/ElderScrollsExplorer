@@ -42,6 +42,7 @@ import tools3d.camera.ICameraPanel;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.mixed3d2d.hud.hudelements.HUDCompass;
 import tools3d.mixed3d2d.hud.hudelements.HUDFPSCounter;
+import tools3d.mixed3d2d.hud.hudelements.HUDPhysicsState;
 import tools3d.mixed3d2d.hud.hudelements.HUDPosition;
 import tools3d.navigation.AvatarCollisionInfo;
 import tools3d.navigation.AvatarLocation;
@@ -109,6 +110,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	private HUDPosition hudPos;
 
 	private HUDCompass hudcompass;
+
+	private HUDPhysicsState hudPhysicsState;
 
 	private PhysicsSystem physicsSystem;
 
@@ -194,8 +197,10 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		fpsCounter = new HUDFPSCounter();
 		hudPos = new HUDPosition();
 		hudcompass = new HUDCompass();
+		hudPhysicsState = new HUDPhysicsState();
 
 		universe.addToBehaviorBranch(fpsCounter.getBehaviorBranchGroup());
+		universe.addToBehaviorBranch(hudPhysicsState.getBehaviorBranchGroup());
 
 		avatarLocation.addAvatarLocationListener(hudPos);
 		avatarLocation.addAvatarLocationListener(hudcompass);
@@ -266,6 +271,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		cameraAdminMouseOverHandler = new AdminMouseOverHandler(physicsSystem);
 
+		hudPhysicsState.setHudPhysicsStateData(physicsSystem);
+
 		//cameraPanel.startRendering();//JRE7 crash bug work around, doesn't work some times:(
 		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
 				true, false);
@@ -298,6 +305,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			fpsCounter.removeFromCanvas(canvas3D2D);
 			hudPos.removeFromCanvas(canvas3D2D);
 			hudcompass.removeFromCanvas(canvas3D2D);
+			hudPhysicsState.removeFromCanvas(canvas3D2D);
 
 			frame.getContentPane().remove((JPanel) cameraPanel);
 		}
@@ -351,6 +359,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		fpsCounter.addToCanvas(canvas3D2D);
 		hudPos.addToCanvas(canvas3D2D);
 		hudcompass.addToCanvas(canvas3D2D);
+		hudPhysicsState.addToCanvas(canvas3D2D);
 
 		//allow tab for mouse lock
 		canvas3D2D.setFocusTraversalKeysEnabled(false);

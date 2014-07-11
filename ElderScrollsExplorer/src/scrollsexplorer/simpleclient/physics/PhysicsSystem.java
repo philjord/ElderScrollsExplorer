@@ -15,13 +15,14 @@ import scrollsexplorer.simpleclient.physics.PhysicsDynamics.PhysicsStatus;
 import tools.PendingList;
 import tools.clock.PeriodicThread;
 import tools.clock.PeriodicallyUpdated;
+import tools3d.mixed3d2d.hud.hudelements.HUDPhysicsState.HUDPhysicsStateData;
 import tools3d.navigation.AvatarLocation;
 import utils.source.MeshSource;
 import esmj3d.j3d.cell.GridSpace;
 import esmj3d.j3d.cell.J3dCELLGeneral;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 
-public class PhysicsSystem implements NbccProvider
+public class PhysicsSystem implements NbccProvider, HUDPhysicsStateData
 {
 	public static Vector3f gravity = new Vector3f(0f, -9.8f, 0f);
 
@@ -420,5 +421,25 @@ public class PhysicsSystem implements NbccProvider
 			pu.collection = new ArrayList<J3dRECOInst>(collection);
 			return pu;
 		}
+	}
+
+	@Override
+	public int getAverageStepTimeMS()
+	{
+		if (physicsLocaleDynamics != null)
+		{
+			return physicsLocaleDynamics.getAverageStepTimeMS();
+		}
+		return 0;
+	}
+
+	@Override
+	public int getNumCollisionObjects()
+	{
+		if (physicsLocaleDynamics != null)
+		{
+			return physicsLocaleDynamics.getNumCollisionObjects();
+		}
+		return 0;
 	}
 }
