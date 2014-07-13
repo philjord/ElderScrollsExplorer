@@ -488,6 +488,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		//TODO: moc external adds final path twice?s from gui picker
 		//but picker with manual type is ok
 		
+		// also
+		
+		//Exception in thread "Thread-16" java.lang.IllegalArgumentException: Texture: mipmap image not set at level7
+		//at javax.media.j3d.TextureRetained.setLive(TextureRetained.java:976)
+		
 		
 		System.out.println(System.getProperty("os.name"));
 				System.out.println(System.getProperty("os.arch"));
