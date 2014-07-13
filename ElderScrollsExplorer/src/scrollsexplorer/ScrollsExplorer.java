@@ -362,8 +362,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 					mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
-					 
-
 					simpleWalkSetup.configure(meshSource, simpleBethCellManager);
 					simpleWalkSetup.setEnabled(false);
 					//add skynow
@@ -485,42 +483,19 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public static void main(String[] args)
 	{
-		//TODO: moc external adds final path twice?s from gui picker
+		//TODO: mac external file folder picker adds final path twice?s from gui picker
 		//but picker with manual type is ok
-		
+
 		// also
-		
-		//Exception in thread "Thread-16" java.lang.IllegalArgumentException: Texture: mipmap image not set at level7
+
+		//TODO: Exception in thread "Thread-16" java.lang.IllegalArgumentException: Texture: mipmap image not set at level7
 		//at javax.media.j3d.TextureRetained.setLive(TextureRetained.java:976)
-		
-		
-		System.out.println(System.getProperty("os.name"));
-				System.out.println(System.getProperty("os.arch"));
-				
-		HashMap<String, String>  env = new HashMap<String, String> ();
-		
-		env.put("PROCESSOR_ARCHITECTURE", System.getProperty("os.arch"));
-		env.put("PROCESSOR_ARCHITEW6432", System.getProperty("os.name"));
-		
-		
-		setEnv(env);
-				
-		
-		String arch = System.getenv("PROCESSOR_ARCHITECTURE");
-		String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
 
-		System.out.println("arch" +arch);
-		System.out.println("wow "+wow64Arch);
-		
-		String realArch = arch.endsWith("64") || wow64Arch != null && wow64Arch.endsWith("64") ? "64" : "32";
-
-		
-		
 		//Arguments for goodness
 		//-Xmx1200m -Xms900m -Dsun.java2d.noddraw=true -Dj3d.sharedctx=true -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC
 
 		//jogl recomends for non phones 
-		System.setProperty("jogl.disable.opengles","true");
+		System.setProperty("jogl.disable.opengles", "true");
 
 		//DDS requires no installed java3D
 		if (QueryProperties.checkForInstalledJ3d())
@@ -544,43 +519,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		ScrollsExplorer scrollsExplorer = new ScrollsExplorer();
 		scrollsExplorer.setVisible(true);
-	}
-	
-	protected static void setEnv(Map<String, String> newenv)
-	{
-	  try
-	    {
-	        Class<?> processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment");
-	        Field theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment");
-	        theEnvironmentField.setAccessible(true);
-	        Map<String, String> env = (Map<String, String>) theEnvironmentField.get(null);
-	        env.putAll(newenv);
-	        Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
-	        theCaseInsensitiveEnvironmentField.setAccessible(true);
-	        Map<String, String> cienv = (Map<String, String>)     theCaseInsensitiveEnvironmentField.get(null);
-	        cienv.putAll(newenv);
-	    }
-	    catch (NoSuchFieldException e)
-	    {
-	      try {
-	        Class[] classes = Collections.class.getDeclaredClasses();
-	        Map<String, String> env = System.getenv();
-	        for(Class cl : classes) {
-	            if("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
-	                Field field = cl.getDeclaredField("m");
-	                field.setAccessible(true);
-	                Object obj = field.get(env);
-	                Map<String, String> map = (Map<String, String>) obj;
-	                map.clear();
-	                map.putAll(newenv);
-	            }
-	        }
-	      } catch (Exception e2) {
-	        e2.printStackTrace();
-	      }
-	    } catch (Exception e1) {
-	        e1.printStackTrace();
-	    } 
 	}
 
 }
