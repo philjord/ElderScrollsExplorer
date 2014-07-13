@@ -9,6 +9,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.prefs.Preferences;
 import java.util.zip.DataFormatException;
 
@@ -47,9 +51,7 @@ import bsa.BSAFileSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
-
 import common.config.ConfigLoader;
-
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
@@ -483,6 +485,32 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public static void main(String[] args)
 	{
+		//TODO: moc external adds final path twice?s from gui picker
+		//but picker with manual type is ok
+		
+		
+		System.out.println(System.getProperty("os.name"));
+				System.out.println(System.getProperty("os.arch"));
+				
+		HashMap<String, String>  env = new HashMap<String, String> ();
+		
+		env.put("PROCESSOR_ARCHITECTURE", System.getProperty("os.arch"));
+		env.put("PROCESSOR_ARCHITEW6432", System.getProperty("os.name"));
+		
+		
+		setEnv(env);
+				
+		
+		String arch = System.getenv("PROCESSOR_ARCHITECTURE");
+		String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
+
+		System.out.println("arch" +arch);
+		System.out.println("wow "+wow64Arch);
+		
+		String realArch = arch.endsWith("64") || wow64Arch != null && wow64Arch.endsWith("64") ? "64" : "32";
+
+		
+		
 		//Arguments for goodness
 		//-Xmx1200m -Xms900m -Dsun.java2d.noddraw=true -Dj3d.sharedctx=true -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC
 
@@ -511,6 +539,43 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		ScrollsExplorer scrollsExplorer = new ScrollsExplorer();
 		scrollsExplorer.setVisible(true);
+	}
+	
+	protected static void setEnv(Map<String, String> newenv)
+	{
+	  try
+	    {
+	        Class<?> processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment");
+	        Field theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment");
+	        theEnvironmentField.setAccessible(true);
+	        Map<String, String> env = (Map<String, String>) theEnvironmentField.get(null);
+	        env.putAll(newenv);
+	        Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
+	        theCaseInsensitiveEnvironmentField.setAccessible(true);
+	        Map<String, String> cienv = (Map<String, String>)     theCaseInsensitiveEnvironmentField.get(null);
+	        cienv.putAll(newenv);
+	    }
+	    catch (NoSuchFieldException e)
+	    {
+	      try {
+	        Class[] classes = Collections.class.getDeclaredClasses();
+	        Map<String, String> env = System.getenv();
+	        for(Class cl : classes) {
+	            if("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
+	                Field field = cl.getDeclaredField("m");
+	                field.setAccessible(true);
+	                Object obj = field.get(env);
+	                Map<String, String> map = (Map<String, String>) obj;
+	                map.clear();
+	                map.putAll(newenv);
+	            }
+	        }
+	      } catch (Exception e2) {
+	        e2.printStackTrace();
+	      }
+	    } catch (Exception e1) {
+	        e1.printStackTrace();
+	    } 
 	}
 
 }
