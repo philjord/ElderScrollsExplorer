@@ -23,8 +23,8 @@
         <javaElement handleIdentifier="=jnifj3d/src"/>
         <javaElement handleIdentifier="=jbullet1.1/src"/>
         <javaElement handleIdentifier="=Tools/src"/>
+        <javaElement handleIdentifier="=3DTools/src"/>
         <javaElement handleIdentifier="=ElderScrollsExplorer/src"/>
         <javaElement handleIdentifier="=jnifjbullet/src"/>
-        <javaElement handleIdentifier="=3DTools/src"/>
     </selectedElements>
 </jardesc>
