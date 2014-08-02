@@ -59,6 +59,7 @@ public class BootStrap
 
 		jarpath += "." + ps + "lib" + ps + "jogamp" + ps + "jar" + ps + "jogl-all.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "java3d1.6_10.jar" + fs;
+		jarpath += "." + ps + "lib" + ps + "jbullet1.1.jar" + fs;
 
 		ProcessBuilder pb = new ProcessBuilder(createJavaExeStr(), "-Xmx1200m", "-Xms1024m", "-Dsun.java2d.noddraw=true",
 				"-Dj3d.sharedctx=true", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseG1GC", "-cp", jarpath,

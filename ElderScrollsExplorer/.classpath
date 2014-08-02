@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jnifj3d"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ElderScrollsUtils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3d"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dfo3"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dtes4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dtes5"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ESMLoader"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jnifj3d"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSAManager"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/3DTools"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jnif"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jnifjbullet"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Tools"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jbullet1.1"/>
@@ -24,5 +23,6 @@
 	<classpathentry kind="lib" path="/external_jars/external jars/jogamp/jar/jogl-all.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/j3d/j3d-org-java3d-all.jar" sourcepath="E:/Java/3rd party jars/j3d/src"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/java3d1.6_10.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jnif"/>
 	<classpathentry kind="output" path="output"/>
 </classpath>
