@@ -162,11 +162,11 @@ public class SetBethFoldersDialog extends JDialog
 	private File requestFolderName(String title, String defaultFolder)
 	{
 		JFileChooser fc = new JFileChooser();
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		fc.setDialogType(JFileChooser.CUSTOM_DIALOG);
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);	
 		fc.setCurrentDirectory(new File(defaultFolder));
 		fc.setDialogTitle(title);
-		fc.showDialog(this, "Set");
+		fc.setApproveButtonText("Set");
+		fc.showOpenDialog(this);
 		File sf = fc.getSelectedFile();
 		return sf;
 	}

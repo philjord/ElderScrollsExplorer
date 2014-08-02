@@ -9,10 +9,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.prefs.Preferences;
 import java.util.zip.DataFormatException;
 
@@ -51,7 +47,9 @@ import bsa.BSAFileSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
+
 import common.config.ConfigLoader;
+
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;

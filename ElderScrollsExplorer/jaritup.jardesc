@@ -13,10 +13,10 @@
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiDefaultAVObjectPalette.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiMultiTextureProperty.java"/>
-        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiExtraData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiGeometry.java"/>
-        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiRawImageData.java"/>
+        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiExtraData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiSkinData.java"/>
+        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiRawImageData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiControllerSequence.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiProperty.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiPhysXPropDesc.java"/>
@@ -156,8 +156,8 @@
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiPixelData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiScreenElementsData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiAlphaProperty.java"/>
-        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiPhysXBodyDesc.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTexturingProperty.java"/>
+        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiPhysXBodyDesc.java"/>
         <javaElement handleIdentifier="=Tools/src"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTextKeyExtraData.java"/>
     </selectedElements>
