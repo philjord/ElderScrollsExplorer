@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.util.prefs.Preferences;
 
 import javax.media.j3d.AmbientLight;
@@ -537,7 +538,9 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				int result = JOptionPane.showConfirmDialog(null, "Are you sure you wish to exit?");
 				if (result == JOptionPane.OK_OPTION)
 				{
-					System.exit(0);
+					// allow listeners to clean up on exit (save setting etc)
+					// this will exit
+					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));					 
 				}
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_H)
