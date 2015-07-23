@@ -1,7 +1,7 @@
 package scrollsexplorer;
 
 import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.FlowLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,7 +36,7 @@ public class Dashboard extends JPanel
 
 	public Dashboard()
 	{
-		this.setLayout(new GridLayout(-1, 1, 5, 10));
+		this.setLayout(new FlowLayout());
 		add(esmLoadingLabel);
 		esmLoadingLabel.setBackground(Color.red);
 		esmLoadingLabel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.gray, Color.DARK_GRAY));

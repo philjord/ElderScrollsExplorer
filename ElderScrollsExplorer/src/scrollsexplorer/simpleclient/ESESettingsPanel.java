@@ -16,6 +16,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import tools.GridLayout2;
+import tools.swing.VerticalFlowLayout;
 import esmj3d.j3d.BethRenderSettings;
 
 /**
@@ -58,7 +59,8 @@ public class ESESettingsPanel extends JPanel
 	public ESESettingsPanel(SimpleWalkSetup _simpleWalkSetup)
 	{
 		this.simpleWalkSetup = _simpleWalkSetup;
-		this.setLayout(new GridLayout2(-1, 3));
+		//this.setLayout(new GridLayout2(-1, 3));
+		this.setLayout(new VerticalFlowLayout());
 
 		ButtonGroup setG = new ButtonGroup();
 		setG.add(lowSettings);

@@ -26,5 +26,6 @@
 	<classpathentry kind="lib" path="/external_jars/external jars/java3d/1.6.0-pre12/j3dcore.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/java3d/1.6.0-pre12/j3dutils.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/java3d/1.6.0-pre12/vecmath.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/swing_library-master"/>
 	<classpathentry kind="output" path="output"/>
 </classpath>

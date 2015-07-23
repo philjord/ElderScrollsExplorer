@@ -1,6 +1,6 @@
 package scrollsexplorer.simpleclient.physics;
 
-import java.awt.GridLayout;
+import java.awt.FlowLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -44,14 +44,14 @@ public class PhysicsSystemStatus extends JPanel
 				catch (Exception e)
 				{
 					e.printStackTrace();
-					System.out.println("PhysicsSystemStatus.update() exception "+ e + " " + e.getStackTrace()[0]);
+					System.out.println("PhysicsSystemStatus.update() exception " + e + " " + e.getStackTrace()[0]);
 				}
 			}
 
 		});
 		updateThread.start();
 
-		this.setLayout(new GridLayout(3, 1));
+		this.setLayout(new FlowLayout());
 		add(dynL);
 		add(kinL);
 		add(staL);
@@ -64,9 +64,9 @@ public class PhysicsSystemStatus extends JPanel
 		PhysicsStatus ps = physicsSystem.getPhysicsStatus();
 		if (ps != null)
 		{
-			dynL.setText("D" + ps.dynCount);
-			kinL.setText("K" + ps.kinCount);
-			staL.setText("S" + ps.staCount);
+			dynL.setText("D " + ps.dynCount);
+			kinL.setText("K " + ps.kinCount);
+			staL.setText("S " + ps.staCount);
 			doLayout();
 			repaint();
 		}

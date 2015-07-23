@@ -1,7 +1,6 @@
 package scrollsexplorer;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -31,6 +30,7 @@ import nativeLinker.LWJGLLinker;
 import scrollsexplorer.simpleclient.ESESettingsPanel;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
+import tools.TitledPanel;
 import tools3d.resolution.QueryProperties;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
@@ -48,6 +48,9 @@ import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
 
+import com.gg.slider.SideBar;
+import com.gg.slider.SideBar.SideBarMode;
+import com.gg.slider.SidebarSection;
 import common.config.ConfigLoader;
 
 import esmLoader.common.PluginException;
@@ -64,6 +67,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private SimpleWalkSetup simpleWalkSetup;
 
 	private static JTable table;
+
+	private ESESettingsPanel eseSettingsPanel;
 
 	private static DefaultTableModel tableModel;
 
@@ -87,6 +92,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	public JPanel mainPanel = new JPanel();
 
 	public JPanel buttonPanel = new JPanel();
+
+	public JPanel quickEdit = new JPanel();
 
 	public JCheckBoxMenuItem cbLoadAllMenuItem = new JCheckBoxMenuItem("Load all BSA Archives", true);
 
@@ -115,7 +122,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			this.getContentPane().setLayout(new BorderLayout(1, 1));
 			this.setSize(500, 1000);
 
-			mainPanel.setLayout(new GridLayout(-1, 1));
+			mainPanel.setLayout(new BorderLayout());
 
 			JMenuBar menuBar = new JMenuBar();
 			menuBar.setOpaque(true);
@@ -151,8 +158,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			});
 
 			this.setJMenuBar(menuBar);
-			this.getContentPane().add(mainPanel, BorderLayout.CENTER);
-			this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+			//this.getContentPane().add(mainPanel, BorderLayout.CENTER);
+			//this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
 			buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 
@@ -213,12 +220,17 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 			simpleWalkSetup = new SimpleWalkSetup("SimpleBethCellManager");
 
-			buttonPanel.add(simpleWalkSetup.getLocField());
+			quickEdit.add(new TitledPanel("Location", simpleWalkSetup.getLocField()));
+			mainPanel.add(buttonPanel, BorderLayout.NORTH);
+			table = new JTable();
+			mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
+
+			mainPanel.add(dashboard, BorderLayout.SOUTH);
+
 			simpleBethCellManager = new SimpleBethCellManager(simpleWalkSetup);
 
-			ESESettingsPanel eseSettingsPanel = new ESESettingsPanel(simpleWalkSetup);
+			eseSettingsPanel = new ESESettingsPanel(simpleWalkSetup);
 			BethRenderSettings.addUpdateListener(this);
-			this.getContentPane().add(eseSettingsPanel, BorderLayout.NORTH);
 
 			this.getContentPane().invalidate();
 			this.getContentPane().validate();
@@ -227,7 +239,16 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			this.validate();
 			this.doLayout();
 
-			this.getContentPane().add(dashboard, BorderLayout.WEST);
+			SideBar sideBar = new SideBar(SideBarMode.TOP_LEVEL, true, 150, true);
+			//SidebarSection ss1 = new SidebarSection(sideBar, "dashboard", dashboard, null);
+			//sideBar.addSection(ss1);
+			SidebarSection ss2 = new SidebarSection(sideBar, "Quick Edit", quickEdit, null);
+			sideBar.addSection(ss2);
+			SidebarSection ss4 = new SidebarSection(sideBar, "Graphics", eseSettingsPanel, null);
+			sideBar.addSection(ss4);
+
+			this.getContentPane().add(mainPanel, BorderLayout.CENTER);
+			this.getContentPane().add(sideBar, BorderLayout.WEST);
 
 			this.addWindowListener(new WindowAdapter()
 			{
@@ -297,6 +318,10 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		{
 			setFolders();
 		}
+		mainPanel.validate();
+		mainPanel.invalidate();
+		mainPanel.doLayout();
+		mainPanel.repaint();
 	}
 
 	@Override
@@ -321,8 +346,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					prefs.put("use.bsa", Boolean.toString(cbBsaMenuItem.isSelected()));
 					prefs.put("load.all", Boolean.toString(cbLoadAllMenuItem.isSelected()));
 
-					mainPanel.removeAll();
-
 					esmManager = ESMManager.getESMManager(mainESMFile);
 					bsaFileSet = null;
 					if (esmManager != null)
@@ -339,10 +362,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					TextureSource textureSource;
 					SoundSource soundSource;
 
+					String plusSkyrim = PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY);
+
 					if (cbBsaMenuItem.isSelected())
 					{
+						// note skyrim added 
 						if (bsaFileSet == null)
-							bsaFileSet = new BSAFileSet(scrollsFolder, cbLoadAllMenuItem.isSelected(), false);
+							bsaFileSet = new BSAFileSet(new String[]
+							{ scrollsFolder, plusSkyrim }, cbLoadAllMenuItem.isSelected(), false);
 
 						meshSource = new BsaMeshSource(bsaFileSet);
 						textureSource = new BsaTextureSource(bsaFileSet);
@@ -351,7 +378,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					else
 					{
 						FileMediaRoots.setMediaRoots(new String[]
-						{ scrollsFolder });
+						{ scrollsFolder, plusSkyrim });
 						meshSource = new FileMeshSource();
 						textureSource = new FileTextureSource();
 						soundSource = new FileSoundSource();
@@ -383,7 +410,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						}
 					};
 
-					table = new JTable(tableModel);
+					table.setModel(tableModel);
 					table.addMouseListener(new MouseAdapter()
 					{
 						@Override
@@ -395,8 +422,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					});
 
 					table.setRowSorter(new TableRowSorter<DefaultTableModel>(tableModel));
-
-					mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
 
 					try
 					{

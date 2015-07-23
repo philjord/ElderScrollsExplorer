@@ -214,7 +214,10 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			public void actionPerformed(ActionEvent arg0)
 			{
 				String[] parts = locField.getText().split(",");
-				warp(new Vector3f(Float.parseFloat(parts[0]), Float.parseFloat(parts[1]), Float.parseFloat(parts[2])));
+				if (parts.length == 3)
+				{
+					warp(new Vector3f(Float.parseFloat(parts[0]), Float.parseFloat(parts[1]), Float.parseFloat(parts[2])));
+				}
 			}
 		});
 
@@ -540,7 +543,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				{
 					// allow listeners to clean up on exit (save setting etc)
 					// this will exit
-					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));					 
+					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 				}
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_H)
