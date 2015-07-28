@@ -26,6 +26,9 @@ import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 
+/*
+ * Notice it NEVER loads far/distant
+ */
 public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpdateListener
 {
 	private int worldFormId;
@@ -39,8 +42,6 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 	private Vector3f lastUpdatedTranslation = new Vector3f(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
 
 	private HashMap<Point, J3dCELLGeneral> loadedNears = new HashMap<Point, J3dCELLGeneral>();
-
-	private HashMap<Point, J3dCELLGeneral> loadedFars = new HashMap<Point, J3dCELLGeneral>();
 
 	private QueuingThread updateThread;
 
@@ -110,9 +111,6 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			j3dCELLTemporary = j3dCellFactory.makeBGInteriorCELLTemporary(worldFormId, true);
 			addChild(j3dCELLTemporary);
 			clientPhysicsSystem.loadJ3dCELL(j3dCELLTemporary);
-
-			addChild(j3dCellFactory.makeBGInteriorCELLDistant(worldFormId, true));
-			//not added to physics
 
 		}
 	}
@@ -207,28 +205,6 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 
 		}
 
-		// lets remove those loaded fars not in the range
-		keys = loadedFars.keySet().iterator();
-		keysToRemove = new ArrayList<Point>();
-		while (keys.hasNext())
-		{
-			Point key = keys.next();
-			if (key.x < lowX || key.x > highX || key.y < lowY || key.y > highY)
-			{
-				keysToRemove.add(key);
-			}
-		}
-
-		for (int i = 0; i < keysToRemove.size(); i++)
-		{
-			Point key = keysToRemove.get(i);
-			J3dCELLGeneral cell = loadedFars.remove(key);
-			if (cell != null)
-			{
-				removeChild(cell);
-			}
-
-		}
 
 		for (int x = lowX; x <= highX; x++)
 		{
@@ -265,19 +241,6 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 				}
 			}
 		}
-
-		if (!loadedFars.containsKey(key))
-		{
-			J3dCELLGeneral cell = j3dCellFactory.makeBGWRLDDistant(worldFormId, x, y, true);
-			loadedFars.put(key, cell);
-			if (cell != null)
-			{
-				cell.compile();// better to be done not on the j3d thread?
-				addChild(cell);
-				//not added to physics only added to the view for rendering
-			}
-		}
-
 	}
 
 	/**

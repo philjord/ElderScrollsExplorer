@@ -94,7 +94,7 @@ public class ESMToJ3d
 				}
 				else if (cellType == PluginGroup.CELL_PERSISTENT)
 				{
-					//Note teh table listing function in CellDisplay works but doesn't use this?
+					//Note the table listing function in CellDisplay works but doesn't use this?
 					if (version == 0.94f)
 					{
 						if (esmManager.getName().equals("Skyrim.esm"))

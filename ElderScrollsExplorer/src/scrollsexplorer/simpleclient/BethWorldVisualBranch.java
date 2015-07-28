@@ -196,7 +196,6 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 
 	private void updateNear(float charX, float charY)
 	{
-
 		Rectangle bounds = null;
 		if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
 		{
@@ -259,6 +258,14 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 							bg.compile();// better to be done not on the j3d thread?
 							addChild(bg);
 						}
+						
+						// now get rid of any fars that have the same keys loaded in
+						bg = loadedFars.get(key);
+						if (bg != null)
+						{
+							removeChild(bg);
+							loadedFars.remove(key);
+						}
 					}
 				}
 			}
@@ -285,7 +292,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		final int highX = bounds.x + +bounds.width;
 		final int highY = bounds.y + bounds.height;
 
-		// lets remove those loaded nears not in the range
+		// lets remove those loaded fars not in the range
 		Iterator<Point> keys = loadedFars.keySet().iterator();
 		ArrayList<Point> keysToRemove = new ArrayList<Point>();
 		while (keys.hasNext())
@@ -296,7 +303,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 				keysToRemove.add(key);
 			}
 		}
-
+		
 		for (int i = 0; i < keysToRemove.size(); i++)
 		{
 			Point key = keysToRemove.get(i);
@@ -313,7 +320,8 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			for (int y = lowY; y <= highY; y++)
 			{
 				Point key = new Point(x, y);
-				if (!loadedFars.containsKey(key))
+				// don't load fars where a near is
+				if (!loadedFars.containsKey(key) && !loadedNears.containsKey(key))
 				{
 					//long start = System.currentTimeMillis();
 
@@ -321,7 +329,6 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 					loadedFars.put(key, bg);
 					if (bg != null)
 					{
-						//Note fars own trees
 						bg.compile();// better to be done not on the j3d thread?
 						addChild(bg);
 						//System.out.println("updateFar3 " + key + " " + (System.currentTimeMillis() - start));
