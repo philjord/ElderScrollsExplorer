@@ -15,7 +15,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import tools.GridLayout2;
 import tools.swing.VerticalFlowLayout;
 import esmj3d.j3d.BethRenderSettings;
 
