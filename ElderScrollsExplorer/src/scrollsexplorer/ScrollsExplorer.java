@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 import java.util.zip.DataFormatException;
@@ -51,8 +52,8 @@ import bsa.source.BsaTextureSource;
 import com.gg.slider.SideBar;
 import com.gg.slider.SideBar.SideBarMode;
 import com.gg.slider.SidebarSection;
-import common.config.ConfigLoader;
 
+import common.config.ConfigLoader;
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
@@ -120,7 +121,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			this.getContentPane().setLayout(new BorderLayout(1, 1));
-			this.setSize(500, 1000);
+			this.setSize(600, 1000);
 
 			mainPanel.setLayout(new BorderLayout());
 
@@ -239,7 +240,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			this.validate();
 			this.doLayout();
 
-			SideBar sideBar = new SideBar(SideBarMode.TOP_LEVEL, true, 150, true);
+			SideBar sideBar = new SideBar(SideBarMode.TOP_LEVEL, true, 200, true);
 			//SidebarSection ss1 = new SidebarSection(sideBar, "dashboard", dashboard, null);
 			//sideBar.addSection(ss1);
 			SidebarSection ss2 = new SidebarSection(sideBar, "Quick Edit", quickEdit, null);
@@ -362,14 +363,25 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					TextureSource textureSource;
 					SoundSource soundSource;
 
-					String plusSkyrim = PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY);
-
 					if (cbBsaMenuItem.isSelected())
 					{
 						// note skyrim added 
 						if (bsaFileSet == null)
+						{
 							bsaFileSet = new BSAFileSet(new String[]
-							{ scrollsFolder, plusSkyrim }, cbLoadAllMenuItem.isSelected(), false);
+							{ scrollsFolder }, cbLoadAllMenuItem.isSelected(), false);
+
+							// in case of oblivion add some bsas auto 
+							float version = esmManager.getVersion();
+							if (version == 1.0f || version == 0.8f)
+							{
+								bsaFileSet.loadFile(new File(PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY) + "\\"
+										+ "Skyrim - Meshes.bsa"), false);
+								bsaFileSet.loadFile(new File(PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY) + "\\"
+										+ "Skyrim - Textures.bsa"), false);
+							}
+
+						}
 
 						meshSource = new BsaMeshSource(bsaFileSet);
 						textureSource = new BsaTextureSource(bsaFileSet);
@@ -378,11 +390,10 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					else
 					{
 						FileMediaRoots.setMediaRoots(new String[]
-						{ scrollsFolder, plusSkyrim });
+						{ scrollsFolder });
 						meshSource = new FileMeshSource();
 						textureSource = new FileTextureSource();
 						soundSource = new FileSoundSource();
-
 					}
 
 					mediaSources = new MediaSources(meshSource, textureSource, soundSource);

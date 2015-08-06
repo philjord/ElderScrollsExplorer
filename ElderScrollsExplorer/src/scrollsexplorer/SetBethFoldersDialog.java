@@ -10,9 +10,10 @@ import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import tools.swing.TitledJFileChooser;
 
 public class SetBethFoldersDialog extends JDialog
 {
@@ -50,8 +51,8 @@ public class SetBethFoldersDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				File sf = requestFolderName("Select Oblivion Folder",
-						PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY, ""));
+				File sf = TitledJFileChooser.requestFolderName("Select Oblivion Folder",
+						PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY, ""), SetBethFoldersDialog.this);
 				if (sf != null)
 				{
 					PropertyLoader.properties.setProperty(PropertyLoader.OBLIVION_FOLDER_KEY, sf.getAbsolutePath());
@@ -74,8 +75,8 @@ public class SetBethFoldersDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				File sf = requestFolderName("Select Fallout3 Folder",
-						PropertyLoader.properties.getProperty(PropertyLoader.FALLOUT3_FOLDER_KEY, ""));
+				File sf = TitledJFileChooser.requestFolderName("Select Fallout3 Folder",
+						PropertyLoader.properties.getProperty(PropertyLoader.FALLOUT3_FOLDER_KEY, ""), SetBethFoldersDialog.this);
 				if (sf != null)
 				{
 					PropertyLoader.properties.setProperty(PropertyLoader.FALLOUT3_FOLDER_KEY, sf.getAbsolutePath());
@@ -98,8 +99,8 @@ public class SetBethFoldersDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				File sf = requestFolderName("Select FalloutNV Folder",
-						PropertyLoader.properties.getProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY, ""));
+				File sf = TitledJFileChooser.requestFolderName("Select FalloutNV Folder",
+						PropertyLoader.properties.getProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY, ""), SetBethFoldersDialog.this);
 				if (sf != null)
 				{
 					PropertyLoader.properties.setProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY, sf.getAbsolutePath());
@@ -122,8 +123,8 @@ public class SetBethFoldersDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				File sf = requestFolderName("Select Skyrim Folder",
-						PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY, ""));
+				File sf = TitledJFileChooser.requestFolderName("Select Skyrim Folder",
+						PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY, ""), SetBethFoldersDialog.this);
 				if (sf != null)
 				{
 					PropertyLoader.properties.setProperty(PropertyLoader.SKYRIM_FOLDER_KEY, sf.getAbsolutePath());
@@ -159,15 +160,5 @@ public class SetBethFoldersDialog extends JDialog
 		});
 	}
 
-	private File requestFolderName(String title, String defaultFolder)
-	{
-		JFileChooser fc = new JFileChooser();
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);	
-		fc.setCurrentDirectory(new File(defaultFolder));
-		fc.setDialogTitle(title);
-		fc.setApproveButtonText("Set");
-		fc.showOpenDialog(this);
-		File sf = fc.getSelectedFile();
-		return sf;
-	}
+	
 }

@@ -248,11 +248,18 @@ public class SimpleBethCellManager implements InstRECOStore
 					{
 						currentBethInteriorVisualBranch = new BethInteriorVisualBranch(currentCellFormId, cell.getEditorID(),
 								j3dCellFactory);
-						simpleWalkSetup.addToVisualBranch(currentBethInteriorVisualBranch);
+						simpleWalkSetup.addToVisualBranch(currentBethInteriorVisualBranch);						
 
 						currentBethInteriorPhysicalBranch = new BethInteriorPhysicalBranch(simpleWalkSetup.getPhysicsSystem(),
 								currentCellFormId, j3dCellFactory);
 						simpleWalkSetup.addToPhysicalBranch(currentBethInteriorPhysicalBranch);
+						
+						if (avatarLocation != null)
+						{
+							//TODO: the unload load part of this should still be called I think
+							//currentBethInteriorPhysicalBranch.init(avatarLocation.getTransform());
+							//avatarLocation.addAvatarLocationListener(currentBethInteriorPhysicalBranch);
+						}
 					}
 					else
 					{
