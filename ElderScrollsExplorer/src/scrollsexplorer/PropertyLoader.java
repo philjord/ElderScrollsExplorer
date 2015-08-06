@@ -23,6 +23,8 @@ public class PropertyLoader
 	public static String FALLOUTNV_FOLDER_KEY = "FalloutNVFolder";
 
 	public static String SKYRIM_FOLDER_KEY = "SkyrimFolder";
+	
+	public static String OUTPUT_FOLDER_KEY = "outputFolder";
 
 	public static void load() throws IOException
 	{
