@@ -12,14 +12,6 @@ import javax.media.j3d.Transform3D;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
-import scrollsexplorer.ScrollsExplorer;
-import scrollsexplorer.simpleclient.physics.InstRECOStore;
-import tools3d.navigation.AvatarLocation;
-import tools3d.utils.Utils3D;
-import utils.ESConfig;
-import utils.source.MediaSources;
-import utils.source.TextureSource;
-
 import com.sun.j3d.utils.geometry.Primitive;
 import com.sun.j3d.utils.geometry.Sphere;
 
@@ -27,10 +19,18 @@ import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.common.data.plugin.PluginSubrecord;
 import esmLoader.loader.ESMManager;
+import esmLoader.loader.IESMManager;
 import esmj3d.data.shared.subrecords.LString;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dRECODynInst;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
+import scrollsexplorer.ScrollsExplorer;
+import scrollsexplorer.simpleclient.physics.InstRECOStore;
+import tools3d.navigation.AvatarLocation;
+import tools3d.utils.Utils3D;
+import utils.ESConfig;
+import utils.source.MediaSources;
+import utils.source.TextureSource;
 
 public class SimpleBethCellManager implements InstRECOStore
 {
@@ -54,7 +54,7 @@ public class SimpleBethCellManager implements InstRECOStore
 
 	private J3dICellFactory j3dCellFactory;
 
-	private ESMManager esmManager;
+	private IESMManager esmManager;
 
 	public SimpleBethCellManager(SimpleWalkSetup simpleWalkSetup2)
 	{
@@ -77,7 +77,7 @@ public class SimpleBethCellManager implements InstRECOStore
 	 * @param textureSource
 	 * @param soundSource
 	 */
-	public void setSources(ESMManager esmManager, MediaSources mediaSources)
+	public void setSources(IESMManager esmManager, MediaSources mediaSources)
 	{
 		this.esmManager = esmManager;
 

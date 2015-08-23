@@ -43,6 +43,7 @@ import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.common.data.record.Record;
 import esmLoader.loader.CELLPointer;
 import esmLoader.loader.ESMManager;
+import esmLoader.loader.IESMManager;
 import esmLoader.loader.InteriorCELLTopGroup;
 import esmLoader.loader.WRLDTopGroup;
 import esmj3dfo3.data.RecordToRECO;
@@ -92,7 +93,7 @@ public class ESMTest
 		long start = System.currentTimeMillis();
 
 		String esmFile = EsmFileLocations.getGeneralEsmFile();
-		ESMManager esmManager = ESMManager.getESMManager(esmFile);
+		IESMManager esmManager = ESMManager.getESMManager(esmFile);
 
 		try
 		{
@@ -159,7 +160,7 @@ public class ESMTest
 	{
 		String esmFile = EsmFileLocations.getGeneralEsmFile();
 
-		ESMManager esmManager = ESMManager.getESMManager(esmFile);
+		IESMManager esmManager = ESMManager.getESMManager(esmFile);
 		BSAFileSet bsaFileSet = new BSAFileSet(esmFile, false, false);
 
 		BsaMeshSource ms = new BsaMeshSource(bsaFileSet.getMeshArchives());
@@ -213,7 +214,7 @@ public class ESMTest
 	private static void loadAllFullJ3d()
 	{
 		String esmFile = EsmFileLocations.getGeneralEsmFile();
-		ESMManager esmManager = ESMManager.getESMManager(esmFile);
+		IESMManager esmManager = ESMManager.getESMManager(esmFile);
 		BSAFileSet bsaFileSet = new BSAFileSet(esmFile, false, false);
 		BsaSoundSource ss = new BsaSoundSource(bsaFileSet.getSoundArchives(), new EsmSoundKeyToName(esmManager));
 		BsaTextureSource ts = new BsaTextureSource(bsaFileSet.getTextureArchives());
