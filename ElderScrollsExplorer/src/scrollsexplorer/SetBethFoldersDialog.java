@@ -17,6 +17,10 @@ import tools.swing.TitledJFileChooser;
 
 public class SetBethFoldersDialog extends JDialog
 {
+	private JTextField morrowindFolderField = new JTextField("");
+
+	private JButton morrowindSetButton = new JButton("...");
+
 	private JTextField oblivionFolderField = new JTextField("");
 
 	private JButton oblivionSetButton = new JButton("...");
@@ -38,6 +42,31 @@ public class SetBethFoldersDialog extends JDialog
 		super(f, "Set Esm and Bsa Folders", true);
 		this.setLayout(new GridLayout(-1, 1));
 
+		
+		JPanel morrowindPanel = new JPanel();
+		morrowindPanel.setBorder(BorderFactory.createTitledBorder("Morrowind folder"));
+		morrowindPanel.setLayout(new BorderLayout());
+		morrowindPanel.add(morrowindFolderField, BorderLayout.CENTER);
+		morrowindFolderField.setText(PropertyLoader.properties.getProperty(PropertyLoader.MORROWIND_FOLDER_KEY, ""));
+		morrowindPanel.add(morrowindSetButton, BorderLayout.EAST);
+		add(morrowindPanel);
+
+		morrowindSetButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				File sf = TitledJFileChooser.requestFolderName("Select Morrowind Folder",
+						PropertyLoader.properties.getProperty(PropertyLoader.MORROWIND_FOLDER_KEY, ""), SetBethFoldersDialog.this);
+				if (sf != null)
+				{
+					PropertyLoader.properties.setProperty(PropertyLoader.MORROWIND_FOLDER_KEY, sf.getAbsolutePath());
+					morrowindFolderField.setText(sf.getAbsolutePath());
+				}
+			}
+
+		});
+		
 		JPanel oblivionPanel = new JPanel();
 		oblivionPanel.setBorder(BorderFactory.createTitledBorder("Oblivion folder"));
 		oblivionPanel.setLayout(new BorderLayout());
@@ -160,5 +189,4 @@ public class SetBethFoldersDialog extends JDialog
 		});
 	}
 
-	
 }

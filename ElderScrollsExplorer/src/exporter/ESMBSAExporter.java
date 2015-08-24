@@ -1,6 +1,7 @@
 package exporter;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -40,13 +41,13 @@ import utils.source.MediaSources;
 import FO3Archive.ArchiveEntry;
 import FO3Archive.ArchiveFile;
 import bsa.BSAFileSet;
-
 import common.config.ConfigLoader;
-
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
+import esmj3d.j3d.cell.J3dCELLGeneral;
 import esmj3d.j3d.cell.J3dICellFactory;
+import esmj3d.j3d.cell.MorphingLandscape;
 
 public class ESMBSAExporter extends JFrame
 {
@@ -59,7 +60,7 @@ public class ESMBSAExporter extends JFrame
 
 	private MediaSources mediaSources;
 
-	public ESMManager esmManager;
+	public IESMManager esmManager;
 
 	public BSAFileSet bsaFileSet;
 
@@ -259,40 +260,40 @@ public class ESMBSAExporter extends JFrame
 	}
 
 	/**
-		
-		 * @param meshSource
-		 * @param textureSource
-		 * @param soundSource
-		 */
-	public void setSources(ESMManager esmManager, MediaSources mediaSources)
+	 * 
+	 * @param meshSource
+	 * @param textureSource
+	 * @param soundSource
+	 */
+	public void setSources(IESMManager esmManager2, MediaSources mediaSources)
 	{
-		this.esmManager = esmManager;
+		this.esmManager = esmManager2;
 
-		float version = esmManager.getVersion();
+		float version = esmManager2.getVersion();
 
 		if (version == 0.94f)
 		{
-			if (esmManager.getName().equals("Skyrim.esm"))
+			if (esmManager2.getName().equals("Skyrim.esm"))
 			{
-				j3dCellFactory = new esmj3dtes5.j3d.cell.J3dCellFactory(esmManager, esmManager, mediaSources);
+				j3dCellFactory = new esmj3dtes5.j3d.cell.J3dCellFactory(esmManager2, esmManager2, mediaSources);
 			}
 			else
 			{
 
-				j3dCellFactory = new esmj3dfo3.j3d.cell.J3dCellFactory(esmManager, esmManager, mediaSources);
+				j3dCellFactory = new esmj3dfo3.j3d.cell.J3dCellFactory(esmManager2, esmManager2, mediaSources);
 			}
 		}
 		else if (version == 1.32f)
 		{
-			j3dCellFactory = new esmj3dfo3.j3d.cell.J3dCellFactory(esmManager, esmManager, mediaSources);
+			j3dCellFactory = new esmj3dfo3.j3d.cell.J3dCellFactory(esmManager2, esmManager2, mediaSources);
 		}
 		else if (version == 1.0f || version == 0.8f)
 		{
-			j3dCellFactory = new esmj3dtes4.j3d.cell.J3dCellFactory(esmManager, esmManager, mediaSources);
+			j3dCellFactory = new esmj3dtes4.j3d.cell.J3dCellFactory(esmManager2, esmManager2, mediaSources);
 		}
 		else
 		{
-			System.out.println("Bad esm version! " + version + " in " + esmManager.getName());
+			System.out.println("Bad esm version! " + version + " in " + esmManager2.getName());
 		}
 
 		//System.out.println("j3dCellFactory = " + j3dCellFactory);
@@ -436,11 +437,12 @@ public class ESMBSAExporter extends JFrame
 
 	private void export()
 	{
-		// TODO: exteriors, step through all cells possible (lod loads should be fine)
+		// TODO: exteriors, step through all cells possible 
+		// TODO: lod loads need all lods at each level requested!
 		// TODO: nested levels
 		// TODO: animations for each CREA or CHAR how to find all animations
 		// TODO: sounds, found in nifs
-		
+
 		long startTime = System.currentTimeMillis();
 		// for each cell picked
 		for (int i = 0; i < tableModel.getRowCount(); i++)
@@ -464,7 +466,52 @@ public class ESMBSAExporter extends JFrame
 						if (cell != null)
 						{
 							//currentBethWorldVisualBranch = new BethWorldVisualBranch(currentCellFormId, j3dCellFactory);
-							System.out.println("ext todo");
+
+							String lodWorldFormId = j3dCellFactory.getLODWorldName(formId);
+
+							//lods
+							int[] scales = new int[]
+							{ 32, 16, 8, 4 };
+
+							//obliv only has one scale
+							float version = esmManager.getVersion();
+							if (version == 1.0f || version == 0.8f)
+							{
+								scales = new int[]
+								{ 32 };
+							}
+
+							for (int scale : scales)
+							{
+								for (int x = -96; x < 96; x += scale)
+								{
+									for (int y = -96; y < 96; y += scale)
+									{
+										long xyStartTime = System.currentTimeMillis();
+										Object od = j3dCellFactory.makeLODLandscape(x, y, scale, lodWorldFormId);
+										if (od != null)
+											System.out.println("x " + x + " y " + y + " scale " + scale + " complete in "
+													+ (System.currentTimeMillis() - xyStartTime) + "ms");
+									}
+								}
+							}
+
+							//persistents
+							j3dCellFactory.makeBGWRLDPersistent(formId, false);
+							//distants, nears
+							for (int x = -96; x <= 96; x++)
+							{
+								for (int y = -96; y <= 96; y++)
+								{
+									long xyStartTime = System.currentTimeMillis();
+									Object od = j3dCellFactory.makeBGWRLDDistant(formId, x, y, false);
+									Object ot = j3dCellFactory.makeBGWRLDTemporary(formId, x, y, false);
+									if (od != null || ot != null)
+										System.out.println("x " + x + " y " + y + " complete in "
+												+ (System.currentTimeMillis() - xyStartTime) + "ms");
+
+								}
+							}
 						}
 						else
 						{
@@ -551,18 +598,27 @@ public class ESMBSAExporter extends JFrame
 
 			HashSet<String> ts = ((BsaRecordedTextureSource) mediaSources.getTextureSource()).requestedFiles;
 			System.out.println("Textures");
-			for (String tex : ts)
+			for (String texName : ts)
 			{
-				System.out.print("Processing " + tex);
-				if (!tex.toLowerCase().startsWith("textures"))
+				System.out.print("Processing " + texName);
+				texName = texName.toLowerCase();
+
+				// remove incorrect file path prefix, if it exists
+				if (texName.startsWith("data\\"))
 				{
-					tex = "textures\\" + tex;
+					texName = texName.substring(5);
+				}
+
+				// add the textures path part
+				if (!texName.startsWith("textures"))
+				{
+					texName = "textures\\" + texName;
 				}
 
 				InputStream inputStream = null;
 				for (ArchiveFile archiveFile : bsaFileSet)
 				{
-					ArchiveEntry archiveEntry = archiveFile.getEntry(tex);
+					ArchiveEntry archiveEntry = archiveFile.getEntry(texName);
 					if (archiveEntry != null)
 					{
 						inputStream = archiveFile.getInputStream(archiveEntry);
@@ -574,7 +630,7 @@ public class ESMBSAExporter extends JFrame
 
 				if (inputStream != null)
 				{
-					File dest = new File(outputFolder.getAbsolutePath() + "\\" + tex);
+					File dest = new File(outputFolder.getAbsolutePath() + "\\" + texName);
 
 					dest.getParentFile().mkdirs();
 					dest.createNewFile();
@@ -585,7 +641,7 @@ public class ESMBSAExporter extends JFrame
 				}
 				else
 				{
-					System.out.println("Can't find " + tex + " in Bsas");
+					System.out.println("Can't find " + texName + " in Bsas");
 				}
 				System.out.println("");
 			}

@@ -78,15 +78,17 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	private MediaSources mediaSources;
 
-	public ESMManager esmManager;
+	public IESMManager esmManager;
 
 	public BSAFileSet bsaFileSet;
 
-	public JButton falloutButton = new JButton("Fall Out");
-
-	public JButton falloutNVButton = new JButton("Fall Out NV");
+	public JButton morrowindButton = new JButton("Morrowind");
 
 	public JButton oblivionButton = new JButton("Oblivion");
+
+	public JButton falloutButton = new JButton("FallOut");
+
+	public JButton falloutNVButton = new JButton("FallOut NV");
 
 	public JButton skyrimButton = new JButton("Skyrim");
 
@@ -164,15 +166,29 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 			buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 
+			buttonPanel.add(morrowindButton);
 			buttonPanel.add(oblivionButton);
 			buttonPanel.add(falloutButton);
 			buttonPanel.add(falloutNVButton);
 			buttonPanel.add(skyrimButton);
 
+			morrowindButton.setEnabled(false);
 			oblivionButton.setEnabled(false);
 			falloutButton.setEnabled(false);
 			falloutNVButton.setEnabled(false);
 			skyrimButton.setEnabled(false);
+
+			morrowindButton.addActionListener(new ActionListener()
+			{
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.MORROWIND_FOLDER_KEY);
+					mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Morrowind.esm";
+					loadUpPickers();
+					simpleWalkSetup.getAvatarCollisionInfo().setAvatarYHeight(2.28f);
+				}
+			});
 
 			oblivionButton.addActionListener(new ActionListener()
 			{
@@ -285,9 +301,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			PropertyLoader.properties.setProperty("YawPitch" + esmManager.getName(), new YawPitch(simpleWalkSetup.getAvatarLocation()
 					.getTransform()).toString());
 			PropertyLoader.properties.setProperty("Trans" + esmManager.getName(),
-					"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));
-			PropertyLoader.save();
+					"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));			
 		}
+		PropertyLoader.save();
 	}
 
 	private void setFolders()
@@ -301,11 +317,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private void enableButtons()
 	{
 		//in case of nothing selected show dialog, funy infinite loop for recidivst non setters
-		if (PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY) != null
+		if (PropertyLoader.properties.getProperty(PropertyLoader.MORROWIND_FOLDER_KEY) != null
+				|| PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY) != null
 				|| PropertyLoader.properties.getProperty(PropertyLoader.FALLOUT3_FOLDER_KEY) != null
 				|| PropertyLoader.properties.getProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY) != null
 				|| PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY) != null)
 		{
+			String morrowindFolder = PropertyLoader.properties.getProperty(PropertyLoader.MORROWIND_FOLDER_KEY);
+			morrowindButton.setEnabled(morrowindFolder != null);
 			String oblivionFolder = PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY);
 			oblivionButton.setEnabled(oblivionFolder != null);
 			String fallOut3Folder = PropertyLoader.properties.getProperty(PropertyLoader.FALLOUT3_FOLDER_KEY);

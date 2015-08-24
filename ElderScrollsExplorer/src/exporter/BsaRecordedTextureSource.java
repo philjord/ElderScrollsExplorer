@@ -1,6 +1,6 @@
 package exporter;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import javax.media.j3d.Texture;
 
@@ -9,7 +9,7 @@ import bsa.source.BsaTextureSource;
 
 public class BsaRecordedTextureSource extends BsaTextureSource
 {
-	public HashSet<String> requestedFiles = new HashSet<String>();
+	public LinkedHashSet<String> requestedFiles = new LinkedHashSet<String>();
 
 	public BsaRecordedTextureSource(BSAFileSet bsaFileSet)
 	{
