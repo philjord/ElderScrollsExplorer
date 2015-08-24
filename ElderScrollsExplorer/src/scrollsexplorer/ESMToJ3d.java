@@ -6,13 +6,14 @@ import java.util.zip.DataFormatException;
 
 import javax.media.j3d.BranchGroup;
 
+import utils.ESMUtils;
+import utils.source.MediaSources;
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginGroup;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.common.data.record.Record;
 import esmLoader.loader.ESMManager;
 import esmLoader.loader.IESMManager;
-import utils.source.MediaSources;
 
 public class ESMToJ3d
 {
@@ -58,7 +59,7 @@ public class ESMToJ3d
 
 			if (cellChildren != null)
 			{
-				List<Record> childRecords = ESMManager.getChildren(cellChildren, cellType);
+				List<Record> childRecords = ESMUtils.getChildren(cellChildren, cellType);
 				float version = esmManager.getVersion();
 
 				if (cellType == PluginGroup.CELL_TEMPORARY)

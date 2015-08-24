@@ -25,6 +25,7 @@ import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
+import utils.ESMUtils;
 import utils.source.EsmSoundKeyToName;
 import utils.source.MediaSources;
 import bsa.BSAFileSet;
@@ -116,7 +117,7 @@ public class ESMTest
 						if (cellChildren != null)
 						{
 							RecordToRECO.makeRECOsForCELL(esmManager, new Record(record, -1),
-									ESMManager.getChildren(cellChildren, PluginGroup.CELL_TEMPORARY));
+									ESMUtils.getChildren(cellChildren, PluginGroup.CELL_TEMPORARY));
 						}
 					}
 
@@ -133,7 +134,7 @@ public class ESMTest
 						if (cellChildren != null)
 						{
 							RecordToRECO.makeRECOsForCELL(esmManager, new Record(record, -1),
-									ESMManager.getChildren(cellChildren, PluginGroup.CELL_TEMPORARY));
+									ESMUtils.getChildren(cellChildren, PluginGroup.CELL_TEMPORARY));
 						}
 					}
 				}
