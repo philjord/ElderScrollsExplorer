@@ -12,6 +12,7 @@ import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.common.data.record.Record;
 import esmLoader.loader.ESMManager;
 import esmLoader.loader.IESMManager;
+import utils.source.MediaSources;
 
 public class ESMToJ3d
 {

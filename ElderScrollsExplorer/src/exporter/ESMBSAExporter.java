@@ -30,6 +30,15 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
+import FO3Archive.ArchiveEntry;
+import FO3Archive.ArchiveFile;
+import bsa.BSAFileSet;
+import common.config.ConfigLoader;
+import esmLoader.common.PluginException;
+import esmLoader.common.data.plugin.PluginRecord;
+import esmLoader.loader.ESMManager;
+import esmLoader.loader.IESMManager;
+import esmj3d.j3d.cell.J3dICellFactory;
 import scrollsexplorer.PropertyLoader;
 import scrollsexplorer.SetBethFoldersDialog;
 import tools.TitledPanel;
@@ -38,16 +47,6 @@ import tools.swing.VerticalFlowLayout;
 import tools3d.resolution.QueryProperties;
 import utils.source.EsmSoundKeyToName;
 import utils.source.MediaSources;
-import FO3Archive.ArchiveEntry;
-import FO3Archive.ArchiveFile;
-import bsa.BSAFileSet;
-import common.config.ConfigLoader;
-import esmLoader.common.PluginException;
-import esmLoader.common.data.plugin.PluginRecord;
-import esmLoader.loader.ESMManager;
-import esmj3d.j3d.cell.J3dCELLGeneral;
-import esmj3d.j3d.cell.J3dICellFactory;
-import esmj3d.j3d.cell.MorphingLandscape;
 
 public class ESMBSAExporter extends JFrame
 {
@@ -55,8 +54,7 @@ public class ESMBSAExporter extends JFrame
 
 	private static DefaultTableModel tableModel;
 
-	private static String[] columnNames = new String[]
-	{ " ", "Int/Ext", "Cell Id", "Name" };
+	private static String[] columnNames = new String[] { " ", "Int/Ext", "Cell Id", "Name" };
 
 	private MediaSources mediaSources;
 
@@ -129,8 +127,8 @@ public class ESMBSAExporter extends JFrame
 			});
 
 			this.setJMenuBar(menuBar);
-			//this.getContentPane().add(mainPanel, BorderLayout.CENTER);
-			//this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+			// this.getContentPane().add(mainPanel, BorderLayout.CENTER);
+			// this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
 			buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 
@@ -231,7 +229,8 @@ public class ESMBSAExporter extends JFrame
 				public void actionPerformed(ActionEvent e)
 				{
 					File sf = TitledJFileChooser.requestFolderName("Select Output Folder",
-							PropertyLoader.properties.getProperty(PropertyLoader.OUTPUT_FOLDER_KEY, ""), ESMBSAExporter.this);
+							PropertyLoader.properties.getProperty(PropertyLoader.OUTPUT_FOLDER_KEY, ""),
+							ESMBSAExporter.this);
 					if (sf != null)
 					{
 						PropertyLoader.properties.setProperty(PropertyLoader.OUTPUT_FOLDER_KEY, sf.getAbsolutePath());
@@ -296,7 +295,7 @@ public class ESMBSAExporter extends JFrame
 			System.out.println("Bad esm version! " + version + " in " + esmManager2.getName());
 		}
 
-		//System.out.println("j3dCellFactory = " + j3dCellFactory);
+		// System.out.println("j3dCellFactory = " + j3dCellFactory);
 	}
 
 	private void setFolders()
@@ -309,7 +308,8 @@ public class ESMBSAExporter extends JFrame
 
 	private void enableButtons()
 	{
-		//in case of nothing selected show dialog, funy infinite loop for recidivst non setters
+		// in case of nothing selected show dialog, funy infinite loop for
+		// recidivst non setters
 		if (PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY) != null
 				|| PropertyLoader.properties.getProperty(PropertyLoader.FALLOUT3_FOLDER_KEY) != null
 				|| PropertyLoader.properties.getProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY) != null
@@ -358,10 +358,9 @@ public class ESMBSAExporter extends JFrame
 
 					String plusSkyrim = PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY);
 
-					// note skyrim added 
+					// note skyrim added
 					if (bsaFileSet == null)
-						bsaFileSet = new BSAFileSet(new String[]
-						{ scrollsFolder, plusSkyrim }, true, false);
+						bsaFileSet = new BSAFileSet(new String[] { scrollsFolder, plusSkyrim }, true, false);
 
 					meshSource = new BsaRecordedMeshSource(bsaFileSet);
 					textureSource = new BsaRecordedTextureSource(bsaFileSet);
@@ -376,11 +375,10 @@ public class ESMBSAExporter extends JFrame
 						@Override
 						public boolean isCellEditable(int row, int column)
 						{
-							return column == 0; //ticks only
+							return column == 0; // ticks only
 						}
 
 						@Override
-						@SuppressWarnings("unchecked")
 						public Class<? extends Object> getColumnClass(int c)
 						{
 							return getValueAt(0, c).getClass();
@@ -396,15 +394,13 @@ public class ESMBSAExporter extends JFrame
 						for (Integer formId : esmManager.getAllWRLDTopGroupFormIds())
 						{
 							PluginRecord pr = esmManager.getWRLD(formId);
-							tableModel.addRow(new Object[]
-							{ false, "Ext", formId, pr });
+							tableModel.addRow(new Object[] { false, "Ext", formId, pr });
 						}
 
 						for (Integer formId : esmManager.getAllInteriorCELLFormIds())
 						{
 							PluginRecord pr = esmManager.getInteriorCELL(formId);
-							tableModel.addRow(new Object[]
-							{ false, "Int", formId, pr });
+							tableModel.addRow(new Object[] { false, "Int", formId, pr });
 						}
 					}
 					catch (DataFormatException e1)
@@ -437,8 +433,8 @@ public class ESMBSAExporter extends JFrame
 
 	private void export()
 	{
-		// TODO: exteriors, step through all cells possible 
-		// TODO: lod loads need all lods at each level requested!
+		// TODO: exteriors, step through all cells possible (lod loads should be
+		// fine)
 		// TODO: nested levels
 		// TODO: animations for each CREA or CHAR how to find all animations
 		// TODO: sounds, found in nifs
@@ -520,7 +516,7 @@ public class ESMBSAExporter extends JFrame
 					}
 					else
 					{
-						//must be interior
+						// must be interior
 						PluginRecord cell = esmManager.getInteriorCELL(formId);
 						if (cell != null)
 						{
@@ -573,7 +569,7 @@ public class ESMBSAExporter extends JFrame
 					{
 						inputStream = archiveFile.getInputStream(archiveEntry);
 						System.out.print(" found input stream ");
-						// don't check others				
+						// don't check others
 						break;
 					}
 				}
@@ -623,7 +619,7 @@ public class ESMBSAExporter extends JFrame
 					{
 						inputStream = archiveFile.getInputStream(archiveEntry);
 						System.out.print(" found input stream ");
-						// don't check others				
+						// don't check others
 						break;
 					}
 				}
@@ -663,7 +659,7 @@ public class ESMBSAExporter extends JFrame
 					{
 						inputStream = archiveFile.getInputStream(archiveEntry);
 						System.out.print(" found input stream ");
-						// don't check others				
+						// don't check others
 						break;
 					}
 				}
@@ -736,7 +732,7 @@ public class ESMBSAExporter extends JFrame
 	public static void main(String[] args)
 	{
 
-		//DDS requires no installed java3D
+		// DDS requires no installed java3D
 		if (QueryProperties.checkForInstalledJ3d())
 		{
 			System.exit(0);

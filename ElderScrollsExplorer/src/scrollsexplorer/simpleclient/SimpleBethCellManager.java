@@ -12,14 +12,6 @@ import javax.media.j3d.Transform3D;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
-import scrollsexplorer.ScrollsExplorer;
-import scrollsexplorer.simpleclient.physics.InstRECOStore;
-import tools3d.navigation.AvatarLocation;
-import tools3d.utils.Utils3D;
-import utils.ESConfig;
-import utils.source.MediaSources;
-import utils.source.TextureSource;
-
 import com.sun.j3d.utils.geometry.Primitive;
 import com.sun.j3d.utils.geometry.Sphere;
 
