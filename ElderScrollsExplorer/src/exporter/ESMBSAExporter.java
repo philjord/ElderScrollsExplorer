@@ -290,6 +290,10 @@ public class ESMBSAExporter extends JFrame
 		{
 			j3dCellFactory = new esmj3dtes4.j3d.cell.J3dCellFactory(esmManager2, esmManager2, mediaSources);
 		}
+		else if (version == 1.2f )
+		{
+			j3dCellFactory = new esmj3dtes3.j3d.cell.J3dCellFactory(esmManager, esmManager, mediaSources);
+		}
 		else
 		{
 			System.out.println("Bad esm version! " + version + " in " + esmManager2.getName());

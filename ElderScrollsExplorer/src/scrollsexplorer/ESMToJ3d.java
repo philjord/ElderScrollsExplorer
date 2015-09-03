@@ -89,6 +89,11 @@ public class ESMToJ3d
 						return new esmj3dtes4.j3d.cell.J3dCELLTemporary(esmManager, new Record(record, formId), childRecords, makePhys,
 								mediaSources);
 					}
+					else if (version == 1.2f)
+					{
+						return new esmj3dtes3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record, formId), childRecords, makePhys,
+								mediaSources);
+					}
 					else
 					{
 						System.out.println("Bad esm version! " + version + " in " + esmManager.getName());
@@ -103,7 +108,6 @@ public class ESMToJ3d
 						{
 							return new esmj3dtes5.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
 									makePhys, mediaSources);
-
 						}
 						else
 						{
@@ -113,13 +117,17 @@ public class ESMToJ3d
 					}
 					else if (version == 1.32f)
 					{
-						//TODO: is FONV significantly different in esm format to warrant anoth project
 						return new esmj3dfo3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
 								makePhys, mediaSources);
 					}
 					else if (version == 1.0f || version == 0.8f)
 					{
 						return new esmj3dtes4.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
+								makePhys, mediaSources);
+					}
+					else if (version == 1.2f)
+					{
+						return new esmj3dtes3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
 								makePhys, mediaSources);
 					}
 					else

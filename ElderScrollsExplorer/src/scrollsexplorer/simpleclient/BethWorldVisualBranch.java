@@ -22,6 +22,7 @@ import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.cell.Beth32LodManager;
 import esmj3d.j3d.cell.Beth32_4LodManager;
 import esmj3d.j3d.cell.BethLodManager;
+import esmj3d.j3d.cell.BethNoLodManager;
 import esmj3d.j3d.cell.J3dCELLGeneral;
 import esmj3d.j3d.cell.J3dICELLPersistent;
 import esmj3d.j3d.cell.J3dICellFactory;
@@ -72,6 +73,10 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		//Expensive to load, so keep it around and only change when must
 		if (bethLodManager == null)
 		{
+			if (j3dCellFactory.getMainESMFileName().equals("Morrowind.esm"))
+			{
+				bethLodManager = new BethNoLodManager(j3dCellFactory);
+			}
 			if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
 			{
 				bethLodManager = new Beth32LodManager(j3dCellFactory);

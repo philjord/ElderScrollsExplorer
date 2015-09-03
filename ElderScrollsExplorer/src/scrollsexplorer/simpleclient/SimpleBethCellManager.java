@@ -12,18 +12,6 @@ import javax.media.j3d.Transform3D;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
-import com.sun.j3d.utils.geometry.Primitive;
-import com.sun.j3d.utils.geometry.Sphere;
-
-import esmLoader.common.PluginException;
-import esmLoader.common.data.plugin.PluginRecord;
-import esmLoader.common.data.plugin.PluginSubrecord;
-import esmLoader.loader.ESMManager;
-import esmLoader.loader.IESMManager;
-import esmj3d.data.shared.subrecords.LString;
-import esmj3d.j3d.cell.J3dICellFactory;
-import esmj3d.j3d.j3drecords.inst.J3dRECODynInst;
-import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 import scrollsexplorer.ScrollsExplorer;
 import scrollsexplorer.simpleclient.physics.InstRECOStore;
 import tools3d.navigation.AvatarLocation;
@@ -31,6 +19,18 @@ import tools3d.utils.Utils3D;
 import utils.ESConfig;
 import utils.source.MediaSources;
 import utils.source.TextureSource;
+
+import com.sun.j3d.utils.geometry.Primitive;
+import com.sun.j3d.utils.geometry.Sphere;
+
+import esmLoader.common.PluginException;
+import esmLoader.common.data.plugin.PluginRecord;
+import esmLoader.common.data.plugin.PluginSubrecord;
+import esmLoader.loader.IESMManager;
+import esmj3d.data.shared.subrecords.LString;
+import esmj3d.j3d.cell.J3dICellFactory;
+import esmj3d.j3d.j3drecords.inst.J3dRECODynInst;
+import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 
 public class SimpleBethCellManager implements InstRECOStore
 {
@@ -102,6 +102,10 @@ public class SimpleBethCellManager implements InstRECOStore
 		else if (version == 1.0f || version == 0.8f)
 		{
 			j3dCellFactory = new esmj3dtes4.j3d.cell.J3dCellFactory(esmManager, esmManager, mediaSources);
+		}
+		else if (version == 1.2f )
+		{
+			j3dCellFactory = new esmj3dtes3.j3d.cell.J3dCellFactory(esmManager, esmManager, mediaSources);
 		}
 		else
 		{
@@ -350,6 +354,10 @@ public class SimpleBethCellManager implements InstRECOStore
 		else if (textureSource.textureFileExists("textures\\sky\\urbancloudovercastlower01.dds"))
 		{
 			tex = textureSource.getTexture("textures\\sky\\urbancloudovercastlower01.dds");
+		}
+		else if (textureSource.textureFileExists("textures\\tx_sky_clear.dds"))
+		{
+			tex = textureSource.getTexture("textures\\tx_sky_clear.dds");
 		}
 		else
 		{
