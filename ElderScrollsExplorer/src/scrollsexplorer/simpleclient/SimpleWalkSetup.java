@@ -284,6 +284,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		{
 			setupGraphicsSetting(gs);
 		}
+
 	}
 
 	public void setupGraphicsSetting(GraphicsSettings gs)
@@ -297,56 +298,61 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		}
 
 		// clean any old gear
-		if (cameraPanel != null)
-		{
-			// reverse of construction below basically
-			avatarLocation.removeAvatarLocationListener(cameraPanel.getDolly());
-			cameraPanel.getCanvas3D2D().getHudShapeRoot().detach();
-			Canvas3D2D canvas3D2D = cameraPanel.getCanvas3D2D();
-			canvas3D2D.removeKeyListener(keyNavigationInputAWT);
-			canvas3D2D.removeKeyListener(jumpKeyListener);
-			canvas3D2D.removeKeyListener(miscKeyHandler);
-			fpsCounter.removeFromCanvas(canvas3D2D);
-			hudPos.removeFromCanvas(canvas3D2D);
-			hudcompass.removeFromCanvas(canvas3D2D);
-			hudPhysicsState.removeFromCanvas(canvas3D2D);
+		/*	if (cameraPanel != null)
+			{
+				// reverse of construction below basically
+				avatarLocation.removeAvatarLocationListener(cameraPanel.getDolly());
+				cameraPanel.getCanvas3D2D().getHudShapeRoot().detach();
+				Canvas3D2D canvas3D2D = cameraPanel.getCanvas3D2D();
+				canvas3D2D.removeKeyListener(keyNavigationInputAWT);
+				canvas3D2D.removeKeyListener(jumpKeyListener);
+				canvas3D2D.removeKeyListener(miscKeyHandler);
+				fpsCounter.removeFromCanvas(canvas3D2D);
+				hudPos.removeFromCanvas(canvas3D2D);
+				hudcompass.removeFromCanvas(canvas3D2D);
+				hudPhysicsState.removeFromCanvas(canvas3D2D);
 
-			frame.getContentPane().remove((JPanel) cameraPanel);
-		}
+				frame.getContentPane().remove((JPanel) cameraPanel);
+			}*/
 
 		HMD_MODE = gs.isOculusView();
 
-		//create the camera panel ************************
-		if (HMD_MODE)
-		{
-			System.out.println("HMD mode");
-			try
-			{
-				cameraPanel = new HMDCameraPanel(universe);
-				// and the dolly it rides on
-				HMDCamDolly hcd = new HMDCamDolly(avatarCollisionInfo);
-				cameraPanel.setDolly(hcd);
-
-				//disable pitch in body
-				navigationProcessor.setNoPitch(true);
-				navigationTemporalBehaviour.addNavigationProcessor(hcd);
-				cameraPanel.getCanvas3D2D().addKeyListener(new HMDKeyHandler(hcd));
-			}
-			catch (OculusException e)
-			{
-				e.printStackTrace();
-				JOptionPane.showMessageDialog(null, "No Oculus or failure", "Oculus", JOptionPane.ERROR_MESSAGE);
-			}
-
-		}
-
-		//if HMD fails or not HMD
 		if (cameraPanel == null)
 		{
-			cameraPanel = new CameraPanel(universe);
-			// and the dolly it rides on
-			HeadCamDolly headCamDolly = new HeadCamDolly(avatarCollisionInfo);
-			cameraPanel.setDolly(headCamDolly);
+			//create the camera panel ************************
+			if (HMD_MODE)
+			{
+				System.out.println("HMD mode");
+				try
+				{
+					cameraPanel = new HMDCameraPanel(universe);
+					// and the dolly it rides on
+					HMDCamDolly hcd = new HMDCamDolly(avatarCollisionInfo);
+					cameraPanel.setDolly(hcd);
+
+					//disable pitch in body
+					navigationProcessor.setNoPitch(true);
+					navigationTemporalBehaviour.addNavigationProcessor(hcd);
+					cameraPanel.getCanvas3D2D().addKeyListener(new HMDKeyHandler(hcd));
+				}
+				catch (OculusException e)
+				{
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "No Oculus or failure", "Oculus", JOptionPane.ERROR_MESSAGE);
+				}
+
+			}
+
+			//if HMD fails or not HMD
+			if (cameraPanel == null)
+			{
+				cameraPanel = new CameraPanel(universe);
+				// and the dolly it rides on
+				HeadCamDolly headCamDolly = new HeadCamDolly(avatarCollisionInfo);
+				cameraPanel.setDolly(headCamDolly);
+			}
+			
+			frame.getContentPane().add((JPanel) cameraPanel);
 		}
 
 		avatarLocation.addAvatarLocationListener(cameraPanel.getDolly());
@@ -366,9 +372,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		hudPhysicsState.addToCanvas(canvas3D2D);
 
 		//allow tab for mouse lock
-		canvas3D2D.setFocusTraversalKeysEnabled(false);
-
-		frame.getContentPane().add((JPanel) cameraPanel);
+		canvas3D2D.setFocusTraversalKeysEnabled(false);		
 
 		if (isLive)
 		{
@@ -406,8 +410,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				cameraMouseOver.setConfig(null);
 				cameraAdminMouseOverHandler.setConfig(null);
 				physicsSystem.pause();
-				frame.setVisible(false);
-				cameraPanel.stopRendering();
+				//frame.setVisible(false);
+				//cameraPanel.stopRendering();// this kills the J3d stuff like changin the resolution
 			}
 			enabled = enable;
 		}

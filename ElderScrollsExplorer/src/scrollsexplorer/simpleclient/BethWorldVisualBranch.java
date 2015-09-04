@@ -76,8 +76,9 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			if (j3dCellFactory.getMainESMFileName().equals("Morrowind.esm"))
 			{
 				bethLodManager = new BethNoLodManager(j3dCellFactory);
+				J3dLAND.setTes3();
 			}
-			if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
+			else if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
 			{
 				bethLodManager = new Beth32LodManager(j3dCellFactory);
 			}
@@ -263,7 +264,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 							bg.compile();// better to be done not on the j3d thread?
 							addChild(bg);
 						}
-						
+
 						// now get rid of any fars that have the same keys loaded in
 						bg = loadedFars.get(key);
 						if (bg != null)
@@ -308,7 +309,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 				keysToRemove.add(key);
 			}
 		}
-		
+
 		for (int i = 0; i < keysToRemove.size(); i++)
 		{
 			Point key = keysToRemove.get(i);
