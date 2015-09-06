@@ -3,7 +3,7 @@ package scrollsexplorer.simpleclient.physics;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
-import com.bulletphysics.dynamics.character.KinematicCharacterController3.CharacterPositionListener;
+import com.bulletphysics.dynamics.character.KinematicCharacterController.CharacterPositionListener;
 
 import nifbullet.cha.NBControlledChar;
 import tools3d.navigation.AvatarLocation;
@@ -42,8 +42,8 @@ public class ClientNifBulletCharBinding implements NifBulletBinding, CharacterPo
 			if (avatarLocation != null)
 			{
 				// get current out for check
-				//avatarLocation.get(currRotation, currTranslation);
-				//if (!currTranslation.epsilonEquals(newTranslation, 0.001f))
+				avatarLocation.get(currRotation, currTranslation);
+				if (!currTranslation.epsilonEquals(newTranslation, 0.005f))
 				{
 					//ignore rotation from kcc, for some reason it's always late
 					//avatarLocation.set(newRotation, newTranslation);
