@@ -147,7 +147,7 @@ public class PhysicsDynamics extends DynamicsEngine
 	{
 		if (recoIdToNifBullet.containsKey(j3dRECOInst.getRecordId()))
 		{
-			System.out.println("PhysicsDynamics, already loaded " + j3dRECOInst);
+			System.out.println("PhysicsDynamics, already loaded key " + j3dRECOInst.getRecordId() + " of " + j3dRECOInst);
 			//new Throwable("Thread:" + Thread.currentThread()).printStackTrace();
 		}
 
@@ -250,7 +250,7 @@ public class PhysicsDynamics extends DynamicsEngine
 				nb.forceUpdate(rootTrans, linearVelocity, rotationalVelocity);
 
 				NifBulletBinding irnbb = new InstRecoNifBulletBinding(j3dRECOInst, instRecoToNif, nb);
-				
+
 				synchronized (dynamicsWorld)
 				{
 					if (irnbb != null)
