@@ -202,15 +202,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 
 	private void updateNear(float charX, float charY)
 	{
-		Rectangle bounds = null;
-		if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
-		{
-			bounds = Beth32LodManager.getBounds(charX, charY, BethRenderSettings.getNearLoadGridCount());
-		}
-		else
-		{
-			bounds = Beth32_4LodManager.getNearBounds(charX, charY, BethRenderSettings.getNearLoadGridCount());
-		}
+		Rectangle bounds = bethLodManager.getGridBounds(charX, charY, BethRenderSettings.getNearLoadGridCount());
 
 		long start = System.currentTimeMillis();
 
@@ -252,7 +244,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 					if (!loadedNears.containsKey(key))
 					{
 						//Persistent are loaded in  the CELL that is makeBGWRLD all xy based persistents are empty
-
+						 
 						J3dCELLGeneral bg = j3dCellFactory.makeBGWRLDTemporary(worldFormId, x, y, false);
 						synchronized (loadedNears)
 						{
