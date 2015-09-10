@@ -16,6 +16,7 @@ import javax.vecmath.Vector3f;
 import scrollsexplorer.ScrollsExplorer;
 import tools.QueuingThread;
 import tools3d.utils.scenegraph.LocationUpdateListener;
+import tools3d.utils.scenegraph.StructureUpdateBehavior;
 import esmLoader.common.data.record.Record;
 import esmLoader.common.data.record.Subrecord;
 import esmj3d.j3d.BethRenderSettings;
@@ -46,6 +47,8 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 	private QueuingThread nearUpdateThread;
 
 	private QueuingThread grossUpdateThread;
+
+	private StructureUpdateBehavior structureUpdateBehavior;
 
 	private J3dICellFactory j3dCellFactory;
 
@@ -156,6 +159,12 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			grossUpdateThread.setDaemon(true);
 			grossUpdateThread.start();
 
+			//NOTE! j3d does not allow multi threaded access to add and remove groups
+			// It can cause deadlocks, betterdistanceLOD on teh behavior thread is
+			// doing adds and removes, so these queueing thread need to be on a behavior as well.
+			structureUpdateBehavior = new StructureUpdateBehavior();
+			addChild(structureUpdateBehavior);
+
 		}
 		else
 		{
@@ -224,8 +233,8 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			Point key = keysToRemove.get(i);
 			BranchGroup bg = loadedNears.get(key);
 			if (bg != null)
-			{
-				removeChild(bg);
+			{				
+				structureUpdateBehavior.remove(this, bg);				
 			}
 			synchronized (loadedNears)
 			{
@@ -255,14 +264,14 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 						if (bg != null)
 						{
 							bg.compile();// better to be done not on the j3d thread?
-							addChild(bg);
+							structureUpdateBehavior.add(this, bg);							
 						}
 
 						// now get rid of any fars that have the same keys loaded in
 						bg = loadedFars.get(key);
 						if (bg != null)
 						{
-							removeChild(bg);
+							structureUpdateBehavior.remove(this, bg);							
 							loadedFars.remove(key);
 						}
 					}
@@ -309,7 +318,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			BranchGroup bg = loadedFars.get(key);
 			if (bg != null)
 			{
-				removeChild(bg);
+				structureUpdateBehavior.remove(this, bg);				
 				loadedFars.remove(key);
 			}
 		}
@@ -329,7 +338,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 					if (bg != null)
 					{
 						bg.compile();// better to be done not on the j3d thread?
-						addChild(bg);
+						structureUpdateBehavior.add(this, bg);						
 						//System.out.println("updateFar3 " + key + " " + (System.currentTimeMillis() - start));
 					}
 				}
@@ -427,4 +436,5 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		else
 			return null;
 	}
+
 }

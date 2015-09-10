@@ -16,6 +16,7 @@ import javax.vecmath.Vector3f;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools.QueuingThread;
 import tools3d.utils.scenegraph.LocationUpdateListener;
+import tools3d.utils.scenegraph.StructureUpdateBehavior;
 import esmLoader.common.data.record.Record;
 import esmLoader.common.data.record.Subrecord;
 import esmj3d.j3d.BethRenderSettings;
@@ -44,6 +45,8 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 	private HashMap<Point, J3dCELLGeneral> loadedNears = new HashMap<Point, J3dCELLGeneral>();
 
 	private QueuingThread updateThread;
+
+	private StructureUpdateBehavior structureUpdateBehavior;
 
 	private J3dICellFactory j3dCellFactory;
 
@@ -100,6 +103,9 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			updateThread.setName("Obliv Phys update thread");
 			updateThread.setDaemon(true);
 			updateThread.start();
+
+			structureUpdateBehavior = new StructureUpdateBehavior();
+			addChild(structureUpdateBehavior);
 
 		}
 		else
@@ -194,17 +200,16 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			Point key = keysToRemove.get(i);
 			synchronized (loadedNears)
 			{
-				J3dCELLGeneral cell = loadedNears.remove(key);
+				J3dCELLGeneral bg = loadedNears.remove(key);
 
-				if (cell != null)
+				if (bg != null)
 				{
-					removeChild(cell);
-					clientPhysicsSystem.unloadJ3dCELL(cell);
+					structureUpdateBehavior.remove(this, bg);
+					clientPhysicsSystem.unloadJ3dCELL(bg);
 				}
 			}
 
 		}
-
 
 		for (int x = lowX; x <= highX; x++)
 		{
@@ -236,7 +241,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 				if (j3dCELLTemporary != null)
 				{
 					j3dCELLTemporary.compile();// better to be done not on the j3d thread?
-					addChild(j3dCELLTemporary);
+					structureUpdateBehavior.add(this, j3dCELLTemporary);
 					clientPhysicsSystem.loadJ3dCELL(j3dCELLTemporary);
 				}
 			}
