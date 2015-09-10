@@ -23,7 +23,7 @@ public class PhysicsSystemStatus extends JPanel
 
 	private JLabel staL = new JLabel("S000");
 
-	/*Write a timed thread that updates a multiline label in the dashboard that out put the dynamics counts of 
+	/**Write a timed thread that updates a multiline label in the dashboard that out put the dynamics counts of 
 	D#
 	K#
 	S#

@@ -401,8 +401,9 @@ public class PhysicsDynamics extends DynamicsEngine
 				}
 				else if (bnm instanceof NBSimpleModel)
 				{
-					ret.kinCount++;
-					ret.staCount++;
+					NBSimpleModel sm = (NBSimpleModel) bnm;
+					ret.kinCount += sm.hasKinematics() ? 1 : 0;
+					ret.staCount += !sm.hasKinematics() ? 1 : 0;
 				}
 			}
 		}

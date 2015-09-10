@@ -77,6 +77,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			{
 				bethLodManager = new BethNoLodManager(j3dCellFactory);
 				J3dLAND.setTes3();
+				BethRenderSettings.setTes3(true);
 			}
 			else if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
 			{
@@ -244,7 +245,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 					if (!loadedNears.containsKey(key))
 					{
 						//Persistent are loaded in  the CELL that is makeBGWRLD all xy based persistents are empty
-						 
+
 						J3dCELLGeneral bg = j3dCellFactory.makeBGWRLDTemporary(worldFormId, x, y, false);
 						synchronized (loadedNears)
 						{
