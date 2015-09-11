@@ -15,6 +15,7 @@
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiControllerSequence.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{ATextureRenderData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiColorData.java"/>
+        <javaElement handleIdentifier="=esmj3dtes3/src"/>
         <javaElement handleIdentifier="=jnifj3d/src"/>
         <file path="/jnif/.project"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiImage.java"/>
@@ -32,16 +33,16 @@
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiLODNode.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiBezierTriangle4.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiLinesData.java"/>
-        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTransformData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiMorphData.java"/>
+        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTransformData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiRoomGroup.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject.particle"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiBillboardNode.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiPointLight.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiFloatExtraData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiArkTextureExtraData.java"/>
-        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiPhysXProp.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTextureProperty.java"/>
+        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiPhysXProp.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiUVData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiFloatData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiKeyframeData.java"/>
@@ -65,14 +66,14 @@
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiBSAnimationNode.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiFloatsExtraData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiSequenceStreamHelper.java"/>
-        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiLines.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiCollisionObject.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiColorExtraData.java"/>
+        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiLines.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiClodSkinInstance.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiBinaryExtraData.java"/>
         <javaElement handleIdentifier="=ElderScrollsExplorer/src"/>
-        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiScreenElementsData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiBooleanExtraData.java"/>
+        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiScreenElementsData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTexture.java"/>
         <file path="/jnif/.compatibility"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiPhysXShapeDesc.java"/>
@@ -118,8 +119,8 @@
         <javaElement handleIdentifier="=esmj3d/src"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiPixelData.java"/>
         <javaElement handleIdentifier="=jnifjbullet/src"/>
-        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiBSplineBasisData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiSphericalCollider.java"/>
+        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiBSplineBasisData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiCamera.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiAdditionalGeometryData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTextureEffect.java"/>
@@ -146,8 +147,8 @@
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiClod.java"/>
         <javaElement handleIdentifier="=esmj3dtes4/src"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiArkShaderExtraData.java"/>
-        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTextKeyExtraData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiSwitchNode.java"/>
+        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTextKeyExtraData.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject.controller"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiSkinPartition.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiBoolData.java"/>

@@ -10,6 +10,14 @@ public class BootStrap extends GeneralBootStrap
 		ConfigLoader.loadConfig(args);
 		startClient();
 
+		//No no I can't exit now as this process still owns the output pumps
+		// I need to move teh output to log file code into my projects properly (logforj style)
+		//System.exit(0);
+	}
+
+	@Override
+	public void finalize()
+	{
 		//Mac os x complains if I don't get an exit value TODO: check this works?
 		System.exit(0);
 	}
@@ -38,6 +46,7 @@ public class BootStrap extends GeneralBootStrap
 		jarpath += "." + ps + "lib" + ps + "java3d" + ps + "1.6.0-pre12" + ps + "j3dutils.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "java3d" + ps + "1.6.0-pre12" + ps + "vecmath.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "jbullet1.1.jar" + fs;
+		jarpath += "." + ps + "lib" + ps + "swing_library-master.jar" + fs;
 
 		ProcessBuilder pb = new ProcessBuilder(createJavaExeStr(), "-Xmx1200m", "-Xms1024m", noddraw, sharedctx, fancyGCa, fancyGCb,
 				disableExtJars, "-cp", jarpath, "scrollsexplorer.ScrollsExplorer");
