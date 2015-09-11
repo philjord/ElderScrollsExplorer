@@ -48,7 +48,7 @@ public class BootStrap extends GeneralBootStrap
 		jarpath += "." + ps + "lib" + ps + "jbullet1.1.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "swing_library-master.jar" + fs;
 
-		ProcessBuilder pb = new ProcessBuilder(createJavaExeStr(), "-Xmx1200m", "-Xms1024m", noddraw, sharedctx, fancyGCa, fancyGCb,
+		ProcessBuilder pb = new ProcessBuilder(createJavaExeStr(), getXMX(), "-Xms1024m", noddraw, sharedctx, fancyGCa, fancyGCb,
 				disableExtJars, "-cp", jarpath, "scrollsexplorer.ScrollsExplorer");
 
 		startProcess(pb, ".\\logs\\clientlog.txt", ".\\logs\\clientlog.err.txt");
