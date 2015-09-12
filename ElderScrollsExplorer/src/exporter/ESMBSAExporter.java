@@ -95,167 +95,161 @@ public class ESMBSAExporter extends JFrame
 
 	private J3dICellFactory j3dCellFactory;
 
-	public ESMBSAExporter()
+	public ESMBSAExporter() throws IOException
 	{
 		super("ScrollsExplorer");
-		try
+
+		PropertyLoader.load();
+
+		prefs = Preferences.userNodeForPackage(ESMBSAExporter.class);
+
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.getContentPane().setLayout(new BorderLayout(1, 1));
+		this.setSize(500, 1000);
+
+		mainPanel.setLayout(new BorderLayout());
+
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setOpaque(true);
+		JMenu menu = new JMenu("File");
+		menu.setMnemonic(70);
+
+		menuBar.add(menu);
+
+		menu.add(setFolders);
+		setFolders.addActionListener(new ActionListener()
 		{
-			PropertyLoader.load();
-
-			prefs = Preferences.userNodeForPackage(ESMBSAExporter.class);
-
-			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			this.getContentPane().setLayout(new BorderLayout(1, 1));
-			this.setSize(500, 1000);
-
-			mainPanel.setLayout(new BorderLayout());
-
-			JMenuBar menuBar = new JMenuBar();
-			menuBar.setOpaque(true);
-			JMenu menu = new JMenu("File");
-			menu.setMnemonic(70);
-
-			menuBar.add(menu);
-
-			menu.add(setFolders);
-			setFolders.addActionListener(new ActionListener()
+			@Override
+			public void actionPerformed(ActionEvent arg0)
 			{
-				@Override
-				public void actionPerformed(ActionEvent arg0)
-				{
-					setFolders();
-				}
-			});
+				setFolders();
+			}
+		});
 
-			this.setJMenuBar(menuBar);
-			// this.getContentPane().add(mainPanel, BorderLayout.CENTER);
-			// this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		this.setJMenuBar(menuBar);
+		// this.getContentPane().add(mainPanel, BorderLayout.CENTER);
+		// this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-			buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 
-			buttonPanel.add(oblivionButton);
-			buttonPanel.add(falloutButton);
-			buttonPanel.add(falloutNVButton);
-			buttonPanel.add(skyrimButton);
+		buttonPanel.add(oblivionButton);
+		buttonPanel.add(falloutButton);
+		buttonPanel.add(falloutNVButton);
+		buttonPanel.add(skyrimButton);
 
-			oblivionButton.setEnabled(false);
-			falloutButton.setEnabled(false);
-			falloutNVButton.setEnabled(false);
-			skyrimButton.setEnabled(false);
+		oblivionButton.setEnabled(false);
+		falloutButton.setEnabled(false);
+		falloutNVButton.setEnabled(false);
+		skyrimButton.setEnabled(false);
 
-			oblivionButton.addActionListener(new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY);
-					mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Oblivion.esm";
-					loadUpPickers();
-				}
-			});
-			falloutButton.addActionListener(new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.FALLOUT3_FOLDER_KEY);
-					mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Fallout3.esm";
-					loadUpPickers();
-				}
-			});
-
-			falloutNVButton.addActionListener(new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY);
-					mainESMFile = scrollsFolder + PropertyLoader.fileSep + "FalloutNV.esm";
-					loadUpPickers();
-				}
-			});
-			skyrimButton.addActionListener(new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY);
-					mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Skyrim.esm";
-					loadUpPickers();
-				}
-			});
-
-			options.setLayout(new VerticalFlowLayout());
-
-			options.add(new TitledPanel("Export", export));
-			options.add(new JPanel());
-			options.add(new TitledPanel("Cell Levels", cellLevels));
-
-			mainPanel.add(buttonPanel, BorderLayout.NORTH);
-			table = new JTable();
-			mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
-
-			this.getContentPane().invalidate();
-			this.getContentPane().validate();
-			this.getContentPane().doLayout();
-			this.invalidate();
-			this.validate();
-			this.doLayout();
-
-			this.getContentPane().add(mainPanel, BorderLayout.CENTER);
-			this.getContentPane().add(options, BorderLayout.WEST);
-
-			export.addActionListener(new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent arg0)
-				{
-					export();
-				}
-			});
-
-			JPanel outputPanel = new JPanel();
-			outputPanel.setBorder(BorderFactory.createTitledBorder("Output folder"));
-			outputPanel.setLayout(new BorderLayout());
-			outputPanel.add(outputFolderField, BorderLayout.CENTER);
-			outputFolderField.setText(PropertyLoader.properties.getProperty(PropertyLoader.OUTPUT_FOLDER_KEY, ""));
-			outputPanel.add(outputSetButton, BorderLayout.EAST);
-
-			options.add(new JPanel());
-			options.add(new TitledPanel("Output Folder", outputPanel));
-
-			outputSetButton.addActionListener(new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					File sf = TitledJFileChooser.requestFolderName("Select Output Folder",
-							PropertyLoader.properties.getProperty(PropertyLoader.OUTPUT_FOLDER_KEY, ""), ESMBSAExporter.this);
-					if (sf != null)
-					{
-						PropertyLoader.properties.setProperty(PropertyLoader.OUTPUT_FOLDER_KEY, sf.getAbsolutePath());
-						outputFolderField.setText(sf.getAbsolutePath());
-						enableButtons();
-					}
-				}
-			});
-
-			this.addWindowListener(new WindowAdapter()
-			{
-				@Override
-				public void windowClosing(WindowEvent arg0)
-				{
-					closingTime();
-				}
-			});
-
-			enableButtons();
-
-		}
-		catch (IOException e1)
+		oblivionButton.addActionListener(new ActionListener()
 		{
-			e1.printStackTrace();
-		}
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY);
+				mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Oblivion.esm";
+				loadUpPickers();
+			}
+		});
+		falloutButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.FALLOUT3_FOLDER_KEY);
+				mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Fallout3.esm";
+				loadUpPickers();
+			}
+		});
+
+		falloutNVButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY);
+				mainESMFile = scrollsFolder + PropertyLoader.fileSep + "FalloutNV.esm";
+				loadUpPickers();
+			}
+		});
+		skyrimButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY);
+				mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Skyrim.esm";
+				loadUpPickers();
+			}
+		});
+
+		options.setLayout(new VerticalFlowLayout());
+
+		options.add(new TitledPanel("Export", export));
+		options.add(new JPanel());
+		options.add(new TitledPanel("Cell Levels", cellLevels));
+
+		mainPanel.add(buttonPanel, BorderLayout.NORTH);
+		table = new JTable();
+		mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
+
+		this.getContentPane().invalidate();
+		this.getContentPane().validate();
+		this.getContentPane().doLayout();
+		this.invalidate();
+		this.validate();
+		this.doLayout();
+
+		this.getContentPane().add(mainPanel, BorderLayout.CENTER);
+		this.getContentPane().add(options, BorderLayout.WEST);
+
+		export.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				export();
+			}
+		});
+
+		JPanel outputPanel = new JPanel();
+		outputPanel.setBorder(BorderFactory.createTitledBorder("Output folder"));
+		outputPanel.setLayout(new BorderLayout());
+		outputPanel.add(outputFolderField, BorderLayout.CENTER);
+		outputFolderField.setText(PropertyLoader.properties.getProperty(PropertyLoader.OUTPUT_FOLDER_KEY, ""));
+		outputPanel.add(outputSetButton, BorderLayout.EAST);
+
+		options.add(new JPanel());
+		options.add(new TitledPanel("Output Folder", outputPanel));
+
+		outputSetButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				File sf = TitledJFileChooser.requestFolderName("Select Output Folder",
+						PropertyLoader.properties.getProperty(PropertyLoader.OUTPUT_FOLDER_KEY, ""), ESMBSAExporter.this);
+				if (sf != null)
+				{
+					PropertyLoader.properties.setProperty(PropertyLoader.OUTPUT_FOLDER_KEY, sf.getAbsolutePath());
+					outputFolderField.setText(sf.getAbsolutePath());
+					enableButtons();
+				}
+			}
+		});
+
+		this.addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowClosing(WindowEvent arg0)
+			{
+				closingTime();
+			}
+		});
+
+		enableButtons();
+
 	}
 
 	/**
@@ -736,7 +730,6 @@ public class ESMBSAExporter extends JFrame
 	public static void exportSkyrimTrees() throws IOException
 	{
 		PropertyLoader.load();
-	 
 
 		String scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY);
 		String mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Skyrim.esm";
@@ -767,7 +760,7 @@ public class ESMBSAExporter extends JFrame
 		{
 			System.out.println("Tree: " + tree);
 			NifToJ3d.loadNif(tree, meshSource, textureSource);
-			 
+
 		}
 
 		File outputFolder = new File(outputFolderTrees);
@@ -926,13 +919,12 @@ public class ESMBSAExporter extends JFrame
 		}
 
 		ConfigLoader.loadConfig(args);
-
-		//ESMBSAExporter scrollsExplorer = new ESMBSAExporter();
-		//scrollsExplorer.setVisible(true);
-		
 		try
 		{
-			exportSkyrimTrees();
+			ESMBSAExporter scrollsExplorer = new ESMBSAExporter();
+			scrollsExplorer.setVisible(true);
+
+			//exportSkyrimTrees();
 		}
 		catch (IOException e)
 		{

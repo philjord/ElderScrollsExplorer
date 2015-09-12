@@ -7,7 +7,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 import java.util.zip.DataFormatException;
@@ -27,20 +26,6 @@ import javax.swing.table.TableRowSorter;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
-import com.gg.slider.SideBar;
-import com.gg.slider.SideBar.SideBarMode;
-import com.gg.slider.SidebarSection;
-
-import bsa.BSAFileSet;
-import bsa.source.BsaMeshSource;
-import bsa.source.BsaSoundSource;
-import bsa.source.BsaTextureSource;
-import common.config.ConfigLoader;
-import esmLoader.common.PluginException;
-import esmLoader.common.data.plugin.PluginRecord;
-import esmLoader.loader.ESMManager;
-import esmLoader.loader.IESMManager;
-import esmj3d.j3d.BethRenderSettings;
 import nativeLinker.LWJGLLinker;
 import scrollsexplorer.simpleclient.ESESettingsPanel;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
@@ -58,6 +43,21 @@ import utils.source.file.FileMediaRoots;
 import utils.source.file.FileMeshSource;
 import utils.source.file.FileSoundSource;
 import utils.source.file.FileTextureSource;
+import bsa.BSAFileSet;
+import bsa.source.BsaMeshSource;
+import bsa.source.BsaSoundSource;
+import bsa.source.BsaTextureSource;
+
+import com.gg.slider.SideBar;
+import com.gg.slider.SideBar.SideBarMode;
+import com.gg.slider.SidebarSection;
+import common.config.ConfigLoader;
+
+import esmLoader.common.PluginException;
+import esmLoader.common.data.plugin.PluginRecord;
+import esmLoader.loader.ESMManager;
+import esmLoader.loader.IESMManager;
+import esmj3d.j3d.BethRenderSettings;
 
 public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener
 {
@@ -186,7 +186,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.MORROWIND_FOLDER_KEY);
 					mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Morrowind.esm";
 					loadUpPickers();
-					simpleWalkSetup.getAvatarCollisionInfo().setAvatarYHeight(2.28f);
+					simpleWalkSetup.getAvatarCollisionInfo().setAvatarYHeight(3.00f);
 				}
 			});
 
@@ -301,7 +301,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			PropertyLoader.properties.setProperty("YawPitch" + esmManager.getName(), new YawPitch(simpleWalkSetup.getAvatarLocation()
 					.getTransform()).toString());
 			PropertyLoader.properties.setProperty("Trans" + esmManager.getName(),
-					"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));			
+					"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));
 		}
 		PropertyLoader.save();
 	}
@@ -389,17 +389,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						{
 							bsaFileSet = new BSAFileSet(new String[]
 							{ scrollsFolder }, cbLoadAllMenuItem.isSelected(), false);
-
-							// in case of oblivion add some bsas auto 
-							float version = esmManager.getVersion();
-							if (version == 1.0f || version == 0.8f)
-							{
-								bsaFileSet.loadFile(new File(PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY) + "\\"
-										+ "Skyrim - Meshes.bsa"), false);
-								bsaFileSet.loadFile(new File(PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY) + "\\"
-										+ "Skyrim - Textures.bsa"), false);
-							}
-
 						}
 
 						meshSource = new BsaMeshSource(bsaFileSet);
