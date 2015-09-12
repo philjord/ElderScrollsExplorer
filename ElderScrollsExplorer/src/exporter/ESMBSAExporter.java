@@ -6,10 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.prefs.Preferences;
 import java.util.zip.DataFormatException;
@@ -41,7 +39,10 @@ import utils.source.MediaSources;
 import FO3Archive.ArchiveEntry;
 import FO3Archive.ArchiveFile;
 import bsa.BSAFileSet;
+
+import common.Utils;
 import common.config.ConfigLoader;
+
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
@@ -582,7 +583,7 @@ public class ESMBSAExporter extends JFrame
 					dest.getParentFile().mkdirs();
 					dest.createNewFile();
 					System.out.print(" copying ");
-					copyInputStreamToFile(inputStream, dest);
+					Utils.copyInputStreamToFile(inputStream, dest);
 					System.out.print("done");
 
 				}
@@ -632,7 +633,7 @@ public class ESMBSAExporter extends JFrame
 					dest.getParentFile().mkdirs();
 					dest.createNewFile();
 					System.out.print(" copying ");
-					copyInputStreamToFile(inputStream, dest);
+					Utils.copyInputStreamToFile(inputStream, dest);
 					System.out.print("done");
 
 				}
@@ -672,7 +673,7 @@ public class ESMBSAExporter extends JFrame
 					dest.getParentFile().mkdirs();
 					dest.createNewFile();
 					System.out.print(" copying ");
-					copyInputStreamToFile(inputStream, dest);
+					Utils.copyInputStreamToFile(inputStream, dest);
 					System.out.print("done");
 
 				}
@@ -690,40 +691,7 @@ public class ESMBSAExporter extends JFrame
 		System.out.println("Export complete in " + (System.currentTimeMillis() - startTime) + "ms");
 	}
 
-	private static void copyInputStreamToFile(InputStream in, File file)
-	{
-		OutputStream out = null;
-		try
-		{
-			out = new FileOutputStream(file);
-			byte[] buf = new byte[1024 * 1024];
-			int len;
-			while ((len = in.read(buf)) > 0)
-			{
-				out.write(buf, 0, len);
-			}
-			out.close();
-			in.close();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			if (out != null)
-			{
-				try
-				{
-					out.close();
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+	
 
 	public static String outputFolderTrees = "F:\\game media\\output\\skyrimTrees";
 
@@ -796,7 +764,7 @@ public class ESMBSAExporter extends JFrame
 					dest.getParentFile().mkdirs();
 					dest.createNewFile();
 					System.out.print(" copying ");
-					copyInputStreamToFile(inputStream, dest);
+					Utils.copyInputStreamToFile(inputStream, dest);
 					System.out.print("done");
 
 				}
@@ -846,7 +814,7 @@ public class ESMBSAExporter extends JFrame
 					dest.getParentFile().mkdirs();
 					dest.createNewFile();
 					System.out.print(" copying ");
-					copyInputStreamToFile(inputStream, dest);
+					Utils.copyInputStreamToFile(inputStream, dest);
 					System.out.print("done");
 
 				}
@@ -886,7 +854,7 @@ public class ESMBSAExporter extends JFrame
 					dest.getParentFile().mkdirs();
 					dest.createNewFile();
 					System.out.print(" copying ");
-					copyInputStreamToFile(inputStream, dest);
+					Utils.copyInputStreamToFile(inputStream, dest);
 					System.out.print("done");
 
 				}

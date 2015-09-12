@@ -309,7 +309,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private void setFolders()
 	{
 		SetBethFoldersDialog setBethFoldersDialog = new SetBethFoldersDialog(this);
-		setBethFoldersDialog.setSize(300, 250);
+		setBethFoldersDialog.setSize(400, 350);
 		setBethFoldersDialog.setVisible(true);
 		enableButtons();
 	}
