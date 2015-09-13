@@ -18,6 +18,8 @@ float wave(int i, float x, float z) {
 }
 
 float waveHeight(float x, float z) {
+// I need to update this to be deterministic on x,z and time,
+// that way each side of adjacent grids will match
     float height = 0.0;
     for (int i = 0; i < numWaves; ++i)
         height += wave(i, x, z);

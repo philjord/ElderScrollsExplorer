@@ -1,25 +1,50 @@
 package client;
 
-import tools.GeneralBootStrap;
+import java.io.File;
+
+import javax.swing.JOptionPane;
+
+import tools.bootstrap.GeneralBootStrap;
 import common.config.ConfigLoader;
 
 public class BootStrap extends GeneralBootStrap
 {
+	public static String currentVersion = "ElderScrollsExplorer v2.01.rar";
+
+	public static String downloadLocation = "https://sourceforge.net/projects/elderscrollsexplorer/files/latest/download";
+
 	public static void main(String[] args) throws Exception
 	{
 		ConfigLoader.loadConfig(args);
+
+		int result = JOptionPane.showConfirmDialog(null, "Do you wish to update at all sir?");
+
+		if (result == JOptionPane.OK_OPTION)
+		{
+			String recallJar = new File(BootStrap.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getAbsolutePath();
+			String rootDirectory = new File(recallJar).getParentFile().getAbsolutePath();	
+			String unzipPath = new File(rootDirectory).getParentFile().getAbsolutePath();	
+			String updateZipFile = "ElderScrollsExplorer v2.02.rar";
+			String updateZip = rootDirectory + ps + "update" + ps + updateZipFile;
+			
+
+			String javaExe = "java";// just call the path version by default
+
+			//find out if a JRE folder exists, and use it if possible
+			File possibleJreFolder = new File(rootDirectory + "\\jre");
+			if (possibleJreFolder.exists() && possibleJreFolder.isDirectory())
+			{
+				javaExe = rootDirectory + "\\jre\\bin\\java";
+			}
+			String jarpath = "." + ps + "lib" + ps + "update.jar" + fs;
+			ProcessBuilder pb = new ProcessBuilder(javaExe, "-cp", jarpath, "tools.bootstrap.Update", updateZip, unzipPath, rootDirectory, recallJar);
+			pb.start();
+
+			System.exit(0);
+
+		}
+
 		startClient();
-
-		//No no I can't exit now as this process still owns the output pumps
-		// I need to move teh output to log file code into my projects properly (logforj style)
-		//System.exit(0);
-	}
-
-	@Override
-	public void finalize()
-	{
-		//Mac os x complains if I don't get an exit value TODO: check this works?
-		System.exit(0);
 	}
 
 	public static void startClient()
