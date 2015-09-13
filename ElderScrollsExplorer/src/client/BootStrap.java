@@ -1,50 +1,28 @@
 package client;
 
-import java.io.File;
-
-import javax.swing.JOptionPane;
-
 import tools.bootstrap.GeneralBootStrap;
 import common.config.ConfigLoader;
 
 public class BootStrap extends GeneralBootStrap
 {
-	public static String currentVersion = "ElderScrollsExplorer v2.01.rar";
+	//This must be set the the name of teh zip that it will be in when loaded up to sourceforge
+	private static String CURRENT_ZIP_VERSION = "ElderScrollsExplorer v2.02.zip";
 
-	public static String downloadLocation = "https://sourceforge.net/projects/elderscrollsexplorer/files/latest/download";
+	private static String downloadLocation = "https://sourceforge.net/projects/elderscrollsexplorer/files/latest/download";
 
 	public static void main(String[] args) throws Exception
 	{
 		ConfigLoader.loadConfig(args);
 
-		int result = JOptionPane.showConfirmDialog(null, "Do you wish to update at all sir?");
-
-		if (result == JOptionPane.OK_OPTION)
+		// ask updater if we can continue or we should exit
+		if (doUpdateFromSourceForge(CURRENT_ZIP_VERSION, downloadLocation))
 		{
-			String recallJar = new File(BootStrap.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getAbsolutePath();
-			String rootDirectory = new File(recallJar).getParentFile().getAbsolutePath();	
-			String unzipPath = new File(rootDirectory).getParentFile().getAbsolutePath();	
-			String updateZipFile = "ElderScrollsExplorer v2.02.rar";
-			String updateZip = rootDirectory + ps + "update" + ps + updateZipFile;
-			
-
-			String javaExe = "java";// just call the path version by default
-
-			//find out if a JRE folder exists, and use it if possible
-			File possibleJreFolder = new File(rootDirectory + "\\jre");
-			if (possibleJreFolder.exists() && possibleJreFolder.isDirectory())
-			{
-				javaExe = rootDirectory + "\\jre\\bin\\java";
-			}
-			String jarpath = "." + ps + "lib" + ps + "update.jar" + fs;
-			ProcessBuilder pb = new ProcessBuilder(javaExe, "-cp", jarpath, "tools.bootstrap.Update", updateZip, unzipPath, rootDirectory, recallJar);
-			pb.start();
-
-			System.exit(0);
-
+			startClient();
 		}
-
-		startClient();
+		else
+		{
+			System.exit(0);
+		}
 	}
 
 	public static void startClient()

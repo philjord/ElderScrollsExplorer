@@ -9,7 +9,8 @@ import java.text.ParseException;
 import java.util.prefs.Preferences;
 
 import javax.swing.JOptionPane;
-import javax.swing.ProgressMonitor;
+
+import tools.io.FileDownloadProgressThread;
 
 import com.enterprisedt.net.ftp.FTPClient;
 import com.enterprisedt.net.ftp.FTPConnectMode;
@@ -19,16 +20,7 @@ import com.enterprisedt.net.ftp.FTPMessageListener;
 import com.enterprisedt.net.ftp.FTPTransferType;
 
 /**
- * This class loads all files from the ftp directory
- * specified in the statics. These file are expected to be
- * byte arrays of open servers, for open server selection 
- * @author pj
- * 
- * @see common.CommonConstants#FTP_HOST_NAME
- * @see common.CommonConstants#FTP_LOGIN
- * @see common.CommonConstants#FTP_PASSWORD
- * @see common.CommonConstants#FTP_OPEN_SERVER_DIR
- * @see client.ClientConstants#ADDRESS_CATCHER_DELAY_FTP
+ *  This class grabs game media from my ftp server, it asks for the password though...
  *
  */
 public class GameMediaFTPdownloader implements FTPMessageListener
@@ -164,9 +156,9 @@ public class GameMediaFTPdownloader implements FTPMessageListener
 						try
 						{
 							out = new FileOutputStream(destination);
-							FTPThreadProgress progT = new FTPThreadProgress(ftpFile, destination);
+							FileDownloadProgressThread progT = new FileDownloadProgressThread(outputfolder + "\\" + ftpFile.getName(),
+									ftpFile.size(), destination);
 							progT.setName("Progress of FTP download of " + outputfolder + "\\" + ftpFile.getName());
-							progT.setDaemon(true);
 							progT.start();
 
 							ftp.get(out, ftpFile.getName());
@@ -221,35 +213,6 @@ public class GameMediaFTPdownloader implements FTPMessageListener
 			{
 				e.printStackTrace();
 			}
-		}
-	}
-
-	private class FTPThreadProgress extends Thread
-	{
-		private File destination;
-
-		private ProgressMonitor progressMonitor;
-
-		private boolean stop = false;
-
-		public FTPThreadProgress(FTPFile ftpFile, File destination)
-		{
-			this.destination = destination;
-			progressMonitor = new ProgressMonitor(null, "Progress of FTP download of " + outputfolder + "\\" + ftpFile.getName(), "", 0,
-					(int) ftpFile.size());
-		}
-
-		public void run()
-		{
-			while (!stop)
-			{
-				progressMonitor.setProgress((int) destination.length());
-			}
-		}
-
-		public void stopNow()
-		{
-			stop = true;
 		}
 	}
 
