@@ -12,6 +12,7 @@ import java.util.prefs.Preferences;
 import javax.swing.JOptionPane;
 
 import tools.io.FileDownloadProgressThread;
+import tools.io.FileDownloadProgressThread.CancelCallBack;
 
 import com.enterprisedt.net.ftp.FTPClient;
 import com.enterprisedt.net.ftp.FTPConnectMode;
@@ -48,6 +49,8 @@ public class GameMediaFTPdownloader extends Thread
 
 	private Component parent;
 
+	private boolean hasCancelled = false;
+
 	public GameMediaFTPdownloader(Component parent, String folderToDownLoad)
 	{
 		this.parent = parent;
@@ -63,7 +66,7 @@ public class GameMediaFTPdownloader extends Thread
 	}
 
 	/**
-	 * stops checking the ftp site and updating the lsit
+	 * stops checking the ftp site and updating the list
 	 */
 	public void stopFtp()
 	{
@@ -72,6 +75,11 @@ public class GameMediaFTPdownloader extends Thread
 			if (ftp != null)
 			{
 				ftp.quit();
+				System.out.println("ftp stopped");
+				if (callBack != null)
+				{
+					callBack.failed();
+				}
 			}
 		}
 		catch (IOException e)
@@ -122,10 +130,21 @@ public class GameMediaFTPdownloader extends Thread
 							out = new FileOutputStream(destination);
 							FileDownloadProgressThread progT = new FileDownloadProgressThread(parent, outputfolder + "\\"
 									+ ftpFile.getName(), ftpFile.size(), destination);
-							progT.setName("Progress of FTP download of " + outputfolder + "\\" + ftpFile.getName());
+							progT.setCancelCallBack(new CancelCallBack()
+							{
+								@Override
+								public void cancel()
+								{
+									hasCancelled = true;
+									ftp.cancelTransfer();
+									System.out.println("transfer cancelled");
+								}
+
+							});
 							progT.start();
 
 							ftp.get(out, ftpFile.getName());
+
 							out.close();
 							progT.stopNow();
 						}
@@ -154,8 +173,16 @@ public class GameMediaFTPdownloader extends Thread
 					{
 						System.out.println("File exists!");
 					}
+
+					// did we cancel the operation?
+					if (hasCancelled)
+					{
+						allSuccessful = false;
+						break;
+					}
+
 				}
-				System.out.println("Download complete");
+				System.out.println("Download attempt finished");
 
 				if (callBack != null)
 				{
