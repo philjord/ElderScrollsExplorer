@@ -68,13 +68,7 @@ public class SetBethFoldersDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				File sf = TitledJFileChooser.requestFolderName("Select Morrowind Folder",
-						PropertyLoader.properties.getProperty(PropertyLoader.MORROWIND_FOLDER_KEY, ""), SetBethFoldersDialog.this);
-				if (sf != null)
-				{
-					PropertyLoader.properties.setProperty(PropertyLoader.MORROWIND_FOLDER_KEY, sf.getAbsolutePath());
-					morrowindFolderField.setText(sf.getAbsolutePath());
-				}
+				setFolder("Select Morrowind Folder", PropertyLoader.MORROWIND_FOLDER_KEY, morrowindFolderField);
 			}
 
 		});
@@ -83,7 +77,7 @@ public class SetBethFoldersDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				ftpData("morrowind");
+				ftpData("morrowind", PropertyLoader.MORROWIND_FOLDER_KEY, morrowindFolderField);
 			}
 		});
 
@@ -101,15 +95,17 @@ public class SetBethFoldersDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				File sf = TitledJFileChooser.requestFolderName("Select Oblivion Folder",
-						PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY, ""), SetBethFoldersDialog.this);
-				if (sf != null)
-				{
-					PropertyLoader.properties.setProperty(PropertyLoader.OBLIVION_FOLDER_KEY, sf.getAbsolutePath());
-					oblivionFolderField.setText(sf.getAbsolutePath());
-				}
+				setFolder("Select Oblivion Folder", PropertyLoader.OBLIVION_FOLDER_KEY, oblivionFolderField);
 			}
 
+		});
+		oblivionFtpButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				ftpData("oblivion", PropertyLoader.OBLIVION_FOLDER_KEY, oblivionFolderField);
+			}
 		});
 
 		JPanel fallout3Panel = new JPanel();
@@ -126,15 +122,17 @@ public class SetBethFoldersDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				File sf = TitledJFileChooser.requestFolderName("Select Fallout3 Folder",
-						PropertyLoader.properties.getProperty(PropertyLoader.FALLOUT3_FOLDER_KEY, ""), SetBethFoldersDialog.this);
-				if (sf != null)
-				{
-					PropertyLoader.properties.setProperty(PropertyLoader.FALLOUT3_FOLDER_KEY, sf.getAbsolutePath());
-					fallout3FolderField.setText(sf.getAbsolutePath());
-				}
+				setFolder("Select Fallout3 Folder", PropertyLoader.FALLOUT3_FOLDER_KEY, fallout3FolderField);
 			}
 
+		});
+		fallout3FtpButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				ftpData("fallout", PropertyLoader.FALLOUT3_FOLDER_KEY, fallout3FolderField);
+			}
 		});
 
 		JPanel falloutNVPanel = new JPanel();
@@ -151,15 +149,17 @@ public class SetBethFoldersDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				File sf = TitledJFileChooser.requestFolderName("Select FalloutNV Folder",
-						PropertyLoader.properties.getProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY, ""), SetBethFoldersDialog.this);
-				if (sf != null)
-				{
-					PropertyLoader.properties.setProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY, sf.getAbsolutePath());
-					falloutNVFolderField.setText(sf.getAbsolutePath());
-				}
+				setFolder("Select FalloutNV Folder", PropertyLoader.FALLOUTNV_FOLDER_KEY, falloutNVFolderField);
 			}
 
+		});
+		falloutNVFtpButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				ftpData("falloutNV", PropertyLoader.FALLOUTNV_FOLDER_KEY, falloutNVFolderField);
+			}
 		});
 
 		JPanel skyrimPanel = new JPanel();
@@ -176,15 +176,17 @@ public class SetBethFoldersDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				File sf = TitledJFileChooser.requestFolderName("Select Skyrim Folder",
-						PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY, ""), SetBethFoldersDialog.this);
-				if (sf != null)
-				{
-					PropertyLoader.properties.setProperty(PropertyLoader.SKYRIM_FOLDER_KEY, sf.getAbsolutePath());
-					skyrimFolderField.setText(sf.getAbsolutePath());
-				}
+				setFolder("Select Skyrim Folder", PropertyLoader.SKYRIM_FOLDER_KEY, skyrimFolderField);
 			}
 
+		});
+		skyrimFtpButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				ftpData("skyrim", PropertyLoader.SKYRIM_FOLDER_KEY, skyrimFolderField);
+			}
 		});
 
 		JPanel buttonPanel = new JPanel();
@@ -213,9 +215,20 @@ public class SetBethFoldersDialog extends JDialog
 		});
 	}
 
-	private void ftpData(String folderToDownLoad)
+	private void setFolder(String title, String propKey, JTextField output)
 	{
-		GameMediaFTPdownloader ftp = new GameMediaFTPdownloader(folderToDownLoad);
+		File sf = TitledJFileChooser
+				.requestFolderName(title, PropertyLoader.properties.getProperty(propKey, ""), SetBethFoldersDialog.this);
+		if (sf != null)
+		{
+			PropertyLoader.properties.setProperty(propKey, sf.getAbsolutePath());
+			output.setText(sf.getAbsolutePath());
+		}
+	}
+
+	private void ftpData(String folderToDownLoad, final String propKey, final JTextField output)
+	{
+		GameMediaFTPdownloader ftp = new GameMediaFTPdownloader(this, folderToDownLoad);
 		ftp.setCallBack(new CallBack()
 		{
 			@Override
@@ -223,8 +236,8 @@ public class SetBethFoldersDialog extends JDialog
 			{
 				if (outputFolder != null)
 				{
-					PropertyLoader.properties.setProperty(PropertyLoader.MORROWIND_FOLDER_KEY, outputFolder);
-					morrowindFolderField.setText(outputFolder);
+					PropertyLoader.properties.setProperty(propKey, outputFolder);
+					output.setText(outputFolder);
 				}
 			}
 

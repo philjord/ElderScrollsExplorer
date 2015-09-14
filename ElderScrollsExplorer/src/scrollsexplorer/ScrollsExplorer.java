@@ -525,14 +525,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public static void main(String[] args)
 	{
-		//TODO: mac external file folder picker adds final path twice?s from gui picker
-		//but picker with manual type is ok
-
-		// also
-
-		//TODO: Exception in thread "Thread-16" java.lang.IllegalArgumentException: Texture: mipmap image not set at level7
-		//at javax.media.j3d.TextureRetained.setLive(TextureRetained.java:976)
-
 		//Arguments for goodness
 		//-Xmx1200m -Xms900m -Dsun.java2d.noddraw=true -Dj3d.sharedctx=true -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC
 

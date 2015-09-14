@@ -31,7 +31,8 @@ public class BethInteriorPhysicalBranch extends BranchGroup
 		addChild(j3dCELLTemporary);
 		clientPhysicsSystem.loadJ3dCELL(j3dCELLTemporary);
 
-		addChild(j3dCellFactory.makeBGInteriorCELLDistant(interiorCellFormId, true));
+		//TODO: why the hell was I calling this???
+		//addChild(j3dCellFactory.makeBGInteriorCELLDistant(interiorCellFormId, true));
 		//not added to physics
 
 	}

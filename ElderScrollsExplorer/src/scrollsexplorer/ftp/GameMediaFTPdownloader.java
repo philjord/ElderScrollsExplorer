@@ -1,5 +1,6 @@
 package scrollsexplorer.ftp;
 
+import java.awt.Component;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,14 +17,14 @@ import com.enterprisedt.net.ftp.FTPClient;
 import com.enterprisedt.net.ftp.FTPConnectMode;
 import com.enterprisedt.net.ftp.FTPException;
 import com.enterprisedt.net.ftp.FTPFile;
-import com.enterprisedt.net.ftp.FTPMessageListener;
+import com.enterprisedt.net.ftp.FTPMessageCollector;
 import com.enterprisedt.net.ftp.FTPTransferType;
 
 /**
  *  This class grabs game media from my ftp server, it asks for the password though...
  *
  */
-public class GameMediaFTPdownloader implements FTPMessageListener
+public class GameMediaFTPdownloader extends Thread
 {
 	private static final String FTP_HOST_NAME = "philjord.ddns.net";
 
@@ -37,18 +38,19 @@ public class GameMediaFTPdownloader implements FTPMessageListener
 
 	private String outputfolder;
 
-	private Thread thread;
-
 	private FTPClient ftp = null;
 
-	//private FTPMessageCollector listener = new FTPMessageCollector();
+	private FTPMessageCollector ftpMessageCollector = new FTPMessageCollector();
 
 	private Preferences prefs;
 
 	private CallBack callBack;
 
-	public GameMediaFTPdownloader(String folderToDownLoad)
+	private Component parent;
+
+	public GameMediaFTPdownloader(Component parent, String folderToDownLoad)
 	{
+		this.parent = parent;
 		this.folderToDownLoad = folderToDownLoad;
 		outputfolder = OUTPUT_FOLDER + folderToDownLoad;
 		prefs = Preferences.userNodeForPackage(GameMediaFTPdownloader.class);
@@ -57,13 +59,13 @@ public class GameMediaFTPdownloader implements FTPMessageListener
 
 	protected void finalize() throws Throwable
 	{
-		stop();
+		stopFtp();
 	}
 
 	/**
 	 * stops checking the ftp site and updating the lsit
 	 */
-	public void stop()
+	public void stopFtp()
 	{
 		try
 		{
@@ -82,7 +84,7 @@ public class GameMediaFTPdownloader implements FTPMessageListener
 		}
 	}
 
-	public void start()
+	public void run()
 	{
 		boolean good_login = false;
 		while (!good_login)
@@ -90,54 +92,16 @@ public class GameMediaFTPdownloader implements FTPMessageListener
 			try
 			{
 				ftp = new FTPClient(FTP_HOST_NAME);
-				ftp.setMessageListener(this);
+				ftp.setMessageListener(ftpMessageCollector);
 				ftp.login(FTP_LOGIN, ftp_password);//throws a 530 for bad login
-				good_login = true;
 
+				good_login = true;// if no exception we are happy
 				prefs.put("FTP_PASSWORD", ftp_password);//record the good password
+
 				ftp.setConnectMode(FTPConnectMode.PASV);
 				ftp.setType(FTPTransferType.BINARY);
 				ftp.chdir(folderToDownLoad);
-				thread = new Thread(new FTPThread());
-				thread.setName("FTP download of " + folderToDownLoad);
-				thread.start();
-			}
-			catch (UnknownHostException e)
-			{
-				e.printStackTrace();
-				JOptionPane.showMessageDialog(null, "UnknownHostException  " + FTP_HOST_NAME);
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-				JOptionPane.showMessageDialog(null, "IOException  " + e);
-			}
-			catch (FTPException e)
-			{
-				if (e.getReplyCode() == 530)
-				{
-					ftp_password = JOptionPane.showInputDialog("Please enter ftp password");
-					if (ftp_password == null || ftp_password.length() == 0)
-					{
-						// if cancel or blank just exit loop, otherwise give it another whorl
-						break;
-					}
-				}
-				else
-				{
-					e.printStackTrace();
-					JOptionPane.showMessageDialog(null, "FTPException  " + e);
-				}
-			}
-		}
-	}
 
-	private class FTPThread implements Runnable
-	{
-		public void run()
-		{
-			try
-			{
 				boolean allSuccessful = true;
 				// get directory and go through file   
 				FTPFile[] files = ftp.dirDetails(".");
@@ -156,8 +120,8 @@ public class GameMediaFTPdownloader implements FTPMessageListener
 						try
 						{
 							out = new FileOutputStream(destination);
-							FileDownloadProgressThread progT = new FileDownloadProgressThread(outputfolder + "\\" + ftpFile.getName(),
-									ftpFile.size(), destination);
+							FileDownloadProgressThread progT = new FileDownloadProgressThread(parent, outputfolder + "\\"
+									+ ftpFile.getName(), ftpFile.size(), destination);
 							progT.setName("Progress of FTP download of " + outputfolder + "\\" + ftpFile.getName());
 							progT.start();
 
@@ -200,20 +164,43 @@ public class GameMediaFTPdownloader implements FTPMessageListener
 					else
 						callBack.failed();
 				}
+
+			}
+			catch (UnknownHostException e)
+			{
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(parent, "UnknownHostException  " + FTP_HOST_NAME);
 			}
 			catch (IOException e)
 			{
 				e.printStackTrace();
-			}
-			catch (FTPException e)
-			{
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(parent, "IOException  " + e);
 			}
 			catch (ParseException e)
 			{
 				e.printStackTrace();
+				JOptionPane.showMessageDialog(parent, "ParseException  " + e);
 			}
+			catch (FTPException e)
+			{
+				if (e.getReplyCode() == 530)
+				{
+					ftp_password = JOptionPane.showInputDialog(parent, "Please enter ftp password");
+					if (ftp_password == null || ftp_password.length() == 0)
+					{
+						// if cancel or blank just exit loop, otherwise give it another whorl
+						break;
+					}
+				}
+				else
+				{
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(parent, "FTPException  " + e);
+				}
+			}
+
 		}
+
 	}
 
 	public void setCallBack(CallBack callBack)
@@ -226,17 +213,5 @@ public class GameMediaFTPdownloader implements FTPMessageListener
 		public void finished(String outputFolder);
 
 		public void failed();
-	}
-
-	@Override
-	public void logCommand(String command)
-	{
-		//System.out.println("logCommand: " + command);
-	}
-
-	@Override
-	public void logReply(String reply)
-	{
-		//System.out.println("logReply; " + reply);
 	}
 }
