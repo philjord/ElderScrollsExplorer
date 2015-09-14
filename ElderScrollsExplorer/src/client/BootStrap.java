@@ -1,12 +1,14 @@
 package client;
 
 import tools.bootstrap.GeneralBootStrap;
+import tools.updater.SourceForgeUpdater;
+
 import common.config.ConfigLoader;
 
 public class BootStrap extends GeneralBootStrap
 {
 	//This must be set the the name of teh zip that it will be in when loaded up to sourceforge
-	private static String CURRENT_ZIP_VERSION = "ElderScrollsExplorer v2.02.zip";
+	private static String CURRENT_ZIP_VERSION = "ElderScrollsExplorer v2.01.zip";
 
 	private static String downloadLocation = "https://sourceforge.net/projects/elderscrollsexplorer/files/latest/download";
 
@@ -15,7 +17,7 @@ public class BootStrap extends GeneralBootStrap
 		ConfigLoader.loadConfig(args);
 
 		// ask updater if we can continue or we should exit
-		if (doUpdateFromSourceForge(CURRENT_ZIP_VERSION, downloadLocation))
+		if (SourceForgeUpdater.doUpdate(CURRENT_ZIP_VERSION, downloadLocation))
 		{
 			startClient();
 		}

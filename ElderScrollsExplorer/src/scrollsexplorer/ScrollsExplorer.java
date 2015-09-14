@@ -115,6 +115,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	public ScrollsExplorer()
 	{
 		super("ScrollsExplorer");
+		setVisible(true);// need to be visible in case of set folders
 		try
 		{
 			PropertyLoader.load();
@@ -284,6 +285,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					closingTime();
 				}
 			});
+			
+			mainPanel.validate();
+			mainPanel.invalidate();
+			mainPanel.doLayout();
+			mainPanel.repaint();
 
 			enableButtons();
 
@@ -551,8 +557,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			ScrollsExplorer.setDebug(false);
 		}
 
-		ScrollsExplorer scrollsExplorer = new ScrollsExplorer();
-		scrollsExplorer.setVisible(true);
+		new ScrollsExplorer();
 	}
 
 }
