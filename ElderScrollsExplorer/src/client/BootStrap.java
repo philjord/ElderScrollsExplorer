@@ -49,7 +49,6 @@ public class BootStrap extends GeneralBootStrap
 		jarpath += "." + ps + "lib" + ps + "java3d" + ps + "1.6.0-pre12" + ps + "j3dutils.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "java3d" + ps + "1.6.0-pre12" + ps + "vecmath.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "jbullet1.1.jar" + fs;
-		jarpath += "." + ps + "lib" + ps + "swing_library-master.jar" + fs;
 
 		ProcessBuilder pb = new ProcessBuilder(createJavaExeStr(), getXMX(), "-Xms1024m", noddraw, sharedctx, fancyGCa, fancyGCb,
 				disableExtJars, "-cp", jarpath, "scrollsexplorer.ScrollsExplorer");
