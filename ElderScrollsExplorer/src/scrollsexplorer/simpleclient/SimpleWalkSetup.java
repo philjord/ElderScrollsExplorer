@@ -122,6 +122,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private JTextField locField = new JTextField("0000,0000,0000");
 
+	private JTextField warpField = new JTextField("      ");
+
 	private NbccProvider nbccProvider = new NbccProvider()
 	{
 		@Override
@@ -208,12 +210,13 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		avatarLocation.addAvatarLocationListener(this);
 
-		locField.addActionListener(new ActionListener()
+		warpField.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				String[] parts = locField.getText().split(",");
+				String[] parts = warpField.getText().split("\\D+");
+
 				if (parts.length == 3)
 				{
 					warp(new Vector3f(Float.parseFloat(parts[0]), Float.parseFloat(parts[1]), Float.parseFloat(parts[2])));
@@ -351,7 +354,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				HeadCamDolly headCamDolly = new HeadCamDolly(avatarCollisionInfo);
 				cameraPanel.setDolly(headCamDolly);
 			}
-			
+
 			frame.getContentPane().add((JPanel) cameraPanel);
 		}
 
@@ -372,7 +375,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		hudPhysicsState.addToCanvas(canvas3D2D);
 
 		//allow tab for mouse lock
-		canvas3D2D.setFocusTraversalKeysEnabled(false);		
+		canvas3D2D.setFocusTraversalKeysEnabled(false);
 
 		if (isLive)
 		{
@@ -477,6 +480,11 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	{
 		return locField;
 	}
+	public JTextField getWarpField()
+	{
+		return warpField;
+	}
+	
 
 	public void setPhysicsEnabled(boolean enable)
 	{

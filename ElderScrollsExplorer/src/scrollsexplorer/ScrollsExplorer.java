@@ -33,6 +33,7 @@ import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
 import tools.TitledPanel;
 import tools.swing.UserGuideDisplay;
+import tools.swing.VerticalFlowLayout;
 import tools3d.resolution.QueryProperties;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
@@ -257,8 +258,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			});
 
 			simpleWalkSetup = new SimpleWalkSetup("SimpleBethCellManager");
-
+			quickEdit.setLayout(new VerticalFlowLayout());
 			quickEdit.add(new TitledPanel("Location", simpleWalkSetup.getLocField()));
+			quickEdit.add(new TitledPanel("Go To", simpleWalkSetup.getWarpField()));
 			mainPanel.add(buttonPanel, BorderLayout.NORTH);
 			table = new JTable();
 			mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
