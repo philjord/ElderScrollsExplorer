@@ -55,7 +55,7 @@ public class BootStrap extends GeneralBootStrap
 		ProcessBuilder pb = new ProcessBuilder(createJavaExeStr(), getXMX(), "-Xms1024m", noddraw, sharedctx, fancyGCa, fancyGCb,
 				disableExtJars, "-cp", jarpath, "scrollsexplorer.ScrollsExplorer");
 
-		startProcess(pb, ".\\logs\\clientlog.txt", ".\\logs\\clientlog.err.txt");
+		startProcess(pb, ".\\logs\\clientlog.txt", ".\\logs\\clientlog.err.txt", CURRENT_ZIP_VERSION);
 	}
 
 }
