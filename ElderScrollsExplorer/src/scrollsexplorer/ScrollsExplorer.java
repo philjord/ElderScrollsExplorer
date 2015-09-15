@@ -3,6 +3,7 @@ package scrollsexplorer;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -31,6 +32,7 @@ import scrollsexplorer.simpleclient.ESESettingsPanel;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
 import tools.TitledPanel;
+import tools.swing.UserGuideDisplay;
 import tools3d.resolution.QueryProperties;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
@@ -51,8 +53,8 @@ import bsa.source.BsaTextureSource;
 import com.gg.slider.SideBar;
 import com.gg.slider.SideBar.SideBarMode;
 import com.gg.slider.SidebarSection;
-import common.config.ConfigLoader;
 
+import common.config.ConfigLoader;
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
@@ -106,7 +108,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public JMenuItem setGraphics = new JMenuItem("Set Graphics");
 
-	public Preferences prefs;
+	public JMenuItem showUserGuide = new JMenuItem("User Guide");
+
+	private UserGuideDisplay ugd = new UserGuideDisplay();
+
+	private Preferences prefs;
 
 	private String scrollsFolder = "";
 
@@ -130,18 +136,19 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 			JMenuBar menuBar = new JMenuBar();
 			menuBar.setOpaque(true);
-			JMenu menu = new JMenu("File");
-			menu.setMnemonic(70);
+			JMenu fileMenu = new JMenu("File");
+			fileMenu.setMnemonic(KeyEvent.VK_F);
+			menuBar.add(fileMenu);
+
 			boolean loadAll = Boolean.parseBoolean(prefs.get("load.all", "true"));
 			cbLoadAllMenuItem.setSelected(loadAll);
-			menu.add(cbLoadAllMenuItem);
-			menuBar.add(menu);
+			fileMenu.add(cbLoadAllMenuItem);
 
 			boolean useBsa = Boolean.parseBoolean(prefs.get("use.bsa", "true"));
 			cbBsaMenuItem.setSelected(useBsa);
-			menu.add(cbBsaMenuItem);
+			fileMenu.add(cbBsaMenuItem);
 
-			menu.add(setFolders);
+			fileMenu.add(setFolders);
 			setFolders.addActionListener(new ActionListener()
 			{
 				@Override
@@ -151,13 +158,26 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				}
 			});
 
-			menu.add(setGraphics);
+			fileMenu.add(setGraphics);
 			setGraphics.addActionListener(new ActionListener()
 			{
 				@Override
 				public void actionPerformed(ActionEvent arg0)
 				{
 					simpleWalkSetup.resetGraphicsSetting();
+				}
+			});
+			JMenu helpMenu = new JMenu("Help");
+			helpMenu.setMnemonic(KeyEvent.VK_H);
+			menuBar.add(helpMenu);
+
+			helpMenu.add(showUserGuide);
+			showUserGuide.addActionListener(new ActionListener()
+			{
+				@Override
+				public void actionPerformed(ActionEvent arg0)
+				{
+					showUserGuide();
 				}
 			});
 
@@ -285,7 +305,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					closingTime();
 				}
 			});
-			
+
 			mainPanel.validate();
 			mainPanel.invalidate();
 			mainPanel.doLayout();
@@ -298,6 +318,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		{
 			e1.printStackTrace();
 		}
+	}
+
+	protected void showUserGuide()
+	{
+		ugd.display(this, "docs\\userGuide.htm");
 	}
 
 	public void closingTime()
@@ -342,6 +367,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		}
 		else
 		{
+			showUserGuide();
 			setFolders();
 		}
 		mainPanel.validate();
