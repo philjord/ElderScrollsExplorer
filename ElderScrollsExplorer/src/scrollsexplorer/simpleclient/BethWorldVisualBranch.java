@@ -233,8 +233,8 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			Point key = keysToRemove.get(i);
 			BranchGroup bg = loadedNears.get(key);
 			if (bg != null)
-			{				
-				structureUpdateBehavior.remove(this, bg);				
+			{
+				structureUpdateBehavior.remove(this, bg);
 			}
 			synchronized (loadedNears)
 			{
@@ -264,14 +264,14 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 						if (bg != null)
 						{
 							bg.compile();// better to be done not on the j3d thread?
-							structureUpdateBehavior.add(this, bg);							
+							structureUpdateBehavior.add(this, bg);
 						}
 
 						// now get rid of any fars that have the same keys loaded in
 						bg = loadedFars.get(key);
 						if (bg != null)
 						{
-							structureUpdateBehavior.remove(this, bg);							
+							structureUpdateBehavior.remove(this, bg);
 							loadedFars.remove(key);
 						}
 					}
@@ -279,7 +279,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			}
 		}
 		if ((System.currentTimeMillis() - start) > 50)
-			System.out.println("BethWorldVisualBranch.updateNear " + (System.currentTimeMillis() - start));
+			System.out.println("BethWorldVisualBranch.updateNear took " + (System.currentTimeMillis() - start) + "ms");
 
 	}
 
@@ -318,7 +318,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			BranchGroup bg = loadedFars.get(key);
 			if (bg != null)
 			{
-				structureUpdateBehavior.remove(this, bg);				
+				structureUpdateBehavior.remove(this, bg);
 				loadedFars.remove(key);
 			}
 		}
@@ -338,14 +338,14 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 					if (bg != null)
 					{
 						bg.compile();// better to be done not on the j3d thread?
-						structureUpdateBehavior.add(this, bg);						
+						structureUpdateBehavior.add(this, bg);
 						//System.out.println("updateFar3 " + key + " " + (System.currentTimeMillis() - start));
 					}
 				}
 			}
 		}
 		if ((System.currentTimeMillis() - start) > 50)
-			System.out.println("BethWorldVisualBranch.updateFar " + (System.currentTimeMillis() - start));
+			System.out.println("BethWorldVisualBranch.updateFar took " + (System.currentTimeMillis() - start) + "ms");
 	}
 
 	/**

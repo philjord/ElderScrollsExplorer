@@ -128,12 +128,14 @@ public class GameMediaFTPdownloader extends Thread
 						destination.getParentFile().mkdirs();
 
 					long destLen = destination.length();
-					boolean resume = destLen < ftpFile.size(); // is this right? can they be near enough?
-					boolean overwrite = destLen > ftpFile.size();
+					boolean resume = destLen > 0 && destLen < ftpFile.size(); // is this right? can they be near enough?
+					 
 					System.out.println("ftpFile.getName() " + ftpFile.getName());
 					System.out.println("ftpFile.size() " + ftpFile.size());
 					System.out.println("destLen " + destLen);
-					if (overwrite)
+					
+					//if it's too big dump it and force a redownload
+					if (destLen > ftpFile.size())
 						destination.delete();
 
 					if (!destination.exists() || resume)

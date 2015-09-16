@@ -12,6 +12,7 @@ import javax.media.j3d.Transform3D;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
+import scrollsexplorer.GameConfig;
 import scrollsexplorer.ScrollsExplorer;
 import scrollsexplorer.simpleclient.physics.InstRECOStore;
 import tools3d.navigation.AvatarLocation;
@@ -71,48 +72,16 @@ public class SimpleBethCellManager implements InstRECOStore
 			currentBethWorldPhysicalBranch.updateFromCurrent();
 	}
 
-	/**
-	
+	/**	
 	 * @param meshSource
 	 * @param textureSource
 	 * @param soundSource
 	 */
-	public void setSources(IESMManager esmManager, MediaSources mediaSources)
+	public void setSources(GameConfig gameConfig, IESMManager esmManager, MediaSources mediaSources)
 	{
 		this.esmManager = esmManager;
-
-		float version = esmManager.getVersion();
-
-		if (version == 0.94f)
-		{
-			if (esmManager.getName().equals("Skyrim.esm"))
-			{
-				j3dCellFactory = new esmj3dtes5.j3d.cell.J3dCellFactory(esmManager, esmManager, mediaSources);
-			}
-			else
-			{
-
-				j3dCellFactory = new esmj3dfo3.j3d.cell.J3dCellFactory(esmManager, esmManager, mediaSources);
-			}
-		}
-		else if (version == 1.32f)
-		{
-			j3dCellFactory = new esmj3dfo3.j3d.cell.J3dCellFactory(esmManager, esmManager, mediaSources);
-		}
-		else if (version == 1.0f || version == 0.8f)
-		{
-			j3dCellFactory = new esmj3dtes4.j3d.cell.J3dCellFactory(esmManager, esmManager, mediaSources);
-		}
-		else if (version == 1.2f )
-		{
-			j3dCellFactory = new esmj3dtes3.j3d.cell.J3dCellFactory(esmManager, esmManager, mediaSources);
-		}
-		else
-		{
-			System.out.println("Bad esm version! " + version + " in " + esmManager.getName());
-		}
-
-		//System.out.println("j3dCellFactory = " + j3dCellFactory);
+		j3dCellFactory = gameConfig.j3dCellFactory;
+		j3dCellFactory.setSources(esmManager, esmManager, mediaSources);
 	}
 
 	public String getCellNameFormIdOf(int doorFormId)
@@ -252,12 +221,12 @@ public class SimpleBethCellManager implements InstRECOStore
 					{
 						currentBethInteriorVisualBranch = new BethInteriorVisualBranch(currentCellFormId, cell.getEditorID(),
 								j3dCellFactory);
-						simpleWalkSetup.addToVisualBranch(currentBethInteriorVisualBranch);						
+						simpleWalkSetup.addToVisualBranch(currentBethInteriorVisualBranch);
 
 						currentBethInteriorPhysicalBranch = new BethInteriorPhysicalBranch(simpleWalkSetup.getPhysicsSystem(),
 								currentCellFormId, j3dCellFactory);
 						simpleWalkSetup.addToPhysicalBranch(currentBethInteriorPhysicalBranch);
-						
+
 						if (avatarLocation != null)
 						{
 							//TODO: the unload load part of this should still be called I think

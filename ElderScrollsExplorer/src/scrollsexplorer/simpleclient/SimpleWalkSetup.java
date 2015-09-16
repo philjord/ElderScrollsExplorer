@@ -127,7 +127,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private JPanel warpPanel = new JPanel();
 
-	private JTextField warpField = new JTextField("      ");
+	private JTextField warpField = new JTextField("                ");
 
 	private NbccProvider nbccProvider = new NbccProvider()
 	{
@@ -216,26 +216,24 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		avatarLocation.addAvatarLocationListener(this);
 		warpPanel.setLayout(new FlowLayout());
 		warpPanel.add(warpField);
-		JButton warpButton = new JButton("Go");
-		warpPanel.add(warpButton);
-		warpButton.addActionListener(new ActionListener()
+		ActionListener warpActionListener = new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
 				String warp = warpField.getText().trim();
-				String[] parts = warpField.getText().split("[^\\d]+");
+				String[] parts = warp.split("[^\\d]+");
 
 				if (parts.length == 3)
 				{
 					warp(new Vector3f(Float.parseFloat(parts[0]), Float.parseFloat(parts[1]), Float.parseFloat(parts[2])));
 				}
-				else
-				{
-					System.out.println("bad warp value " + warp);
-				}
 			}
-		});
+		};
+		warpField.addActionListener(warpActionListener);
+		JButton warpButton = new JButton("Go");
+		warpPanel.add(warpButton);
+		warpButton.addActionListener(warpActionListener);
 
 		frame.setTitle(frameName);
 

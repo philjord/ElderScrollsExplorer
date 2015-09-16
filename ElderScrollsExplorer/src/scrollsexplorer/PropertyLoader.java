@@ -8,7 +8,6 @@ import java.util.Properties;
 
 public class PropertyLoader
 {
-
 	public static String fileSep = System.getProperty("file.separator");
 
 	public static String pathSep = System.getProperty("path.separator");
@@ -16,18 +15,6 @@ public class PropertyLoader
 	public static File propFile;
 
 	public static Properties properties;
-
-	public static String MORROWIND_FOLDER_KEY = "MorrowindFolder";
-
-	public static String OBLIVION_FOLDER_KEY = "OblivionFolder";
-
-	public static String FALLOUT3_FOLDER_KEY = "FallOut3Folder";
-
-	public static String FALLOUTNV_FOLDER_KEY = "FalloutNVFolder";
-
-	public static String SKYRIM_FOLDER_KEY = "SkyrimFolder";
-
-	public static String OUTPUT_FOLDER_KEY = "outputFolder";
 
 	public static void load() throws IOException
 	{
@@ -57,7 +44,7 @@ public class PropertyLoader
 		try
 		{
 			FileOutputStream out = new FileOutputStream(propFile);
-			properties.store(out, "FO3Archive Properties");
+			properties.store(out, "ElderScrollsExplorer Properties");
 			out.close();
 		}
 		catch (Throwable exc)

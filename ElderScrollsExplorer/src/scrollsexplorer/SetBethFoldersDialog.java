@@ -19,193 +19,51 @@ import tools.swing.TitledJFileChooser;
 
 public class SetBethFoldersDialog extends JDialog
 {
-	private JTextField morrowindFolderField = new JTextField("");
-
-	private JButton morrowindSetButton = new JButton("...");
-
-	private JButton morrowindFtpButton = new JButton("FTP");
-
-	private JTextField oblivionFolderField = new JTextField("");
-
-	private JButton oblivionSetButton = new JButton("...");
-
-	private JButton oblivionFtpButton = new JButton("FTP");
-
-	private JTextField fallout3FolderField = new JTextField("");
-
-	private JButton fallout3SetButton = new JButton("...");
-
-	private JButton fallout3FtpButton = new JButton("FTP");
-
-	private JTextField falloutNVFolderField = new JTextField("");
-
-	private JButton falloutNVSetButton = new JButton("...");
-
-	private JButton falloutNVFtpButton = new JButton("FTP");
-
-	private JTextField skyrimFolderField = new JTextField("");
-
-	private JButton skyrimSetButton = new JButton("...");
-
-	private JButton skyrimFtpButton = new JButton("FTP");
-
 	public SetBethFoldersDialog(Frame f)
 	{
-		super(f, "Set Esm and Bsa Folders", true);
+		super(f, "Game Data (Esm and Bsa) Folders", true);
 		this.setLayout(new GridLayout(-1, 1));
 
-		JPanel morrowindPanel = new JPanel();
-		morrowindPanel.setBorder(BorderFactory.createTitledBorder("Morrowind folder"));
-		morrowindPanel.setLayout(new BorderLayout());
-		morrowindPanel.add(morrowindFolderField, BorderLayout.CENTER);
-		morrowindFolderField.setText(PropertyLoader.properties.getProperty(PropertyLoader.MORROWIND_FOLDER_KEY, ""));
-		morrowindPanel.add(morrowindSetButton, BorderLayout.EAST);
-		morrowindPanel.add(morrowindFtpButton, BorderLayout.WEST);
-		add(morrowindPanel);
-
-		morrowindSetButton.addActionListener(new ActionListener()
+		for (final GameConfig gameConfig : GameConfig.allGameConfigs)
 		{
-			@Override
-			public void actionPerformed(ActionEvent e)
+			final JTextField gameFolderField = new JTextField("");
+			JButton gameSetButton = new JButton("...");
+			JButton gameFtpButton = new JButton("FTP");
+
+			JPanel gamePanel = new JPanel();
+			gamePanel.setBorder(BorderFactory.createTitledBorder(gameConfig.gameName + " data folder"));
+			gamePanel.setLayout(new BorderLayout());
+			gamePanel.add(gameFolderField, BorderLayout.CENTER);
+			gameFolderField.setText(PropertyLoader.properties.getProperty(gameConfig.folderKey, ""));
+			gamePanel.add(gameSetButton, BorderLayout.EAST);
+			gamePanel.add(gameFtpButton, BorderLayout.WEST);
+			add(gamePanel);
+
+			gameSetButton.addActionListener(new ActionListener()
 			{
-				setFolder("Select Morrowind Folder", PropertyLoader.MORROWIND_FOLDER_KEY, morrowindFolderField);
-			}
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					setFolder("Select " + gameConfig.gameName + " data folder", gameConfig.folderKey, gameFolderField);
+				}
 
-		});
-		morrowindFtpButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
+			});
+			gameFtpButton.addActionListener(new ActionListener()
 			{
-				ftpData("morrowind", PropertyLoader.MORROWIND_FOLDER_KEY, morrowindFolderField);
-			}
-		});
-
-		JPanel oblivionPanel = new JPanel();
-		oblivionPanel.setBorder(BorderFactory.createTitledBorder("Oblivion folder"));
-		oblivionPanel.setLayout(new BorderLayout());
-		oblivionPanel.add(oblivionFolderField, BorderLayout.CENTER);
-		oblivionFolderField.setText(PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY, ""));
-		oblivionPanel.add(oblivionSetButton, BorderLayout.EAST);
-		oblivionPanel.add(oblivionFtpButton, BorderLayout.WEST);
-		add(oblivionPanel);
-
-		oblivionSetButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				setFolder("Select Oblivion Folder", PropertyLoader.OBLIVION_FOLDER_KEY, oblivionFolderField);
-			}
-
-		});
-		oblivionFtpButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				ftpData("oblivion", PropertyLoader.OBLIVION_FOLDER_KEY, oblivionFolderField);
-			}
-		});
-
-		JPanel fallout3Panel = new JPanel();
-		fallout3Panel.setBorder(BorderFactory.createTitledBorder("Fallout3 folder"));
-		fallout3Panel.setLayout(new BorderLayout());
-		fallout3Panel.add(fallout3FolderField, BorderLayout.CENTER);
-		fallout3FolderField.setText(PropertyLoader.properties.getProperty(PropertyLoader.FALLOUT3_FOLDER_KEY, ""));
-		fallout3Panel.add(fallout3SetButton, BorderLayout.EAST);
-		fallout3Panel.add(fallout3FtpButton, BorderLayout.WEST);
-		add(fallout3Panel);
-
-		fallout3SetButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				setFolder("Select Fallout3 Folder", PropertyLoader.FALLOUT3_FOLDER_KEY, fallout3FolderField);
-			}
-
-		});
-		fallout3FtpButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				ftpData("fallout", PropertyLoader.FALLOUT3_FOLDER_KEY, fallout3FolderField);
-			}
-		});
-
-		JPanel falloutNVPanel = new JPanel();
-		falloutNVPanel.setBorder(BorderFactory.createTitledBorder("FalloutNV folder"));
-		falloutNVPanel.setLayout(new BorderLayout());
-		falloutNVPanel.add(falloutNVFolderField, BorderLayout.CENTER);
-		falloutNVFolderField.setText(PropertyLoader.properties.getProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY, ""));
-		falloutNVPanel.add(falloutNVSetButton, BorderLayout.EAST);
-		falloutNVPanel.add(falloutNVFtpButton, BorderLayout.WEST);
-		add(falloutNVPanel);
-
-		falloutNVSetButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				setFolder("Select FalloutNV Folder", PropertyLoader.FALLOUTNV_FOLDER_KEY, falloutNVFolderField);
-			}
-
-		});
-		falloutNVFtpButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				ftpData("falloutNV", PropertyLoader.FALLOUTNV_FOLDER_KEY, falloutNVFolderField);
-			}
-		});
-
-		JPanel skyrimPanel = new JPanel();
-		skyrimPanel.setBorder(BorderFactory.createTitledBorder("Skyrim folder"));
-		skyrimPanel.setLayout(new BorderLayout());
-		skyrimPanel.add(skyrimFolderField, BorderLayout.CENTER);
-		skyrimFolderField.setText(PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY, ""));
-		skyrimPanel.add(skyrimSetButton, BorderLayout.EAST);
-		skyrimPanel.add(skyrimFtpButton, BorderLayout.WEST);
-		add(skyrimPanel);
-
-		skyrimSetButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				setFolder("Select Skyrim Folder", PropertyLoader.SKYRIM_FOLDER_KEY, skyrimFolderField);
-			}
-
-		});
-		skyrimFtpButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				ftpData("skyrim", PropertyLoader.SKYRIM_FOLDER_KEY, skyrimFolderField);
-			}
-		});
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					ftpData(gameConfig.ftpFolderName, gameConfig.folderKey, gameFolderField);
+				}
+			});
+		}
 
 		JPanel buttonPanel = new JPanel();
-		JButton okButton = new JButton("Ok");
-		JButton cancelButton = new JButton("Cancel");
-		buttonPanel.add(okButton);
-		buttonPanel.add(cancelButton);
+		JButton closeButton = new JButton("Close");
+		buttonPanel.add(closeButton);
 		add(buttonPanel);
 
-		okButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				setVisible(false);
-			}
-		});
-
-		cancelButton.addActionListener(new ActionListener()
+		closeButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)

@@ -1,6 +1,7 @@
 package exporter;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -8,12 +9,12 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.prefs.Preferences;
 import java.util.zip.DataFormatException;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -28,6 +29,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import nif.NifToJ3d;
+import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
 import scrollsexplorer.SetBethFoldersDialog;
 import tools.TitledPanel;
@@ -51,6 +53,8 @@ import esmj3d.j3d.cell.J3dICellFactory;
 
 public class ESMBSAExporter extends JFrame
 {
+	public static String OUTPUT_FOLDER_KEY = "outputFolder";
+
 	private static JTable table;
 
 	private static DefaultTableModel tableModel;
@@ -64,13 +68,9 @@ public class ESMBSAExporter extends JFrame
 
 	public BSAFileSet bsaFileSet;
 
-	public JButton falloutButton = new JButton("Fall Out");
+	private GameConfig selectedGameConfig = null;
 
-	public JButton falloutNVButton = new JButton("Fall Out NV");
-
-	public JButton oblivionButton = new JButton("Oblivion");
-
-	public JButton skyrimButton = new JButton("Skyrim");
+	private HashMap<GameConfig, JButton> gameButtons = new HashMap<GameConfig, JButton>();
 
 	public JPanel mainPanel = new JPanel();
 
@@ -89,10 +89,6 @@ public class ESMBSAExporter extends JFrame
 	private JButton outputSetButton = new JButton("...");
 
 	public Preferences prefs;
-
-	private String scrollsFolder = "";
-
-	private String mainESMFile = "";
 
 	private J3dICellFactory j3dCellFactory;
 
@@ -131,59 +127,23 @@ public class ESMBSAExporter extends JFrame
 		// this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 		// this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+		buttonPanel.setLayout(new GridLayout(-1, 3));
 
-		buttonPanel.add(oblivionButton);
-		buttonPanel.add(falloutButton);
-		buttonPanel.add(falloutNVButton);
-		buttonPanel.add(skyrimButton);
-
-		oblivionButton.setEnabled(false);
-		falloutButton.setEnabled(false);
-		falloutNVButton.setEnabled(false);
-		skyrimButton.setEnabled(false);
-
-		oblivionButton.addActionListener(new ActionListener()
+		for (final GameConfig gameConfig : GameConfig.allGameConfigs)
 		{
-			@Override
-			public void actionPerformed(ActionEvent e)
+			JButton gameButton = new JButton(gameConfig.gameName);
+			buttonPanel.add(gameButton);
+			gameButton.setEnabled(false);
+			gameButtons.put(gameConfig, gameButton);
+			gameButton.addActionListener(new ActionListener()
 			{
-				scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY);
-				mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Oblivion.esm";
-				loadUpPickers();
-			}
-		});
-		falloutButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.FALLOUT3_FOLDER_KEY);
-				mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Fallout3.esm";
-				loadUpPickers();
-			}
-		});
-
-		falloutNVButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY);
-				mainESMFile = scrollsFolder + PropertyLoader.fileSep + "FalloutNV.esm";
-				loadUpPickers();
-			}
-		});
-		skyrimButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY);
-				mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Skyrim.esm";
-				loadUpPickers();
-			}
-		});
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					setSelectedGameConfig(gameConfig);
+				}
+			});
+		}
 
 		options.setLayout(new VerticalFlowLayout());
 
@@ -218,7 +178,7 @@ public class ESMBSAExporter extends JFrame
 		outputPanel.setBorder(BorderFactory.createTitledBorder("Output folder"));
 		outputPanel.setLayout(new BorderLayout());
 		outputPanel.add(outputFolderField, BorderLayout.CENTER);
-		outputFolderField.setText(PropertyLoader.properties.getProperty(PropertyLoader.OUTPUT_FOLDER_KEY, ""));
+		outputFolderField.setText(PropertyLoader.properties.getProperty(OUTPUT_FOLDER_KEY, ""));
 		outputPanel.add(outputSetButton, BorderLayout.EAST);
 
 		options.add(new JPanel());
@@ -230,10 +190,10 @@ public class ESMBSAExporter extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				File sf = TitledJFileChooser.requestFolderName("Select Output Folder",
-						PropertyLoader.properties.getProperty(PropertyLoader.OUTPUT_FOLDER_KEY, ""), ESMBSAExporter.this);
+						PropertyLoader.properties.getProperty(OUTPUT_FOLDER_KEY, ""), ESMBSAExporter.this);
 				if (sf != null)
 				{
-					PropertyLoader.properties.setProperty(PropertyLoader.OUTPUT_FOLDER_KEY, sf.getAbsolutePath());
+					PropertyLoader.properties.setProperty(OUTPUT_FOLDER_KEY, sf.getAbsolutePath());
 					outputFolderField.setText(sf.getAbsolutePath());
 					enableButtons();
 				}
@@ -253,50 +213,6 @@ public class ESMBSAExporter extends JFrame
 
 	}
 
-	/**
-	 * 
-	 * @param meshSource
-	 * @param textureSource
-	 * @param soundSource
-	 */
-	public void setSources(IESMManager esmManager2, MediaSources mediaSources)
-	{
-		this.esmManager = esmManager2;
-
-		float version = esmManager2.getVersion();
-
-		if (version == 0.94f)
-		{
-			if (esmManager2.getName().equals("Skyrim.esm"))
-			{
-				j3dCellFactory = new esmj3dtes5.j3d.cell.J3dCellFactory(esmManager2, esmManager2, mediaSources);
-			}
-			else
-			{
-
-				j3dCellFactory = new esmj3dfo3.j3d.cell.J3dCellFactory(esmManager2, esmManager2, mediaSources);
-			}
-		}
-		else if (version == 1.32f)
-		{
-			j3dCellFactory = new esmj3dfo3.j3d.cell.J3dCellFactory(esmManager2, esmManager2, mediaSources);
-		}
-		else if (version == 1.0f || version == 0.8f)
-		{
-			j3dCellFactory = new esmj3dtes4.j3d.cell.J3dCellFactory(esmManager2, esmManager2, mediaSources);
-		}
-		else if (version == 1.2f)
-		{
-			j3dCellFactory = new esmj3dtes3.j3d.cell.J3dCellFactory(esmManager, esmManager, mediaSources);
-		}
-		else
-		{
-			System.out.println("Bad esm version! " + version + " in " + esmManager2.getName());
-		}
-
-		// System.out.println("j3dCellFactory = " + j3dCellFactory);
-	}
-
 	private void setFolders()
 	{
 		SetBethFoldersDialog setBethFoldersDialog = new SetBethFoldersDialog(this);
@@ -307,24 +223,18 @@ public class ESMBSAExporter extends JFrame
 
 	private void enableButtons()
 	{
-		// in case of nothing selected show dialog, funy infinite loop for
-		// recidivst non setters
-		if (PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY) != null
-				|| PropertyLoader.properties.getProperty(PropertyLoader.FALLOUT3_FOLDER_KEY) != null
-				|| PropertyLoader.properties.getProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY) != null
-				|| PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY) != null)
+		boolean noFolderSet = true;
+		for (GameConfig gameConfig : GameConfig.allGameConfigs)
 		{
-			String oblivionFolder = PropertyLoader.properties.getProperty(PropertyLoader.OBLIVION_FOLDER_KEY);
-			oblivionButton.setEnabled(oblivionFolder != null);
-			String fallOut3Folder = PropertyLoader.properties.getProperty(PropertyLoader.FALLOUT3_FOLDER_KEY);
-			falloutButton.setEnabled(fallOut3Folder != null);
-			String falloutNVFolder = PropertyLoader.properties.getProperty(PropertyLoader.FALLOUTNV_FOLDER_KEY);
-			falloutNVButton.setEnabled(falloutNVFolder != null);
-			String skyrimFolder = PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY);
-			skyrimButton.setEnabled(skyrimFolder != null);
+			JButton gameButton = gameButtons.get(gameConfig);
+			gameButton.setEnabled(gameConfig.scrollsFolder != null);
+			noFolderSet = noFolderSet && (gameConfig.scrollsFolder == null);
 		}
-		else
+
+		//in case of nothing selected show dialog, funny infinite loop for recidivist non-setters
+		if (noFolderSet)
 		{
+			//showUserGuide();
 			setFolders();
 		}
 		mainPanel.validate();
@@ -339,15 +249,26 @@ public class ESMBSAExporter extends JFrame
 	/**
 	 
 	 */
-	private void loadUpPickers()
+	private void setSelectedGameConfig(GameConfig newGameConfig)
 	{
+
+		selectedGameConfig = newGameConfig;
+		//simpleWalkSetup.getAvatarCollisionInfo().setAvatarYHeight(selectedGameConfig.avatarYHeight);
+
+		for (GameConfig gameConfig : GameConfig.allGameConfigs)
+		{
+			JButton gameButton = gameButtons.get(gameConfig);
+			gameButton.setEnabled(false);
+		}
+
 		Thread t = new Thread()
 		{
 			public void run()
 			{
-				synchronized (mainESMFile)
+				synchronized (selectedGameConfig.mainESMFile)
 				{
-					esmManager = ESMManager.getESMManager(mainESMFile);
+
+					esmManager = ESMManager.getESMManager(selectedGameConfig.mainESMFile);
 					bsaFileSet = null;
 
 					new EsmSoundKeyToName(esmManager);
@@ -355,12 +276,10 @@ public class ESMBSAExporter extends JFrame
 					BsaRecordedTextureSource textureSource;
 					BsaRecordedSoundSource soundSource;
 
-					String plusSkyrim = PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY);
-
 					// note skyrim added
 					if (bsaFileSet == null)
 						bsaFileSet = new BSAFileSet(new String[]
-						{ scrollsFolder, plusSkyrim }, true, false);
+						{ selectedGameConfig.scrollsFolder }, true, false);
 
 					meshSource = new BsaRecordedMeshSource(bsaFileSet);
 					textureSource = new BsaRecordedTextureSource(bsaFileSet);
@@ -368,7 +287,8 @@ public class ESMBSAExporter extends JFrame
 
 					mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
-					setSources(esmManager, mediaSources);
+					j3dCellFactory = selectedGameConfig.j3dCellFactory;
+					j3dCellFactory.setSources(esmManager, esmManager, mediaSources);
 
 					tableModel = new DefaultTableModel(columnNames, 0)
 					{
@@ -691,15 +611,13 @@ public class ESMBSAExporter extends JFrame
 		System.out.println("Export complete in " + (System.currentTimeMillis() - startTime) + "ms");
 	}
 
-	
-
 	public static String outputFolderTrees = "F:\\game media\\output\\skyrimTrees";
 
 	public static void exportSkyrimTrees() throws IOException
 	{
 		PropertyLoader.load();
 
-		String scrollsFolder = PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY);
+		String scrollsFolder = PropertyLoader.properties.getProperty("SkyrimFolder");
 		String mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Skyrim.esm";
 
 		IESMManager esmManager = ESMManager.getESMManager(mainESMFile);
@@ -710,7 +628,7 @@ public class ESMBSAExporter extends JFrame
 		BsaRecordedTextureSource textureSource;
 		BsaRecordedSoundSource soundSource;
 
-		String plusSkyrim = PropertyLoader.properties.getProperty(PropertyLoader.SKYRIM_FOLDER_KEY);
+		String plusSkyrim = PropertyLoader.properties.getProperty("SkyrimFolder");
 
 		bsaFileSet = new BSAFileSet(new String[]
 		{ plusSkyrim }, true, false);
