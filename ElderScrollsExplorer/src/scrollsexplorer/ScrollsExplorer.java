@@ -1,6 +1,7 @@
 package scrollsexplorer;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -12,7 +13,6 @@ import java.io.IOException;
 import java.util.prefs.Preferences;
 import java.util.zip.DataFormatException;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
@@ -54,8 +54,8 @@ import bsa.source.BsaTextureSource;
 import com.gg.slider.SideBar;
 import com.gg.slider.SideBar.SideBarMode;
 import com.gg.slider.SidebarSection;
-
 import common.config.ConfigLoader;
+
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
@@ -186,7 +186,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			//this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 			//this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-			buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+			buttonPanel.setLayout(new GridLayout(-1, 4));
 
 			buttonPanel.add(morrowindButton);
 			buttonPanel.add(oblivionButton);
@@ -389,6 +389,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	 */
 	private void loadUpPickers()
 	{
+		morrowindButton.setEnabled(false);
+		oblivionButton.setEnabled(false);
+		falloutButton.setEnabled(false);
+		falloutNVButton.setEnabled(false);
+		skyrimButton.setEnabled(false);
 
 		Thread t = new Thread()
 		{

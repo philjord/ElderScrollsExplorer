@@ -1,5 +1,7 @@
 package scrollsexplorer.simpleclient;
 
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -15,6 +17,7 @@ import javax.media.j3d.Group;
 import javax.media.j3d.Light;
 import javax.media.j3d.ShaderError;
 import javax.media.j3d.ShaderErrorListener;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -122,6 +125,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private JTextField locField = new JTextField("0000,0000,0000");
 
+	private JPanel warpPanel = new JPanel();
+
 	private JTextField warpField = new JTextField("      ");
 
 	private NbccProvider nbccProvider = new NbccProvider()
@@ -209,17 +214,25 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		avatarLocation.addAvatarLocationListener(hudcompass);
 
 		avatarLocation.addAvatarLocationListener(this);
-
-		warpField.addActionListener(new ActionListener()
+		warpPanel.setLayout(new FlowLayout());
+		warpPanel.add(warpField);
+		JButton warpButton = new JButton("Go");
+		warpPanel.add(warpButton);
+		warpButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				String[] parts = warpField.getText().split("\\D+");
+				String warp = warpField.getText().trim();
+				String[] parts = warpField.getText().split("[^\\d]+");
 
 				if (parts.length == 3)
 				{
 					warp(new Vector3f(Float.parseFloat(parts[0]), Float.parseFloat(parts[1]), Float.parseFloat(parts[2])));
+				}
+				else
+				{
+					System.out.println("bad warp value " + warp);
 				}
 			}
 		});
@@ -476,15 +489,15 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		return avatarLocation;
 	}
 
-	public JTextField getLocField()
+	public Component getLocField()
 	{
 		return locField;
 	}
-	public JTextField getWarpField()
+
+	public Component getWarpField()
 	{
-		return warpField;
+		return warpPanel;
 	}
-	
 
 	public void setPhysicsEnabled(boolean enable)
 	{

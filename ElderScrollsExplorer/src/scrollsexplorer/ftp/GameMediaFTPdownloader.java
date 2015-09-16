@@ -25,6 +25,7 @@ import com.enterprisedt.net.ftp.FTPTransferType;
  *  This class grabs game media from my ftp server, it asks for the password though...
  *
  */
+//TODO: swap this whole thing across to commons.net.ftp which is just better
 public class GameMediaFTPdownloader extends Thread
 {
 	private static final String FTP_HOST_NAME = "philjord.ddns.net";
@@ -53,6 +54,8 @@ public class GameMediaFTPdownloader extends Thread
 
 	public GameMediaFTPdownloader(Component parent, String folderToDownLoad)
 	{
+		this.setName("GameMediaFTPdownloader");
+		this.setDaemon(true);
 		this.parent = parent;
 		this.folderToDownLoad = folderToDownLoad;
 		outputfolder = OUTPUT_FOLDER + folderToDownLoad;
@@ -84,11 +87,13 @@ public class GameMediaFTPdownloader extends Thread
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			//ignore quitting anyway
+			//e.printStackTrace();
 		}
 		catch (FTPException e)
 		{
-			e.printStackTrace();
+			//ignore quitting anyway
+			//e.printStackTrace();
 		}
 	}
 
@@ -122,12 +127,20 @@ public class GameMediaFTPdownloader extends Thread
 					if (!destination.getParentFile().exists())
 						destination.getParentFile().mkdirs();
 
-					if (!destination.exists())
+					long destLen = destination.length();
+					boolean resume = destLen < ftpFile.size(); // is this right? can they be near enough?
+					boolean overwrite = destLen > ftpFile.size();
+					System.out.println("ftpFile.getName() " + ftpFile.getName());
+					System.out.println("ftpFile.size() " + ftpFile.size());
+					System.out.println("destLen " + destLen);
+					if (overwrite)
+						destination.delete();
+
+					if (!destination.exists() || resume)
 					{
 						OutputStream out = null;
 						try
 						{
-							out = new FileOutputStream(destination);
 							FileDownloadProgressThread progT = new FileDownloadProgressThread(parent, outputfolder + "\\"
 									+ ftpFile.getName(), ftpFile.size(), destination);
 							progT.setCancelCallBack(new CancelCallBack()
@@ -137,11 +150,18 @@ public class GameMediaFTPdownloader extends Thread
 								{
 									hasCancelled = true;
 									ftp.cancelTransfer();
+
 									System.out.println("transfer cancelled");
 								}
 
 							});
 							progT.start();
+
+							if (resume)
+							{
+								ftp.resume();
+							}
+							out = new FileOutputStream(destination, resume);
 
 							ftp.get(out, ftpFile.getName());
 
@@ -210,6 +230,7 @@ public class GameMediaFTPdownloader extends Thread
 			}
 			catch (FTPException e)
 			{
+
 				if (e.getReplyCode() == 530)
 				{
 					ftp_password = JOptionPane.showInputDialog(parent, "Please enter ftp password");
@@ -218,6 +239,11 @@ public class GameMediaFTPdownloader extends Thread
 						// if cancel or blank just exit loop, otherwise give it another whorl
 						break;
 					}
+				}
+				else if (e.getMessage().equals("Connection timed out."))
+				{// TODO: if this is a timeout just restart?
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(parent, "FTPException time out " + e.getReplyCode() + " " + e);
 				}
 				else
 				{
