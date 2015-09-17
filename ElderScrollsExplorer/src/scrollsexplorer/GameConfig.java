@@ -34,9 +34,19 @@ public class GameConfig
 		this.skyTexture = skyTexture;
 		this.avatarYHeight = avatarYHeight;
 		this.folderKey = folderKey;
-		this.scrollsFolder = PropertyLoader.properties.getProperty(folderKey);
-		this.mainESMFile = scrollsFolder + PropertyLoader.fileSep + mainESMFile;
 		this.ftpFolderName = ftpFolderName;
+		this.mainESMFile = mainESMFile;
+		update();
+	}
+
+	public void update()
+	{
+		this.scrollsFolder = PropertyLoader.properties.getProperty(folderKey);
+	}
+
+	public String getESMPath()
+	{
+		return scrollsFolder + PropertyLoader.fileSep + mainESMFile;
 	}
 
 	static

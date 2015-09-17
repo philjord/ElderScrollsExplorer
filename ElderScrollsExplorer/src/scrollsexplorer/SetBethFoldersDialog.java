@@ -81,6 +81,11 @@ public class SetBethFoldersDialog extends JDialog
 		{
 			PropertyLoader.properties.setProperty(propKey, sf.getAbsolutePath());
 			output.setText(sf.getAbsolutePath());
+			//update gameconfigs based on property changes
+			for (GameConfig gameConfig : GameConfig.allGameConfigs)
+			{
+				gameConfig.update();
+			}
 		}
 	}
 

@@ -247,11 +247,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				}
 			});
 
-			mainPanel.validate();
-			mainPanel.invalidate();
-			mainPanel.doLayout();
-			mainPanel.repaint();
-
 			enableButtons();
 
 		}
@@ -283,11 +278,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		SetBethFoldersDialog setBethFoldersDialog = new SetBethFoldersDialog(this);
 		setBethFoldersDialog.setSize(400, 350);
 		setBethFoldersDialog.setVisible(true);
-		//update gameconfigs based on property changes
-		for (GameConfig gameConfig : GameConfig.allGameConfigs)
-		{
-			gameConfig.scrollsFolder = PropertyLoader.properties.getProperty(gameConfig.folderKey);
-		}
 		enableButtons();
 	}
 
@@ -297,8 +287,10 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		for (GameConfig gameConfig : GameConfig.allGameConfigs)
 		{
 			JButton gameButton = gameButtons.get(gameConfig);
-			gameButton.setEnabled(gameConfig.scrollsFolder != null);
-			noFolderSet = noFolderSet && (gameConfig.scrollsFolder == null);
+			// must have no game selected and have a folder
+			boolean enable = selectedGameConfig == null && gameConfig.scrollsFolder != null;
+			gameButton.setEnabled(enable);
+			noFolderSet = noFolderSet && enable;
 		}
 
 		//in case of nothing selected show dialog, funny infinite loop for recidivist non-setters
@@ -324,27 +316,21 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	 */
 	private void setSelectedGameConfig(GameConfig newGameConfig)
 	{
-
 		selectedGameConfig = newGameConfig;
+		enableButtons();
 		simpleWalkSetup.getAvatarCollisionInfo().setAvatarYHeight(selectedGameConfig.avatarYHeight);
-
-		for (GameConfig gameConfig : GameConfig.allGameConfigs)
-		{
-			JButton gameButton = gameButtons.get(gameConfig);
-			gameButton.setEnabled(false);
-		}
 
 		Thread t = new Thread()
 		{
 			public void run()
 			{
-				synchronized (selectedGameConfig.mainESMFile)
+				synchronized (selectedGameConfig)
 				{
 					ScrollsExplorer.dashboard.setEsmLoading(1);
 					prefs.put("use.bsa", Boolean.toString(cbBsaMenuItem.isSelected()));
 					prefs.put("load.all", Boolean.toString(cbLoadAllMenuItem.isSelected()));
 
-					esmManager = ESMManager.getESMManager(selectedGameConfig.mainESMFile);
+					esmManager = ESMManager.getESMManager(selectedGameConfig.getESMPath());
 					bsaFileSet = null;
 					if (esmManager != null)
 					{

@@ -265,10 +265,10 @@ public class ESMBSAExporter extends JFrame
 		{
 			public void run()
 			{
-				synchronized (selectedGameConfig.mainESMFile)
+				synchronized (selectedGameConfig)
 				{
 
-					esmManager = ESMManager.getESMManager(selectedGameConfig.mainESMFile);
+					esmManager = ESMManager.getESMManager(selectedGameConfig.getESMPath());
 					bsaFileSet = null;
 
 					new EsmSoundKeyToName(esmManager);
