@@ -503,7 +503,16 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	public static void main(String[] args)
 	{
 		//Arguments for goodness
-		//-Xmx1200m -Xms900m -Dsun.java2d.noddraw=true -Dj3d.sharedctx=true -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC
+		//-Xmx1200m -Xms900m -Dj3d.cacheAutoComputeBounds=true -Dsun.java2d.noddraw=true 
+		//-Dj3d.sharedctx=true -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC
+		
+		//Can't see a noticable diff in perf with this one
+		//-Dj3d.soleUser=true 				If set to true, allow the sole-user optimization; otherwise, sole-user is disabled 
+		
+		// still can't tell if this improves things
+		// it'ss only help if interleave is on
+		//-Dj3d.optimizedForSpace=false		If set to true, optimize by-ref geometry for space; otherwise, optimize for rendering speed 
+		
 
 		//jogl recomends for non phones 
 		System.setProperty("jogl.disable.opengles", "true");
