@@ -255,6 +255,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		{
 			e1.printStackTrace();
 		}
+		// MY system for guaranteee rendering of a component (test this)
+		this.setFont(this.getFont());
 	}
 
 	protected void showUserGuide()

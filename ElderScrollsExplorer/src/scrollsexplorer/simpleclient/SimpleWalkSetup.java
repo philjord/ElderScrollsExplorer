@@ -303,36 +303,36 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	public void setupGraphicsSetting(GraphicsSettings gs)
 	{
-		// must record start state to restore later
-		boolean isLive = enabled;
-
-		if (isLive)
-		{
-			setEnabled(false);
-		}
-
-		// clean any old gear
-		/*	if (cameraPanel != null)
-			{
-				// reverse of construction below basically
-				avatarLocation.removeAvatarLocationListener(cameraPanel.getDolly());
-				cameraPanel.getCanvas3D2D().getHudShapeRoot().detach();
-				Canvas3D2D canvas3D2D = cameraPanel.getCanvas3D2D();
-				canvas3D2D.removeKeyListener(keyNavigationInputAWT);
-				canvas3D2D.removeKeyListener(jumpKeyListener);
-				canvas3D2D.removeKeyListener(miscKeyHandler);
-				fpsCounter.removeFromCanvas(canvas3D2D);
-				hudPos.removeFromCanvas(canvas3D2D);
-				hudcompass.removeFromCanvas(canvas3D2D);
-				hudPhysicsState.removeFromCanvas(canvas3D2D);
-
-				frame.getContentPane().remove((JPanel) cameraPanel);
-			}*/
-
-		HMD_MODE = gs.isOculusView();
-
 		if (cameraPanel == null)
 		{
+			// must record start state to restore later
+			boolean isLive = enabled;
+
+			if (isLive)
+			{
+				setEnabled(false);
+			}
+
+			// clean any old gear
+			/*	if (cameraPanel != null)
+				{
+					// reverse of construction below basically
+					avatarLocation.removeAvatarLocationListener(cameraPanel.getDolly());
+					cameraPanel.getCanvas3D2D().getHudShapeRoot().detach();
+					Canvas3D2D canvas3D2D = cameraPanel.getCanvas3D2D();
+					canvas3D2D.removeKeyListener(keyNavigationInputAWT);
+					canvas3D2D.removeKeyListener(jumpKeyListener);
+					canvas3D2D.removeKeyListener(miscKeyHandler);
+					fpsCounter.removeFromCanvas(canvas3D2D);
+					hudPos.removeFromCanvas(canvas3D2D);
+					hudcompass.removeFromCanvas(canvas3D2D);
+					hudPhysicsState.removeFromCanvas(canvas3D2D);
+
+					frame.getContentPane().remove((JPanel) cameraPanel);
+				}*/
+
+			HMD_MODE = gs.isOculusView();
+
 			//create the camera panel ************************
 			if (HMD_MODE)
 			{
@@ -367,30 +367,30 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			}
 
 			frame.getContentPane().add((JPanel) cameraPanel);
-		}
 
-		avatarLocation.addAvatarLocationListener(cameraPanel.getDolly());
-		cameraPanel.getDolly().locationUpdated(avatarLocation.get(new Quat4f()), avatarLocation.get(new Vector3f()));
-		cameraPanel.getDolly().setHudShape(cameraPanel.getCanvas3D2D().getHudShapeRoot());
+			avatarLocation.addAvatarLocationListener(cameraPanel.getDolly());
+			cameraPanel.getDolly().locationUpdated(avatarLocation.get(new Quat4f()), avatarLocation.get(new Vector3f()));
+			cameraPanel.getDolly().setHudShape(cameraPanel.getCanvas3D2D().getHudShapeRoot());
 
-		DDSTextureLoader.setAnisotropicFilterDegree(gs.getAnisotropicFilterDegree());
-		cameraPanel.setSceneAntialiasingEnable(gs.isAaRequired());
+			DDSTextureLoader.setAnisotropicFilterDegree(gs.getAnisotropicFilterDegree());
+			cameraPanel.setSceneAntialiasingEnable(gs.isAaRequired());
 
-		Canvas3D2D canvas3D2D = cameraPanel.getCanvas3D2D();
-		canvas3D2D.addKeyListener(keyNavigationInputAWT);
-		canvas3D2D.addKeyListener(jumpKeyListener);
-		canvas3D2D.addKeyListener(miscKeyHandler);
-		fpsCounter.addToCanvas(canvas3D2D);
-		hudPos.addToCanvas(canvas3D2D);
-		hudcompass.addToCanvas(canvas3D2D);
-		hudPhysicsState.addToCanvas(canvas3D2D);
+			Canvas3D2D canvas3D2D = cameraPanel.getCanvas3D2D();
+			canvas3D2D.addKeyListener(keyNavigationInputAWT);
+			canvas3D2D.addKeyListener(jumpKeyListener);
+			canvas3D2D.addKeyListener(miscKeyHandler);
+			fpsCounter.addToCanvas(canvas3D2D);
+			hudPos.addToCanvas(canvas3D2D);
+			hudcompass.addToCanvas(canvas3D2D);
+			hudPhysicsState.addToCanvas(canvas3D2D);
 
-		//allow tab for mouse lock
-		canvas3D2D.setFocusTraversalKeysEnabled(false);
+			//allow tab for mouse lock
+			canvas3D2D.setFocusTraversalKeysEnabled(false);
 
-		if (isLive)
-		{
-			setEnabled(true);
+			if (isLive)
+			{
+				setEnabled(true);
+			}
 		}
 	}
 
