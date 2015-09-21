@@ -115,7 +115,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	public ScrollsExplorer()
 	{
 		super("ScrollsExplorer");
-		setVisible(true);// need to be visible in case of set folders
+
 		try
 		{
 			PropertyLoader.load();
@@ -124,7 +124,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			this.getContentPane().setLayout(new BorderLayout(1, 1));
-			this.setSize(600, 1000);
+			this.setSize(600, 800);
 
 			mainPanel.setLayout(new BorderLayout());
 
@@ -247,7 +247,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					closingTime();
 				}
 			});
-
+			setVisible(true);// need to be visible in case of set folders
+			// MY system for guaranteee rendering of a component (test this)
+			this.setFont(this.getFont());
 			enableButtons();
 
 		}
