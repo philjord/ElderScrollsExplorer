@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -19,14 +20,17 @@ import tools.swing.TitledJFileChooser;
 
 public class SetBethFoldersDialog extends JDialog
 {
-	public SetBethFoldersDialog(Frame f)
+	private HashMap<GameConfig, JTextField> gameFolderFields = new HashMap<GameConfig, JTextField>();
+
+	public SetBethFoldersDialog(Frame frame)
 	{
-		super(f, "Game Data (Esm and Bsa) Folders", true);
+		super(frame, "Game Data (Esm and Bsa) Folders", true);
 		this.setLayout(new GridLayout(-1, 1));
 
 		for (final GameConfig gameConfig : GameConfig.allGameConfigs)
 		{
 			final JTextField gameFolderField = new JTextField("");
+			gameFolderFields.put(gameConfig, gameFolderField);
 			JButton gameSetButton = new JButton("...");
 			JButton gameFtpButton = new JButton("FTP");
 
@@ -46,8 +50,8 @@ public class SetBethFoldersDialog extends JDialog
 				{
 					setFolder("Select " + gameConfig.gameName + " data folder", gameConfig.folderKey, gameFolderField);
 				}
-
 			});
+
 			gameFtpButton.addActionListener(new ActionListener()
 			{
 				@Override
@@ -68,6 +72,18 @@ public class SetBethFoldersDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
+				// set all properties in case of manual edits
+				for (GameConfig gameConfig : GameConfig.allGameConfigs)
+				{
+					JTextField gameFolderField = gameFolderFields.get(gameConfig);
+					File fileText = new File(gameFolderField.getText());
+					if (fileText.exists() && fileText.isDirectory())
+					{
+						PropertyLoader.properties.setProperty(gameConfig.folderKey, gameFolderField.getText());
+						//update gameconfigs based on property changes
+						gameConfig.update();
+					}
+				}
 				setVisible(false);
 			}
 		});

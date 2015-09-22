@@ -215,13 +215,14 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		avatarLocation.addAvatarLocationListener(this);
 		warpPanel.setLayout(new FlowLayout());
 		warpPanel.add(warpField);
+		warpField.setSize(200, 20);
 		ActionListener warpActionListener = new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
 				String warp = warpField.getText().trim();
-				String[] parts = warp.split("[^\\d]+");
+				String[] parts = warp.split("[^\\d-]+");
 
 				if (parts.length == 3)
 				{
