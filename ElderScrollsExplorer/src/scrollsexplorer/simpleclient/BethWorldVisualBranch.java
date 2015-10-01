@@ -76,13 +76,14 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		//Expensive to load, so keep it around and only change when must
 		if (bethLodManager == null)
 		{
-			if (j3dCellFactory.getMainESMFileName().equals("Morrowind.esm"))
+			//TODO: all these should be connected strongly to GameConfig
+			if (j3dCellFactory.getMainESMFileName().indexOf("Morrowind") != -1)
 			{
 				bethLodManager = new BethNoLodManager(j3dCellFactory);
 				J3dLAND.setTes3();
 				BethRenderSettings.setTes3(true);
 			}
-			else if (j3dCellFactory.getMainESMFileName().equals("Oblivion.esm"))
+			else if (j3dCellFactory.getMainESMFileName().indexOf("Oblivion") != -1)
 			{
 				bethLodManager = new Beth32LodManager(j3dCellFactory);
 			}

@@ -96,7 +96,7 @@ public class GameConfig
 				"textures\\sky\\cloudsclear.dds",//
 				2.28f, //
 				"HunterSneakerFolder",//
-				"Oblivion.esm",//
+				"OblivionHS.esm",//
 				"huntersneaker"));
 	}
 	/*
