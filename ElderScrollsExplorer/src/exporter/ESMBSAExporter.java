@@ -28,7 +28,6 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-import nif.NifToJ3d;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
 import scrollsexplorer.SetBethFoldersDialog;
@@ -355,9 +354,7 @@ public class ESMBSAExporter extends JFrame
 
 	private void export()
 	{
-		// TODO: exteriors, step through all cells possible (lod loads should be
-		// fine)
-		// TODO: nested levels
+
 		// TODO: animations for each CREA or CHAR how to find all animations
 		// TODO: sounds, found in nifs
 
@@ -380,6 +377,10 @@ public class ESMBSAExporter extends JFrame
 				{
 					if (intExt.equals("Ext"))
 					{
+						// TODO: exteriors, step through all cells possible (lod loads should be
+						// fine) test
+						// TODO: nested levels for exterior (e.g. for all houses inside cheydinhal
+
 						PluginRecord cell = esmManager.getWRLD(formId);
 						if (cell != null)
 						{
@@ -469,325 +470,153 @@ public class ESMBSAExporter extends JFrame
 			}
 
 		}
-
-		File outputFolder = new File(outputFolderField.getText());
 		try
 		{
-			System.out.println("Nifs");
-			HashSet<String> ms = ((BsaRecordedMeshSource) mediaSources.getMeshSource()).requestedFiles;
-			for (String nifName : ms)
-			{
-				System.out.print("Processing " + nifName);
-				if (!nifName.toLowerCase().startsWith("meshes"))
-				{
-					nifName = "Meshes\\" + nifName;
-				}
-
-				InputStream inputStream = null;
-				for (ArchiveFile archiveFile : bsaFileSet)
-				{
-					ArchiveEntry archiveEntry = archiveFile.getEntry(nifName);
-					if (archiveEntry != null)
-					{
-						inputStream = archiveFile.getInputStream(archiveEntry);
-						System.out.print(" found input stream ");
-						// don't check others
-						break;
-					}
-				}
-
-				if (inputStream != null)
-				{
-					File dest = new File(outputFolder.getAbsolutePath() + "\\" + nifName);
-
-					dest.getParentFile().mkdirs();
-					dest.createNewFile();
-					System.out.print(" copying ");
-					Utils.copyInputStreamToFile(inputStream, dest);
-					System.out.print("done");
-
-				}
-				else
-				{
-					System.out.println("Can't find " + nifName + " in Bsas");
-				}
-				System.out.println("");
-			}
-
-			HashSet<String> ts = ((BsaRecordedTextureSource) mediaSources.getTextureSource()).requestedFiles;
-			System.out.println("Textures");
-			for (String texName : ts)
-			{
-				System.out.print("Processing " + texName);
-				texName = texName.toLowerCase();
-
-				// remove incorrect file path prefix, if it exists
-				if (texName.startsWith("data\\"))
-				{
-					texName = texName.substring(5);
-				}
-
-				// add the textures path part
-				if (!texName.startsWith("textures"))
-				{
-					texName = "textures\\" + texName;
-				}
-
-				InputStream inputStream = null;
-				for (ArchiveFile archiveFile : bsaFileSet)
-				{
-					ArchiveEntry archiveEntry = archiveFile.getEntry(texName);
-					if (archiveEntry != null)
-					{
-						inputStream = archiveFile.getInputStream(archiveEntry);
-						System.out.print(" found input stream ");
-						// don't check others
-						break;
-					}
-				}
-
-				if (inputStream != null)
-				{
-					File dest = new File(outputFolder.getAbsolutePath() + "\\" + texName);
-
-					dest.getParentFile().mkdirs();
-					dest.createNewFile();
-					System.out.print(" copying ");
-					Utils.copyInputStreamToFile(inputStream, dest);
-					System.out.print("done");
-
-				}
-				else
-				{
-					System.out.println("Can't find " + texName + " in Bsas");
-				}
-				System.out.println("");
-			}
-			HashSet<String> ss = ((BsaRecordedSoundSource) mediaSources.getSoundSource()).requestedFiles;
-			System.out.println("Sounds");
-			for (String soun : ss)
-			{
-				System.out.print("Processing " + soun);
-				if (!soun.toLowerCase().startsWith("sound"))
-				{
-					soun = "sound\\" + soun;
-				}
-
-				InputStream inputStream = null;
-				for (ArchiveFile archiveFile : bsaFileSet)
-				{
-					ArchiveEntry archiveEntry = archiveFile.getEntry(soun);
-					if (archiveEntry != null)
-					{
-						inputStream = archiveFile.getInputStream(archiveEntry);
-						System.out.print(" found input stream ");
-						// don't check others
-						break;
-					}
-				}
-
-				if (inputStream != null)
-				{
-					File dest = new File(outputFolder.getAbsolutePath() + "\\" + soun);
-
-					dest.getParentFile().mkdirs();
-					dest.createNewFile();
-					System.out.print(" copying ");
-					Utils.copyInputStreamToFile(inputStream, dest);
-					System.out.print("done");
-
-				}
-				else
-				{
-					System.out.println("Can't find " + soun + " in Bsas");
-				}
-				System.out.println("");
-			}
+			File outputFolder = new File(outputFolderField.getText());
+			copyToOutput(outputFolder, mediaSources, bsaFileSet);
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 		System.out.println("Export complete in " + (System.currentTimeMillis() - startTime) + "ms");
+
 	}
 
-	public static String outputFolderTrees = "F:\\game media\\output\\skyrimTrees";
-
-	public static void exportSkyrimTrees() throws IOException
+	public static void copyToOutput(File outputFolder,  MediaSources mediaSources,  BSAFileSet bsaFileSet) throws IOException
 	{
-		PropertyLoader.load();
 
-		String scrollsFolder = PropertyLoader.properties.getProperty("SkyrimFolder");
-		String mainESMFile = scrollsFolder + PropertyLoader.fileSep + "Skyrim.esm";
-
-		IESMManager esmManager = ESMManager.getESMManager(mainESMFile);
-		new EsmSoundKeyToName(esmManager);
-
-		BSAFileSet bsaFileSet = null;
-		BsaRecordedMeshSource meshSource;
-		BsaRecordedTextureSource textureSource;
-		BsaRecordedSoundSource soundSource;
-
-		String plusSkyrim = PropertyLoader.properties.getProperty("SkyrimFolder");
-
-		bsaFileSet = new BSAFileSet(new String[]
-		{ plusSkyrim }, true, false);
-
-		meshSource = new BsaRecordedMeshSource(bsaFileSet);
-		textureSource = new BsaRecordedTextureSource(bsaFileSet);
-		soundSource = new BsaRecordedSoundSource(bsaFileSet, new EsmSoundKeyToName(esmManager));
-
-		MediaSources mediaSources = new MediaSources(meshSource, textureSource, soundSource);
-
-		long startTime = System.currentTimeMillis();
-		System.out.println("starting trees...");
-		// for each cell picked
-		for (String tree : meshSource.getFilesInFolder("Meshes\\landscape\\trees"))
+		System.out.println("Nifs");
+		BsaRecordedMeshSource meshSource = (BsaRecordedMeshSource) mediaSources.getMeshSource();
+		HashSet<String> meshRequestedFiles = meshSource.requestedFiles;
+		for (String nifName : meshRequestedFiles)
 		{
-			System.out.println("Tree: " + tree);
-			NifToJ3d.loadNif(tree, meshSource, textureSource);
-
-		}
-
-		File outputFolder = new File(outputFolderTrees);
-		try
-		{
-			System.out.println("Nifs");
-			HashSet<String> ms = ((BsaRecordedMeshSource) mediaSources.getMeshSource()).requestedFiles;
-			for (String nifName : ms)
+			System.out.print("Processing " + nifName);
+			if (!nifName.toLowerCase().startsWith("meshes"))
 			{
-				System.out.print("Processing " + nifName);
-				if (!nifName.toLowerCase().startsWith("meshes"))
-				{
-					nifName = "Meshes\\" + nifName;
-				}
-
-				InputStream inputStream = null;
-				for (ArchiveFile archiveFile : bsaFileSet)
-				{
-					ArchiveEntry archiveEntry = archiveFile.getEntry(nifName);
-					if (archiveEntry != null)
-					{
-						inputStream = archiveFile.getInputStream(archiveEntry);
-						System.out.print(" found input stream ");
-						// don't check others
-						break;
-					}
-				}
-
-				if (inputStream != null)
-				{
-					File dest = new File(outputFolder.getAbsolutePath() + "\\" + nifName);
-
-					dest.getParentFile().mkdirs();
-					dest.createNewFile();
-					System.out.print(" copying ");
-					Utils.copyInputStreamToFile(inputStream, dest);
-					System.out.print("done");
-
-				}
-				else
-				{
-					System.out.println("Can't find " + nifName + " in Bsas");
-				}
-				System.out.println("");
+				nifName = "Meshes\\" + nifName;
 			}
 
-			HashSet<String> ts = ((BsaRecordedTextureSource) mediaSources.getTextureSource()).requestedFiles;
-			System.out.println("Textures");
-			for (String texName : ts)
+			InputStream inputStream = null;
+			for (ArchiveFile archiveFile : bsaFileSet)
 			{
-				System.out.print("Processing " + texName);
-				texName = texName.toLowerCase();
-
-				// remove incorrect file path prefix, if it exists
-				if (texName.startsWith("data\\"))
+				ArchiveEntry archiveEntry = archiveFile.getEntry(nifName);
+				if (archiveEntry != null)
 				{
-					texName = texName.substring(5);
+					inputStream = archiveFile.getInputStream(archiveEntry);
+					System.out.print(" found input stream ");
+					// don't check others
+					break;
 				}
-
-				// add the textures path part
-				if (!texName.startsWith("textures"))
-				{
-					texName = "textures\\" + texName;
-				}
-
-				InputStream inputStream = null;
-				for (ArchiveFile archiveFile : bsaFileSet)
-				{
-					ArchiveEntry archiveEntry = archiveFile.getEntry(texName);
-					if (archiveEntry != null)
-					{
-						inputStream = archiveFile.getInputStream(archiveEntry);
-						System.out.print(" found input stream ");
-						// don't check others
-						break;
-					}
-				}
-
-				if (inputStream != null)
-				{
-					File dest = new File(outputFolder.getAbsolutePath() + "\\" + texName);
-
-					dest.getParentFile().mkdirs();
-					dest.createNewFile();
-					System.out.print(" copying ");
-					Utils.copyInputStreamToFile(inputStream, dest);
-					System.out.print("done");
-
-				}
-				else
-				{
-					System.out.println("Can't find " + texName + " in Bsas");
-				}
-				System.out.println("");
 			}
-			HashSet<String> ss = ((BsaRecordedSoundSource) mediaSources.getSoundSource()).requestedFiles;
-			System.out.println("Sounds");
-			for (String soun : ss)
+
+			if (inputStream != null)
 			{
-				System.out.print("Processing " + soun);
-				if (!soun.toLowerCase().startsWith("sound"))
-				{
-					soun = "sound\\" + soun;
-				}
+				File dest = new File(outputFolder.getAbsolutePath() + "\\" + nifName);
 
-				InputStream inputStream = null;
-				for (ArchiveFile archiveFile : bsaFileSet)
-				{
-					ArchiveEntry archiveEntry = archiveFile.getEntry(soun);
-					if (archiveEntry != null)
-					{
-						inputStream = archiveFile.getInputStream(archiveEntry);
-						System.out.print(" found input stream ");
-						// don't check others
-						break;
-					}
-				}
+				dest.getParentFile().mkdirs();
+				dest.createNewFile();
+				System.out.print(" copying ");
+				Utils.copyInputStreamToFile(inputStream, dest);
+				System.out.print("done");
 
-				if (inputStream != null)
-				{
-					File dest = new File(outputFolder.getAbsolutePath() + "\\" + soun);
-
-					dest.getParentFile().mkdirs();
-					dest.createNewFile();
-					System.out.print(" copying ");
-					Utils.copyInputStreamToFile(inputStream, dest);
-					System.out.print("done");
-
-				}
-				else
-				{
-					System.out.println("Can't find " + soun + " in Bsas");
-				}
-				System.out.println("");
 			}
+			else
+			{
+				System.out.println("Can't find " + nifName + " in Bsas");
+			}
+			System.out.println("");
 		}
-		catch (IOException e)
+
+		HashSet<String> ts = ((BsaRecordedTextureSource) mediaSources.getTextureSource()).requestedFiles;
+		System.out.println("Textures");
+		for (String texName : ts)
 		{
-			e.printStackTrace();
+			System.out.print("Processing " + texName);
+			texName = texName.toLowerCase();
+
+			// remove incorrect file path prefix, if it exists
+			if (texName.startsWith("data\\"))
+			{
+				texName = texName.substring(5);
+			}
+
+			// add the textures path part
+			if (!texName.startsWith("textures"))
+			{
+				texName = "textures\\" + texName;
+			}
+
+			InputStream inputStream = null;
+			for (ArchiveFile archiveFile : bsaFileSet)
+			{
+				ArchiveEntry archiveEntry = archiveFile.getEntry(texName);
+				if (archiveEntry != null)
+				{
+					inputStream = archiveFile.getInputStream(archiveEntry);
+					System.out.print(" found input stream ");
+					// don't check others
+					break;
+				}
+			}
+
+			if (inputStream != null)
+			{
+				File dest = new File(outputFolder.getAbsolutePath() + "\\" + texName);
+
+				dest.getParentFile().mkdirs();
+				dest.createNewFile();
+				System.out.print(" copying ");
+				Utils.copyInputStreamToFile(inputStream, dest);
+				System.out.print("done");
+
+			}
+			else
+			{
+				System.out.println("Can't find " + texName + " in Bsas");
+			}
+			System.out.println("");
 		}
-		System.out.println("Export complete in " + (System.currentTimeMillis() - startTime) + "ms");
+		HashSet<String> ss = ((BsaRecordedSoundSource) mediaSources.getSoundSource()).requestedFiles;
+		System.out.println("Sounds");
+		for (String soun : ss)
+		{
+			System.out.print("Processing " + soun);
+			if (!soun.toLowerCase().startsWith("sound"))
+			{
+				soun = "sound\\" + soun;
+			}
+
+			InputStream inputStream = null;
+			for (ArchiveFile archiveFile : bsaFileSet)
+			{
+				ArchiveEntry archiveEntry = archiveFile.getEntry(soun);
+				if (archiveEntry != null)
+				{
+					inputStream = archiveFile.getInputStream(archiveEntry);
+					System.out.print(" found input stream ");
+					// don't check others
+					break;
+				}
+			}
+
+			if (inputStream != null)
+			{
+				File dest = new File(outputFolder.getAbsolutePath() + "\\" + soun);
+
+				dest.getParentFile().mkdirs();
+				dest.createNewFile();
+				System.out.print(" copying ");
+				Utils.copyInputStreamToFile(inputStream, dest);
+				System.out.print("done");
+
+			}
+			else
+			{
+				System.out.println("Can't find " + soun + " in Bsas");
+			}
+			System.out.println("");
+		}
 	}
 
 	public void closingTime()
@@ -809,8 +638,6 @@ public class ESMBSAExporter extends JFrame
 		{
 			ESMBSAExporter scrollsExplorer = new ESMBSAExporter();
 			scrollsExplorer.setVisible(true);
-
-			//exportSkyrimTrees();
 		}
 		catch (IOException e)
 		{

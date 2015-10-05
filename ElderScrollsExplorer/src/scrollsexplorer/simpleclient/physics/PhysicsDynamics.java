@@ -163,6 +163,10 @@ public class PhysicsDynamics extends DynamicsEngine
 			{
 				createStaticOrDynamic(j3dRECOInst, j3dRECOType.physNifFile);
 			}
+			else
+			{
+				System.out.println("j3dRECOType null or null phys " + j3dRECOType);
+			}
 		}
 		//System.out.println("add called total= " + nifBulletToRecoId.size());
 	}
@@ -194,7 +198,7 @@ public class PhysicsDynamics extends DynamicsEngine
 			BulletNifModel nb = null;
 
 			if (BulletNifModelClassifier.isStaticModel(physNifFile, meshSource))
-			{
+			{				
 				// the nif file will have mass of 0 making this static
 				nb = new NBSimpleModel(physNifFile, meshSource, rootTrans);
 			}
@@ -208,8 +212,14 @@ public class PhysicsDynamics extends DynamicsEngine
 			{
 				createDynamic(j3dRECOInst, physNifFile);
 			}
+			else if (BulletNifModelClassifier.isComplexDynamic(physNifFile, meshSource))
+			{
+
+			}
 			else
 			{
+				//TODO: lots of plants have this check them out 
+				//System.out.println("crazy type? " + physNifFile);
 				// probably just smoke effect etc, complex dynamic rag doll
 			}
 
@@ -225,6 +235,10 @@ public class PhysicsDynamics extends DynamicsEngine
 				}
 			}
 
+		}
+		else
+		{
+			System.out.println("why null phys? " + j3dRECOInst);
 		}
 	}
 

@@ -29,6 +29,7 @@ import esmj3d.j3d.cell.J3dICELLPersistent;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
+ 
 
 public class BethWorldVisualBranch extends BranchGroup implements LocationUpdateListener
 {
@@ -82,6 +83,10 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 				bethLodManager = new BethNoLodManager(j3dCellFactory);
 				J3dLAND.setTes3();
 				BethRenderSettings.setTes3(true);
+			}
+			else if (j3dCellFactory.getMainESMFileName().indexOf("HunterSneaker") != -1)
+			{
+				esmj3dtes4.j3d.j3drecords.inst.J3dREFRFactory.NATURAL_ANIMALS_ONLY = true;
 			}
 			else if (j3dCellFactory.getMainESMFileName().indexOf("Oblivion") != -1)
 			{

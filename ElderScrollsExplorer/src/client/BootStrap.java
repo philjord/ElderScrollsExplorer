@@ -8,7 +8,7 @@ import common.config.ConfigLoader;
 public class BootStrap extends GeneralBootStrap
 {
 	//This must be set the the name of teh zip that it will be in when loaded up to sourceforge
-	public static String CURRENT_ZIP_VERSION = "ElderScrollsExplorer v2.13.zip";
+	public static String CURRENT_ZIP_VERSION = "ElderScrollsExplorer v2.14.zip";
 
 	private static String downloadLocation = "https://sourceforge.net/projects/elderscrollsexplorer/files/latest/download";
 
