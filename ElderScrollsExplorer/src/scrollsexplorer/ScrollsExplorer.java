@@ -288,18 +288,18 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	private void enableButtons()
 	{
-		boolean noFolderSet = true;
+		boolean noFoldersSet = true;
 		for (GameConfig gameConfig : GameConfig.allGameConfigs)
 		{
 			JButton gameButton = gameButtons.get(gameConfig);
 			// must have no game selected and have a folder
 			boolean enable = selectedGameConfig == null && gameConfig.scrollsFolder != null;
 			gameButton.setEnabled(enable);
-			noFolderSet = noFolderSet && enable;
+			noFoldersSet = noFoldersSet && !enable;
 		}
 
 		//in case of nothing selected show dialog, funny infinite loop for recidivist non-setters
-		if (noFolderSet)
+		if (noFoldersSet)
 		{
 			showUserGuide();
 			setFolders();
