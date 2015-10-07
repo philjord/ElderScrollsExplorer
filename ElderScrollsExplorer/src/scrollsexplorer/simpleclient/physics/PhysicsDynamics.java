@@ -238,7 +238,8 @@ public class PhysicsDynamics extends DynamicsEngine
 		}
 		else
 		{
-			System.out.println("why null phys? " + j3dRECOInst);
+			//Lights and alsorts of things can have no model or physics
+			//System.out.println("why null phys? " + j3dRECOInst);
 		}
 	}
 

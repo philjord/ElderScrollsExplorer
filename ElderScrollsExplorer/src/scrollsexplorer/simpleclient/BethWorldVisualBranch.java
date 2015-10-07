@@ -29,7 +29,6 @@ import esmj3d.j3d.cell.J3dICELLPersistent;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
- 
 
 public class BethWorldVisualBranch extends BranchGroup implements LocationUpdateListener
 {
@@ -142,6 +141,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			};
 
 			nearUpdateThread = new QueuingThread(nearCallBack);
+			nearUpdateThread.setNewestOnly(true);
 			nearUpdateThread.setName("Beth Vis near update thread");
 			nearUpdateThread.setDaemon(true);
 			nearUpdateThread.start();
@@ -161,6 +161,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			};
 
 			grossUpdateThread = new QueuingThread(grossCallBack);
+			grossUpdateThread.setNewestOnly(true);
 			grossUpdateThread.setName("Beth Vis gross update thread");
 			grossUpdateThread.setDaemon(true);
 			grossUpdateThread.start();
@@ -262,10 +263,12 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 						//Persistent are loaded in  the CELL that is makeBGWRLD all xy based persistents are empty
 
 						J3dCELLGeneral bg = j3dCellFactory.makeBGWRLDTemporary(worldFormId, x, y, false);
+
 						synchronized (loadedNears)
 						{
 							loadedNears.put(key, bg);
 						}
+
 						//NOTE nears own the detailed land					
 						if (bg != null)
 						{

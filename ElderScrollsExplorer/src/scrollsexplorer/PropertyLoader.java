@@ -18,11 +18,11 @@ public class PropertyLoader
 
 	public static void load() throws IOException
 	{
-		String filePath = System.getProperty("user.home") + fileSep + "PJJava";
+		String filePath = System.getProperty("user.home") + fileSep + "philjord";
 		File dirFile = new File(filePath);
 		if (!dirFile.exists())
 			dirFile.mkdirs();
-		filePath = filePath + fileSep + "MCD.ini";
+		filePath = filePath + fileSep + "ElderScrollsExploerer.ini";
 		propFile = new File(filePath);
 		properties = new Properties();
 		if (propFile.exists())
