@@ -197,21 +197,22 @@ public class SimpleBethCellManager implements InstRECOStore
 				if (cell != null)
 				{
 					currentBethWorldVisualBranch = new BethWorldVisualBranch(currentCellFormId, j3dCellFactory);
-					simpleWalkSetup.addToVisualBranch(currentBethWorldVisualBranch);
 					if (avatarLocation != null)
 					{
 						currentBethWorldVisualBranch.init(avatarLocation.getTransform());
 						avatarLocation.addAvatarLocationListener(currentBethWorldVisualBranch);
 					}
+					// notice init before making live to speed it up
+					simpleWalkSetup.addToVisualBranch(currentBethWorldVisualBranch);
 
 					currentBethWorldPhysicalBranch = new BethWorldPhysicalBranch(simpleWalkSetup.getPhysicsSystem(), currentCellFormId,
 							j3dCellFactory);
-					simpleWalkSetup.addToPhysicalBranch(currentBethWorldPhysicalBranch);
 					if (avatarLocation != null)
 					{
 						currentBethWorldPhysicalBranch.init(avatarLocation.getTransform());
 						avatarLocation.addAvatarLocationListener(currentBethWorldPhysicalBranch);
 					}
+					simpleWalkSetup.addToPhysicalBranch(currentBethWorldPhysicalBranch);
 				}
 				else
 				{

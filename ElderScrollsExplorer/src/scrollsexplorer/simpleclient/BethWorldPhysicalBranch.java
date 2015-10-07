@@ -100,6 +100,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			};
 
 			updateThread = new QueuingThread(callBack);
+			updateThread.setNewestOnly(true);
 			updateThread.setName("Obliv Phys update thread");
 			updateThread.setDaemon(true);
 			updateThread.start();

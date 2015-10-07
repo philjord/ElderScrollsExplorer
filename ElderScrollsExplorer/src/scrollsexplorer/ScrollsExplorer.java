@@ -344,7 +344,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
 								new Vector3f().toString()));
 						simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
-
+						
 						new EsmSoundKeyToName(esmManager);
 						MeshSource meshSource;
 						TextureSource textureSource;

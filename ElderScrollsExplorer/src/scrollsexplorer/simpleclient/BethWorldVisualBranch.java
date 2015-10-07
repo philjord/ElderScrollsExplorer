@@ -108,9 +108,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		isWRLD = j3dCellFactory.isWRLD(worldFormId);
 		if (isWRLD)
 		{
-
 			//load the general children of this wrld space
-
 			j3dCELLPersistent = j3dCellFactory.makeBGWRLDPersistent(worldFormId, false);
 			addChild((J3dCELLGeneral) j3dCELLPersistent);
 
@@ -118,25 +116,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			{
 				public void run(Object parameter)
 				{
-					Point3f p = (Point3f) parameter;
-
-					//in case of warp fix up the old but ignore new?
-					Point3f currentCharPoint = new Point3f(lastUpdatedTranslation.x, 0, lastUpdatedTranslation.z);
-					if (currentCharPoint.distance(p) < BethRenderSettings.getFarLoadGridCount())
-					{
-						ScrollsExplorer.dashboard.setNearLoading(1);
-						if (j3dCELLPersistent != null)
-						{
-							j3dCELLPersistent.getGridSpaces().update(p.x, -p.z,
-									J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount());
-						}
-
-						updateNear(p.x, -p.z);
-						ScrollsExplorer.dashboard.setNearLoading(-1);
-						ScrollsExplorer.dashboard.setFarLoading(1);
-						updateFar(p.x, -p.z);
-						ScrollsExplorer.dashboard.setFarLoading(-1);
-					}
+					updateNear((Point3f) parameter);
 				}
 			};
 
@@ -150,13 +130,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			{
 				public void run(Object parameter)
 				{
-					Point3f p = (Point3f) parameter;
-					if (isWRLD)
-					{
-						ScrollsExplorer.dashboard.setLodLoading(1);
-						updateGross(p.x, -p.z);
-						ScrollsExplorer.dashboard.setLodLoading(-1);
-					}
+					updateGross((Point3f) parameter);
 				}
 			};
 
@@ -170,6 +144,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			// It can cause deadlocks, betterdistanceLOD on teh behavior thread is
 			// doing adds and removes, so these queueing thread need to be on a behavior as well.
 			structureUpdateBehavior = new StructureUpdateBehavior();
+			structureUpdateBehavior.setMaxElapsedTimeForCalls(20);
 			addChild(structureUpdateBehavior);
 
 		}
@@ -185,9 +160,12 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		bethLodManager.detach();
 	}
 
+	/**
+	 * Note this MUST be called wiht the visuals not yet attached, it does much structure change
+	 * @param charLocation
+	 */
 	public void init(Transform3D charLocation)
 	{
-
 		ScrollsExplorer.dashboard.setNearLoading(1);
 		Vector3f v = new Vector3f();
 		charLocation.get(v);
@@ -195,26 +173,52 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		charLocation.get(newTranslation);
 		lastUpdatedTranslation.set(newTranslation);
 
-		//Note not on a seperate thread				 
-		updateNear(p.x, -p.z);
+		//Note not on a seperate thread		
 		if (j3dCELLPersistent != null)
 		{
 			j3dCELLPersistent.getGridSpaces().update(p.x, -p.z, J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount());
 		}
-
-		// on a seperate thread
-
 		Point3f updatePoint = new Point3f(lastUpdatedTranslation.x, 0, lastUpdatedTranslation.z);
-		nearUpdateThread.addToQueue(updatePoint);
-		grossUpdateThread.addToQueue(updatePoint);
+		updateNear(updatePoint);
+		updateGross(updatePoint);
 
 		ScrollsExplorer.dashboard.setNearLoading(-1);
 
 	}
 
+	private void updateGross(Point3f p)
+	{
+		if (isWRLD)
+		{
+			ScrollsExplorer.dashboard.setLodLoading(1);
+			updateGross(p.x, -p.z);
+			ScrollsExplorer.dashboard.setLodLoading(-1);
+		}
+	}
+
 	private void updateGross(float charX, float charY)
 	{
 		bethLodManager.updateGross(charX, charY);
+	}
+
+	private void updateNear(Point3f p)
+	{
+		//in case of warp fix up the old but ignore new?
+		Point3f currentCharPoint = new Point3f(lastUpdatedTranslation.x, 0, lastUpdatedTranslation.z);
+		if (currentCharPoint.distance(p) < BethRenderSettings.getFarLoadGridCount())
+		{
+			ScrollsExplorer.dashboard.setNearLoading(1);
+			if (j3dCELLPersistent != null)
+			{
+				j3dCELLPersistent.getGridSpaces().update(p.x, -p.z, J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount());
+			}
+
+			updateNear(p.x, -p.z);
+			ScrollsExplorer.dashboard.setNearLoading(-1);
+			ScrollsExplorer.dashboard.setFarLoading(1);
+			updateFar(p.x, -p.z);
+			ScrollsExplorer.dashboard.setFarLoading(-1);
+		}
 	}
 
 	private void updateNear(float charX, float charY)
@@ -296,6 +300,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 	 * This only does things for Oblivion, tes5 doesn't use it
 	 * @param charX
 	 * @param charY
+	 * @param isLive 
 	 */
 	private void updateFar(float charX, float charY)
 	{
@@ -394,7 +399,6 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 				grossUpdateThread.addToQueue(updatePoint);
 			}
 		}
-
 	}
 
 	public void handleRecordCreate(Record record)
