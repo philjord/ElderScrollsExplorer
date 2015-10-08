@@ -31,12 +31,6 @@ public class PropertyLoader
 			properties.load(in);
 			in.close();
 		}
-		else
-		{
-			//Insert some defaults
-			properties.put("USEJOGL2", "true");
-		}
-
 	}
 
 	public static void save()

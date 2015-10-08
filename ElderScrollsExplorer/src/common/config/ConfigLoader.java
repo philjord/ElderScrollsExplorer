@@ -22,29 +22,13 @@ public class ConfigLoader
 				String configString = input.readLine();
 				while (configString != null)
 				{
-
-				/*	if (configString.startsWith("USEJOGL2="))
-					{
-						String s = configString.substring("USEJOGL2=".length());
-						CommonConstants.USEJOGL2 = Boolean.parseBoolean(s);
-						System.out.println("USEJOGL2 " + CommonConstants.USEJOGL2);
-					}
-					
-*/
 					configString = input.readLine();
 				}
 
 				// Now do command line overrides			 
 				for (String argConfigString : args)
 				{
-					/*System.out.println("Command line override " + argConfigString);
-					if (argConfigString.startsWith("-USEJOGL2="))
-					{
-						String s = argConfigString.substring("-USEJOGL2=".length());
-						CommonConstants.USEJOGL2 = Boolean.parseBoolean(s);
-						System.out.println("USEJOGL2 " + CommonConstants.USEJOGL2);
-					}*/
-					
+
 				}
 
 			}

@@ -7,8 +7,13 @@ import common.config.ConfigLoader;
 
 public class BootStrap extends GeneralBootStrap
 {
-	//This must be set the the name of teh zip that it will be in when loaded up to sourceforge
-	public static String CURRENT_ZIP_VERSION = "ElderScrollsExplorer v2.14.zip";
+	//This must be set the the name of the zip that it will be in when loaded up to sourceforge
+	// of the form ZIP_PREFIX+" v"+MAJOR_VERSION+"."+MINOR_VERSION+".zip"
+	public static String ZIP_PREFIX = "ElderScrollsExplorer";
+
+	public static int MAJOR_VERSION = 2;
+
+	public static int MINOR_VERSION = 16;
 
 	private static String downloadLocation = "https://sourceforge.net/projects/elderscrollsexplorer/files/latest/download";
 
@@ -17,7 +22,7 @@ public class BootStrap extends GeneralBootStrap
 		ConfigLoader.loadConfig(args);
 
 		// ask updater if we can continue or we should exit
-		if (SourceForgeUpdater.doUpdate(CURRENT_ZIP_VERSION, downloadLocation))
+		if (SourceForgeUpdater.doUpdate(ZIP_PREFIX, MAJOR_VERSION, MINOR_VERSION, downloadLocation))
 		{
 			startClient();
 		}
@@ -55,7 +60,7 @@ public class BootStrap extends GeneralBootStrap
 		ProcessBuilder pb = new ProcessBuilder(createJavaExeStr(), getXMX(), "-Xms1024m", cacheAutoComputeBounds, noddraw, sharedctx,
 				fancyGCa, fancyGCb, disableExtJars, "-cp", jarpath, "scrollsexplorer.ScrollsExplorer");
 
-		startProcess(pb, ".\\logs\\clientlog.txt", ".\\logs\\clientlog.err.txt", CURRENT_ZIP_VERSION);
+		startProcess(pb, ".\\logs\\clientlog.txt", ".\\logs\\clientlog.err.txt", ZIP_PREFIX + "-" + MAJOR_VERSION + "-" + MINOR_VERSION);
 	}
 
 }

@@ -344,7 +344,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
 								new Vector3f().toString()));
 						simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
-						
+
 						new EsmSoundKeyToName(esmManager);
 						MeshSource meshSource;
 						TextureSource textureSource;
@@ -517,9 +517,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		// still can't tell if this improves things
 		// it'ss only help if interleave is on
 		//-Dj3d.optimizedForSpace=false		If set to true, optimize by-ref geometry for space; otherwise, optimize for rendering speed 
-
-		System.out.println("VERSION: " + BootStrap.CURRENT_ZIP_VERSION);
-		System.err.println("VERSION: " + BootStrap.CURRENT_ZIP_VERSION);
+		String versionString = BootStrap.ZIP_PREFIX + "-" + BootStrap.MAJOR_VERSION + "-" + BootStrap.MINOR_VERSION;
+		System.out.println("VERSION: " + versionString);
+		System.err.println("VERSION: " + versionString);
 
 		//jogl recomends for non phones 
 		System.setProperty("jogl.disable.opengles", "true");

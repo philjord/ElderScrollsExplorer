@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="WINDOWS-1252" standalone="no"?>
 <jardesc>
     <jar path="E:/Java/installers/ElderScrollsExplorer/ElderScrollsExplorer.jar"/>
-    <options buildIfNeeded="true" compress="true" descriptionLocation="/ElderScrollsExplorer/SET_THE_ZIP_VERSION_BEFORE.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/ElderScrollsExplorer/UPDATE_VERSION_BEFORE_EXPORT.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
     <manifest generateManifest="false" manifestLocation="/ElderScrollsExplorer/META-INF/MANIFEST.MF" manifestVersion="1.0" reuseManifest="false" saveManifest="true" usesManifest="true">
