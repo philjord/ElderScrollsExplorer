@@ -516,7 +516,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		// still can't tell if this improves things
 		// it'ss only help if interleave is on
-		//-Dj3d.optimizedForSpace=false		If set to true, optimize by-ref geometry for space; otherwise, optimize for rendering speed 
+		//-Dj3d.optimizedForSpace=false		If set to true, optimize by-ref geometry for space; otherwise, optimize for rendering speed
+		
+		// some other interesting settings
+		//java -server -XX:CompileThreshold=2 -XX:+AggressiveOpts -XX:+UseFastAccessorMethods 
+		
 		String versionString = BootStrap.ZIP_PREFIX + "-" + BootStrap.MAJOR_VERSION + "-" + BootStrap.MINOR_VERSION;
 		System.out.println("VERSION: " + versionString);
 		System.err.println("VERSION: " + versionString);
