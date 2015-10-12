@@ -1,6 +1,7 @@
 package scrollsexplorer.simpleclient;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -136,7 +137,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 			update(p.x, -p.z);
 			if (j3dCELLPersistent != null)
 			{
-				j3dCELLPersistent.getGridSpaces().update(p.x, -p.z, J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount());
+				j3dCELLPersistent.getGridSpaces().update(p.x, -p.z, BethWorldVisualBranch.bethLodManager);
 			}
 		}
 	}
@@ -153,14 +154,14 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 
 		if (j3dCELLPersistent != null)
 		{
-			float loadDist = J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount();
+			Rectangle bounds = BethWorldVisualBranch.bethLodManager.getGridBounds(charX, charY, BethRenderSettings.getNearLoadGridCount());
 
 			// because j3dcellpersistent is in a lower project I have to do this here, bum			
-			List<GridSpace> gridsToRemove = j3dCELLPersistent.getGridSpaces().getGridSpacesToRemove(charX, charY, loadDist);
-			List<GridSpace> gridsToAdd = j3dCELLPersistent.getGridSpaces().getGridSpacesToAdd(charX, charY, loadDist);
+			List<GridSpace> gridsToRemove = j3dCELLPersistent.getGridSpaces().getGridSpacesToRemove(bounds);
+			List<GridSpace> gridsToAdd = j3dCELLPersistent.getGridSpaces().getGridSpacesToAdd(bounds);
 
 			//done after gathering the lists above so we now do the grid changes
-			j3dCELLPersistent.getGridSpaces().update(charX, charY, loadDist);
+			j3dCELLPersistent.getGridSpaces().update(charX, charY, BethWorldVisualBranch.bethLodManager);
 
 			for (GridSpace gridSpace : gridsToRemove)
 			{

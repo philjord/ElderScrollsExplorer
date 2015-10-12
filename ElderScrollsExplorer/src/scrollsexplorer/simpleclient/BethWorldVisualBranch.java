@@ -52,8 +52,8 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 
 	private J3dICellFactory j3dCellFactory;
 
-	//  on change don't dump gross until we forcable need a different one
-	private static BethLodManager bethLodManager;
+	// TODO: on change don't dump gross until we forcable need a different one
+	public static BethLodManager bethLodManager;
 
 	private BethRenderSettings.UpdateListener listener = new BethRenderSettings.UpdateListener()
 	{
@@ -176,7 +176,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 		//Note not on a seperate thread		
 		if (j3dCELLPersistent != null)
 		{
-			j3dCELLPersistent.getGridSpaces().update(p.x, -p.z, J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount());
+			j3dCELLPersistent.getGridSpaces().update(p.x, -p.z, bethLodManager);
 		}
 		Point3f updatePoint = new Point3f(lastUpdatedTranslation.x, 0, lastUpdatedTranslation.z);
 		updateNear(updatePoint);
@@ -210,7 +210,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			ScrollsExplorer.dashboard.setNearLoading(1);
 			if (j3dCELLPersistent != null)
 			{
-				j3dCELLPersistent.getGridSpaces().update(p.x, -p.z, J3dLAND.LAND_SIZE * BethRenderSettings.getNearLoadGridCount());
+				j3dCELLPersistent.getGridSpaces().update(p.x, -p.z, bethLodManager);
 			}
 
 			updateNear(p.x, -p.z);

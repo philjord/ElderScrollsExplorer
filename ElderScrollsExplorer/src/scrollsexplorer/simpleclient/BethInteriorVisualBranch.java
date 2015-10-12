@@ -13,6 +13,8 @@ import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 public class BethInteriorVisualBranch extends BranchGroup
 {
 
+	private String cellFormName;
+
 	private J3dICELLPersistent j3dCELLPersistent;
 
 	private J3dCELLGeneral interiorCELLTemporary;
@@ -21,13 +23,13 @@ public class BethInteriorVisualBranch extends BranchGroup
 
 	public BethInteriorVisualBranch(int interiorCellFormId, String cellFormName, J3dICellFactory j3dCellFactory)
 	{
-
+		this.cellFormName = cellFormName;
 		this.setCapability(BranchGroup.ALLOW_DETACH);
 		this.setCapability(Group.ALLOW_CHILDREN_WRITE);
 		this.setCapability(Group.ALLOW_CHILDREN_EXTEND);
 
 		j3dCELLPersistent = j3dCellFactory.makeBGInteriorCELLPersistent(interiorCellFormId, false);
-		j3dCELLPersistent.getGridSpaces().update(0, 0, 100000);//force add all
+		j3dCELLPersistent.getGridSpaces().updateAll();
 		addChild((J3dCELLGeneral) j3dCELLPersistent);
 		interiorCELLTemporary = j3dCellFactory.makeBGInteriorCELLTemporary(interiorCellFormId, false);
 		addChild(interiorCELLTemporary);
