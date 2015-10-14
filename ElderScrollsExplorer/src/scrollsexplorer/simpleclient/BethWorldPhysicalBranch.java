@@ -63,6 +63,7 @@ public class BethWorldPhysicalBranch extends BranchGroup implements LocationUpda
 
 	public BethWorldPhysicalBranch(PhysicsSystem clientPhysicsSystem, int worldFormId, J3dICellFactory j3dCellFactory)
 	{
+		this.setName("BethWorldPhysicalBranch" + worldFormId);
 		this.clientPhysicsSystem = clientPhysicsSystem;
 		this.worldFormId = worldFormId;
 		this.j3dCellFactory = j3dCellFactory;

@@ -1,5 +1,6 @@
 package scrollsexplorer.simpleclient;
 
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -30,6 +31,12 @@ import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 
+/**
+
+ * 
+ * @author phil
+ *
+ */
 public class BethWorldVisualBranch extends BranchGroup implements LocationUpdateListener
 {
 	private int worldFormId;
@@ -65,6 +72,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 
 	public BethWorldVisualBranch(int worldFormId, J3dICellFactory j3dCellFactory)
 	{
+		this.setName("BethWorldVisualBranch" + worldFormId);
 		this.worldFormId = worldFormId;
 		this.j3dCellFactory = j3dCellFactory;
 

@@ -18,6 +18,7 @@ public class BethInteriorPhysicalBranch extends BranchGroup
 
 	public BethInteriorPhysicalBranch(PhysicsSystem clientPhysicsSystem, int interiorCellFormId, J3dICellFactory j3dCellFactory)
 	{
+		this.setName("BethInteriorPhysicalBranch" + interiorCellFormId);
 		this.setCapability(BranchGroup.ALLOW_DETACH);
 		this.setCapability(Group.ALLOW_CHILDREN_WRITE);
 		this.setCapability(Group.ALLOW_CHILDREN_EXTEND);
