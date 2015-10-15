@@ -6,8 +6,6 @@ import java.util.Collection;
 import javax.media.j3d.BranchGroup;
 import javax.vecmath.Vector3f;
 
-import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
-
 import nifbullet.BulletNifModel;
 import nifbullet.NavigationProcessorBullet.NbccProvider;
 import nifbullet.cha.NBControlledChar;
@@ -18,6 +16,9 @@ import tools.clock.PeriodicallyUpdated;
 import tools3d.mixed3d2d.hud.hudelements.HUDPhysicsState.HUDPhysicsStateData;
 import tools3d.navigation.AvatarLocation;
 import utils.source.MeshSource;
+
+import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
+
 import esmj3d.j3d.cell.GridSpace;
 import esmj3d.j3d.cell.J3dCELLGeneral;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
@@ -135,57 +136,49 @@ public class PhysicsSystem implements NbccProvider, HUDPhysicsStateData
 	public void loadJ3dGridSpace(GridSpace cell)
 	{
 		//System.out.println("load request for GridSpace " + cell.getName() + " recos count = " + cell.getJ3dRECOsById().values().size());
+
+		// add the items
+		for (J3dRECOInst instReco : cell.getJ3dRECOsById().values())
+		{
+			physicsLocaleDynamics.createRECO(instReco);
+		}
+		// use the arraylist of insts are teh keys for add
 		eventsToProcess.add(PhysicsUpdate.createLFM(cell.getJ3dRECOsById().values()));
 	}
 
 	public void unloadJ3dGridSpace(GridSpace cell)
 	{
+		// removes just need the keys to remove
 		eventsToProcess.add(PhysicsUpdate.createULFM(cell.getJ3dRECOsById().values()));
 	}
 
 	public void loadJ3dCELL(J3dCELLGeneral cell)
 	{
 		//System.out.println("load request for cell " + cell.getName());
+		// add the items
+		for (J3dRECOInst instReco : cell.getJ3dRECOs().values())
+		{
+			physicsLocaleDynamics.createRECO(instReco);
+		}
+		// use the arraylist of insts are teh keys for add
 		eventsToProcess.add(PhysicsUpdate.createLFM(cell.getJ3dRECOs().values()));
 	}
 
 	public void unloadJ3dCELL(J3dCELLGeneral cell)
 	{
+		// removes just need the keys to remove
 		eventsToProcess.add(PhysicsUpdate.createULFM(cell.getJ3dRECOs().values()));
 	}
 
-	private void loadFromModelImpl(Collection<J3dRECOInst> collection)
+	public void addRECO(J3dRECOInst j3dRECOInst)
 	{
-		try
-		{
-			// add the items
-			for (J3dRECOInst instReco : collection)
-			{
-				physicsLocaleDynamics.addRECO(instReco);
-			}
-
-			// tell the statemodel we want to know about movements
-			//System.out.println("1Physics objects loaded for cell " + cellId);
-			physicsLocaleDynamics.unpause();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
+		physicsLocaleDynamics.createRECO(j3dRECOInst);
+		eventsToProcess.add(PhysicsUpdate.createAdd(j3dRECOInst));
 	}
 
-	private void unloadFromModelImpl(Collection<J3dRECOInst> collection)
+	public void removeRECO(J3dRECOInst j3dRECOInst)
 	{
-		// add the items
-		for (J3dRECOInst instReco : collection)
-		{
-			physicsLocaleDynamics.removeRECO(instReco);
-		}
-
-		// tell the statemodel we want to know about movements
-		//System.out.println("2Physics objects loaded for cell " + cellId);
-		physicsLocaleDynamics.unpause();
+		eventsToProcess.add(PhysicsUpdate.createRemove(j3dRECOInst));
 	}
 
 	protected void unload()
@@ -230,16 +223,6 @@ public class PhysicsSystem implements NbccProvider, HUDPhysicsStateData
 		System.out.println("Physics stopped");
 	}
 
-	protected void addRECO(J3dRECOInst j3dRECOInst)
-	{
-		physicsLocaleDynamics.addRECO(j3dRECOInst);
-	}
-
-	protected void removeRECO(J3dRECOInst j3dRECOInst)
-	{
-		physicsLocaleDynamics.removeRECO(j3dRECOInst);
-	}
-
 	private void physicsTick()
 	{
 		if (physicsLocaleDynamics != null)
@@ -252,12 +235,23 @@ public class PhysicsSystem implements NbccProvider, HUDPhysicsStateData
 				if (pu.type == PhysicsUpdate.UPDATE_TYPE.LOAD_FROM_MODEL)
 				{
 					// assumes cell id and stmodel set properly by now
-					loadFromModelImpl(pu.collection);
+					for (J3dRECOInst instReco : pu.collection)
+					{
+						physicsLocaleDynamics.addRECO(instReco);
+					}
+
+					// tell the statemodel we want to know about movements
+					//System.out.println("1Physics objects loaded for cell " + cellId);
+					//TODO: why the hell unpause here? isn't there somewhere better? bay in the worldphysicsbranch
+					physicsLocaleDynamics.unpause();
 				}
 				else if (pu.type == PhysicsUpdate.UPDATE_TYPE.UNLOAD_FROM_MODEL)
 				{
 					// assumes cell id and stmodel set properly by now
-					unloadFromModelImpl(pu.collection);
+					for (J3dRECOInst instReco : pu.collection)
+					{
+						physicsLocaleDynamics.removeRECO(instReco);
+					}
 				}
 				else if (pu.type == PhysicsUpdate.UPDATE_TYPE.ADD)
 				{
@@ -288,7 +282,6 @@ public class PhysicsSystem implements NbccProvider, HUDPhysicsStateData
 	{
 		if (!isPaused() && physicsLocaleDynamics != null)
 		{
-
 			// is it time to update the model from the physics
 			long elapsedTime = (System.nanoTime() - lastPhysicsBoundUpdate) / 1000000;
 			if (elapsedTime > MIN_TIME_BETWEEN_BOUND_UPDATES_MS)

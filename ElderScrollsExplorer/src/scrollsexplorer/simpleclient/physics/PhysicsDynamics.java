@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Group;
+import javax.media.j3d.Node;
 import javax.media.j3d.Transform3D;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
@@ -143,7 +144,7 @@ public class PhysicsDynamics extends DynamicsEngine
 		instRecoBulletBindings.clear();
 	}
 
-	public void addRECO(J3dRECOInst j3dRECOInst)
+	public BulletNifModel createRECO(J3dRECOInst j3dRECOInst)
 	{
 		if (recoIdToNifBullet.containsKey(j3dRECOInst.getRecordId()))
 		{
@@ -153,7 +154,7 @@ public class PhysicsDynamics extends DynamicsEngine
 
 		if (j3dRECOInst instanceof J3dLAND)
 		{
-			createLand((J3dLAND) j3dRECOInst);
+			return createLand((J3dLAND) j3dRECOInst);
 		}
 		else
 		{
@@ -161,7 +162,7 @@ public class PhysicsDynamics extends DynamicsEngine
 
 			if (j3dRECOType != null && j3dRECOType.physNifFile != null)
 			{
-				createStaticOrDynamic(j3dRECOInst, j3dRECOType.physNifFile);
+				return createStaticOrDynamic(j3dRECOInst, j3dRECOType.physNifFile);
 			}
 			else
 			{
@@ -169,36 +170,42 @@ public class PhysicsDynamics extends DynamicsEngine
 			}
 		}
 		//System.out.println("add called total= " + nifBulletToRecoId.size());
+		return null;
 	}
 
-	private void createLand(J3dLAND j3dLAND)
+	private NBSimpleModel createLand(J3dLAND j3dLAND)
 	{
 		Transform3D rootTrans = j3dLAND.getLocation(new Transform3D());
 		NBSimpleModel nb = new NBSimpleModel(j3dLAND.getGeometryInfo(), rootTrans);
 		if (nb != null)
 		{
-			synchronized (dynamicsWorld)
-			{
-				// Note we don't listen for physics updates
-				recoIdToNifBullet.put(j3dLAND.getRecordId(), nb);
-				nifBulletToRecoId.put(nb, j3dLAND.getRecordId());
-				nb.addToDynamicsWorld(dynamicsWorld);
-			}
+			// Note we don't listen for physics updates
+			recoIdToNifBullet.put(j3dLAND.getRecordId(), nb);
+			nifBulletToRecoId.put(nb, j3dLAND.getRecordId());
 		}
+		return nb;
 	}
 
-	private void createStaticOrDynamic(J3dRECOInst j3dRECOInst, String physNifFile)
+	/**
+	 * the loading from file must occur not on the physics thread
+	 * it will be happily done well before time, 
+	 * then addRECO should happen on the physics tick  thread. 	
+	 * 
+	 * @param j3dRECOInst
+	 * @param physNifFile
+	 */
+	private BulletNifModel createStaticOrDynamic(J3dRECOInst j3dRECOInst, String physNifFile)
 	{
-		//root should have scale in it		
+		BulletNifModel nb = null;
 
+		//root should have scale in it
 		Transform3D rootTrans = j3dRECOInst.getLocation(new Transform3D());
 
 		if (physNifFile != null && physNifFile.length() > 0)
 		{
-			BulletNifModel nb = null;
 
 			if (BulletNifModelClassifier.isStaticModel(physNifFile, meshSource))
-			{				
+			{
 				// the nif file will have mass of 0 making this static
 				nb = new NBSimpleModel(physNifFile, meshSource, rootTrans);
 			}
@@ -206,7 +213,6 @@ public class PhysicsDynamics extends DynamicsEngine
 			{
 				// the nif file will have mass of 0 making this kinematic
 				nb = new NBSimpleModel(physNifFile, meshSource, rootTrans);
-				dynamicsRootBranchGroup.addChild((NBSimpleModel) nb);
 			}
 			else if (BulletNifModelClassifier.isSimpleDynamicModel(physNifFile, meshSource, 0))
 			{
@@ -214,7 +220,7 @@ public class PhysicsDynamics extends DynamicsEngine
 			}
 			else if (BulletNifModelClassifier.isComplexDynamic(physNifFile, meshSource))
 			{
-
+				//TODO: this bad boy right here
 			}
 			else
 			{
@@ -225,14 +231,9 @@ public class PhysicsDynamics extends DynamicsEngine
 
 			if (nb != null)
 			{
-
-				synchronized (dynamicsWorld)
-				{
-					// Note we don't listen for physics updates
-					recoIdToNifBullet.put(j3dRECOInst.getRecordId(), nb);
-					nifBulletToRecoId.put(nb, j3dRECOInst.getRecordId());
-					nb.addToDynamicsWorld(dynamicsWorld);
-				}
+				// Note we don't listen for physics updates
+				recoIdToNifBullet.put(j3dRECOInst.getRecordId(), nb);
+				nifBulletToRecoId.put(nb, j3dRECOInst.getRecordId());
 			}
 
 		}
@@ -241,10 +242,13 @@ public class PhysicsDynamics extends DynamicsEngine
 			//Lights and alsorts of things can have no model or physics
 			//System.out.println("why null phys? " + j3dRECOInst);
 		}
+
+		return nb;
 	}
 
-	private void createDynamic(J3dRECOInst j3dRECOInst, String model)
+	private NBSimpleDynamicModel createDynamic(J3dRECOInst j3dRECOInst, String model)
 	{
+		NBSimpleDynamicModel nb = null;
 		Transform3D rootTrans = j3dRECOInst.getLocation(new Transform3D());
 
 		if (model != null && model.length() > 0)
@@ -252,7 +256,7 @@ public class PhysicsDynamics extends DynamicsEngine
 
 			//VELO velo = instReco.velocity;
 
-			NBSimpleDynamicModel nb = new NBSimpleDynamicModel(model, meshSource, 0);
+			nb = new NBSimpleDynamicModel(model, meshSource, 0);
 
 			if (nb != null)
 			{
@@ -264,20 +268,9 @@ public class PhysicsDynamics extends DynamicsEngine
 				//velo.getVelocities(linearVelocity, rotationalVelocity);
 				nb.forceUpdate(rootTrans, linearVelocity, rotationalVelocity);
 
-				NifBulletBinding irnbb = new InstRecoNifBulletBinding(j3dRECOInst, instRecoToNif, nb);
+				recoIdToNifBullet.put(j3dRECOInst.getRecordId(), nb);
+				nifBulletToRecoId.put(nb, j3dRECOInst.getRecordId());
 
-				synchronized (dynamicsWorld)
-				{
-					if (irnbb != null)
-					{
-						instRecoBulletBindings.put(j3dRECOInst.getRecordId(), irnbb);
-					}
-
-					recoIdToNifBullet.put(j3dRECOInst.getRecordId(), nb);
-					nifBulletToRecoId.put(nb, j3dRECOInst.getRecordId());
-					dynamicsRootBranchGroup.addChild(nb);
-					nb.addToDynamicsWorld(dynamicsWorld);
-				}
 			}
 			else
 			{
@@ -289,6 +282,8 @@ public class PhysicsDynamics extends DynamicsEngine
 		{
 			System.out.println("no model for createDynamic " + j3dRECOInst.getRecordId());
 		}
+
+		return nb;
 	}
 
 	public void updateRECOROTR(J3dRECOInst j3dRECOInst, Transform3D newTrans)
@@ -305,8 +300,10 @@ public class PhysicsDynamics extends DynamicsEngine
 		}
 		else if (nifBullet instanceof NBSimpleModel)
 		{
-			//remove and readd
+			// TODO: this seems dodgy perhaps an exception here, surely it should be dynamic or kinematic?
+			//remove re-create and re-add
 			removeRECO(j3dRECOInst);
+			createRECO(j3dRECOInst);
 			addRECO(j3dRECOInst);
 		}
 
@@ -333,6 +330,38 @@ public class PhysicsDynamics extends DynamicsEngine
 
 	}
 
+	/**
+	 * Note I need to carefully watch for the addChild to the java3d scene graph
+	 * it must be done to a non live root node and then added later via a strucutre update behaviour
+	 * dynamicsRootBranchGroup.addChild((NBSimpleModel) nb);
+	 * @param j3dRECOInst
+	 */
+	protected void addRECO(J3dRECOInst j3dRECOInst)
+	{
+		//NOTE a create must have been called for this J3dRECOInst
+		int recordId = j3dRECOInst.getRecordId();
+		BulletNifModel nifBullet = recoIdToNifBullet.get(recordId);
+		if (nifBullet != null)
+		{
+			// add to physics simulation
+			synchronized (dynamicsWorld)
+			{
+				nifBullet.addToDynamicsWorld(dynamicsWorld);
+
+				//TODO: this guy is added things to a live scene graph, definately problem chance??
+				if (nifBullet instanceof Node)
+					dynamicsRootBranchGroup.addChild((Node) nifBullet);
+
+				if (nifBullet instanceof NBSimpleDynamicModel)
+				{
+					NifBulletBinding irnbb = new InstRecoNifBulletBinding(j3dRECOInst, instRecoToNif, (NBSimpleDynamicModel) nifBullet);
+					instRecoBulletBindings.put(j3dRECOInst.getRecordId(), irnbb);
+				}
+			}
+
+		}
+	}
+
 	protected void removeRECO(J3dRECOInst j3dRECOInst)
 	{
 		int recordId = j3dRECOInst.getRecordId();
@@ -342,6 +371,10 @@ public class PhysicsDynamics extends DynamicsEngine
 			// remove from physics simulation
 			synchronized (dynamicsWorld)
 			{
+				//TODO: this guy is added things to a live scene graph, definately problem chance??
+				if (nifBullet instanceof Node)
+					dynamicsRootBranchGroup.removeChild((Node) nifBullet);
+
 				nifBullet.removeFromDynamicsWorld();
 				nifBullet.destroy();
 				instRecoBulletBindings.remove(recordId);
@@ -350,8 +383,6 @@ public class PhysicsDynamics extends DynamicsEngine
 			}
 
 		}
-		//System.out.println("remove called total= " + nifBulletToRecoId.size());
-
 	}
 
 	public void applyPhysicsToModel()

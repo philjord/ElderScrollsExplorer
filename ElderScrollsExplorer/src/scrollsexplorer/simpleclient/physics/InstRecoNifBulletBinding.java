@@ -43,7 +43,10 @@ public class InstRecoNifBulletBinding implements NifBulletBinding, NifBulletTran
 		if (!nextTrans.epsilonEquals(prevTrans, 0.0001))
 		{
 			nextTrans.get(newTranslation);
-			Utils3D.safeGetQuat(nextTrans, newRotation);
+			Utils3D.safeGetQuat(nextTrans, newRotation);	
+			//TODO: I should not have to call this here, transformChanged above should only receive good transfroms
+			newRotation.normalize();
+			
 			if (Float.isNaN(newTranslation.x))
 			{
 				System.out.println("NAN detected in ClientInstRecoNifBulletBinding.setTransform position!");

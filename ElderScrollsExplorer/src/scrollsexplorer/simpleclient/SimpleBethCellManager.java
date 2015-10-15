@@ -385,17 +385,11 @@ public class SimpleBethCellManager implements InstRECOStore
 	@Override
 	public void applyUpdate(J3dRECOInst instReco, Quat4f newRotation, Vector3f newTranslation)
 	{
+		//Phil note, I think this is the physics version of this inst reco (for rendering red lines)
 		if (instReco instanceof J3dRECODynInst)
 		{
 			J3dRECODynInst dynInst = ((J3dRECODynInst) instReco);
 			Transform3D t = new Transform3D(newRotation, newTranslation, 1f);
-
-			//TODO: odd with this in I fail to get non affines? timing?
-			//if ((t.getType() & Transform3D.AFFINE) == 0)
-			{
-				//		System.out.println("Non affine! ");
-				//		new Exception("bum t=" + newTranslation + " rot=" + newRotation).printStackTrace();
-			}
 
 			dynInst.setLocation(t);
 
