@@ -179,9 +179,11 @@ public class PhysicsDynamics extends DynamicsEngine
 		NBSimpleModel nb = new NBSimpleModel(j3dLAND.getGeometryInfo(), rootTrans);
 		if (nb != null)
 		{
-			// Note we don't listen for physics updates
-			recoIdToNifBullet.put(j3dLAND.getRecordId(), nb);
-			nifBulletToRecoId.put(nb, j3dLAND.getRecordId());
+			synchronized (recoIdToNifBullet)
+			{
+				recoIdToNifBullet.put(j3dLAND.getRecordId(), nb);
+				nifBulletToRecoId.put(nb, j3dLAND.getRecordId());
+			}
 		}
 		return nb;
 	}
@@ -231,9 +233,11 @@ public class PhysicsDynamics extends DynamicsEngine
 
 			if (nb != null)
 			{
-				// Note we don't listen for physics updates
-				recoIdToNifBullet.put(j3dRECOInst.getRecordId(), nb);
-				nifBulletToRecoId.put(nb, j3dRECOInst.getRecordId());
+				synchronized (recoIdToNifBullet)
+				{
+					recoIdToNifBullet.put(j3dRECOInst.getRecordId(), nb);
+					nifBulletToRecoId.put(nb, j3dRECOInst.getRecordId());
+				}
 			}
 
 		}
@@ -267,9 +271,6 @@ public class PhysicsDynamics extends DynamicsEngine
 				Vector3f rotationalVelocity = new Vector3f();
 				//velo.getVelocities(linearVelocity, rotationalVelocity);
 				nb.forceUpdate(rootTrans, linearVelocity, rotationalVelocity);
-
-				recoIdToNifBullet.put(j3dRECOInst.getRecordId(), nb);
-				nifBulletToRecoId.put(nb, j3dRECOInst.getRecordId());
 
 			}
 			else
@@ -378,6 +379,9 @@ public class PhysicsDynamics extends DynamicsEngine
 				nifBullet.removeFromDynamicsWorld();
 				nifBullet.destroy();
 				instRecoBulletBindings.remove(recordId);
+			}
+			synchronized (recoIdToNifBullet)
+			{
 				nifBulletToRecoId.remove(nifBullet);
 				recoIdToNifBullet.remove(recordId);
 			}
@@ -437,7 +441,7 @@ public class PhysicsDynamics extends DynamicsEngine
 	public PhysicsStatus getPhysicsStatus()
 	{
 		PhysicsStatus ret = new PhysicsStatus();
-		synchronized (dynamicsWorld)
+		synchronized (recoIdToNifBullet)
 		{
 			for (BulletNifModel bnm : recoIdToNifBullet.values())
 			{
