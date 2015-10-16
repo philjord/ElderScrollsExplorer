@@ -549,12 +549,12 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	{
 		public MiscKeyHandler()
 		{
-			System.out.println("Esc exit");
+			/*System.out.println("Esc exit");
 			System.out.println("H toggle havok display");
 			System.out.println("L toggle visual display");
 			System.out.println("TAB toggle mouse lock");
 			System.out.println("F toggle freefly");
-			System.out.println("J display jbullet debug");
+			System.out.println("J display jbullet debug");*/
 		}
 
 		public void keyPressed(KeyEvent e)

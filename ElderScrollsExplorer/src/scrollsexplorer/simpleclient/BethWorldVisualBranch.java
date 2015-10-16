@@ -1,6 +1,5 @@
 package scrollsexplorer.simpleclient;
 
-
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -452,7 +451,7 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 			}
 		}
 		//ok try the persistent cell as well, it'll return null if it's really not here
-		if (j3dCELLPersistent.getGridSpaces() != null)
+		if (j3dCELLPersistent != null && j3dCELLPersistent.getGridSpaces() != null)
 			return j3dCELLPersistent.getGridSpaces().getJ3dInstRECO(recoId);
 		else
 			return null;

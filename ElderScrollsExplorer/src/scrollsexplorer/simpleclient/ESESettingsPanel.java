@@ -3,6 +3,7 @@
  */
 package scrollsexplorer.simpleclient;
 
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -53,6 +54,12 @@ public class ESESettingsPanel extends JPanel
 
 	private JCheckBox enablePhysicsTick = new JCheckBox("Enable Physics", true);
 
+	private JCheckBox outlineCharsTick = new JCheckBox("Outline Characters", BethRenderSettings.isOutlineChars());
+
+	private JCheckBox outlineDoorsTick = new JCheckBox("Outline Doors", BethRenderSettings.isOutlineDoors());
+
+	private JCheckBox outlineContsTick = new JCheckBox("Outline Containers", BethRenderSettings.isOutlineConts());
+
 	private SimpleWalkSetup simpleWalkSetup;
 
 	public ESESettingsPanel(SimpleWalkSetup _simpleWalkSetup)
@@ -65,9 +72,13 @@ public class ESESettingsPanel extends JPanel
 		setG.add(lowSettings);
 		setG.add(medSettings);
 		setG.add(highSettings);
-		add(lowSettings);
-		add(medSettings);
-		add(highSettings);
+		JPanel bpan = new JPanel();
+		bpan.setLayout(new FlowLayout());
+		bpan.add(lowSettings);
+		bpan.add(medSettings);
+		bpan.add(highSettings);
+		add(bpan);
+		
 		lowSettings.addActionListener(new ActionListener()
 		{
 			@Override
@@ -228,6 +239,36 @@ public class ESESettingsPanel extends JPanel
 			public void actionPerformed(ActionEvent arg0)
 			{
 				simpleWalkSetup.setPhysicsEnabled(enablePhysicsTick.isSelected());
+			}
+		});
+
+		add(outlineCharsTick);
+		outlineCharsTick.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				BethRenderSettings.setOutlineChars(outlineCharsTick.isSelected());
+			}
+		});
+
+		add(outlineDoorsTick);
+		outlineDoorsTick.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				BethRenderSettings.setOutlineDoors(outlineDoorsTick.isSelected());
+			}
+		});
+
+		add(outlineContsTick);
+		outlineContsTick.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				BethRenderSettings.setOutlineConts(outlineContsTick.isSelected());
 			}
 		});
 	}
