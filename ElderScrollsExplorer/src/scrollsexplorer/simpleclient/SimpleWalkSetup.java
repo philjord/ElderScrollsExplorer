@@ -262,10 +262,17 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		return frame;
 	}
 
+	private long lastLocationUpdate = 0;
+
 	@Override
 	public void locationUpdated(Quat4f rot, Vector3f trans)
 	{
-		locField.setText(("" + trans.x).split("\\.")[0] + "," + ("" + trans.y).split("\\.")[0] + "," + ("" + trans.z).split("\\.")[0]);
+		if (System.currentTimeMillis() - lastLocationUpdate > 200)
+		{
+			//oddly this is mildly expensive so only update 5 times per second
+			locField.setText(("" + trans.x).split("\\.")[0] + "," + ("" + trans.y).split("\\.")[0] + "," + ("" + trans.z).split("\\.")[0]);
+			lastLocationUpdate = System.currentTimeMillis();
+		}
 	}
 
 	public void warp(Vector3f origin)
