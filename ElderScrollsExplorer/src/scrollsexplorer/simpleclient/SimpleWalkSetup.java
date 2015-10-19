@@ -592,7 +592,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_J)
 			{
-				physicsSystem.getPhysicsLocaleDynamics().setDisplayDebug(true);
+				physicsSystem.setDisplayDebug(true);
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_TAB)
 			{

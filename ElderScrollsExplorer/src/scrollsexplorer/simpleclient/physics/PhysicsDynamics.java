@@ -99,7 +99,6 @@ public class PhysicsDynamics extends DynamicsEngine
 	@Override
 	protected void dynamicsPostStep()
 	{
-
 		if (displayDebug)
 		{
 			if (!debugOutputInited)
@@ -107,16 +106,21 @@ public class PhysicsDynamics extends DynamicsEngine
 				DebugOutput.initDebug(dynamicsWorld, avatarLocation);
 				debugOutputInited = true;
 			}
+
 			synchronized (dynamicsWorld)
 			{
 				LWJGL.step();
+				//did it quit?
+				if (!LWJGL.isDoRun())
+					displayDebug = false;
 			}
 		}
 		else
 		{
 			if (debugOutputInited)
 			{
-				//TODO: I should hide teh debug output, but might have to dispose and re create in fact
+				DebugOutput.disposeDebug();
+				debugOutputInited = false;
 			}
 		}
 	}
