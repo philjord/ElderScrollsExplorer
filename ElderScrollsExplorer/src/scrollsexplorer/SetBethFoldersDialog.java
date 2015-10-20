@@ -11,6 +11,7 @@ import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -48,7 +49,7 @@ public class SetBethFoldersDialog extends JDialog
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					setFolder("Select " + gameConfig.gameName + " data folder", gameConfig.folderKey, gameFolderField);
+					setFolder(gameConfig, gameFolderField);
 				}
 			});
 
@@ -57,7 +58,7 @@ public class SetBethFoldersDialog extends JDialog
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					ftpData(gameConfig.ftpFolderName, gameConfig.folderKey, gameFolderField);
+					ftpData(gameConfig.ftpFolderName, gameConfig, gameFolderField);
 				}
 			});
 		}
@@ -89,23 +90,67 @@ public class SetBethFoldersDialog extends JDialog
 		});
 	}
 
-	private void setFolder(String title, String propKey, JTextField output)
+	private void setFolder(GameConfig gameConfig, JTextField output)
 	{
-		File sf = TitledJFileChooser
-				.requestFolderName(title, PropertyLoader.properties.getProperty(propKey, ""), SetBethFoldersDialog.this);
-		if (sf != null)
+		String startFolder = PropertyLoader.properties.getProperty(gameConfig.folderKey, "");
+		File confirmedFolder = null;
+		while (confirmedFolder == null)
 		{
-			PropertyLoader.properties.setProperty(propKey, sf.getAbsolutePath());
-			output.setText(sf.getAbsolutePath());
-			//update gameconfigs based on property changes
-			for (GameConfig gameConfig : GameConfig.allGameConfigs)
+			File pickedfolder = TitledJFileChooser.requestFolderName("Select " + gameConfig.gameName + " data folder", startFolder,
+					SetBethFoldersDialog.this);
+
+			// check for cancel
+			if (pickedfolder == null)
+				return;
+
+			// check to ensure the esm file and at least one bsa file are in the folder
+			File checkEsm = new File(pickedfolder, gameConfig.mainESMFile);
+			if (!checkEsm.exists())
 			{
-				gameConfig.update();
+				int r = JOptionPane.showConfirmDialog(SetBethFoldersDialog.this, "The selected folder does not contain "
+						+ gameConfig.mainESMFile + " this game type will not work.\n" + "Do you wish to set anyway?", "ESM file not found",
+						JOptionPane.YES_NO_OPTION);
+
+				if (r == JOptionPane.NO_OPTION)
+				{
+					startFolder = pickedfolder.getAbsolutePath();
+					continue;
+				}
+
+				// otherwise carry on, perhaps they'll put it there shortly
 			}
+
+			int countOfBsa = 0;
+			for (File f : pickedfolder.listFiles())
+			{
+				countOfBsa += f.getName().toLowerCase().endsWith(".bsa") ? 1 : 0;
+			}
+
+			if (countOfBsa == 0)
+			{
+				int r = JOptionPane.showConfirmDialog(SetBethFoldersDialog.this, "The selected folder does not contain "
+						+ " any .bsa files, this game type will not work.\n" + "Do you wish to set anyway?", "No BSA files found",
+						JOptionPane.YES_NO_OPTION);
+
+				if (r == JOptionPane.NO_OPTION)
+				{
+					startFolder = pickedfolder.getAbsolutePath();
+					continue;
+				}
+
+				// otherwise carry on, perhaps they'll put them there shortly
+			}
+
+			confirmedFolder = pickedfolder;
 		}
+
+		PropertyLoader.properties.setProperty(gameConfig.folderKey, confirmedFolder.getAbsolutePath());
+		output.setText(confirmedFolder.getAbsolutePath());
+		gameConfig.update();
+
 	}
 
-	private void ftpData(String folderToDownLoad, final String propKey, final JTextField output)
+	private void ftpData(String folderToDownLoad, final GameConfig gameConfig, final JTextField output)
 	{
 		GameMediaFTPdownloader ftp = new GameMediaFTPdownloader(this, folderToDownLoad);
 		ftp.setCallBack(new CallBack()
@@ -115,8 +160,9 @@ public class SetBethFoldersDialog extends JDialog
 			{
 				if (outputFolder != null)
 				{
-					PropertyLoader.properties.setProperty(propKey, outputFolder);
+					PropertyLoader.properties.setProperty(gameConfig.folderKey, outputFolder);
 					output.setText(outputFolder);
+					gameConfig.update();
 				}
 			}
 

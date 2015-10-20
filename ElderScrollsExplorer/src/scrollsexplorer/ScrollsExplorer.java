@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.prefs.Preferences;
@@ -292,8 +293,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		for (GameConfig gameConfig : GameConfig.allGameConfigs)
 		{
 			JButton gameButton = gameButtons.get(gameConfig);
-			// must have no game selected and have a folder
-			boolean enable = selectedGameConfig == null && gameConfig.scrollsFolder != null;
+			// must have no game selected and have a folder and folder must ahve right files
+			boolean enable = selectedGameConfig == null && gameConfig.scrollsFolder != null && hasESMAndBSAFiles(gameConfig);
 			gameButton.setEnabled(enable);
 			noFoldersSet = noFoldersSet && gameConfig.scrollsFolder == null;
 		}
@@ -308,6 +309,30 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		mainPanel.invalidate();
 		mainPanel.doLayout();
 		mainPanel.repaint();
+	}
+
+	private boolean hasESMAndBSAFiles(GameConfig gameConfig)
+	{
+		// check to ensure the esm file and at least one bsa file are in the folder
+		File checkEsm = new File(gameConfig.scrollsFolder, gameConfig.mainESMFile);
+		if (!checkEsm.exists())
+		{
+			return false;
+		}
+
+		int countOfBsa = 0;
+		File checkBsa = new File(gameConfig.scrollsFolder);
+		for (File f : checkBsa.listFiles())
+		{
+			countOfBsa += f.getName().toLowerCase().endsWith(".bsa") ? 1 : 0;
+		}
+
+		if (countOfBsa == 0)
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
@@ -517,12 +542,12 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		// still can't tell if this improves things
 		// it'ss only help if interleave is on
 		//-Dj3d.optimizedForSpace=false		If set to true, optimize by-ref geometry for space; otherwise, optimize for rendering speed
-		
+
 		// -Dj3d.threadLimit=2 from https://java.net/projects/java3d/lists/interest/archive/2007-03/message/438
-		
+
 		// some other interesting settings
 		//java -server -XX:CompileThreshold=2 -XX:+AggressiveOpts -XX:+UseFastAccessorMethods 
-		
+
 		String versionString = BootStrap.ZIP_PREFIX + "-" + BootStrap.MAJOR_VERSION + "-" + BootStrap.MINOR_VERSION;
 		System.out.println("VERSION: " + versionString);
 		System.err.println("VERSION: " + versionString);
