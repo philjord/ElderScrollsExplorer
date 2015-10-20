@@ -60,6 +60,8 @@ public class ESESettingsPanel extends JPanel
 
 	private JCheckBox outlineContsTick = new JCheckBox("Outline Containers", BethRenderSettings.isOutlineConts());
 
+	private JCheckBox outlinePartsTick = new JCheckBox("Outline Particles", BethRenderSettings.isOutlineParts());
+
 	private SimpleWalkSetup simpleWalkSetup;
 
 	public ESESettingsPanel(SimpleWalkSetup _simpleWalkSetup)
@@ -78,7 +80,7 @@ public class ESESettingsPanel extends JPanel
 		bpan.add(medSettings);
 		bpan.add(highSettings);
 		add(bpan);
-		
+
 		lowSettings.addActionListener(new ActionListener()
 		{
 			@Override
@@ -269,6 +271,16 @@ public class ESESettingsPanel extends JPanel
 			public void actionPerformed(ActionEvent arg0)
 			{
 				BethRenderSettings.setOutlineConts(outlineContsTick.isSelected());
+			}
+		});
+
+		add(outlinePartsTick);
+		outlinePartsTick.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				BethRenderSettings.setOutlineParts(outlinePartsTick.isSelected());
 			}
 		});
 	}

@@ -300,7 +300,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		//cameraPanel.startRendering();//JRE7 crash bug work around, doesn't work some times:(
 		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
-				true, false);
+				true, false, true);
 		if (gs != null)
 		{
 			setupGraphicsSetting(gs);
@@ -310,6 +310,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	public void setupGraphicsSetting(GraphicsSettings gs)
 	{
+
 		if (cameraPanel == null)
 		{
 			// must record start state to restore later
@@ -403,8 +404,11 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	public void resetGraphicsSetting()
 	{
+		//RAISE_BUG: java 1.7+ can't reuse a frame or teh generic video driver is used on teh second 
+		//glContext.makeCurrent call in the pipeline in createNewCOntext
+
 		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
-				false, true);
+				false, true, true);
 		if (gs != null)
 		{
 			setupGraphicsSetting(gs);
