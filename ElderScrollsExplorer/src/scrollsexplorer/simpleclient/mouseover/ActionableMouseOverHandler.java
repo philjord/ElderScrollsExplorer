@@ -273,16 +273,17 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 									}
 									else if (j3dRECOType instanceof J3dDOOR)
 									{
-										// TODO: I should be able to work out if it's open or closed!
+										J3dDOOR j3dDOOR = (J3dDOOR) j3dRECOType;
+
 										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
 										{
-											currentActionTargetData.hudText = "Open/Close";
+											currentActionTargetData.hudText = j3dDOOR.isOpen() ? "Close" : "Open";
 											currentActionTargetData.isGrey = false;
 											currentActionTargetData.currentActionable = j3dInstRECO;
 										}
 										else
 										{
-											currentActionTargetData.hudText = "Open/Close";
+											currentActionTargetData.hudText = j3dDOOR.isOpen() ? "Close" : "Open";
 											currentActionTargetData.isGrey = true;
 											currentActionTargetData.currentActionable = null; // nothing to action yet										
 										}
