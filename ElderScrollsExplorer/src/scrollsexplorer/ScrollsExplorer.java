@@ -111,6 +111,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	private UserGuideDisplay ugd = new UserGuideDisplay();
 
+	private int currentCellformid = -1;
+
 	private Preferences prefs;
 
 	public ScrollsExplorer()
@@ -275,6 +277,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					.getTransform()).toString());
 			PropertyLoader.properties.setProperty("Trans" + esmManager.getName(),
 					"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));
+			PropertyLoader.properties.setProperty("CellId" + esmManager.getName(), "" + currentCellformid);
 		}
 		PropertyLoader.save();
 	}
@@ -368,6 +371,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 								new YawPitch().toString()));
 						Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
 								new Vector3f().toString()));
+						currentCellformid = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
 						simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
 
 						new EsmSoundKeyToName(esmManager);
@@ -448,15 +452,23 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							for (Integer formId : esmManager.getAllWRLDTopGroupFormIds())
 							{
 								PluginRecord pr = esmManager.getWRLD(formId);
-								tableModel.addRow(new Object[]
-								{ "Ext", formId, pr });
+								if (currentCellformid == formId)
+									tableModel.insertRow(0, new Object[]
+									{ "Ext", formId, pr });
+								else
+									tableModel.addRow(new Object[]
+									{ "Ext", formId, pr });
 							}
 
 							for (Integer formId : esmManager.getAllInteriorCELLFormIds())
 							{
 								PluginRecord pr = esmManager.getInteriorCELL(formId);
-								tableModel.addRow(new Object[]
-								{ "Int", formId, pr });
+								if (currentCellformid == formId)
+									tableModel.insertRow(0, new Object[]
+									{ "Int", formId, pr });
+								else
+									tableModel.addRow(new Object[]
+									{ "Int", formId, pr });
 							}
 						}
 						catch (DataFormatException e1)
@@ -498,6 +510,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	{
 		Thread t = new Thread()
 		{
+
 			public void run()
 			{
 				//crappy no doubles system
@@ -511,6 +524,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					System.out.println("Cell loaded and dispalyed " + cellformid);
 					simpleWalkSetup.setEnabled(true);
 					//	simpleWalkSetup.warp(new Vector3f(0, 10000, 0));
+					currentCellformid = cellformid;
 				}
 			}
 		};

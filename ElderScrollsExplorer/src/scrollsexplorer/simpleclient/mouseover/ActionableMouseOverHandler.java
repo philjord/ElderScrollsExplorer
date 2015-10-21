@@ -203,6 +203,10 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 					{
 						bnm = (NifBulletChar) body.getUserPointer();
 					}
+					else
+					{
+						System.out.println("body.getUserPointer() " + body.getUserPointer());
+					}
 
 					if (bnm != null)
 					{
@@ -251,26 +255,35 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 										// if not then set hudtext (in light grey) but don't allow actions
 										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
 										{
-											currentActionTargetData.hudText = "To " + currentActionTargetData.cellName;
+											currentActionTargetData.hudText = "Travel to " + currentActionTargetData.cellName;
+											currentActionTargetData.isGrey = false;
 											currentActionTargetData.currentActionable = j3dInstRECO;
 										}
 										else
 										{
-											currentActionTargetData.hudText = "To " + currentActionTargetData.cellName + " (dist)";
+											currentActionTargetData.hudText = "Travel to " + currentActionTargetData.cellName;
+											currentActionTargetData.isGrey = true;
 											currentActionTargetData.currentActionable = null; // nothing to action yet										
 										}
 									}
-									else if (j3dRECOType instanceof J3dDOOR)
+									// TES3 version??
+									else if (false)
 									{
 
+									}
+									else if (j3dRECOType instanceof J3dDOOR)
+									{
+										// TODO: I should be able to work out if it's open or closed!
 										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
 										{
-											currentActionTargetData.hudText = "Open/Close DOOR";
+											currentActionTargetData.hudText = "Open/Close";
+											currentActionTargetData.isGrey = false;
 											currentActionTargetData.currentActionable = j3dInstRECO;
 										}
 										else
 										{
-											currentActionTargetData.hudText = "Open/Close DOOR (dist)";
+											currentActionTargetData.hudText = "Open/Close";
+											currentActionTargetData.isGrey = true;
 											currentActionTargetData.currentActionable = null; // nothing to action yet										
 										}
 									}
@@ -279,12 +292,14 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
 										{
-											currentActionTargetData.hudText = "Open Container";
+											currentActionTargetData.hudText = "Look in";
+											currentActionTargetData.isGrey = false;
 											currentActionTargetData.currentActionable = j3dInstRECO;
 										}
 										else
 										{
-											currentActionTargetData.hudText = "Open Container (dist)";
+											currentActionTargetData.hudText = "Look in";
+											currentActionTargetData.isGrey = true;
 											currentActionTargetData.currentActionable = null; // nothing to action yet										
 										}
 									}
@@ -310,7 +325,10 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 					currentActionTargetData.clear();
 				}
 			}
-			HUDText.setText(currentActionTargetData.hudText);
+			if (currentActionTargetData.isGrey)
+				HUDText.setTextGreyed(currentActionTargetData.hudText);
+			else
+				HUDText.setText(currentActionTargetData.hudText);
 		}
 
 	}
@@ -327,6 +345,8 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 	private class CurrentActionTargetData
 	{
 		public String hudText = "";
+
+		public boolean isGrey = false;
 
 		public int recoId;
 
