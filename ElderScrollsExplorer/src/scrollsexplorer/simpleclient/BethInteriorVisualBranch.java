@@ -64,7 +64,6 @@ public class BethInteriorVisualBranch extends BranchGroup
 
 	public J3dRECOInst getJ3dInstRECO(int recoId)
 	{
-
 		if (interiorCELLTemporary != null)
 		{
 			J3dRECOInst jri = interiorCELLTemporary.getJ3dRECOs().get(recoId);

@@ -95,31 +95,33 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 						{
 							CommonREFR commonREFR = (CommonREFR) j3dRECOStatInst.getInstRECO();
 							XTEL xtel = commonREFR.XTEL;
-							System.out.println("xtel " + xtel);
 							if (xtel != null)
 							{
+								boolean moved = false;
+
+								if (xtel.doorFormId != 0)
+								{
+									moved = SimpleBethCellManager.simpleBethCellManager.changeToCellOfTarget(xtel.doorFormId);
+								}
 								//TES3 won't have formId set yet
-								if (commonREFR instanceof esmj3dtes3.data.records.REFR)
+								else if (commonREFR instanceof esmj3dtes3.data.records.REFR)
 								{
 									esmj3dtes3.data.records.REFR refr = (esmj3dtes3.data.records.REFR) commonREFR;
 									// DNAM is the target cell name
 									if (refr.DNAM != null)
 									{
-										System.out.println("Boom just nearly traveled to " + refr.DNAM.str);
-										if (SimpleBethCellManager.simpleBethCellManager.changeToCell(refr.DNAM.str))
-										{
-											SimpleBethCellManager.simpleBethCellManager.setLocation(xtel.x, xtel.y, xtel.z, xtel.rx,
-													xtel.ry, xtel.rz);
-										}
+										moved = SimpleBethCellManager.simpleBethCellManager.changeToCell(refr.DNAM.str);
+									}
+									else
+									{
+										moved = SimpleBethCellManager.simpleBethCellManager.changeToCell(null);
 									}
 								}
-								else
+
+								if (moved)
 								{
-									if (SimpleBethCellManager.simpleBethCellManager.changeToCellOfTarget(xtel.doorFormId))
-									{
-										SimpleBethCellManager.simpleBethCellManager.setLocation(xtel.x, xtel.y, xtel.z, xtel.rx, xtel.ry,
-												xtel.rz);
-									}
+									SimpleBethCellManager.simpleBethCellManager.setLocation(xtel.x, xtel.y, xtel.z, xtel.rx, xtel.ry,
+											xtel.rz);
 								}
 							}
 							else
@@ -259,38 +261,45 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 									currentActionTargetData.distance = MAX_MOUSE_RAY_DIST * rayCallback.closestHitFraction;
 
 									if (j3dRECOType instanceof J3dDOOR)
-									{System.out.println("that's a door that is");
+									{
 										J3dDOOR j3dDOOR = (J3dDOOR) j3dRECOType;
 										GenericDOOR genericDOOR = (GenericDOOR) j3dDOOR.getRECO();
 
-										if (xtel != null && xtel.doorFormId != 0)
+										if (xtel != null)
 										{
-											if (currentActionTargetData.cellName == null)
+											if (xtel.doorFormId != 0)
 											{
-												currentActionTargetData.cellName = SimpleBethCellManager.simpleBethCellManager
-														.getCellNameFormIdOf(xtel.doorFormId);
-											}
+												if (currentActionTargetData.cellName == null)
+												{
+													currentActionTargetData.cellName = SimpleBethCellManager.simpleBethCellManager
+															.getCellNameFormIdOf(xtel.doorFormId);
+												}
 
-											// if less than the max interact then set interactable
-											// if not then set hudtext (in light grey) but don't allow actions
-											currentActionTargetData.hudText = "Travel to " + currentActionTargetData.cellName;
-											if (currentActionTargetData.distance < INTERACT_MAX_DIST)
-												currentActionTargetData.currentActionable = j3dInstRECO;
-											else
-												currentActionTargetData.currentActionable = null;
-										}
-										else if (commonREFR instanceof esmj3dtes3.data.records.REFR)
-										{
-											esmj3dtes3.data.records.REFR refr = (esmj3dtes3.data.records.REFR) commonREFR;
-
-											if (refr.DNAM != null)
-											{
-												currentActionTargetData.hudText = "Travel to " + refr.DNAM.str;
+												// if less than the max interact then set interactable
+												// if not then set hudtext (in light grey) but don't allow actions
+												currentActionTargetData.hudText = "Travel to " + currentActionTargetData.cellName;
 												if (currentActionTargetData.distance < INTERACT_MAX_DIST)
 													currentActionTargetData.currentActionable = j3dInstRECO;
 												else
 													currentActionTargetData.currentActionable = null;
-												// DNAM is the target cell name
+											}
+											else if (commonREFR instanceof esmj3dtes3.data.records.REFR)
+											{
+												esmj3dtes3.data.records.REFR refr = (esmj3dtes3.data.records.REFR) commonREFR;
+
+												if (refr.DNAM != null)
+												{ // DNAM is the target cell name
+													currentActionTargetData.hudText = "Travel to " + refr.DNAM.str;
+												}
+												else
+												{
+													//DOOR with null DNAM mean take me to morrowind
+													currentActionTargetData.hudText = "Travel to Morrowind";
+												}
+												if (currentActionTargetData.distance < INTERACT_MAX_DIST)
+													currentActionTargetData.currentActionable = j3dInstRECO;
+												else
+													currentActionTargetData.currentActionable = null;
 											}
 										}
 										else

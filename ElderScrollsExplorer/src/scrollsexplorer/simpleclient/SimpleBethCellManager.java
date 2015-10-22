@@ -148,9 +148,17 @@ public class SimpleBethCellManager implements InstRECOStore
 		return false;
 	}
 
+	/**
+	 * Use null to indicate morrowind
+	 * @param str
+	 * @return
+	 */
 	public boolean changeToCell(String str)
 	{
-		setCurrentCellFormId(convertNameRefToId(str));
+		if (str == null)
+			setCurrentCellFormId(0);
+		else
+			setCurrentCellFormId(convertNameRefToId(str));
 		return true;
 	}
 
