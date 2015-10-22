@@ -48,15 +48,15 @@ public class AdminMouseOverHandler extends MouseOverHandler
 		// set up new canvas
 		if (canvas3D != null)
 		{
-			HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle((int) (canvas3D.getWidth() * 0.8f) - hudWidth,
-					(int) (canvas3D.getHeight() * 0.8f) - hudHeight, hudWidth, hudHeight), 10);
+			HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle((int) (canvas3D.getWidth() * 0.95f) - hudWidth,
+					(int) (canvas3D.getHeight() * 0.95f) - hudHeight, hudWidth, hudHeight), 10);
 		}
 	}
 
 	@Override
 	protected void screenResized()
 	{
-		HUDText.setLocation((int) (canvas3D.getWidth() * 0.8f) - hudWidth, (int) (canvas3D.getHeight() * 0.8f) - hudHeight);
+		HUDText.setLocation((int) (canvas3D.getWidth() * 0.95f) - hudWidth, (int) (canvas3D.getHeight() * 0.95f) - hudHeight);
 	}
 
 	@Override

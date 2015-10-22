@@ -552,15 +552,23 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		//Can't see a noticable diff in perf with this one
 		//-Dj3d.soleUser=true 				If set to true, allow the sole-user optimization; otherwise, sole-user is disabled 
-
+//what?-Dj3d.allowSoleUser=true is the proper spelling
+		
 		// still can't tell if this improves things
 		// it'ss only help if interleave is on
-		//-Dj3d.optimizedForSpace=false		If set to true, optimize by-ref geometry for space; otherwise, optimize for rendering speed
+		//-Dj3d.optimizeForSpace=false		If set to true, optimize by-ref geometry for space; otherwise, optimize for rendering speed
 
 		// -Dj3d.threadLimit=2 from https://java.net/projects/java3d/lists/interest/archive/2007-03/message/438
 
 		// some other interesting settings
-		//java -server -XX:CompileThreshold=2 -XX:+AggressiveOpts -XX:+UseFastAccessorMethods 
+		//java -server -XX:CompileThreshold=2 -XX:+AggressiveOpts -XX:+UseFastAccessorMethods
+		
+		
+		//j3d.implicitAntialiasing=true check it why not set?
+		
+		//-Dj3d.disablecompile can't see a difference
+		
+		//-Dj3d.docompaction=false
 
 		String versionString = BootStrap.ZIP_PREFIX + "-" + BootStrap.MAJOR_VERSION + "-" + BootStrap.MINOR_VERSION;
 		System.out.println("VERSION: " + versionString);

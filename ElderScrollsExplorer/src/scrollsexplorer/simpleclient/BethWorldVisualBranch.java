@@ -435,7 +435,6 @@ public class BethWorldVisualBranch extends BranchGroup implements LocationUpdate
 
 	public J3dRECOInst getJ3dInstRECO(int recoId)
 	{
-
 		synchronized (loadedNears)
 		{
 			for (J3dCELLGeneral cell : loadedNears.values())

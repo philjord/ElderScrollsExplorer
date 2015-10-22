@@ -17,6 +17,8 @@ import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallb
 import com.bulletphysics.dynamics.RigidBody;
 
 import esmj3d.data.shared.records.CommonREFR;
+import esmj3d.data.shared.records.GenericCONT;
+import esmj3d.data.shared.records.GenericDOOR;
 import esmj3d.data.shared.subrecords.XTEL;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 import esmj3d.j3d.j3drecords.inst.J3dRECOStatInst;
@@ -93,12 +95,31 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 						{
 							CommonREFR commonREFR = (CommonREFR) j3dRECOStatInst.getInstRECO();
 							XTEL xtel = commonREFR.XTEL;
+							System.out.println("xtel " + xtel);
 							if (xtel != null)
 							{
-								if (SimpleBethCellManager.simpleBethCellManager.changeToCellOfTarget(xtel.doorFormId))
+								//TES3 won't have formId set yet
+								if (commonREFR instanceof esmj3dtes3.data.records.REFR)
 								{
-									SimpleBethCellManager.simpleBethCellManager.setLocation(xtel.x, xtel.y, xtel.z, xtel.rx, xtel.ry,
-											xtel.rz);
+									esmj3dtes3.data.records.REFR refr = (esmj3dtes3.data.records.REFR) commonREFR;
+									// DNAM is the target cell name
+									if (refr.DNAM != null)
+									{
+										System.out.println("Boom just nearly traveled to " + refr.DNAM.str);
+										if (SimpleBethCellManager.simpleBethCellManager.changeToCell(refr.DNAM.str))
+										{
+											SimpleBethCellManager.simpleBethCellManager.setLocation(xtel.x, xtel.y, xtel.z, xtel.rx,
+													xtel.ry, xtel.rz);
+										}
+									}
+								}
+								else
+								{
+									if (SimpleBethCellManager.simpleBethCellManager.changeToCellOfTarget(xtel.doorFormId))
+									{
+										SimpleBethCellManager.simpleBethCellManager.setLocation(xtel.x, xtel.y, xtel.z, xtel.rx, xtel.ry,
+												xtel.rz);
+									}
 								}
 							}
 							else
@@ -185,15 +206,13 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 			if (rayCallback != null && rayCallback.hasHit())
 			{
-
 				RigidBody body = RigidBody.upcast(rayCallback.collisionObject);
 
 				if (body != null)
 				{
-
 					BulletNifModel bnm = null;
 
-					// might be one of 2 ways to get teh model out of the user pointer
+					// might be one of 2 ways to get the model out of the user pointer
 					if (body.getUserPointer() instanceof NBRigidBody)
 					{
 						NBRigidBody nBRigidBody = (NBRigidBody) body.getUserPointer();
@@ -202,10 +221,6 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 					else if (body.getUserPointer() instanceof NifBulletChar)
 					{
 						bnm = (NifBulletChar) body.getUserPointer();
-					}
-					else
-					{
-						System.out.println("body.getUserPointer() " + body.getUserPointer());
 					}
 
 					if (bnm != null)
@@ -243,66 +258,69 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 									J3dRECOType j3dRECOType = j3dInstRECO.getJ3dRECOType();
 									currentActionTargetData.distance = MAX_MOUSE_RAY_DIST * rayCallback.closestHitFraction;
 
-									if (xtel != null && xtel.doorFormId != 0)
-									{
-										if (currentActionTargetData.cellName == null)
-										{
-											currentActionTargetData.cellName = SimpleBethCellManager.simpleBethCellManager
-													.getCellNameFormIdOf(xtel.doorFormId);
-										}
-
-										// if less than the max interact then set interactable
-										// if not then set hudtext (in light grey) but don't allow actions
-										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
-										{
-											currentActionTargetData.hudText = "Travel to " + currentActionTargetData.cellName;
-											currentActionTargetData.isGrey = false;
-											currentActionTargetData.currentActionable = j3dInstRECO;
-										}
-										else
-										{
-											currentActionTargetData.hudText = "Travel to " + currentActionTargetData.cellName;
-											currentActionTargetData.isGrey = true;
-											currentActionTargetData.currentActionable = null; // nothing to action yet										
-										}
-									}
-									// TES3 version??
-									else if (false)
-									{
-
-									}
-									else if (j3dRECOType instanceof J3dDOOR)
-									{
+									if (j3dRECOType instanceof J3dDOOR)
+									{System.out.println("that's a door that is");
 										J3dDOOR j3dDOOR = (J3dDOOR) j3dRECOType;
+										GenericDOOR genericDOOR = (GenericDOOR) j3dDOOR.getRECO();
 
-										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
+										if (xtel != null && xtel.doorFormId != 0)
 										{
-											currentActionTargetData.hudText = j3dDOOR.isOpen() ? "Close" : "Open";
-											currentActionTargetData.isGrey = false;
-											currentActionTargetData.currentActionable = j3dInstRECO;
+											if (currentActionTargetData.cellName == null)
+											{
+												currentActionTargetData.cellName = SimpleBethCellManager.simpleBethCellManager
+														.getCellNameFormIdOf(xtel.doorFormId);
+											}
+
+											// if less than the max interact then set interactable
+											// if not then set hudtext (in light grey) but don't allow actions
+											currentActionTargetData.hudText = "Travel to " + currentActionTargetData.cellName;
+											if (currentActionTargetData.distance < INTERACT_MAX_DIST)
+												currentActionTargetData.currentActionable = j3dInstRECO;
+											else
+												currentActionTargetData.currentActionable = null;
+										}
+										else if (commonREFR instanceof esmj3dtes3.data.records.REFR)
+										{
+											esmj3dtes3.data.records.REFR refr = (esmj3dtes3.data.records.REFR) commonREFR;
+
+											if (refr.DNAM != null)
+											{
+												currentActionTargetData.hudText = "Travel to " + refr.DNAM.str;
+												if (currentActionTargetData.distance < INTERACT_MAX_DIST)
+													currentActionTargetData.currentActionable = j3dInstRECO;
+												else
+													currentActionTargetData.currentActionable = null;
+												// DNAM is the target cell name
+											}
 										}
 										else
 										{
-											currentActionTargetData.hudText = j3dDOOR.isOpen() ? "Close" : "Open";
-											currentActionTargetData.isGrey = true;
-											currentActionTargetData.currentActionable = null; // nothing to action yet										
+
+											String ext = "";
+											if (genericDOOR.FULL != null)
+												ext = " " + genericDOOR.FULL.str;
+											currentActionTargetData.hudText = (j3dDOOR.isOpen() ? "Close" : "Open") + ext;
+
+											if (currentActionTargetData.distance < INTERACT_MAX_DIST)
+												currentActionTargetData.currentActionable = j3dInstRECO;
+											else
+												currentActionTargetData.currentActionable = null; // nothing to action yet										
 										}
 									}
 									else if (j3dRECOType instanceof J3dCONT)
 									{
+										J3dCONT j3dCONT = (J3dCONT) j3dRECOType;
+										GenericCONT genericCONT = (GenericCONT) j3dCONT.getRECO();
+
+										String ext = " container";
+										if (genericCONT.FULL != null)
+											ext = " " + genericCONT.FULL.str;
+										currentActionTargetData.hudText = "Look in" + ext;
 
 										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
-										{
-											currentActionTargetData.hudText = "Look in";
-											currentActionTargetData.isGrey = false;
 											currentActionTargetData.currentActionable = j3dInstRECO;
-										}
 										else
-										{
-											currentActionTargetData.hudText = "Look in";
-											currentActionTargetData.isGrey = true;
 											currentActionTargetData.currentActionable = null; // nothing to action yet										
-										}
 									}
 									else
 									{
@@ -326,7 +344,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 					currentActionTargetData.clear();
 				}
 			}
-			if (currentActionTargetData.isGrey)
+			if (currentActionTargetData.currentActionable == null)
 				HUDText.setTextGreyed(currentActionTargetData.hudText);
 			else
 				HUDText.setText(currentActionTargetData.hudText);
@@ -346,8 +364,6 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 	private class CurrentActionTargetData
 	{
 		public String hudText = "";
-
-		public boolean isGrey = false;
 
 		public int recoId;
 

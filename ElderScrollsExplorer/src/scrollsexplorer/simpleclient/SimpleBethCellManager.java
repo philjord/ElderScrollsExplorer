@@ -28,6 +28,7 @@ import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.common.data.plugin.PluginSubrecord;
 import esmLoader.loader.IESMManager;
+import esmLoader.tes3.ESMManagerTes3;
 import esmj3d.data.shared.subrecords.LString;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dRECODynInst;
@@ -147,6 +148,12 @@ public class SimpleBethCellManager implements InstRECOStore
 		return false;
 	}
 
+	public boolean changeToCell(String str)
+	{
+		setCurrentCellFormId(convertNameRefToId(str));
+		return true;
+	}
+
 	public void setCurrentCellFormId(int newCellFormId)
 	{
 		System.out.println("Moving to cell " + newCellFormId);
@@ -255,6 +262,25 @@ public class SimpleBethCellManager implements InstRECOStore
 		catch (PluginException e)
 		{
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * for TES3 conversions
+	 * @param str
+	 * @return
+	 */
+	private int convertNameRefToId(String str)
+	{
+		if (esmManager instanceof esmLoader.tes3.ESMManagerTes3)
+		{
+			ESMManagerTes3 esmManagerTes3 = (ESMManagerTes3) esmManager;
+
+			return esmManagerTes3.convertNameRefToId(str);
+		}
+		else
+		{
+			throw new UnsupportedOperationException();
 		}
 	}
 
@@ -412,4 +438,5 @@ public class SimpleBethCellManager implements InstRECOStore
 			//System.out.println("do somethig here? " + instReco);
 		}
 	}
+
 }
