@@ -547,28 +547,15 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	public static void main(String[] args)
 	{
 		//Arguments for goodness
-		//-Xmx1200m -Xms900m -Dj3d.cacheAutoComputeBounds=true -Dsun.java2d.noddraw=true 
-		//-Dj3d.sharedctx=true -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC
-
-		//Can't see a noticable diff in perf with this one
-		//-Dj3d.soleUser=true 				If set to true, allow the sole-user optimization; otherwise, sole-user is disabled 
-//what?-Dj3d.allowSoleUser=true is the proper spelling
-		
-		// still can't tell if this improves things
-		// it'ss only help if interleave is on
-		//-Dj3d.optimizeForSpace=false		If set to true, optimize by-ref geometry for space; otherwise, optimize for rendering speed
-
-		// -Dj3d.threadLimit=2 from https://java.net/projects/java3d/lists/interest/archive/2007-03/message/438
+		//-Xmx1200m -Xms900m  -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -Dsun.java2d.noddraw=true
+		//-Dj3d.cacheAutoComputeBounds=true -Dj3d.sharedctx=true
 
 		// some other interesting settings
 		//java -server -XX:CompileThreshold=2 -XX:+AggressiveOpts -XX:+UseFastAccessorMethods
-		
-		
-		//j3d.implicitAntialiasing=true check it why not set?
-		
-		//-Dj3d.disablecompile can't see a difference
-		
-		//-Dj3d.docompaction=false
+
+		//-Dj3d.implicitAntialiasing=true check it why not set? MacOSX needs for AA, if set always AA
+
+		// -Dj3d.threadLimit=2 from https://java.net/projects/java3d/lists/interest/archive/2007-03/message/438
 
 		String versionString = BootStrap.ZIP_PREFIX + "-" + BootStrap.MAJOR_VERSION + "-" + BootStrap.MINOR_VERSION;
 		System.out.println("VERSION: " + versionString);
@@ -576,12 +563,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		//jogl recomends for non phones 
 		System.setProperty("jogl.disable.opengles", "true");
-
-		//DDS requires no installed java3D
-		if (QueryProperties.checkForInstalledJ3d())
-		{
-			System.exit(0);
-		}
 
 		ConfigLoader.loadConfig(args);
 

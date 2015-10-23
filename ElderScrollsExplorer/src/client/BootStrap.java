@@ -16,8 +16,6 @@ public class BootStrap extends GeneralBootStrap
 
 	private static String downloadLocation = "https://sourceforge.net/projects/elderscrollsexplorer/files/latest/download";
 
-	
-
 	public static void main(String[] args) throws Exception
 	{
 		ConfigLoader.loadConfig(args);
@@ -58,8 +56,8 @@ public class BootStrap extends GeneralBootStrap
 		jarpath += "." + ps + "lib" + ps + "java3d" + ps + "1.6.0-pre12" + ps + "vecmath.jar" + fs;
 		jarpath += "." + ps + "lib" + ps + "jbullet1.1.jar" + fs;
 
-		ProcessBuilder pb = new ProcessBuilder(createJavaExeStr(), getXMX(), "-Xms1024m", cacheAutoComputeBounds, noddraw, sharedctx, clearStencilBuffer ,
-				fancyGCa, fancyGCb, disableExtJars, "-cp", jarpath, "scrollsexplorer.ScrollsExplorer");
+		ProcessBuilder pb = new ProcessBuilder(createJavaExeStr(), getXMX(), "-Xms1024m", fancyGCa, fancyGCb, disableExtJars,
+				cacheAutoComputeBounds, noddraw, sharedctx, clearStencilBuffer, "-cp", jarpath, "scrollsexplorer.ScrollsExplorer");
 
 		startProcess(pb, ".\\logs\\clientlog.txt", ".\\logs\\clientlog.err.txt", ZIP_PREFIX + "-" + MAJOR_VERSION + "-" + MINOR_VERSION);
 	}
