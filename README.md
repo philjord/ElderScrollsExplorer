@@ -1,5 +1,4 @@
 ElderScrollsExplorer
-
 ====
 
  
@@ -46,7 +45,7 @@ The Java3d scene graphs created from them are working, including:
 
 -Regular interpolator animations  
 
--DDS texture loading (and an enahncement to java3d to allow direct compressed textures)  
+-DDS texture loading (and an enhancement to java3d to allow direct compressed textures)  
 
 -Sound files  
 
@@ -56,7 +55,7 @@ The Java3d scene graphs created from them are working, including:
 
  
 
-but not including  
+but not yet complete support for  
 
 -Shaders  
 
@@ -66,7 +65,7 @@ but not including
 
  
 
-The JBullet physics simualtion created from them is working  
+The JBullet physics simulation created from them is working  
 
 Including  
 
@@ -110,10 +109,6 @@ Sounds running properly
 
 Script based objects will probably always appear  
 
-Simple animations run run on things which can be absurb looking  
-
-Skyrim skinning is crazy  
-
 Shadows  
 
 Game time  
@@ -122,9 +117,6 @@ A decent sky
 
 Proper water surface  
 
-The LOD system for Skyrim and Fallout make it load too many cells so performance is always poor (15fps)  
-
- 
 
  
 
@@ -138,11 +130,12 @@ Download eclipse IDE http://www.eclipse.org/downloads/
 
 Unzip it (not into program files)  
 
-install JDK 1.6 into eclipse http://www.oracle.com/technetwork/java/javase/downloads/index.html  
+Install JDK 1.6 into eclipse http://www.oracle.com/technetwork/java/javase/downloads/index.html  
+JDK 1.7+ cause crashes on graphics setting changes so 1.6 is nicer.
 
-Download all the projects here  
+Download or clone in git all of these projects here  
 
-(yes there are a lot fo them, sorry, use the zip button at the root of each)  
+(yes there are a lot of them, sorry, use the zip button at the root of each to download or the git url)  
 
 external_jars  
 
@@ -150,13 +143,9 @@ tools
 
 3DTools  
 
-  
-
 BSAManager  
 
 ESMLoader  
-
-  
 
 jnif  
 
@@ -164,15 +153,13 @@ jnifj3d
 
 jnifjbullet  
 
-  
-
-  
-
 ElderScrollsUtils  
 
 esmj3d  
 
 esmj3dfo3  
+
+esmj3dtes3
 
 esmj3dtes4  
 
@@ -182,9 +169,9 @@ ElderScrollsExplorer
 
  
 
-Import each of them into Eclipse as a project  
+Import each of them into Eclipse as a project ( if downloaded) 
 
-You may have to fix up dependancies at this point(not sure)  
+You may have to fix up dependancies at this point, all the required library jars are in the project external_jars)  
 
  
 
@@ -204,7 +191,7 @@ You need to project -> properties -> configure workspace settings -> Compiler co
 
 If you get a texture mip map exception change the run configuration -> classpath->ElderScrollsExplorer->edit -> only include exported entries  
 
-Once it's running you must set your game folders (the ones containing the esm and bsa files) using File menu  
+Once it's running you must set your game folders (the ones containing the esm and bsa files) using the File menu  in game
 
  
 
