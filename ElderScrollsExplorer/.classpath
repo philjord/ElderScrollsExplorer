@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jnifj3d"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ElderScrollsUtils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3d"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dfo3"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dtes4"/>
@@ -13,7 +12,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/jnifjbullet"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Tools"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jbullet1.1"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_45"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/lwjgl-2.8.5/jar/jinput.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/lwjgl-2.8.5/jar/lwjgl_util.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/lwjgl-2.8.5/jar/lwjgl.jar" sourcepath="E:/downloads&amp;installs/develop/java/jogamp/jogamp-all-platforms/jogl-java-src.zip"/>
