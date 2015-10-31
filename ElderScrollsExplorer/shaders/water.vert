@@ -80,7 +80,7 @@ void main() {
 		vec3 L = normalize(gl_LightSource[i].position.xyz*P.w -
 			P.xyz*gl_LightSource[i].position.w);
 		gl_FrontColor.xyz +=
-			gl_LightSource[i].ambient +
-			gl_LightSource[i].diffuse*max(dot(Nf,L),0.);
+			gl_LightSource[i].ambient.xyz +
+			gl_LightSource[i].diffuse.xyz*max(dot(Nf,L),0.);
 	}    
 }
