@@ -2,7 +2,6 @@ package client;
 
 import tools.bootstrap.GeneralBootStrap;
 import tools.updater.SourceForgeUpdater;
-import common.config.ConfigLoader;
 
 public class BootStrap extends GeneralBootStrap
 {
@@ -18,8 +17,6 @@ public class BootStrap extends GeneralBootStrap
 
 	public static void main(String[] args) throws Exception
 	{
-		ConfigLoader.loadConfig(args);
-
 		// ask updater if we can continue or we should exit
 		if (SourceForgeUpdater.doUpdate(ZIP_PREFIX, MAJOR_VERSION, MINOR_VERSION, downloadLocation))
 		{

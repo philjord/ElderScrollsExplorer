@@ -5,9 +5,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
 
 public class ConfigLoader
 {
+
+	public static HashSet<String> configLines = new HashSet<String>();
+
 	public static void loadConfig(String[] args)
 	{
 		File configFile = new File("config.ini");
@@ -22,13 +26,27 @@ public class ConfigLoader
 				String configString = input.readLine();
 				while (configString != null)
 				{
+					configLines.add(configString);
+
 					configString = input.readLine();
+
 				}
 
-				// Now do command line overrides			 
-				for (String argConfigString : args)
+				// now set properties wher required
+				for (String line : configLines)
 				{
-
+					if (line.startsWith("-D"))
+					{
+						line = line.substring("-D".length());
+						if (line.contains("="))
+						{
+							System.setProperty(line.substring(0, line.indexOf("=")), line.substring(line.indexOf("=") + 1));
+						}
+						else
+						{
+							System.setProperty(line, "true");
+						}
+					}
 				}
 
 			}

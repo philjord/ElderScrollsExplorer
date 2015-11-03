@@ -37,7 +37,6 @@ import scrollsexplorer.simpleclient.SimpleWalkSetup;
 import tools.TitledPanel;
 import tools.swing.UserGuideDisplay;
 import tools.swing.VerticalFlowLayout;
-import tools3d.resolution.QueryProperties;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
 import utils.source.EsmSoundKeyToName;
@@ -58,8 +57,8 @@ import client.BootStrap;
 import com.gg.slider.SideBar;
 import com.gg.slider.SideBar.SideBarMode;
 import com.gg.slider.SidebarSection;
-
 import common.config.ConfigLoader;
+
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.loader.ESMManager;
@@ -554,8 +553,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		//java -server -XX:CompileThreshold=2 -XX:+AggressiveOpts -XX:+UseFastAccessorMethods
 
 		//-Dj3d.implicitAntialiasing=true check it why not set? MacOSX needs for AA, if set always AA
-
-		// -Dj3d.threadLimit=2 from https://java.net/projects/java3d/lists/interest/archive/2007-03/message/438
 
 		String versionString = BootStrap.ZIP_PREFIX + "-" + BootStrap.MAJOR_VERSION + "-" + BootStrap.MINOR_VERSION;
 		System.out.println("VERSION: " + versionString);
