@@ -17,7 +17,6 @@ import scrollsexplorer.ScrollsExplorer;
 import scrollsexplorer.simpleclient.physics.InstRECOStore;
 import tools3d.navigation.AvatarLocation;
 import tools3d.utils.Utils3D;
-import utils.ESConfig;
 import utils.source.MediaSources;
 import utils.source.TextureSource;
 
@@ -45,9 +44,6 @@ public class SimpleBethCellManager implements InstRECOStore
 
 	public static BethInteriorPhysicalBranch currentBethInteriorPhysicalBranch;
 
-	//TODO: more bad form only for ActionableMouseOverHandler
-	public static SimpleBethCellManager simpleBethCellManager;
-
 	private SimpleWalkSetup simpleWalkSetup;
 
 	private AvatarLocation avatarLocation;
@@ -58,11 +54,13 @@ public class SimpleBethCellManager implements InstRECOStore
 
 	private IESMManager esmManager;
 
+	// gate keeper of expensive change cell id call
+	private boolean canChangeCell = true;
+
 	public SimpleBethCellManager(SimpleWalkSetup simpleWalkSetup2)
 	{
 		this.simpleWalkSetup = simpleWalkSetup2;
 		this.avatarLocation = simpleWalkSetup2.getAvatarLocation();
-		simpleBethCellManager = this;
 	}
 
 	public void updateBranches()
@@ -131,13 +129,13 @@ public class SimpleBethCellManager implements InstRECOStore
 	 * @param targetFormId
 	 * @return true if a cell was found and changed to
 	 */
-	public boolean changeToCellOfTarget(int targetFormId)
+	public boolean changeToCellOfTarget(int targetFormId, Vector3f trans, Quat4f rot)
 	{
 		int cellFormID = esmManager.getCellIdOfPersistentTarget(targetFormId);
 		System.out.println("cellFormID " + cellFormID);
 		if (cellFormID > 0)
 		{
-			setCurrentCellFormId(cellFormID);
+			setCurrentCellFormId(cellFormID, trans, rot);
 			return true;
 		}
 		else
@@ -153,123 +151,152 @@ public class SimpleBethCellManager implements InstRECOStore
 	 * @param str
 	 * @return
 	 */
-	public boolean changeToCell(String str)
+	public boolean changeToCell(String str, Vector3f trans, Quat4f rot)
 	{
 		if (str == null)
-			setCurrentCellFormId(0);
+			setCurrentCellFormId(0, trans, rot);
 		else
-			setCurrentCellFormId(convertNameRefToId(str));
+			setCurrentCellFormId(convertNameRefToId(str), trans, rot);
 		return true;
 	}
 
-	public void setCurrentCellFormId(int newCellFormId)
+	public int getCurrentCellFormId()
 	{
-		System.out.println("Moving to cell " + newCellFormId);
-		if (currentCellFormId != -1 && currentCellFormId != newCellFormId)
+		return currentCellFormId;
+	}
+
+	public void setCurrentCellFormId(final int newCellFormId, final Vector3f trans, final Quat4f rot)
+	{
+		if (canChangeCell)
 		{
-			System.out.println("unloading...");
-			// unload current
-			if (currentBethWorldVisualBranch != null)
+			// use a new thread as generally the AWt thread is coming in and better to let it go
+			Thread thread = new Thread()
 			{
-				currentBethWorldVisualBranch.unload();
-				currentBethWorldVisualBranch.detach();
-				if (avatarLocation != null)
+				public void run()
 				{
-					avatarLocation.removeAvatarLocationListener(currentBethWorldVisualBranch);
-				}
-				currentBethWorldVisualBranch = null;
-			}
-			if (currentBethWorldPhysicalBranch != null)
-			{
-				currentBethWorldPhysicalBranch.detach();
-				if (avatarLocation != null)
-				{
-					avatarLocation.removeAvatarLocationListener(currentBethWorldPhysicalBranch);
-				}
-				currentBethWorldPhysicalBranch = null;
-			}
-			if (currentBethInteriorVisualBranch != null)
-			{
-				currentBethInteriorVisualBranch.detach();
-				currentBethInteriorVisualBranch = null;
-			}
-			if (currentBethInteriorPhysicalBranch != null)
-			{
-				currentBethInteriorPhysicalBranch.detach();
-				currentBethInteriorPhysicalBranch = null;
-			}
-		}
-		currentCellFormId = newCellFormId;
+					canChangeCell = false;
 
-		try
-		{
-			// now load new
-			if (currentCellFormId != -1)
-			{
-				System.out.println("loading...");
-				ScrollsExplorer.dashboard.setCellLoading(1);
-				PluginRecord cell = esmManager.getWRLD(currentCellFormId);
-				if (cell != null)
-				{
-					currentBethWorldVisualBranch = new BethWorldVisualBranch(currentCellFormId, j3dCellFactory);
-					if (avatarLocation != null)
+					simpleWalkSetup.setEnabled(false);
+					System.out.println("LOAD SCREEEEENNNENEN!!");
+
+					System.out.println("Setting cell to ID:" + newCellFormId);
+					if (currentCellFormId != -1 && currentCellFormId != newCellFormId)
 					{
-						currentBethWorldVisualBranch.init(avatarLocation.getTransform());
-						avatarLocation.addAvatarLocationListener(currentBethWorldVisualBranch);
-					}
-					// notice init before making live to speed it up
-					simpleWalkSetup.addToVisualBranch(currentBethWorldVisualBranch);
-
-					currentBethWorldPhysicalBranch = new BethWorldPhysicalBranch(simpleWalkSetup.getPhysicsSystem(), currentCellFormId,
-							j3dCellFactory);
-					if (avatarLocation != null)
-					{
-						currentBethWorldPhysicalBranch.init(avatarLocation.getTransform());
-						avatarLocation.addAvatarLocationListener(currentBethWorldPhysicalBranch);
-					}
-					simpleWalkSetup.addToPhysicalBranch(currentBethWorldPhysicalBranch);
-				}
-				else
-				{
-					//must be interior?
-					cell = esmManager.getInteriorCELL(currentCellFormId);
-					if (cell != null)
-					{
-						currentBethInteriorVisualBranch = new BethInteriorVisualBranch(currentCellFormId, cell.getEditorID(),
-								j3dCellFactory);
-						simpleWalkSetup.addToVisualBranch(currentBethInteriorVisualBranch);
-
-						currentBethInteriorPhysicalBranch = new BethInteriorPhysicalBranch(simpleWalkSetup.getPhysicsSystem(),
-								currentCellFormId, j3dCellFactory);
-						simpleWalkSetup.addToPhysicalBranch(currentBethInteriorPhysicalBranch);
-
-						if (avatarLocation != null)
+						System.out.println("unloading cell " + currentCellFormId + "...");
+						// unload current
+						if (currentBethWorldVisualBranch != null)
 						{
-							//TODO: the unload load part of this should still be called I think
-							//currentBethInteriorPhysicalBranch.init(avatarLocation.getTransform());
-							//avatarLocation.addAvatarLocationListener(currentBethInteriorPhysicalBranch);
+							currentBethWorldVisualBranch.unload();
+							currentBethWorldVisualBranch.detach();
+							if (avatarLocation != null)
+							{
+								avatarLocation.removeAvatarLocationListener(currentBethWorldVisualBranch);
+							}
+							currentBethWorldVisualBranch = null;
+						}
+						if (currentBethWorldPhysicalBranch != null)
+						{
+							currentBethWorldPhysicalBranch.detach();
+							if (avatarLocation != null)
+							{
+								avatarLocation.removeAvatarLocationListener(currentBethWorldPhysicalBranch);
+							}
+							currentBethWorldPhysicalBranch = null;
+						}
+						if (currentBethInteriorVisualBranch != null)
+						{
+							currentBethInteriorVisualBranch.detach();
+							currentBethInteriorVisualBranch = null;
+						}
+						if (currentBethInteriorPhysicalBranch != null)
+						{
+							currentBethInteriorPhysicalBranch.detach();
+							currentBethInteriorPhysicalBranch = null;
 						}
 					}
-					else
-					{
-						System.out.println("unknown cell id " + currentCellFormId);
+					currentCellFormId = newCellFormId;
 
+					//update location to avoid double load as would happen if not done between unload and load	
+					simpleWalkSetup.changeLocation(rot, trans);
+
+					try
+					{
+						// now load new
+						if (currentCellFormId != -1)
+						{
+							System.out.println("loading " + currentCellFormId + "...");
+							ScrollsExplorer.dashboard.setCellLoading(1);
+							PluginRecord cell = esmManager.getWRLD(currentCellFormId);
+							if (cell != null)
+							{
+								currentBethWorldVisualBranch = new BethWorldVisualBranch(currentCellFormId, j3dCellFactory);
+								if (avatarLocation != null)
+								{
+									currentBethWorldVisualBranch.init(avatarLocation.getTransform());
+									avatarLocation.addAvatarLocationListener(currentBethWorldVisualBranch);
+								}
+								// notice init before making live to speed it up
+								simpleWalkSetup.addToVisualBranch(currentBethWorldVisualBranch);
+
+								currentBethWorldPhysicalBranch = new BethWorldPhysicalBranch(simpleWalkSetup.getPhysicsSystem(),
+										currentCellFormId, j3dCellFactory);
+								if (avatarLocation != null)
+								{
+									currentBethWorldPhysicalBranch.init(avatarLocation.getTransform());
+									avatarLocation.addAvatarLocationListener(currentBethWorldPhysicalBranch);
+								}
+								simpleWalkSetup.addToPhysicalBranch(currentBethWorldPhysicalBranch);
+							}
+							else
+							{
+								//must be interior?
+								cell = esmManager.getInteriorCELL(currentCellFormId);
+								if (cell != null)
+								{
+									currentBethInteriorVisualBranch = new BethInteriorVisualBranch(currentCellFormId, cell.getEditorID(),
+											j3dCellFactory);
+									simpleWalkSetup.addToVisualBranch(currentBethInteriorVisualBranch);
+
+									currentBethInteriorPhysicalBranch = new BethInteriorPhysicalBranch(simpleWalkSetup.getPhysicsSystem(),
+											currentCellFormId, j3dCellFactory);
+									simpleWalkSetup.addToPhysicalBranch(currentBethInteriorPhysicalBranch);
+
+									if (avatarLocation != null)
+									{
+										//TODO: the unload load part of this should still be called I think
+										//currentBethInteriorPhysicalBranch.init(avatarLocation.getTransform());
+										//avatarLocation.addAvatarLocationListener(currentBethInteriorPhysicalBranch);
+									}
+								}
+								else
+								{
+									System.out.println("unknown cell id " + currentCellFormId);
+
+								}
+							}
+							ScrollsExplorer.dashboard.setCellLoading(-1);
+						}
 					}
+					catch (DataFormatException e)
+					{
+						e.printStackTrace();
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+					catch (PluginException e)
+					{
+						e.printStackTrace();
+					}
+
+					simpleWalkSetup.setEnabled(true);
+					System.out.println("LOAD SCREEEEENNNENEN down...");
+
+					canChangeCell = true;
 				}
-				ScrollsExplorer.dashboard.setCellLoading(-1);
-			}
-		}
-		catch (DataFormatException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		catch (PluginException e)
-		{
-			e.printStackTrace();
+			};
+			thread.start();
 		}
 	}
 
@@ -391,29 +418,6 @@ public class SimpleBethCellManager implements InstRECOStore
 
 		return backgroundGroup;
 
-	}
-
-	public void setLocation(float x, float y, float z, float rx, float ry, float rz)
-	{
-		Transform3D transform = new Transform3D();
-
-		Transform3D xrotT = new Transform3D();
-		xrotT.rotX(-rx);
-		Transform3D zrotT = new Transform3D();
-		zrotT.rotZ(ry);
-		Transform3D yrotT = new Transform3D();
-		yrotT.rotY(-rz);
-
-		xrotT.mul(zrotT);
-		xrotT.mul(yrotT);
-
-		transform.set(xrotT);
-
-		simpleWalkSetup.warp(new Vector3f(x * ESConfig.ES_TO_METERS_SCALE, z * ESConfig.ES_TO_METERS_SCALE, -y
-				* ESConfig.ES_TO_METERS_SCALE));
-		Quat4f q = new Quat4f();
-		Utils3D.safeGetQuat(transform, q);
-		simpleWalkSetup.getAvatarLocation().setRotation(q);
 	}
 
 	@Override

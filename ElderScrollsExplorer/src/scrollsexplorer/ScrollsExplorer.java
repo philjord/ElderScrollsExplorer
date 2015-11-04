@@ -110,8 +110,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	private UserGuideDisplay ugd = new UserGuideDisplay();
 
-	private int currentCellformid = -1;
-
 	private Preferences prefs;
 
 	public ScrollsExplorer()
@@ -276,7 +274,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					.getTransform()).toString());
 			PropertyLoader.properties.setProperty("Trans" + esmManager.getName(),
 					"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));
-			PropertyLoader.properties.setProperty("CellId" + esmManager.getName(), "" + currentCellformid);
+			PropertyLoader.properties.setProperty("CellId" + esmManager.getName(), "" + simpleBethCellManager.getCurrentCellFormId());
 		}
 		PropertyLoader.save();
 	}
@@ -370,7 +368,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 								new YawPitch().toString()));
 						Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
 								new Vector3f().toString()));
-						currentCellformid = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
+						int prevCellformid = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
 						simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
 
 						new EsmSoundKeyToName(esmManager);
@@ -451,7 +449,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							for (Integer formId : esmManager.getAllWRLDTopGroupFormIds())
 							{
 								PluginRecord pr = esmManager.getWRLD(formId);
-								if (currentCellformid == formId)
+								if (prevCellformid == formId)
 									tableModel.insertRow(0, new Object[]
 									{ "Ext", formId, pr });
 								else
@@ -462,7 +460,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							for (Integer formId : esmManager.getAllInteriorCELLFormIds())
 							{
 								PluginRecord pr = esmManager.getInteriorCELL(formId);
-								if (currentCellformid == formId)
+								if (prevCellformid == formId)
 									tableModel.insertRow(0, new Object[]
 									{ "Int", formId, pr });
 								else
@@ -507,27 +505,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	private void display(final int cellformid)
 	{
-		Thread t = new Thread()
-		{
-
-			public void run()
-			{
-				//crappy no doubles system
-				synchronized (simpleBethCellManager)
-				{
-					simpleWalkSetup.setEnabled(false);
-					System.out.println("loading and displaying cell " + cellformid);
-
-					simpleBethCellManager.setCurrentCellFormId(cellformid);
-
-					System.out.println("Cell loaded and dispalyed " + cellformid);
-					simpleWalkSetup.setEnabled(true);
-					//	simpleWalkSetup.warp(new Vector3f(0, 10000, 0));
-					currentCellformid = cellformid;
-				}
-			}
-		};
-		t.start();
+		Vector3f t = simpleWalkSetup.getAvatarLocation().get(new Vector3f());
+		Quat4f r = simpleWalkSetup.getAvatarLocation().get(new Quat4f());
+		simpleBethCellManager.setCurrentCellFormId(cellformid, t, r);
 	}
 
 	private static void setDebug(boolean b)

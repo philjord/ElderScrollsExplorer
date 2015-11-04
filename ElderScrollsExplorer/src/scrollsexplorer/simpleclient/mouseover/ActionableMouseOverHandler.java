@@ -4,6 +4,9 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
 import javax.media.j3d.Canvas3D;
+import javax.media.j3d.Transform3D;
+import javax.vecmath.Quat4f;
+import javax.vecmath.Vector3f;
 
 import nifbullet.BulletNifModel;
 import nifbullet.NBRigidBody;
@@ -12,6 +15,8 @@ import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.mixed3d2d.hud.hudelements.HUDText;
+import tools3d.utils.Utils3D;
+import utils.ESConfig;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
 import com.bulletphysics.dynamics.RigidBody;
@@ -30,6 +35,8 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 {
 	public static final float INTERACT_MAX_DIST = 2.6f;
 
+	private SimpleBethCellManager simpleBethCellManager;
+
 	private CurrentActionTargetData currentActionTargetData = new CurrentActionTargetData();
 
 	private static Object currentActionableMonitor = new Object();
@@ -40,9 +47,10 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 	private int hudHeight = 60;
 
-	public ActionableMouseOverHandler(PhysicsSystem clientPhysicsSystem)
+	public ActionableMouseOverHandler(PhysicsSystem clientPhysicsSystem, SimpleBethCellManager simpleBethCellManager)
 	{
 		super(clientPhysicsSystem);
+		this.simpleBethCellManager = simpleBethCellManager;
 	}
 
 	@Override
@@ -97,11 +105,14 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 							XTEL xtel = commonREFR.XTEL;
 							if (xtel != null)
 							{
-								boolean moved = false;
+								Vector3f t = getTrans(xtel.x, xtel.y, xtel.z);
+								// TODO: for now lift up, but when pelvis set right stop this
+								t.y += 0.75;
+								Quat4f r = getRot(xtel.rx, xtel.ry, xtel.rz);
 
 								if (xtel.doorFormId != 0)
 								{
-									moved = SimpleBethCellManager.simpleBethCellManager.changeToCellOfTarget(xtel.doorFormId);
+									simpleBethCellManager.changeToCellOfTarget(xtel.doorFormId, t, r);
 								}
 								//TES3 won't have formId set yet
 								else if (commonREFR instanceof esmj3dtes3.data.records.REFR)
@@ -110,19 +121,14 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 									// DNAM is the target cell name
 									if (refr.DNAM != null)
 									{
-										moved = SimpleBethCellManager.simpleBethCellManager.changeToCell(refr.DNAM.str);
+										simpleBethCellManager.changeToCell(refr.DNAM.str, t, r);
 									}
 									else
 									{
-										moved = SimpleBethCellManager.simpleBethCellManager.changeToCell(null);
+										simpleBethCellManager.changeToCell(null, t, r);
 									}
 								}
 
-								if (moved)
-								{
-									SimpleBethCellManager.simpleBethCellManager.setLocation(xtel.x, xtel.y, xtel.z, xtel.rx, xtel.ry,
-											xtel.rz);
-								}
 							}
 							else
 							{
@@ -271,7 +277,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 											{
 												if (currentActionTargetData.cellName == null)
 												{
-													currentActionTargetData.cellName = SimpleBethCellManager.simpleBethCellManager
+													currentActionTargetData.cellName = simpleBethCellManager
 															.getCellNameFormIdOf(xtel.doorFormId);
 												}
 
@@ -389,5 +395,31 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 			distance = 999;
 			cellName = null;
 		}
+	}
+
+	private static Vector3f getTrans(float x, float y, float z)
+	{
+		return new Vector3f(x * ESConfig.ES_TO_METERS_SCALE, z * ESConfig.ES_TO_METERS_SCALE, -y * ESConfig.ES_TO_METERS_SCALE);
+	}
+
+	private static Quat4f getRot(float rx, float ry, float rz)
+	{
+		Transform3D transform = new Transform3D();
+
+		Transform3D xrotT = new Transform3D();
+		xrotT.rotX(-rx);
+		Transform3D zrotT = new Transform3D();
+		zrotT.rotZ(ry);
+		Transform3D yrotT = new Transform3D();
+		yrotT.rotY(-rz);
+
+		xrotT.mul(zrotT);
+		xrotT.mul(yrotT);
+
+		transform.set(xrotT);
+
+		Quat4f q = new Quat4f();
+		Utils3D.safeGetQuat(transform, q);
+		return q;
 	}
 }

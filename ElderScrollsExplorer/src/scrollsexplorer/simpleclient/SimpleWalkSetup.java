@@ -35,7 +35,6 @@ import nifbullet.cha.NBControlledChar;
 import scrollsexplorer.ScrollsExplorer;
 import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
 import scrollsexplorer.simpleclient.mouseover.AdminMouseOverHandler;
-import scrollsexplorer.simpleclient.physics.InstRECOStore;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools.ddstexture.DDSTextureLoader;
 import tools3d.camera.CameraPanel;
@@ -275,7 +274,16 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		}
 	}
 
-	public void warp(Vector3f origin)
+	public void changeLocation(Quat4f rot, Vector3f trans)
+	{
+		System.out.println("Moving to " + trans);
+		//TODO: should I call warp now? not needed if only change cell uses the above
+		warp(trans);
+		getAvatarLocation().setTranslation(trans);
+		getAvatarLocation().setRotation(rot);
+	}
+
+	private void warp(Vector3f origin)
 	{
 		if (physicsSystem != null && physicsSystem.getNBControlledChar() != null)
 		{
@@ -284,15 +292,15 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	}
 
-	public void configure(MeshSource meshSource, InstRECOStore instRECOStore)
+	public void configure(MeshSource meshSource, SimpleBethCellManager simpleBethCellManager)
 	{
 		// set up and run the physics system************************************************
 
-		physicsSystem = new PhysicsSystem(instRECOStore, avatarLocation, behaviourBranch, meshSource);
+		physicsSystem = new PhysicsSystem(simpleBethCellManager, avatarLocation, behaviourBranch, meshSource);
 
 		ScrollsExplorer.dashboard.setPhysicSystem(physicsSystem);
 
-		cameraMouseOver = new ActionableMouseOverHandler(physicsSystem);
+		cameraMouseOver = new ActionableMouseOverHandler(physicsSystem, simpleBethCellManager);
 
 		cameraAdminMouseOverHandler = new AdminMouseOverHandler(physicsSystem);
 
@@ -308,7 +316,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	}
 
-	public void setupGraphicsSetting(GraphicsSettings gs)
+	private void setupGraphicsSetting(GraphicsSettings gs)
 	{
 
 		if (cameraPanel == null)
