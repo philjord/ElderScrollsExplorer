@@ -114,7 +114,6 @@
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiAVObjectPalette.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiGeometry.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiSortAdjustNode.java"/>
-        <javaElement handleIdentifier="=ElderScrollsUtils/src"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiAlphaProperty.java"/>
         <javaElement handleIdentifier="=esmj3d/src"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiPixelData.java"/>

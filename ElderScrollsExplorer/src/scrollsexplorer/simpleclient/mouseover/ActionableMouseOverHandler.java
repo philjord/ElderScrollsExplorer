@@ -43,7 +43,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 	private HUDText HUDText;
 
-	private int hudWidth = 250;
+	private int hudWidth = 300;
 
 	private int hudHeight = 60;
 
@@ -254,6 +254,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 						if (j3dInstRECO != null && j3dInstRECO instanceof J3dRECOStatInst)
 						{
+
 							// if the mouse release listener is working we can't change the currentActionable until it's finished
 							synchronized (currentActionableMonitor)
 							{
@@ -283,7 +284,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 												// if less than the max interact then set interactable
 												// if not then set hudtext (in light grey) but don't allow actions
-												currentActionTargetData.hudText = "Travel to " + currentActionTargetData.cellName;
+												currentActionTargetData.hudText = "To " + currentActionTargetData.cellName;
 												if (currentActionTargetData.distance < INTERACT_MAX_DIST)
 													currentActionTargetData.currentActionable = j3dInstRECO;
 												else
@@ -295,7 +296,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 												if (refr.DNAM != null)
 												{ // DNAM is the target cell name
-													currentActionTargetData.hudText = "Travel to " + refr.DNAM.str;
+													currentActionTargetData.hudText = "To " + refr.DNAM.str;
 												}
 												else
 												{
@@ -330,7 +331,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 										String ext = " container";
 										if (genericCONT.FULL != null)
 											ext = " " + genericCONT.FULL.str;
-										currentActionTargetData.hudText = "Look in" + ext;
+										currentActionTargetData.hudText = "Look in " + ext;
 
 										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
 											currentActionTargetData.currentActionable = j3dInstRECO;

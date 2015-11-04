@@ -101,8 +101,11 @@ public class SimpleBethCellManager implements InstRECOStore
 					List<PluginSubrecord> subrecords = pr.getSubrecords();
 					for (PluginSubrecord subrec : subrecords)
 					{
-						if (subrec.getSubrecordType().equals("FULL"))
+						//TES5 has these FULLs as FormIDs, so test for 4 bytes
+						if (subrec.getSubrecordType().equals("FULL") && subrec.getSubrecordData().length > 4)
+						{
 							return new LString(subrec.getSubrecordData()).str;
+						}
 					}
 					return pr.getEditorID();
 
