@@ -145,14 +145,14 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 									//also update physics view, but assume much
 									J3dRECOInst phyJ3dInstRECO = null;
-									if (SimpleBethCellManager.currentBethWorldVisualBranch != null)
+									if (SimpleBethCellManager.currentBethWorldPhysicalBranch != null)
 									{
 										phyJ3dInstRECO = SimpleBethCellManager.currentBethWorldPhysicalBranch
 												.getJ3dInstRECO(j3dRECOStatInst.getRecordId());
 									}
-									else if (SimpleBethCellManager.currentBethInteriorVisualBranch != null)
+									else if (SimpleBethCellManager.currentBethInteriorPhysicalBranch != null)
 									{
-										phyJ3dInstRECO = SimpleBethCellManager.currentBethInteriorVisualBranch
+										phyJ3dInstRECO = SimpleBethCellManager.currentBethInteriorPhysicalBranch
 												.getJ3dInstRECO(j3dRECOStatInst.getRecordId());
 									}
 									if (phyJ3dInstRECO != null)
@@ -173,14 +173,14 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 									//also update physics view, but assume much
 									J3dRECOInst phyJ3dInstRECO = null;
-									if (SimpleBethCellManager.currentBethWorldVisualBranch != null)
+									if (SimpleBethCellManager.currentBethWorldPhysicalBranch != null)
 									{
 										phyJ3dInstRECO = SimpleBethCellManager.currentBethWorldPhysicalBranch
 												.getJ3dInstRECO(j3dRECOStatInst.getRecordId());
 									}
-									else if (SimpleBethCellManager.currentBethInteriorVisualBranch != null)
+									else if (SimpleBethCellManager.currentBethInteriorPhysicalBranch != null)
 									{
-										phyJ3dInstRECO = SimpleBethCellManager.currentBethInteriorVisualBranch
+										phyJ3dInstRECO = SimpleBethCellManager.currentBethInteriorPhysicalBranch
 												.getJ3dInstRECO(j3dRECOStatInst.getRecordId());
 									}
 
@@ -331,7 +331,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 										String ext = " container";
 										if (genericCONT.FULL != null)
 											ext = " " + genericCONT.FULL.str;
-										currentActionTargetData.hudText = "Look in " + ext;
+										currentActionTargetData.hudText = "Look in" + ext;
 
 										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
 											currentActionTargetData.currentActionable = j3dInstRECO;

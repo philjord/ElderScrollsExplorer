@@ -9,6 +9,7 @@ import esmLoader.common.data.record.Subrecord;
 import esmj3d.j3d.cell.J3dCELLGeneral;
 import esmj3d.j3d.cell.J3dICELLPersistent;
 import esmj3d.j3d.cell.J3dICellFactory;
+import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 
 public class BethInteriorPhysicalBranch extends BranchGroup
 {
@@ -63,4 +64,17 @@ public class BethInteriorPhysicalBranch extends BranchGroup
 
 	}
 
+	public J3dRECOInst getJ3dInstRECO(int recoId)
+	{
+		if (j3dCELLTemporary != null)
+		{
+			J3dRECOInst jri = j3dCELLTemporary.getJ3dRECOs().get(recoId);
+			if (jri != null)
+			{
+				return jri;
+			}
+		}
+
+		return j3dCELLPersistent.getGridSpaces().getJ3dInstRECO(recoId);
+	}
 }

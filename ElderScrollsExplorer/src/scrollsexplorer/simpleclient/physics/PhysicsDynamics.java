@@ -331,6 +331,12 @@ public class PhysicsDynamics extends DynamicsEngine
 					s.fireSequenceOnce();
 				}
 			}
+			else
+			{
+				//wow TES3 door have no animation, they look like they just artifically pivot around 
+				System.out.println("updateRECOToggleOpen door with no controller, probably travel door "
+						+ j3dRECOInst.getJ3dRECOType().getName());
+			}
 		}
 
 	}
