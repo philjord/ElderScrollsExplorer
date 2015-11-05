@@ -410,9 +410,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 						simpleWalkSetup.configure(meshSource, simpleBethCellManager);
 						simpleWalkSetup.setEnabled(false);
-						//add skynow
-						simpleWalkSetup.addToVisualBranch(SimpleBethCellManager.createBackground(textureSource));
-
+						
+						
 						simpleBethCellManager.setSources(selectedGameConfig, esmManager, mediaSources);
 
 						tableModel = new DefaultTableModel(columnNames, 0)

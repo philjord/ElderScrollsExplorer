@@ -4,10 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-import javax.media.j3d.Appearance;
-import javax.media.j3d.Background;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.Texture;
 import javax.media.j3d.Transform3D;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
@@ -15,14 +11,10 @@ import javax.vecmath.Vector3f;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.ScrollsExplorer;
 import scrollsexplorer.simpleclient.physics.InstRECOStore;
+import scrollsexplorer.simpleclient.scenegraph.LoadScreen;
+import scrollsexplorer.simpleclient.scenegraph.SimpleSky;
 import tools3d.navigation.AvatarLocation;
-import tools3d.utils.Utils3D;
 import utils.source.MediaSources;
-import utils.source.TextureSource;
-
-import com.sun.j3d.utils.geometry.Primitive;
-import com.sun.j3d.utils.geometry.Sphere;
-
 import esmLoader.common.PluginException;
 import esmLoader.common.data.plugin.PluginRecord;
 import esmLoader.common.data.plugin.PluginSubrecord;
@@ -54,6 +46,10 @@ public class SimpleBethCellManager implements InstRECOStore
 
 	private IESMManager esmManager;
 
+	private SimpleSky simpleSky;
+
+	private LoadScreen loadScreen;
+
 	// gate keeper of expensive change cell id call
 	private boolean canChangeCell = true;
 
@@ -81,6 +77,14 @@ public class SimpleBethCellManager implements InstRECOStore
 		this.esmManager = esmManager;
 		j3dCellFactory = gameConfig.j3dCellFactory;
 		j3dCellFactory.setSources(esmManager, esmManager, mediaSources);
+
+		//add skynow
+		simpleSky = new SimpleSky(mediaSources.getTextureSource());
+		simpleWalkSetup.addToVisualBranch(simpleSky);
+
+		loadScreen = new LoadScreen(mediaSources);
+		simpleWalkSetup.addToVisualBranch(loadScreen);
+
 	}
 
 	public String getCellNameFormIdOf(int doorFormId)
@@ -172,7 +176,7 @@ public class SimpleBethCellManager implements InstRECOStore
 	{
 		if (canChangeCell)
 		{
-			// use a new thread as generally the AWt thread is coming in and better to let it go
+			// use a new thread as generally the Awt thread is coming in and better to let it go
 			Thread thread = new Thread()
 			{
 				public void run()
@@ -180,7 +184,7 @@ public class SimpleBethCellManager implements InstRECOStore
 					canChangeCell = false;
 
 					simpleWalkSetup.setEnabled(false);
-					System.out.println("LOAD SCREEEEENNNENEN!!");
+					showLoadScreen();
 
 					System.out.println("Setting cell to ID:" + newCellFormId);
 					if (currentCellFormId != -1 && currentCellFormId != newCellFormId)
@@ -189,8 +193,9 @@ public class SimpleBethCellManager implements InstRECOStore
 						// unload current
 						if (currentBethWorldVisualBranch != null)
 						{
-							currentBethWorldVisualBranch.unload();
 							currentBethWorldVisualBranch.detach();
+							currentBethWorldVisualBranch.unload();
+
 							if (avatarLocation != null)
 							{
 								avatarLocation.removeAvatarLocationListener(currentBethWorldVisualBranch);
@@ -294,7 +299,8 @@ public class SimpleBethCellManager implements InstRECOStore
 					}
 
 					simpleWalkSetup.setEnabled(true);
-					System.out.println("LOAD SCREEEEENNNENEN down...");
+
+					dropLoadScreen();
 
 					canChangeCell = true;
 				}
@@ -327,102 +333,6 @@ public class SimpleBethCellManager implements InstRECOStore
 		this.avatarLocation = avatarLocation;
 	}
 
-	/*
-	  * Create some Background geometry to use as
-	  * a backdrop for the application. Here we create
-	  * a Sphere that will enclose the entire scene and
-	  * apply a texture image onto the inside of the Sphere
-	  * to serve as a graphical backdrop for the scene.
-	  */
-	public static BranchGroup createBackground(TextureSource textureSource)
-	{
-
-		/*Background background = new Background();
-		background.setApplicationBounds(Utils3D.defaultBounds);
-		//background.setColor(new Color3f(1.0f, 1.0f, 1.0f));
-
-		BranchGroup bgNifbg = new BranchGroup();
-		NifFile nifFile = NifToJ3d.loadNiObjects("meshes\\sky\\stars.nif", meshSource);
-		NiToJ3dData niToJ3dData = new NiToJ3dData(nifFile.blocks);
-		for (NiObject no : nifFile.blocks)
-		{
-			if (no instanceof NiTriShape)
-			{
-				NiTriShape niTriShape = (NiTriShape) no;
-				//J3dNiTriShape jnts = new J3dNiTriShape(niTriShape, niToJ3dData, textureSource);
-				//bgNifbg.addChild(jnts);
-			}
-		}
-
-		background.setGeometry(bgNifbg);
-
-		BranchGroup bgbg = new BranchGroup();
-		bgbg.addChild(background);*/
-
-		// create a parent BranchGroup for the Background
-		BranchGroup backgroundGroup = new BranchGroup();
-
-		// create a new Background node
-		Background back = new Background();
-
-		// set the range of influence of the background
-		back.setApplicationBounds(Utils3D.defaultBounds);
-
-		// create a BranchGroup that will hold
-		// our Sphere geometry
-		BranchGroup bgGeometry = new BranchGroup();
-
-		// create an appearance for the Sphere
-		Appearance app = new Appearance();
-
-		Texture tex = null;
-		// load a texture image 		
-		if (textureSource.textureFileExists("textures\\sky\\skyrimcloudsupper04.dds"))
-		{
-			tex = textureSource.getTexture("textures\\sky\\skyrimcloudsupper04.dds");
-		}
-		else if (textureSource.textureFileExists("textures\\sky\\cloudsclear.dds"))
-		{
-			tex = textureSource.getTexture("textures\\sky\\cloudsclear.dds");
-		}
-		else if (textureSource.textureFileExists("textures\\sky\\urbancloudovercastlower01.dds"))
-		{
-			tex = textureSource.getTexture("textures\\sky\\urbancloudovercastlower01.dds");
-		}
-		else if (textureSource.textureFileExists("textures\\tx_sky_clear.dds"))
-		{
-			tex = textureSource.getTexture("textures\\tx_sky_clear.dds");
-		}
-		else
-		{
-			System.out.println("BUM, no tex fro sky");
-		}
-
-		// apply the texture to the Appearance
-		app.setTexture(tex);
-
-		// create the Sphere geometry with radius 1.0.
-		// we tell the Sphere to generate texture coordinates
-		// to enable the texture image to be rendered
-		// and because we are *inside* the Sphere we have to generate 
-		// Normal coordinates inwards or the Sphere will not be visible.
-		Sphere sphere = new Sphere(1.0f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS_INWARD, app);
-
-		// start wiring everything together,
-
-		// add the Sphere to its parent BranchGroup.
-		bgGeometry.addChild(sphere);
-
-		// assign the BranchGroup to the Background as geometry.
-		back.setGeometry(bgGeometry);
-
-		// add the Background node to its parent BranchGroup.
-		backgroundGroup.addChild(back);
-
-		return backgroundGroup;
-
-	}
-
 	@Override
 	public void applyUpdate(J3dRECOInst instReco, Quat4f newRotation, Vector3f newTranslation)
 	{
@@ -452,6 +362,18 @@ public class SimpleBethCellManager implements InstRECOStore
 		{
 			//System.out.println("do somethig here? " + instReco);
 		}
+	}
+
+	public void showLoadScreen()
+	{
+		simpleSky.setShowSky(false);
+		loadScreen.setShowLoadScreen(true, avatarLocation.getTransform());
+	}
+
+	public void dropLoadScreen()
+	{
+		simpleSky.setShowSky(true);
+		loadScreen.setShowLoadScreen(false, null);
 	}
 
 }
