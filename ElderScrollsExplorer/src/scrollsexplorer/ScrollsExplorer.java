@@ -57,13 +57,13 @@ import client.BootStrap;
 import com.gg.slider.SideBar;
 import com.gg.slider.SideBar.SideBarMode;
 import com.gg.slider.SidebarSection;
-import common.config.ConfigLoader;
 
-import esmLoader.common.PluginException;
-import esmLoader.common.data.plugin.PluginRecord;
-import esmLoader.loader.ESMManager;
-import esmLoader.loader.IESMManager;
+import common.config.ConfigLoader;
 import esmj3d.j3d.BethRenderSettings;
+import esmmanager.common.PluginException;
+import esmmanager.common.data.plugin.PluginRecord;
+import esmmanager.loader.ESMManager;
+import esmmanager.loader.IESMManager;
 
 public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener
 {

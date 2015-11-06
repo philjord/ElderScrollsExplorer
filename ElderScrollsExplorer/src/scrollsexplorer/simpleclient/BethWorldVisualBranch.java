@@ -17,8 +17,6 @@ import scrollsexplorer.ScrollsExplorer;
 import tools.QueuingThread;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 import tools3d.utils.scenegraph.StructureUpdateBehavior;
-import esmLoader.common.data.record.Record;
-import esmLoader.common.data.record.Subrecord;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.cell.Beth32LodManager;
 import esmj3d.j3d.cell.Beth32_4LodManager;
@@ -29,6 +27,8 @@ import esmj3d.j3d.cell.J3dICELLPersistent;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
+import esmmanager.common.data.record.Record;
+import esmmanager.common.data.record.Subrecord;
 
 /**
 

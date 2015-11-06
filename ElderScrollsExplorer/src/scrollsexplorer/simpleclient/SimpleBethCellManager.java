@@ -15,15 +15,15 @@ import scrollsexplorer.simpleclient.scenegraph.LoadScreen;
 import scrollsexplorer.simpleclient.scenegraph.SimpleSky;
 import tools3d.navigation.AvatarLocation;
 import utils.source.MediaSources;
-import esmLoader.common.PluginException;
-import esmLoader.common.data.plugin.PluginRecord;
-import esmLoader.common.data.plugin.PluginSubrecord;
-import esmLoader.loader.IESMManager;
-import esmLoader.tes3.ESMManagerTes3;
 import esmj3d.data.shared.subrecords.LString;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dRECODynInst;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
+import esmmanager.common.PluginException;
+import esmmanager.common.data.plugin.PluginRecord;
+import esmmanager.common.data.plugin.PluginSubrecord;
+import esmmanager.loader.IESMManager;
+import esmmanager.tes3.ESMManagerTes3;
 
 public class SimpleBethCellManager implements InstRECOStore
 {
@@ -328,7 +328,7 @@ public class SimpleBethCellManager implements InstRECOStore
 	 */
 	private int convertNameRefToId(String str)
 	{
-		if (esmManager instanceof esmLoader.tes3.ESMManagerTes3)
+		if (esmManager instanceof esmmanager.tes3.ESMManagerTes3)
 		{
 			ESMManagerTes3 esmManagerTes3 = (ESMManagerTes3) esmManager;
 

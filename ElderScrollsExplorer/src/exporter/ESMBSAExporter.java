@@ -40,15 +40,13 @@ import utils.source.MediaSources;
 import FO3Archive.ArchiveEntry;
 import FO3Archive.ArchiveFile;
 import bsa.BSAFileSet;
-
 import common.Utils;
 import common.config.ConfigLoader;
-
-import esmLoader.common.PluginException;
-import esmLoader.common.data.plugin.PluginRecord;
-import esmLoader.loader.ESMManager;
-import esmLoader.loader.IESMManager;
 import esmj3d.j3d.cell.J3dICellFactory;
+import esmmanager.common.PluginException;
+import esmmanager.common.data.plugin.PluginRecord;
+import esmmanager.loader.ESMManager;
+import esmmanager.loader.IESMManager;
 
 public class ESMBSAExporter extends JFrame
 {

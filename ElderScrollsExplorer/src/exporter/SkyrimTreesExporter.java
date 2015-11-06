@@ -10,11 +10,9 @@ import tools3d.resolution.QueryProperties;
 import utils.source.EsmSoundKeyToName;
 import utils.source.MediaSources;
 import bsa.BSAFileSet;
-
 import common.config.ConfigLoader;
-
-import esmLoader.loader.ESMManager;
-import esmLoader.loader.IESMManager;
+import esmmanager.loader.ESMManager;
+import esmmanager.loader.IESMManager;
 
 public class SkyrimTreesExporter
 {
