@@ -26,7 +26,7 @@ public abstract class MouseOverHandler implements ComponentListener
 {
 	public static final float MAX_MOUSE_RAY_DIST = 100f;// max pick dist 100 meters?
 
-	private static final long MIN_TIME_BETWEEN_STEPS_MS = 500;
+	private static final long MIN_TIME_BETWEEN_STEPS_MS = 125;
 
 	protected Canvas3D canvas3D;
 

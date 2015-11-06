@@ -44,6 +44,7 @@ import tools3d.camera.HeadCamDolly;
 import tools3d.camera.ICameraPanel;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.mixed3d2d.hud.hudelements.HUDCompass;
+import tools3d.mixed3d2d.hud.hudelements.HUDCrossHair;
 import tools3d.mixed3d2d.hud.hudelements.HUDFPSCounter;
 import tools3d.mixed3d2d.hud.hudelements.HUDPosition;
 import tools3d.navigation.AvatarCollisionInfo;
@@ -114,6 +115,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	private HUDPosition hudPos;
 
 	private HUDCompass hudcompass;
+	
+	private HUDCrossHair hudCrossHair;
 
 	//private HUDPhysicsState hudPhysicsState;
 
@@ -209,6 +212,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		hudPos = new HUDPosition();
 		hudcompass = new HUDCompass();
 		//hudPhysicsState = new HUDPhysicsState();
+		hudCrossHair = new HUDCrossHair();
 
 		behaviourBranch.addChild(fpsCounter.getBehaviorBranchGroup());
 		//behaviourBranch.addChild(hudPhysicsState.getBehaviorBranchGroup());
@@ -408,6 +412,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			hudPos.addToCanvas(canvas3D2D);
 			hudcompass.addToCanvas(canvas3D2D);
 			//hudPhysicsState.addToCanvas(canvas3D2D);
+			hudCrossHair.addToCanvas(canvas3D2D);
 
 			//allow tab for mouse lock
 			canvas3D2D.setFocusTraversalKeysEnabled(false);

@@ -105,6 +105,9 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 							XTEL xtel = commonREFR.XTEL;
 							if (xtel != null)
 							{
+								currentActionTargetData.clear();
+								HUDText.setText("");
+								
 								Vector3f t = getTrans(xtel.x, xtel.y, xtel.z);
 								// TODO: for now lift up, but when pelvis set right stop this
 								t.y += 0.75;
@@ -237,8 +240,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 						int recoId = clientPhysicsSystem.getPhysicsLocaleDynamics().getRecordId(bnm);
 
 						if (recoId != currentActionTargetData.recoId)
-						{
-							currentActionTargetData.clear();
+						{								
 							currentActionTargetData.recoId = recoId;
 						}
 
