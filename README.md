@@ -3,11 +3,13 @@ ElderScrollsExplorer
 
  
 
-Elder Scrolls Explorer is a pure java open source engine to allow you to walk around in the Elder Scrolls games.  
+Elder Scrolls Explorer is a pure java, open source engine to allow you to walk around in the Elder Scrolls series of games that are derived from the Gamebryo engine and asset pipeline.  
 
  
 
 To use this code you must have copies of the .esm and .bsa files from one (or more) of the following games:  
+
+Morrowind
 
 Oblivion  
 
@@ -27,7 +29,7 @@ This project pulls together many other projects based around building a game eng
 
 
 This particular project is used as a test bed but also proves the following:
-
+====
  
 
 The BSA (nif, dds, sound) and esm (game world) file loaders are working
@@ -50,7 +52,7 @@ The Java3d scene graphs created from them are working, including:
 
  
 
-it does not yet have complete support for  
+It does not yet have complete support for  
 
 -Shaders  
 
@@ -83,6 +85,7 @@ Doors will teleport you to other cells if appropriate
  
 
 It does not have:  
+====
 
 An avatar for your charater  
 
@@ -112,7 +115,7 @@ Proper water surface
  
 
 To build the code you must:  
-
+====
  
 
 Download eclipse IDE http://www.eclipse.org/downloads/  
@@ -157,30 +160,38 @@ https://github.com/philjord/external_jars
 
 The easiest way to get this code into eclipse is to:
 
+Open Eclipse
+
 Open the Git Repositories View (Window->Show View->Other->Team->Git Repositories)
 
 For each project listed above
+
    Click the URL
-   Click the copy to clipboard button (found below "HTTPS clone URL" on the lower right)
-   Switch to Ecipse, Git Repositories View
-   Click the "Clone a Git Repository" button in the upper right (blue curved arrow)
+   
+   Click the "copy to clipboard" button (found below "HTTPS clone URL" on the lower right)
+   
+   Switch to Ecipse 
+   
+   In the Git Repositories View click the "Clone a Git Repository" button in the upper right (blue curved arrow)
+   
    It will auto fill from the clipboard
+   
    Click Next (no login info required)
+   
    Click Next (leave master branch ticked)
+   
    Change working directory if you wish and click Finish
    
 
 
 
-You may have to fix up dependancies at this point
+You may have to fix up dependancies at this point or do other minor corrections based on your setup...
 
 All the required 3rd party library jars are in the project external_jars
 
 You are best off to set the workspace JRE to 1.6 to avoid graphics settings change crashes.
 
-Teh Jbullet is an amazingly optomised so you must right click the build.xml file in the root of teh project and
-
-"Run As.." ->"Ant Build"
+The Jbullet (http://jbullet.advel.cz) is an amazingly optomised project (that is very cool in it's own right). In order for it to compile you must right click the "build.xml" file in the root of the project and "Run As.." ->"Ant Build"
 
 It should output something about Instrumenting Stack
 
