@@ -29,7 +29,7 @@ This project pulls together many other projects based around building a game eng
 
 
 This particular project is used as a test bed but also proves the following:
-====
+----
  
 
 The BSA (nif, dds, sound) and esm (game world) file loaders are working
@@ -85,7 +85,7 @@ Doors will teleport you to other cells if appropriate
  
 
 It does not have:  
-====
+----
 
 An avatar for your charater  
 
@@ -115,7 +115,7 @@ Proper water surface
  
 
 To build the code you must:  
-====
+----
  
 
 Download eclipse IDE http://www.eclipse.org/downloads/  
