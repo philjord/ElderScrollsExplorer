@@ -23,13 +23,8 @@ If you don't have those game files this code will not do much for you (except be
 
  
 
-This project pulls together many other projects based around building a game engine on java3d and JBullet that imports the assets of the Bethesda games built on the Gamebryo engine.
+This project pulls together many other projects based around building a game engine on java3d and JBullet, an engine that imports the assets of the Bethesda games that have been built on the Gamebryo engine.
 
- 
-
-I need these assets and engine components for another game project (not open source).
-
- 
 
 This particular project is used as a test bed but also proves the following:
 
@@ -55,7 +50,7 @@ The Java3d scene graphs created from them are working, including:
 
  
 
-but not yet complete support for  
+it does not yet have complete support for  
 
 -Shaders  
 
@@ -65,9 +60,7 @@ but not yet complete support for
 
  
 
-The JBullet physics simulation created from them is working  
-
-Including  
+The JBullet physics simulation created from them is working, including:  
 
 -Animations of kinematic features  
 
@@ -95,8 +88,6 @@ An avatar for your charater
 
 AI of any sort for NPCs/CREAs 
 
-Load screens  
-
 A decent interface  
 
 An inventory or any game play elements  
@@ -107,7 +98,7 @@ BSA loading priority
 
 Sounds running properly  
 
-Script based objects will probably always appear  
+ESM scripts ( so script based objects will probably always appear)  
 
 Shadows  
 
@@ -120,8 +111,6 @@ Proper water surface
 
  
 
- 
-
 To build the code you must:  
 
  
@@ -131,61 +120,85 @@ Download eclipse IDE http://www.eclipse.org/downloads/
 Unzip it (not into program files)  
 
 Install JDK 1.6 into eclipse http://www.oracle.com/technetwork/java/javase/downloads/index.html  
-JDK 1.7+ cause crashes on graphics setting changes so 1.6 is nicer.
+JDK 1.7+ cause crashes on graphics setting changes therefore 1.6 is nicer.
 
-Download or clone in git all of these projects here  
+Get the code for the porjects below into your workspace(a new workspace is probably cleanest)
 
-(yes there are a lot of them, sorry, use the zip button at the root of each to download or the git url)  
+https://github.com/philjord/tools  
 
-external_jars  
+https://github.com/philjord/3DTools  
 
-tools  
+https://github.com/philjord/BSAManager  
 
-3DTools  
+https://github.com/philjord/ESMManager
 
-BSAManager  
+https://github.com/philjord/jnif  
 
-ESMLoader  
+https://github.com/philjord/jnifj3d  
 
-jnif  
+https://github.com/philjord/jbullet1.1 
 
-jnifj3d  
+https://github.com/philjord/jnifjbullet  
 
-jnifjbullet  
+https://github.com/philjord/esmj3d  
 
-ElderScrollsUtils  
+https://github.com/philjord/esmj3dfo3  
 
-esmj3d  
+https://github.com/philjord/esmj3dtes3
 
-esmj3dfo3  
+https://github.com/philjord/esmj3dtes4 
 
-esmj3dtes3
+https://github.com/philjord/esmj3dtes5
 
-esmj3dtes4  
+https://github.com/philjord/ElderScrollsExplorer 
 
-esmj3dtes5  
+https://github.com/philjord/external_jars
 
-ElderScrollsExplorer  
 
- 
+The easiest way to get this code into eclipse is to:
 
-Import each of them into Eclipse as a project ( if downloaded) 
+Open the Git Repositories View (Window->Show View->Other->Team->Git Repositories)
 
-You may have to fix up dependancies at this point, all the required library jars are in the project external_jars)  
+For each project listed above
+   Click the URL
+   Click the copy to clipboard button (found below "HTTPS clone URL" on the lower right)
+   Switch to Ecipse, Git Repositories View
+   Click the "Clone a Git Repository" button in the upper right (blue curved arrow)
+   It will auto fill from the clipboard
+   Click Next (no login info required)
+   Click Next (leave master branch ticked)
+   Change working directory if you wish and click Finish
+   
 
- 
 
-Once done, run the main in ElderScrollsExplorer  
+
+You may have to fix up dependancies at this point
+
+All the required 3rd party library jars are in the project external_jars
+
+You are best off to set the workspace JRE to 1.6 to avoid graphics settings change crashes.
+
+Teh Jbullet is an amazingly optomised so you must right click the build.xml file in the root of teh project and
+
+"Run As.." ->"Ant Build"
+
+It should output something about Instrumenting Stack
+
+Each time you clean the workspace you will need to repeat this, or put the jbullet1.1 output into a jar file.
+
+Once done, run the as a java application
+
+scrollsexplorer.ScrollsExplorer
 
 scrollsecplorer.ScrollsExplorer  
 
 With VM arguments  
 
--Xms512M -Xmx1200M  
+-Xmx2400m -Xms1200m -Dj3d.cacheAutoComputeBounds=true -Dsun.java2d.noddraw=true -Dj3d.sharedctx=true -Dj3d.stencilClear=true  -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -server -Djava.ext.dirs=.\none\ 
 
  
 
-if you get Unsupported major.minor version 51.0  
+If you get Unsupported major.minor version 51.0  
 
 You need to project -> properties -> configure workspace settings -> Compiler compliance level:-> 1.6  
 
