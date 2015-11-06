@@ -6,7 +6,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dfo3"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dtes4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dtes5"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ESMLoader"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ESMManager"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSAManager"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/3DTools"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jnifjbullet"/>
