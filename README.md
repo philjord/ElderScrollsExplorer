@@ -9,28 +9,26 @@ Elder Scrolls Explorer is a pure java, open source engine to allow you to walk a
 
 To use this code you must have copies of the .esm and .bsa files from one (or more) of the following games:  
 
-Morrowind
+* Morrowind
 
-Oblivion  
+* Oblivion  
 
-Fallout 3  
+* Fallout 3  
 
-Fallout New Vegas  
+* Fallout New Vegas  
 
-Skyrim  
+* Skyrim  
 
- 
 
 If you don't have those game files this code will not do much for you (except be fun to read).
 
- 
 
 This project pulls together many other projects based around building a game engine on java3d and JBullet, an engine that imports the assets of the Bethesda games that have been built on the Gamebryo engine.
 
 
-This particular project is used as a test bed but also proves the following:
-----
- 
+###This is a test bed project
+It is really for building another game on top of but also proves the following:
+
 
 The BSA (nif, dds, sound) and esm (game world) file loaders are working
 
@@ -38,25 +36,25 @@ The BSA (nif, dds, sound) and esm (game world) file loaders are working
 
 The Java3d scene graphs created from them are working, including:
 
--Skin/bone animations  
+- Skin/bone animations  
 
--Regular interpolator animations  
+- Regular interpolator animations  
 
--DDS texture loading (and an enhancement to java3d to allow direct compressed textures)  
+- DDS texture loading (and an enhancement to java3d to allow direct compressed textures)  
 
--Sound files  
+- Sound files  
 
--Appearance data  
+- Appearance data  
 
--Various LOD strategies (billboards, switches, model swap outs)  
+- Various LOD strategies (billboards, switches, model swap outs)  
 
  
 
 It does not yet have complete support for  
 
--Shaders  
+- Shaders  
 
--Particle Systems  
+- Particle Systems  
 
  
 
@@ -64,11 +62,11 @@ It does not yet have complete support for
 
 The JBullet physics simulation created from them is working, including:  
 
--Animations of kinematic features  
+- Animations of kinematic features  
 
--Character controllers  
+- Character controllers  
 
--Skyrim compressed meshes  
+- Skyrim compressed meshes  
 
  
 
@@ -84,8 +82,7 @@ Doors will teleport you to other cells if appropriate
 
  
 
-It does not have:  
-----
+####It does not have:  
 
 An avatar for your charater  
 
@@ -114,8 +111,8 @@ Proper water surface
 
  
 
-To build the code you must:  
-----
+###To build the code you must:  
+
  
 
 Download eclipse IDE http://www.eclipse.org/downloads/  
@@ -125,7 +122,7 @@ Unzip it (not into program files)
 Install JDK 1.6 into eclipse http://www.oracle.com/technetwork/java/javase/downloads/index.html  
 JDK 1.7+ cause crashes on graphics setting changes therefore 1.6 is nicer.
 
-Get the code for the porjects below into your workspace(a new workspace is probably cleanest)
+Get the code for the projects below into your workspace (a new workspace is probably cleanest)
 
 https://github.com/philjord/tools  
 
@@ -158,7 +155,7 @@ https://github.com/philjord/ElderScrollsExplorer
 https://github.com/philjord/external_jars
 
 
-The easiest way to get this code into eclipse is to:
+####The easiest way to get this code into eclipse is to:
 
 Open Eclipse
 
@@ -166,23 +163,14 @@ Open the Git Repositories View (Window->Show View->Other->Team->Git Repositories
 
 For each project listed above
 
-   Click the URL
-   
-   Click the "copy to clipboard" button (found below "HTTPS clone URL" on the lower right)
-   
-   Switch to Ecipse 
-   
-   In the Git Repositories View click the "Clone a Git Repository" button in the upper right (blue curved arrow)
-   
-   It will auto fill from the clipboard
-   
-   Click Next (no login info required)
-   
-   Click Next (leave master branch ticked)
-   
-   Change working directory if you wish and click Finish
-   
-
+1. Click the URL
+2. Click the "copy to clipboard" button (found below "HTTPS clone URL" on the lower right)
+3. Switch to Ecipse 
+4. In the Git Repositories View click the "Clone a Git Repository" button in the upper right (blue curved arrow)
+5. It will auto fill from the clipboard
+6. Click Next (no login info required)
+7. Click Next (leave master branch ticked)
+8. Change working directory if you wish and click Finish
 
 
 You may have to fix up dependancies at this point or do other minor corrections based on your setup...
@@ -197,29 +185,38 @@ It should output something about Instrumenting Stack
 
 Each time you clean the workspace you will need to repeat this, or put the jbullet1.1 output into a jar file.
 
-Once done, run the as a java application
+###To run as a java application
 
-scrollsexplorer.ScrollsExplorer
+1. Go to Run->Run Configurations...
 
-scrollsecplorer.ScrollsExplorer  
+2. New Launch Configuration
 
-With VM arguments  
+3. Give it a name
 
+4. For project use the ElderScrollsExplorer
+
+5. For Main class use scrollsexplorer.ScrollsExplorer
+
+6. On Arguments tab-> VM arguments  
 -Xmx2400m -Xms1200m -Dj3d.cacheAutoComputeBounds=true -Dsun.java2d.noddraw=true -Dj3d.sharedctx=true -Dj3d.stencilClear=true  -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -server -Djava.ext.dirs=.\none\ 
 
- 
+7. Click Run 
 
+
+####Troubles
 If you get Unsupported major.minor version 51.0  
 
 You need to project -> properties -> configure workspace settings -> Compiler compliance level:-> 1.6  
 
 If you get a texture mip map exception change the run configuration -> classpath->ElderScrollsExplorer->edit -> only include exported entries  
 
+If you get a class not found called Stack, you probably didn't ant buil the xml file as above (or it failed)
+
 Once it's running you must set your game folders (the ones containing the esm and bsa files) using the File menu  in game
 
  
 
-Then you should be good to go.
+Good luck, feel free to contact me with questions...
 
  
 
