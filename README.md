@@ -3,37 +3,32 @@ ElderScrollsExplorer
 
  
 
-Elder Scrolls Explorer is a pure java open source engine to allow you to walk around in the Elder Scrolls games.  
+Elder Scrolls Explorer is a pure java, open source engine to allow you to walk around in the Elder Scrolls series of games that are derived from the Gamebryo engine and asset pipeline.  
 
  
 
 To use this code you must have copies of the .esm and .bsa files from one (or more) of the following games:  
 
-Oblivion  
+* Morrowind
 
-Fallout 3  
+* Oblivion  
 
-Fallout New Vegas  
+* Fallout 3  
 
-Skyrim  
+* Fallout New Vegas  
 
- 
+* Skyrim  
+
 
 If you don't have those game files this code will not do much for you (except be fun to read).
 
- 
 
-This project pulls together many other projects based around building a game engine on java3d and JBullet that imports the assets of the Bethesda games built on the Gamebryo engine.
+This project pulls together many other projects based around building a game engine on java3d and JBullet, an engine that imports the assets of the Bethesda games that have been built on the Gamebryo engine.
 
- 
 
-I need these assets and engine components for another game project (not open source).
+###This is a test bed project
+It is really for building another game on top of but also proves the following:
 
- 
-
-This particular project is used as a test bed but also proves the following:
-
- 
 
 The BSA (nif, dds, sound) and esm (game world) file loaders are working
 
@@ -41,39 +36,37 @@ The BSA (nif, dds, sound) and esm (game world) file loaders are working
 
 The Java3d scene graphs created from them are working, including:
 
--Skin/bone animations  
+- Skin/bone animations  
 
--Regular interpolator animations  
+- Regular interpolator animations  
 
--DDS texture loading (and an enhancement to java3d to allow direct compressed textures)  
+- DDS texture loading (and an enhancement to java3d to allow direct compressed textures)  
 
--Sound files  
+- Sound files  
 
--Appearance data  
+- Appearance data  
 
--Various LOD strategies (billboards, switches, model swap outs)  
-
- 
-
-but not yet complete support for  
-
--Shaders  
-
--Particle Systems  
+- Various LOD strategies (billboards, switches, model swap outs)  
 
  
 
+It does not yet have complete support for  
+
+- Shaders  
+
+- Particle Systems  
+
  
 
-The JBullet physics simulation created from them is working  
+ 
 
-Including  
+The JBullet physics simulation created from them is working, including:  
 
--Animations of kinematic features  
+- Animations of kinematic features  
 
--Character controllers  
+- Character controllers  
 
--Skyrim compressed meshes  
+- Skyrim compressed meshes  
 
  
 
@@ -89,13 +82,11 @@ Doors will teleport you to other cells if appropriate
 
  
 
-It does not have:  
+####It does not have:  
 
 An avatar for your charater  
 
 AI of any sort for NPCs/CREAs 
-
-Load screens  
 
 A decent interface  
 
@@ -107,7 +98,7 @@ BSA loading priority
 
 Sounds running properly  
 
-Script based objects will probably always appear  
+ESM scripts ( so script based objects will probably always appear)  
 
 Shadows  
 
@@ -120,9 +111,7 @@ Proper water surface
 
  
 
- 
-
-To build the code you must:  
+###To build the code you must:  
 
  
 
@@ -131,71 +120,103 @@ Download eclipse IDE http://www.eclipse.org/downloads/
 Unzip it (not into program files)  
 
 Install JDK 1.6 into eclipse http://www.oracle.com/technetwork/java/javase/downloads/index.html  
-JDK 1.7+ cause crashes on graphics setting changes so 1.6 is nicer.
+JDK 1.7+ cause crashes on graphics setting changes therefore 1.6 is nicer.
 
-Download or clone in git all of these projects here  
+Get the code for the projects below into your workspace (a new workspace is probably cleanest)
 
-(yes there are a lot of them, sorry, use the zip button at the root of each to download or the git url)  
+https://github.com/philjord/tools  
 
-external_jars  
+https://github.com/philjord/3DTools  
 
-tools  
+https://github.com/philjord/BSAManager  
 
-3DTools  
+https://github.com/philjord/ESMManager
 
-BSAManager  
+https://github.com/philjord/jnif  
 
-ESMLoader  
+https://github.com/philjord/jnifj3d  
 
-jnif  
+https://github.com/philjord/jbullet1.1 
 
-jnifj3d  
+https://github.com/philjord/jnifjbullet  
 
-jnifjbullet  
+https://github.com/philjord/esmj3d  
 
-ElderScrollsUtils  
+https://github.com/philjord/esmj3dfo3  
 
-esmj3d  
+https://github.com/philjord/esmj3dtes3
 
-esmj3dfo3  
+https://github.com/philjord/esmj3dtes4 
 
-esmj3dtes3
+https://github.com/philjord/esmj3dtes5
 
-esmj3dtes4  
+https://github.com/philjord/ElderScrollsExplorer 
 
-esmj3dtes5  
+https://github.com/philjord/external_jars
 
-ElderScrollsExplorer  
 
- 
+####The easiest way to get this code into eclipse is to:
 
-Import each of them into Eclipse as a project ( if downloaded) 
+Open Eclipse
 
-You may have to fix up dependancies at this point, all the required library jars are in the project external_jars)  
+Open the Git Repositories View (Window->Show View->Other->Team->Git Repositories)
 
- 
+For each project listed above
 
-Once done, run the main in ElderScrollsExplorer  
+1. Click the URL
+2. Click the "copy to clipboard" button (found below "HTTPS clone URL" on the lower right)
+3. Switch to Ecipse 
+4. In the Git Repositories View click the "Clone a Git Repository" button in the upper right (blue curved arrow)
+5. It will auto fill from the clipboard
+6. Click Next (no login info required)
+7. Click Next (leave master branch ticked)
+8. Change working directory if you wish and click Finish
 
-scrollsecplorer.ScrollsExplorer  
 
-With VM arguments  
+You may have to fix up dependancies at this point or do other minor corrections based on your setup...
 
--Xms512M -Xmx1200M  
+All the required 3rd party library jars are in the project external_jars
 
- 
+You are best off to set the workspace JRE to 1.6 to avoid graphics settings change crashes.
 
-if you get Unsupported major.minor version 51.0  
+The Jbullet (http://jbullet.advel.cz) is an amazingly optomised project (that is very cool in it's own right). In order for it to compile you must right click the "build.xml" file in the root of the project and "Run As.." ->"Ant Build"
+
+It should output something about Instrumenting Stack
+
+Each time you clean the workspace you will need to repeat this, or put the jbullet1.1 output into a jar file.
+
+###To run as a java application
+
+1. Go to Run->Run Configurations...
+
+2. New Launch Configuration
+
+3. Give it a name
+
+4. For project use the ElderScrollsExplorer
+
+5. For Main class use scrollsexplorer.ScrollsExplorer
+
+6. On Arguments tab-> VM arguments  
+-Xmx2400m -Xms1200m -Dj3d.cacheAutoComputeBounds=true -Dsun.java2d.noddraw=true -Dj3d.sharedctx=true -Dj3d.stencilClear=true  -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -server -Djava.ext.dirs=.\none\ 
+
+7. Click Run 
+
+
+####Troubles
+If you get Unsupported major.minor version 51.0  
 
 You need to project -> properties -> configure workspace settings -> Compiler compliance level:-> 1.6  
 
 If you get a texture mip map exception change the run configuration -> classpath->ElderScrollsExplorer->edit -> only include exported entries  
 
+If you get a class not found called Stack, you probably didn't ant buil the xml file as above (or it failed)
+
 Once it's running you must set your game folders (the ones containing the esm and bsa files) using the File menu  in game
 
  
 
-Then you should be good to go.
+Good luck, feel free to contact me with questions...
 
  
 
