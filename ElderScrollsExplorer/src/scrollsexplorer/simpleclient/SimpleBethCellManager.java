@@ -13,6 +13,7 @@ import scrollsexplorer.ScrollsExplorer;
 import scrollsexplorer.simpleclient.physics.InstRECOStore;
 import scrollsexplorer.simpleclient.scenegraph.LoadScreen;
 import scrollsexplorer.simpleclient.scenegraph.SimpleSky;
+import tools3d.mixed3d2d.hud.hudelements.HUDText;
 import tools3d.navigation.AvatarLocation;
 import utils.source.MediaSources;
 import esmj3d.data.shared.subrecords.LString;
@@ -52,7 +53,7 @@ public class SimpleBethCellManager implements InstRECOStore
 
 	// gate keeper of expensive change cell id call
 	private boolean canChangeCell = true;
-
+	
 	public SimpleBethCellManager(SimpleWalkSetup simpleWalkSetup2)
 	{
 		this.simpleWalkSetup = simpleWalkSetup2;

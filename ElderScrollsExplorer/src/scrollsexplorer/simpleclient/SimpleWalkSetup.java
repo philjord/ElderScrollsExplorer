@@ -2,6 +2,7 @@ package scrollsexplorer.simpleclient;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -47,6 +48,7 @@ import tools3d.mixed3d2d.hud.hudelements.HUDCompass;
 import tools3d.mixed3d2d.hud.hudelements.HUDCrossHair;
 import tools3d.mixed3d2d.hud.hudelements.HUDFPSCounter;
 import tools3d.mixed3d2d.hud.hudelements.HUDPosition;
+import tools3d.mixed3d2d.hud.hudelements.HUDText;
 import tools3d.navigation.AvatarCollisionInfo;
 import tools3d.navigation.AvatarLocation;
 import tools3d.navigation.NavigationInputAWTKey;
@@ -115,10 +117,12 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	private HUDPosition hudPos;
 
 	private HUDCompass hudcompass;
-	
+
 	private HUDCrossHair hudCrossHair;
 
 	//private HUDPhysicsState hudPhysicsState;
+
+	private HUDText firstInstruction;
 
 	private PhysicsSystem physicsSystem;
 
@@ -417,6 +421,13 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			//allow tab for mouse lock
 			canvas3D2D.setFocusTraversalKeysEnabled(false);
 
+			if (firstInstruction == null)
+			{
+				firstInstruction = new HUDText(canvas3D2D, new Rectangle(600, 60), 18);
+				firstInstruction.setLocation(0, 200);
+				firstInstruction.setText("Press tab to look around, press tab again to release mouse");
+			}
+
 			if (isLive)
 			{
 				setEnabled(true);
@@ -675,11 +686,21 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				if (mouseInputListener.hasCanvas())
 				{
 					mouseInputListener.setCanvas(null);
+					if (firstInstruction != null)
+					{
+						firstInstruction.addToCanvas(cameraPanel.getCanvas3D2D());
+					}
 				}
 				else
 				{
 					mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
+					if (firstInstruction != null)
+					{
+						firstInstruction.removeFromCanvas();
+					}
 				}
+
+				
 			}
 		}
 	}
