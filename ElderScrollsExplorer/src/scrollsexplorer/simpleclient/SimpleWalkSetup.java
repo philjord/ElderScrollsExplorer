@@ -58,6 +58,8 @@ import tools3d.universe.VisualPhysicalUniverse;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 import utils.source.MeshSource;
 
+import com.sun.j3d.utils.universe.ViewingPlatform;
+
 /**
  * A class to pull teh keyboard nav, bullet phys, nif displayable, canvas2d3d overlays, 
  * physics display together, 
@@ -127,6 +129,11 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private JTextField warpField = new JTextField("                ");
 
+	private boolean freefly = false;
+
+	//CAn't use as threading cause massive toruble for scene loading
+	//	private StructureUpdateBehavior structureUpdateBehavior;
+
 	private NbccProvider nbccProvider = new NbccProvider()
 	{
 		@Override
@@ -135,8 +142,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			return physicsSystem.getNBControlledChar();
 		}
 	};
-
-	private boolean freefly = false;
 
 	public SimpleWalkSetup(String frameName)
 	{
@@ -205,8 +210,12 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		hudcompass = new HUDCompass();
 		//hudPhysicsState = new HUDPhysicsState();
 
-		universe.addToBehaviorBranch(fpsCounter.getBehaviorBranchGroup());
-		//universe.addToBehaviorBranch(hudPhysicsState.getBehaviorBranchGroup());
+		behaviourBranch.addChild(fpsCounter.getBehaviorBranchGroup());
+		//behaviourBranch.addChild(hudPhysicsState.getBehaviorBranchGroup());
+
+		//	structureUpdateBehavior = new StructureUpdateBehavior();
+		//	structureUpdateBehavior.setMaxElapsedTimeForCalls(20);
+		//	behaviourBranch.addChild(structureUpdateBehavior);
 
 		avatarLocation.addAvatarLocationListener(hudPos);
 		avatarLocation.addAvatarLocationListener(hudcompass);
@@ -465,14 +474,14 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		return physicsSystem;
 	}
 
-	public void addToVisualBranch(Group newGroup)
+	public BranchGroup getVisualBranch()
 	{
-		visualGroup.addChild(newGroup);
+		return visualGroup;
 	}
 
-	public void addToPhysicalBranch(Group group)
+	public BranchGroup getPhysicalBranch()
 	{
-		physicsGroup.addChild(group);
+		return physicsGroup;
 	}
 
 	public void toggleHavok()
@@ -493,12 +502,32 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		showVisual = !showVisual;
 		if (showVisual && visualGroup.getParent() == null)
 		{
+			//Bad no good 
+			//structureUpdateBehavior.add(modelGroup, visualGroup);
 			modelGroup.addChild(visualGroup);
 		}
 		else if (!showVisual && visualGroup.getParent() != null)
 		{
+			//structureUpdateBehavior.remove(modelGroup, visualGroup);
 			visualGroup.detach();
 		}
+	}
+
+	public void setVisualDisplayed(boolean newShowVisual)
+	{
+		if (newShowVisual && visualGroup.getParent() == null)
+		{
+			//structureUpdateBehavior.add(modelGroup, visualGroup);
+			modelGroup.addChild(visualGroup);
+
+		}
+		else if (!newShowVisual && visualGroup.getParent() != null)
+		{
+			//structureUpdateBehavior.remove(modelGroup, visualGroup);
+			visualGroup.detach();
+		}
+
+		showVisual = newShowVisual;
 	}
 
 	public AvatarLocation getAvatarLocation()
@@ -524,6 +553,36 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	public AvatarCollisionInfo getAvatarCollisionInfo()
 	{
 		return avatarCollisionInfo;
+	}
+
+	public ViewingPlatform getViewingPlatform()
+	{
+		// this won't work for the HMD version for now, as it it 2 platforms
+		return (ViewingPlatform) cameraPanel.getDolly();
+	}
+
+	public void setAzerty(boolean a)
+	{
+		if (a)
+		{
+			NavigationInputAWTKey.FORWARD_KEY = KeyEvent.VK_Z;
+			//NavigationInputAWTKey.FAST_KEY = KeyEvent.VK_E;
+			//NavigationInputAWTKey.BACK_KEY = KeyEvent.VK_S;
+			NavigationInputAWTKey.LEFT_KEY = KeyEvent.VK_Q;
+			//NavigationInputAWTKey.RIGHT_KEY = KeyEvent.VK_D;
+			NavigationInputAWTKey.UP_KEY = KeyEvent.VK_A;
+			NavigationInputAWTKey.DOWN_KEY = KeyEvent.VK_W;
+		}
+		else
+		{
+			NavigationInputAWTKey.FORWARD_KEY = KeyEvent.VK_W;
+			//NavigationInputAWTKey.FAST_KEY = KeyEvent.VK_E;
+			//NavigationInputAWTKey.BACK_KEY = KeyEvent.VK_S;
+			NavigationInputAWTKey.LEFT_KEY = KeyEvent.VK_A;
+			//NavigationInputAWTKey.RIGHT_KEY = KeyEvent.VK_D;
+			NavigationInputAWTKey.UP_KEY = KeyEvent.VK_Q;
+			NavigationInputAWTKey.DOWN_KEY = KeyEvent.VK_Z;
+		}
 	}
 
 	private class HMDKeyHandler extends KeyAdapter

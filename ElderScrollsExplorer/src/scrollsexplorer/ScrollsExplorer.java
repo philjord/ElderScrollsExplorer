@@ -102,6 +102,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public JCheckBoxMenuItem cbBsaMenuItem = new JCheckBoxMenuItem("Use BSA not Files", true);
 
+	public JCheckBoxMenuItem cbAzertyKB = new JCheckBoxMenuItem("Azerty", false);
+
 	public JMenuItem setFolders = new JMenuItem("Set Folders");
 
 	public JMenuItem setGraphics = new JMenuItem("Set Graphics");
@@ -141,6 +143,18 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			boolean useBsa = Boolean.parseBoolean(prefs.get("use.bsa", "true"));
 			cbBsaMenuItem.setSelected(useBsa);
 			fileMenu.add(cbBsaMenuItem);
+
+			boolean useAzerty = Boolean.parseBoolean(prefs.get("use.azerty", "false"));
+			cbAzertyKB.setSelected(useAzerty);
+			fileMenu.add(cbAzertyKB);
+			cbAzertyKB.addActionListener(new ActionListener()
+			{
+				@Override
+				public void actionPerformed(ActionEvent arg0)
+				{
+					simpleWalkSetup.setAzerty(cbAzertyKB.isSelected());
+				}
+			});
 
 			fileMenu.add(setFolders);
 			setFolders.addActionListener(new ActionListener()
@@ -198,6 +212,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			}
 
 			simpleWalkSetup = new SimpleWalkSetup("SimpleBethCellManager");
+			simpleWalkSetup.setAzerty(cbAzertyKB.isSelected());
 			quickEdit.setLayout(new VerticalFlowLayout());
 			quickEdit.add(new TitledPanel("Location", simpleWalkSetup.getLocField()));
 			quickEdit.add(new TitledPanel("Go To", simpleWalkSetup.getWarpField()));
@@ -277,6 +292,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			PropertyLoader.properties.setProperty("CellId" + esmManager.getName(), "" + simpleBethCellManager.getCurrentCellFormId());
 		}
 		PropertyLoader.save();
+
+		prefs.put("use.bsa", Boolean.toString(cbBsaMenuItem.isSelected()));
+		prefs.put("load.all", Boolean.toString(cbLoadAllMenuItem.isSelected()));
+		prefs.put("use.azerty", Boolean.toString(cbAzertyKB.isSelected()));
+
 	}
 
 	private void setFolders()
@@ -357,8 +377,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				synchronized (selectedGameConfig)
 				{
 					ScrollsExplorer.dashboard.setEsmLoading(1);
-					prefs.put("use.bsa", Boolean.toString(cbBsaMenuItem.isSelected()));
-					prefs.put("load.all", Boolean.toString(cbLoadAllMenuItem.isSelected()));
 
 					esmManager = ESMManager.getESMManager(selectedGameConfig.getESMPath());
 					bsaFileSet = null;
@@ -410,8 +428,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 						simpleWalkSetup.configure(meshSource, simpleBethCellManager);
 						simpleWalkSetup.setEnabled(false);
-						
-						
+
 						simpleBethCellManager.setSources(selectedGameConfig, esmManager, mediaSources);
 
 						tableModel = new DefaultTableModel(columnNames, 0)

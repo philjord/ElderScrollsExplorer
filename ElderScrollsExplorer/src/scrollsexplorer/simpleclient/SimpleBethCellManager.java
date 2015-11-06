@@ -74,16 +74,25 @@ public class SimpleBethCellManager implements InstRECOStore
 	 */
 	public void setSources(GameConfig gameConfig, IESMManager esmManager, MediaSources mediaSources)
 	{
+		simpleWalkSetup.setVisualDisplayed(false);
 		this.esmManager = esmManager;
 		j3dCellFactory = gameConfig.j3dCellFactory;
 		j3dCellFactory.setSources(esmManager, esmManager, mediaSources);
 
 		//add skynow
 		simpleSky = new SimpleSky(mediaSources.getTextureSource());
-		simpleWalkSetup.addToVisualBranch(simpleSky);
+		//BranchGroup bg = new BranchGroup();
+		//bg.addChild(simpleSky);
+		simpleWalkSetup.getVisualBranch().addChild(simpleSky);
 
 		loadScreen = new LoadScreen(mediaSources);
-		simpleWalkSetup.addToVisualBranch(loadScreen);
+		//bg = new BranchGroup();
+		//bg.addChild(loadScreen);
+		//simpleWalkSetup.getVisualBranch().addChild(loadScreen);
+
+		simpleWalkSetup.getViewingPlatform().getPlatformGeometry().addChild(loadScreen);
+
+		simpleWalkSetup.setVisualDisplayed(true);
 
 	}
 
@@ -184,7 +193,10 @@ public class SimpleBethCellManager implements InstRECOStore
 					canChangeCell = false;
 
 					simpleWalkSetup.setEnabled(false);
+					simpleWalkSetup.setVisualDisplayed(false);
 					showLoadScreen();
+
+					//NOTE no structure thread as visual are not displayed now from call above (not live at all)
 
 					System.out.println("Setting cell to ID:" + newCellFormId);
 					if (currentCellFormId != -1 && currentCellFormId != newCellFormId)
@@ -244,7 +256,7 @@ public class SimpleBethCellManager implements InstRECOStore
 									avatarLocation.addAvatarLocationListener(currentBethWorldVisualBranch);
 								}
 								// notice init before making live to speed it up
-								simpleWalkSetup.addToVisualBranch(currentBethWorldVisualBranch);
+								simpleWalkSetup.getVisualBranch().addChild(currentBethWorldVisualBranch);
 
 								currentBethWorldPhysicalBranch = new BethWorldPhysicalBranch(simpleWalkSetup.getPhysicsSystem(),
 										currentCellFormId, j3dCellFactory);
@@ -253,7 +265,7 @@ public class SimpleBethCellManager implements InstRECOStore
 									currentBethWorldPhysicalBranch.init(avatarLocation.getTransform());
 									avatarLocation.addAvatarLocationListener(currentBethWorldPhysicalBranch);
 								}
-								simpleWalkSetup.addToPhysicalBranch(currentBethWorldPhysicalBranch);
+								simpleWalkSetup.getPhysicalBranch().addChild(currentBethWorldPhysicalBranch);
 							}
 							else
 							{
@@ -263,11 +275,11 @@ public class SimpleBethCellManager implements InstRECOStore
 								{
 									currentBethInteriorVisualBranch = new BethInteriorVisualBranch(currentCellFormId, cell.getEditorID(),
 											j3dCellFactory);
-									simpleWalkSetup.addToVisualBranch(currentBethInteriorVisualBranch);
+									simpleWalkSetup.getVisualBranch().addChild(currentBethInteriorVisualBranch);
 
 									currentBethInteriorPhysicalBranch = new BethInteriorPhysicalBranch(simpleWalkSetup.getPhysicsSystem(),
 											currentCellFormId, j3dCellFactory);
-									simpleWalkSetup.addToPhysicalBranch(currentBethInteriorPhysicalBranch);
+									simpleWalkSetup.getPhysicalBranch().addChild(currentBethInteriorPhysicalBranch);
 
 									if (avatarLocation != null)
 									{
@@ -297,7 +309,7 @@ public class SimpleBethCellManager implements InstRECOStore
 					{
 						e.printStackTrace();
 					}
-
+					simpleWalkSetup.setVisualDisplayed(true);
 					simpleWalkSetup.setEnabled(true);
 
 					dropLoadScreen();
@@ -367,13 +379,13 @@ public class SimpleBethCellManager implements InstRECOStore
 	public void showLoadScreen()
 	{
 		simpleSky.setShowSky(false);
-		loadScreen.setShowLoadScreen(true, avatarLocation.getTransform());
+		loadScreen.setShowLoadScreen(true);
 	}
 
 	public void dropLoadScreen()
 	{
 		simpleSky.setShowSky(true);
-		loadScreen.setShowLoadScreen(false, null);
+		loadScreen.setShowLoadScreen(false);
 	}
 
 }
