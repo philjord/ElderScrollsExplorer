@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
@@ -49,6 +51,8 @@ import tools3d.mixed3d2d.hud.hudelements.HUDCrossHair;
 import tools3d.mixed3d2d.hud.hudelements.HUDFPSCounter;
 import tools3d.mixed3d2d.hud.hudelements.HUDPosition;
 import tools3d.mixed3d2d.hud.hudelements.HUDText;
+import tools3d.mixed3d2d.overlay.swing.Panel3D;
+import tools3d.mixed3d2d.overlay.swing.util.ExitDialogPane3D;
 import tools3d.navigation.AvatarCollisionInfo;
 import tools3d.navigation.AvatarLocation;
 import tools3d.navigation.NavigationInputAWTKey;
@@ -138,7 +142,22 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private boolean freefly = false;
 
-	//CAn't use as threading cause massive toruble for scene loading
+	private ComponentAdapter canvasResizeListener = new ComponentAdapter()
+	{
+		@Override
+		public void componentResized(ComponentEvent e)
+		{
+			canvasResized();
+		}
+
+		@Override
+		public void componentShown(ComponentEvent e)
+		{
+			canvasResized();
+		}
+	};
+
+	//Can't use as threading causes massive trouble for scene loading
 	//	private StructureUpdateBehavior structureUpdateBehavior;
 
 	private NbccProvider nbccProvider = new NbccProvider()
@@ -149,6 +168,11 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			return physicsSystem.getNBControlledChar();
 		}
 	};
+
+	//Panel3D gear
+	private Panel3D fullScreenPanel3D;
+
+	private ExitDialogPane3D exitDialogPane3D;
 
 	public SimpleWalkSetup(String frameName)
 	{
@@ -199,7 +223,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		navigationTemporalBehaviour.addNavigationProcessor(navigationProcessor);
 		behaviourBranch.addChild(navigationTemporalBehaviour);
 
-		//now we have timekeep and camera panel add mouse and keyboard inputs ************************
+		//add mouse and keyboard inputs ************************
 		keyNavigationInputAWT = new NavigationInputAWTKey(navigationProcessor);
 		NavigationInputAWTKey.VERTICAL_RATE = 50f;
 
@@ -211,7 +235,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		//add jump key and vis/phy toggle key listenres for fun ************************
 		jumpKeyListener = new JumpKeyListener(nbccProvider);
 
-		//just an fps for fun
+		//some hud gear
 		fpsCounter = new HUDFPSCounter();
 		hudPos = new HUDPosition();
 		hudcompass = new HUDCompass();
@@ -267,6 +291,38 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			}
 		});
 
+		//Panel3D gear
+		fullScreenPanel3D = new Panel3D();
+		exitDialogPane3D = new ExitDialogPane3D(fullScreenPanel3D);
+		exitDialogPane3D.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (exitDialogPane3D.isExitConfirmed())
+				{
+					// allow listeners to clean up on exit (save setting etc)
+					// this will exit
+					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+				}
+				else
+				{
+					//hide dialog and lock mouse
+					exitDialogPane3D.setVisible(false);
+					mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
+				}
+
+			}
+		});
+	}
+
+	protected void canvasResized()
+	{
+		Canvas3D2D c = cameraPanel.getCanvas3D2D();
+		exitDialogPane3D.setLocation((c.getWidth() / 2) - (exitDialogPane3D.getWidth() / 2),
+				(c.getHeight() / 2) - (exitDialogPane3D.getHeight() / 2));
+
+		fullScreenPanel3D.redraw(true);
 	}
 
 	/**
@@ -418,8 +474,15 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			//hudPhysicsState.addToCanvas(canvas3D2D);
 			hudCrossHair.addToCanvas(canvas3D2D);
 
+			//Panel3D gear
+			fullScreenPanel3D.setConfig(canvas3D2D);
+			exitDialogPane3D.setLocation((canvas3D2D.getWidth() / 2) - (exitDialogPane3D.getWidth() / 2), (canvas3D2D.getHeight() / 2)
+					- (exitDialogPane3D.getHeight() / 2));
+
 			//allow tab for mouse lock
 			canvas3D2D.setFocusTraversalKeysEnabled(false);
+
+			canvas3D2D.addComponentListener(canvasResizeListener);
 
 			if (firstInstruction == null)
 			{
@@ -655,17 +718,21 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		{
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
 			{
-				int result = JOptionPane.showConfirmDialog(null, "Are you sure you wish to exit?");
-				if (result == JOptionPane.OK_OPTION)
+				if (!exitDialogPane3D.isVisible())
 				{
-					// allow listeners to clean up on exit (save setting etc)
-					// this will exit
-					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+					//unlock mouse to interact
+					mouseInputListener.setCanvas(null);
+					exitDialogPane3D.setVisible(true);
+				}
+				else
+				{
+					//hide dialog and lock mouse
+					exitDialogPane3D.setVisible(false);
+					mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
 				}
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_H)
 			{
-				//TODO: physics line rendering makes fps drop by 25%???
 				toggleHavok();
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_L)
@@ -700,7 +767,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 					}
 				}
 
-				
 			}
 		}
 	}
