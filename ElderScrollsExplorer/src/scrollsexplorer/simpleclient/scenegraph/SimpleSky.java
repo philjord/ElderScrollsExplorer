@@ -4,6 +4,7 @@ import javax.media.j3d.Appearance;
 import javax.media.j3d.Background;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Group;
+import javax.media.j3d.RenderingAttributes;
 import javax.media.j3d.Texture;
 
 import tools3d.utils.Utils3D;
@@ -69,6 +70,8 @@ public class SimpleSky extends BranchGroup
 
 		// apply the texture to the Appearance
 		app.setTexture(tex);
+		
+		app.setRenderingAttributes(new RenderingAttributes());
 
 		// create the Sphere geometry with radius 1.0.
 		// we tell the Sphere to generate texture coordinates
