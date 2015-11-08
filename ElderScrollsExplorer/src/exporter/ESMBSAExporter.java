@@ -30,7 +30,7 @@ import javax.swing.table.TableRowSorter;
 
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
-import scrollsexplorer.SetBethFoldersDialog;
+import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
 import tools.TitledPanel;
 import tools.swing.TitledJFileChooser;
 import tools.swing.VerticalFlowLayout;

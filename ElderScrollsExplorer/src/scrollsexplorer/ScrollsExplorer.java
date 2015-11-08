@@ -31,9 +31,11 @@ import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
 import nativeLinker.LWJGLLinker;
-import scrollsexplorer.simpleclient.ESESettingsPanel;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
+import scrollsexplorer.simpleclient.settings.GraphicsSettingsPanel;
+import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
+import scrollsexplorer.simpleclient.settings.ShowOutlinesPanel;
 import tools.TitledPanel;
 import tools.swing.UserGuideDisplay;
 import tools.swing.VerticalFlowLayout;
@@ -75,11 +77,13 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	private static JTable table;
 
-	private ESESettingsPanel eseSettingsPanel;
+	private GraphicsSettingsPanel graphicsSettingsPanel;
 
-	private static DefaultTableModel tableModel;
+	private ShowOutlinesPanel showOutlinesPanel;
 
-	private static String[] columnNames = new String[]
+	private DefaultTableModel tableModel;
+
+	private String[] columnNames = new String[]
 	{ "Int/Ext", "Cell Id", "Name" };
 
 	private MediaSources mediaSources;
@@ -224,7 +228,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 			simpleBethCellManager = new SimpleBethCellManager(simpleWalkSetup);
 
-			eseSettingsPanel = new ESESettingsPanel(simpleWalkSetup);
+			graphicsSettingsPanel = new GraphicsSettingsPanel(simpleWalkSetup);
+			showOutlinesPanel = new ShowOutlinesPanel(simpleWalkSetup);
 			BethRenderSettings.addUpdateListener(this);
 
 			this.getContentPane().invalidate();
@@ -237,10 +242,13 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			SideBar sideBar = new SideBar(SideBarMode.TOP_LEVEL, true, 200, true);
 			//SidebarSection ss1 = new SidebarSection(sideBar, "dashboard", dashboard, null);
 			//sideBar.addSection(ss1);
-			SidebarSection ss2 = new SidebarSection(sideBar, "Quick Edit", quickEdit, null);
+			SidebarSection ss2 = new SidebarSection(sideBar, "Avartar", quickEdit, null);
 			sideBar.addSection(ss2);
-			SidebarSection ss4 = new SidebarSection(sideBar, "Graphics", eseSettingsPanel, null);
+			SidebarSection ss3 = new SidebarSection(sideBar, "Graphics", graphicsSettingsPanel, null);
+			sideBar.addSection(ss3);
+			SidebarSection ss4 = new SidebarSection(sideBar, "Outlines", showOutlinesPanel, null);
 			sideBar.addSection(ss4);
+			
 
 			this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 			this.getContentPane().add(sideBar, BorderLayout.WEST);

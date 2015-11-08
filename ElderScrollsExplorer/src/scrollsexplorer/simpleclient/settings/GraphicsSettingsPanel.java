@@ -1,7 +1,7 @@
 /*
  * Created on Oct 28, 2006
  */
-package scrollsexplorer.simpleclient;
+package scrollsexplorer.simpleclient.settings;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -16,6 +16,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import scrollsexplorer.simpleclient.SimpleWalkSetup;
 import tools.swing.VerticalFlowLayout;
 import esmj3d.j3d.BethRenderSettings;
 
@@ -23,7 +24,7 @@ import esmj3d.j3d.BethRenderSettings;
  * @author Administrator
  *
  */
-public class ESESettingsPanel extends JPanel
+public class GraphicsSettingsPanel extends JPanel
 {
 
 	private JButton lowSettings = new JButton("Low");
@@ -54,17 +55,9 @@ public class ESESettingsPanel extends JPanel
 
 	private JCheckBox enablePhysicsTick = new JCheckBox("Enable Physics", true);
 
-	private JCheckBox outlineCharsTick = new JCheckBox("Outline Characters", BethRenderSettings.isOutlineChars());
-
-	private JCheckBox outlineDoorsTick = new JCheckBox("Outline Doors", BethRenderSettings.isOutlineDoors());
-
-	private JCheckBox outlineContsTick = new JCheckBox("Outline Containers", BethRenderSettings.isOutlineConts());
-
-	private JCheckBox outlinePartsTick = new JCheckBox("Outline Particles", BethRenderSettings.isOutlineParts());
-
 	private SimpleWalkSetup simpleWalkSetup;
 
-	public ESESettingsPanel(SimpleWalkSetup _simpleWalkSetup)
+	public GraphicsSettingsPanel(SimpleWalkSetup _simpleWalkSetup)
 	{
 		this.simpleWalkSetup = _simpleWalkSetup;
 		//this.setLayout(new GridLayout2(-1, 3));
@@ -241,46 +234,6 @@ public class ESESettingsPanel extends JPanel
 			public void actionPerformed(ActionEvent arg0)
 			{
 				simpleWalkSetup.setPhysicsEnabled(enablePhysicsTick.isSelected());
-			}
-		});
-
-		add(outlineCharsTick);
-		outlineCharsTick.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				BethRenderSettings.setOutlineChars(outlineCharsTick.isSelected());
-			}
-		});
-
-		add(outlineDoorsTick);
-		outlineDoorsTick.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				BethRenderSettings.setOutlineDoors(outlineDoorsTick.isSelected());
-			}
-		});
-
-		add(outlineContsTick);
-		outlineContsTick.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				BethRenderSettings.setOutlineConts(outlineContsTick.isSelected());
-			}
-		});
-
-		add(outlinePartsTick);
-		outlinePartsTick.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				BethRenderSettings.setOutlineParts(outlinePartsTick.isSelected());
 			}
 		});
 	}

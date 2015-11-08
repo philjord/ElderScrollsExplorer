@@ -1,4 +1,4 @@
-package scrollsexplorer;
+package scrollsexplorer.simpleclient.settings;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import scrollsexplorer.GameConfig;
+import scrollsexplorer.PropertyLoader;
 import scrollsexplorer.ftp.GameMediaFTPdownloader;
 import scrollsexplorer.ftp.GameMediaFTPdownloader.CallBack;
 import tools.swing.TitledJFileChooser;

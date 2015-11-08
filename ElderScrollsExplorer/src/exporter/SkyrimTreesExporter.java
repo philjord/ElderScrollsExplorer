@@ -54,7 +54,12 @@ public class SkyrimTreesExporter
 		{
 			System.out.println("Tree: " + tree);
 			NifToJ3d.loadNif(tree, meshSource, textureSource);
-
+		}
+		
+		for (String tree : meshSource.getFilesInFolder("Meshes\\landscape\\plants"))
+		{
+			System.out.println("Tree: " + tree);
+			NifToJ3d.loadNif(tree, meshSource, textureSource);
 		}
 
 		File outputFolder = new File(outputFolderTrees);
