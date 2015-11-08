@@ -36,7 +36,7 @@ import nifbullet.NavigationProcessorBullet;
 import nifbullet.NavigationProcessorBullet.NbccProvider;
 import nifbullet.cha.NBControlledChar;
 import scrollsexplorer.ScrollsExplorer;
-import scrollsexplorer.simpleclient.inventory.SimpleInventorySystem;
+import scrollsexplorer.simpleclient.charactersheet.SimpleInventorySystem;
 import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
 import scrollsexplorer.simpleclient.mouseover.AdminMouseOverHandler;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;

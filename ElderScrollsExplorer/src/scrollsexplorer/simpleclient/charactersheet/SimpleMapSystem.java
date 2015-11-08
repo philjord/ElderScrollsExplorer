@@ -1,4 +1,4 @@
-package scrollsexplorer.simpleclient.inventory;
+package scrollsexplorer.simpleclient.charactersheet;
 
 import java.awt.GridLayout;
 
@@ -8,11 +8,11 @@ import javax.swing.JLabel;
 import tools3d.mixed3d2d.overlay.swing.JInternalFrame3D;
 import tools3d.mixed3d2d.overlay.swing.Panel3D;
 
-public class SimpleInventorySystem extends JInternalFrame3D
+public class SimpleMapSystem extends JInternalFrame3D
 {
 	private JCheckBox jcb = new JCheckBox("tickable item 2");
 
-	public SimpleInventorySystem(Panel3D panel3D)
+	public SimpleMapSystem(Panel3D panel3D)
 	{
 		super(panel3D, "Simple Inventory", 300, 200, true);
 		setLayout(new GridLayout(5, 3));
@@ -23,6 +23,15 @@ public class SimpleInventorySystem extends JInternalFrame3D
 
 		getContentPane().doLayout();
 		setVisible(false);
+		
+		//Morrowind use teh color of cell system to show teh uncovered map!
+		
+		// oblivion?
+		
+		//fallout mini wasteland nif file system?
+		
+		//skyrim map nif file system?
+		
 	}
 
 }
