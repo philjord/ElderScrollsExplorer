@@ -36,6 +36,7 @@ import nifbullet.NavigationProcessorBullet;
 import nifbullet.NavigationProcessorBullet.NbccProvider;
 import nifbullet.cha.NBControlledChar;
 import scrollsexplorer.ScrollsExplorer;
+import scrollsexplorer.simpleclient.inventory.SimpleInventorySystem;
 import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
 import scrollsexplorer.simpleclient.mouseover.AdminMouseOverHandler;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
@@ -174,6 +175,9 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private ExitDialogPane3D exitDialogPane3D;
 
+	//We are nolonger in simple walk set up now!!!!
+	private SimpleInventorySystem simpleInventorySystem;
+
 	public SimpleWalkSetup(String frameName)
 	{
 		//kick off with a universe ***************************
@@ -309,9 +313,25 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				{
 					//hide dialog and lock mouse
 					exitDialogPane3D.setVisible(false);
-					mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
+					setMouseLock(true);
 				}
 
+			}
+		});
+
+		simpleInventorySystem = new SimpleInventorySystem(fullScreenPanel3D);
+		simpleInventorySystem.addComponentListener(new ComponentAdapter()
+		{
+			@Override
+			public void componentShown(ComponentEvent e)
+			{
+				setMouseLock(false);
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent e)
+			{
+				setMouseLock(true);
 			}
 		});
 	}
@@ -663,6 +683,26 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			NavigationInputAWTKey.DOWN_KEY = KeyEvent.VK_Z;
 		}
 	}
+	
+	private void setMouseLock(boolean mouseLock)
+	{
+		if (!mouseLock)
+		{
+			mouseInputListener.setCanvas(null);
+
+			//note tab message only put up if tab used to unlock mouse
+		}
+		else
+		{
+			mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
+
+			// always clear teh tab message regardless
+			if (firstInstruction != null)
+			{
+				firstInstruction.removeFromCanvas();
+			}
+		}
+	}
 
 	private class HMDKeyHandler extends KeyAdapter
 	{
@@ -721,14 +761,14 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				if (!exitDialogPane3D.isVisible())
 				{
 					//unlock mouse to interact
-					mouseInputListener.setCanvas(null);
+					setMouseLock(false);
 					exitDialogPane3D.setVisible(true);
 				}
 				else
 				{
 					//hide dialog and lock mouse
 					exitDialogPane3D.setVisible(false);
-					mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
+					setMouseLock(true);
 				}
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_H)
@@ -752,7 +792,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			{
 				if (mouseInputListener.hasCanvas())
 				{
-					mouseInputListener.setCanvas(null);
+					setMouseLock(false);
 					if (firstInstruction != null)
 					{
 						firstInstruction.addToCanvas(cameraPanel.getCanvas3D2D());
@@ -760,15 +800,17 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				}
 				else
 				{
-					mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
-					if (firstInstruction != null)
-					{
-						firstInstruction.removeFromCanvas();
-					}
+					setMouseLock(true);
 				}
-
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_I)
+			{
+				// simpleInventorySystem has a listener for the mouse lock
+				simpleInventorySystem.setVisible(!simpleInventorySystem.isVisible());
 			}
 		}
 	}
+
+	
 
 }
