@@ -52,7 +52,7 @@ public class SimpleBethCellManager implements InstRECOStore
 
 	// gate keeper of expensive change cell id call
 	private boolean canChangeCell = true;
-	
+
 	public SimpleBethCellManager(SimpleWalkSetup simpleWalkSetup2)
 	{
 		this.simpleWalkSetup = simpleWalkSetup2;
@@ -77,19 +77,12 @@ public class SimpleBethCellManager implements InstRECOStore
 		simpleWalkSetup.setVisualDisplayed(false);
 		this.esmManager = esmManager;
 		j3dCellFactory = gameConfig.j3dCellFactory;
-		j3dCellFactory.setSources(esmManager, esmManager, mediaSources);
+		j3dCellFactory.setSources(esmManager, mediaSources);
 
-		//add skynow
 		simpleSky = new SimpleSky(mediaSources.getTextureSource());
-		//BranchGroup bg = new BranchGroup();
-		//bg.addChild(simpleSky);
 		simpleWalkSetup.getVisualBranch().addChild(simpleSky);
 
 		loadScreen = new LoadScreen(mediaSources);
-		//bg = new BranchGroup();
-		//bg.addChild(loadScreen);
-		//simpleWalkSetup.getVisualBranch().addChild(loadScreen);
-
 		simpleWalkSetup.getViewingPlatform().getPlatformGeometry().addChild(loadScreen);
 
 		simpleWalkSetup.setVisualDisplayed(true);
@@ -98,7 +91,7 @@ public class SimpleBethCellManager implements InstRECOStore
 
 	public String getCellNameFormIdOf(int doorFormId)
 	{
-		int cellFormID = esmManager.getCellIdOfPersistentTarget(doorFormId);
+		int cellFormID = j3dCellFactory.getCellIdOfPersistentTarget(doorFormId);
 		if (cellFormID != -1 && cellFormID != 0)
 		{
 			try
@@ -147,8 +140,7 @@ public class SimpleBethCellManager implements InstRECOStore
 	 */
 	public boolean changeToCellOfTarget(int targetFormId, Vector3f trans, Quat4f rot)
 	{
-		int cellFormID = esmManager.getCellIdOfPersistentTarget(targetFormId);
-		System.out.println("cellFormID " + cellFormID);
+		int cellFormID = j3dCellFactory.getCellIdOfPersistentTarget(targetFormId);
 		if (cellFormID > 0)
 		{
 			setCurrentCellFormId(cellFormID, trans, rot);
@@ -174,6 +166,24 @@ public class SimpleBethCellManager implements InstRECOStore
 		else
 			setCurrentCellFormId(convertNameRefToId(str), trans, rot);
 		return true;
+	}
+
+	/**
+	 * for TES3 conversions
+	 * @param str
+	 * @return
+	 */
+	private int convertNameRefToId(String str)
+	{
+		if (esmManager instanceof esmmanager.tes3.ESMManagerTes3)
+		{
+			ESMManagerTes3 esmManagerTes3 = (ESMManagerTes3) esmManager;
+			return esmManagerTes3.convertNameRefToId(str);
+		}
+		else
+		{
+			throw new UnsupportedOperationException();
+		}
 	}
 
 	public int getCurrentCellFormId()
@@ -318,25 +328,6 @@ public class SimpleBethCellManager implements InstRECOStore
 				}
 			};
 			thread.start();
-		}
-	}
-
-	/**
-	 * for TES3 conversions
-	 * @param str
-	 * @return
-	 */
-	private int convertNameRefToId(String str)
-	{
-		if (esmManager instanceof esmmanager.tes3.ESMManagerTes3)
-		{
-			ESMManagerTes3 esmManagerTes3 = (ESMManagerTes3) esmManager;
-
-			return esmManagerTes3.convertNameRefToId(str);
-		}
-		else
-		{
-			throw new UnsupportedOperationException();
 		}
 	}
 

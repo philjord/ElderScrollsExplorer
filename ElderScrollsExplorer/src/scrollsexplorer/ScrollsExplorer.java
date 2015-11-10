@@ -437,6 +437,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						simpleWalkSetup.configure(meshSource, simpleBethCellManager);
 						simpleWalkSetup.setEnabled(false);
 
+						// I could use the j3dcellfactory now? with the cached cell records?
 						simpleBethCellManager.setSources(selectedGameConfig, esmManager, mediaSources);
 
 						tableModel = new DefaultTableModel(columnNames, 0)

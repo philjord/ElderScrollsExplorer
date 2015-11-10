@@ -125,7 +125,6 @@
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTextureEffect.java"/>
         <folder path="/ElderScrollsExplorer/META-INF"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTextureModeProperty.java"/>
-        <javaElement handleIdentifier="=ESMLoader/src"/>
         <javaElement handleIdentifier="=esmj3dtes5/src"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiBSParticleNode.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTriBasedGeom.java"/>

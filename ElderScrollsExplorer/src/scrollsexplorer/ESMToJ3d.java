@@ -69,29 +69,28 @@ public class ESMToJ3d
 					{
 						if (esmManager.getName().equals("Skyrim.esm"))
 						{
-							return new esmj3dtes5.j3d.cell.J3dCELLTemporary(esmManager, new Record(record, formId), childRecords, makePhys,
+							return new esmj3dtes5.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), childRecords, makePhys,
 									mediaSources);
 
 						}
 						else
 						{
-							return new esmj3dfo3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record, formId), childRecords, makePhys,
+							return new esmj3dfo3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), childRecords, makePhys,
 									mediaSources);
 						}
 					}
 					else if (version == 1.32f)
 					{
-						return new esmj3dfo3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record, formId), childRecords, makePhys,
-								mediaSources);
+						return new esmj3dfo3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), childRecords, makePhys, mediaSources);
 					}
 					else if (version == 1.0f || version == 0.8f)
 					{
-						return new esmj3dtes4.j3d.cell.J3dCELLTemporary(esmManager, new Record(record, formId), childRecords, makePhys,
+						return new esmj3dtes4.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), childRecords, makePhys,
 								mediaSources);
 					}
 					else if (version == 1.2f)
 					{
-						return new esmj3dtes3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record, formId), childRecords, makePhys,
+						return new esmj3dtes3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), childRecords, makePhys,
 								mediaSources);
 					}
 					else
@@ -106,29 +105,29 @@ public class ESMToJ3d
 					{
 						if (esmManager.getName().equals("Skyrim.esm"))
 						{
-							return new esmj3dtes5.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
-									makePhys, mediaSources);
+							return new esmj3dtes5.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), childRecords, makePhys,
+									mediaSources);
 						}
 						else
 						{
-							return new esmj3dfo3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
-									makePhys, mediaSources);
+							return new esmj3dfo3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), childRecords, makePhys,
+									mediaSources);
 						}
 					}
 					else if (version == 1.32f)
 					{
-						return new esmj3dfo3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
-								makePhys, mediaSources);
+						return new esmj3dfo3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), childRecords, makePhys,
+								mediaSources);
 					}
 					else if (version == 1.0f || version == 0.8f)
 					{
-						return new esmj3dtes4.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
-								makePhys, mediaSources);
+						return new esmj3dtes4.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), childRecords, makePhys,
+								mediaSources);
 					}
 					else if (version == 1.2f)
 					{
-						return new esmj3dtes3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record, formId), childRecords,
-								makePhys, mediaSources);
+						return new esmj3dtes3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), childRecords, makePhys,
+								mediaSources);
 					}
 					else
 					{
@@ -165,7 +164,7 @@ public class ESMToJ3d
 				//ok let's try exterior
 				record = esmManager.getWRLDExtBlockCELL(formId);
 			}
-			return new Record(record, formId);
+			return new Record(record);
 		}
 		catch (PluginException e1)
 		{

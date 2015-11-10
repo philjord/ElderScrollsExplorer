@@ -285,7 +285,7 @@ public class ESMBSAExporter extends JFrame
 					mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
 					j3dCellFactory = selectedGameConfig.j3dCellFactory;
-					j3dCellFactory.setSources(esmManager, esmManager, mediaSources);
+					j3dCellFactory.setSources(esmManager, mediaSources);
 
 					tableModel = new DefaultTableModel(columnNames, 0)
 					{
@@ -481,7 +481,7 @@ public class ESMBSAExporter extends JFrame
 
 	}
 
-	public static void copyToOutput(File outputFolder,  MediaSources mediaSources,  BSAFileSet bsaFileSet) throws IOException
+	public static void copyToOutput(File outputFolder, MediaSources mediaSources, BSAFileSet bsaFileSet) throws IOException
 	{
 
 		System.out.println("Nifs");

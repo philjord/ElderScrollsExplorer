@@ -45,7 +45,6 @@ import esmmanager.common.data.plugin.PluginRecord;
 import esmmanager.common.data.record.Record;
 import esmmanager.loader.CELLPointer;
 import esmmanager.loader.ESMManager;
-import esmmanager.loader.IESMManager;
 import esmmanager.loader.InteriorCELLTopGroup;
 import esmmanager.loader.WRLDTopGroup;
 
@@ -94,14 +93,14 @@ public class ESMTest
 		long start = System.currentTimeMillis();
 
 		String esmFile = EsmFileLocations.getGeneralEsmFile();
-		IESMManager esmManager = ESMManager.getESMManager(esmFile);
+		ESMManager esmManager = (ESMManager) ESMManager.getESMManager(esmFile);
 
 		try
 		{
 			for (FormInfo formInfo : esmManager.getFormMap().values())
 			{
 				//	System.out.println("stat " + formInfo.getSource());
-				Record rec = new Record(formInfo.getPluginRecord(), -1);
+				Record rec = new Record(formInfo.getPluginRecord());
 				//TODO: non cell reco converstion
 				RecordToRECO.makeRECO(rec);
 			}
@@ -116,7 +115,7 @@ public class ESMTest
 						PluginGroup cellChildren = esmManager.getInteriorCELLChildren(cp.formId);
 						if (cellChildren != null)
 						{
-							RecordToRECO.makeRECOsForCELL(esmManager, new Record(record, -1),
+							RecordToRECO.makeRECOsForCELL(esmManager, new Record(record),
 									ESMUtils.getChildren(cellChildren, PluginGroup.CELL_TEMPORARY));
 						}
 					}
@@ -133,7 +132,7 @@ public class ESMTest
 						PluginGroup cellChildren = esmManager.getWRLDExtBlockCELLChildren(cp.formId);
 						if (cellChildren != null)
 						{
-							RecordToRECO.makeRECOsForCELL(esmManager, new Record(record, -1),
+							RecordToRECO.makeRECOsForCELL(esmManager, new Record(record),
 									ESMUtils.getChildren(cellChildren, PluginGroup.CELL_TEMPORARY));
 						}
 					}
@@ -161,7 +160,7 @@ public class ESMTest
 	{
 		String esmFile = EsmFileLocations.getGeneralEsmFile();
 
-		IESMManager esmManager = ESMManager.getESMManager(esmFile);
+		ESMManager esmManager = (ESMManager) ESMManager.getESMManager(esmFile);
 		BSAFileSet bsaFileSet = new BSAFileSet(esmFile, false, false);
 
 		BsaMeshSource ms = new BsaMeshSource(bsaFileSet.getMeshArchives());
@@ -215,7 +214,7 @@ public class ESMTest
 	private static void loadAllFullJ3d()
 	{
 		String esmFile = EsmFileLocations.getGeneralEsmFile();
-		IESMManager esmManager = ESMManager.getESMManager(esmFile);
+		ESMManager esmManager = (ESMManager) ESMManager.getESMManager(esmFile);
 		BSAFileSet bsaFileSet = new BSAFileSet(esmFile, false, false);
 		BsaSoundSource ss = new BsaSoundSource(bsaFileSet.getSoundArchives(), new EsmSoundKeyToName(esmManager));
 		BsaTextureSource ts = new BsaTextureSource(bsaFileSet.getTextureArchives());
