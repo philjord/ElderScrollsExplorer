@@ -26,7 +26,6 @@ import esmj3d.j3d.BethRenderSettings;
  */
 public class GraphicsSettingsPanel extends JPanel
 {
-
 	private JButton lowSettings = new JButton("Low");
 
 	private JButton medSettings = new JButton("Med");
@@ -236,6 +235,7 @@ public class GraphicsSettingsPanel extends JPanel
 				simpleWalkSetup.setPhysicsEnabled(enablePhysicsTick.isSelected());
 			}
 		});
+
 	}
 
 }

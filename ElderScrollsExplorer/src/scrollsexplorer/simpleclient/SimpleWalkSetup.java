@@ -68,6 +68,8 @@ import utils.source.MeshSource;
 
 import com.sun.j3d.utils.universe.ViewingPlatform;
 
+import esmj3d.j3d.BethRenderSettings;
+
 /**
  * A class to pull teh keyboard nav, bullet phys, nif displayable, canvas2d3d overlays, 
  * physics display together, 
@@ -143,6 +145,10 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private boolean freefly = false;
 
+	private AmbientLight ambLight = null;
+
+	private DirectionalLight dirLight = null;
+
 	private ComponentAdapter canvasResizeListener = new ComponentAdapter()
 	{
 		@Override
@@ -205,13 +211,18 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		behaviourBranch.setCapability(Group.ALLOW_CHILDREN_WRITE);
 
 		// Create ambient light	and add it ************************
-		Color3f alColor = new Color3f(1f, 1f, 1f);
-		AmbientLight ambLight = new AmbientLight(true, alColor);
-		ambLight.setCapability(Light.ALLOW_INFLUENCING_BOUNDS_WRITE);
+		float ambl = BethRenderSettings.getGlobalAmbLightLevel();
+		Color3f alColor = new Color3f(ambl, ambl, ambl);
+		ambLight = new AmbientLight(true, alColor);
+		//ambLight.setCapability(Light.ALLOW_INFLUENCING_BOUNDS_WRITE);
 		ambLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.POSITIVE_INFINITY));
-		DirectionalLight dirLight = new DirectionalLight(true, alColor, new Vector3f(0f, -1f, 0f));
-		dirLight.setCapability(Light.ALLOW_INFLUENCING_BOUNDS_WRITE);
+		ambLight.setCapability(Light.ALLOW_COLOR_WRITE);
+		float dirl = BethRenderSettings.getGlobalDirLightLevel();
+		Color3f dirColor = new Color3f(dirl, dirl, dirl);
+		dirLight = new DirectionalLight(true, dirColor, new Vector3f(0f, -1f, 0f));
+		//dirLight.setCapability(Light.ALLOW_INFLUENCING_BOUNDS_WRITE);
 		dirLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.POSITIVE_INFINITY));
+		dirLight.setCapability(Light.ALLOW_COLOR_WRITE);
 		BranchGroup lightsBG = new BranchGroup();
 		lightsBG.addChild(ambLight);
 		lightsBG.addChild(dirLight);
@@ -383,6 +394,18 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			physicsSystem.getNBControlledChar().getCharacterController().warp(origin);
 		}
 
+	}
+
+	public void setGlobalAmbLightLevel(float f)
+	{
+		Color3f alColor = new Color3f(f, f, f);
+		ambLight.setColor(alColor);
+	}
+
+	public void setGlobalDirLightLevel(float f)
+	{
+		Color3f dirColor = new Color3f(f, f, f);
+		dirLight.setColor(dirColor);
 	}
 
 	public void configure(MeshSource meshSource, SimpleBethCellManager simpleBethCellManager)
@@ -683,7 +706,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			NavigationInputAWTKey.DOWN_KEY = KeyEvent.VK_Z;
 		}
 	}
-	
+
 	private void setMouseLock(boolean mouseLock)
 	{
 		if (!mouseLock)
@@ -810,7 +833,5 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			}
 		}
 	}
-
-	
 
 }
