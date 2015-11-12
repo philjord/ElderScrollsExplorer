@@ -109,8 +109,8 @@
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject.fx"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiMultiTextureProperty.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTriBasedGeomData.java"/>
-        <javaElement handleIdentifier="=BSAManager/src"/>
         <javaElement handleIdentifier="=Tools/src"/>
+        <javaElement handleIdentifier="=BSAManager/src"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiAVObjectPalette.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiGeometry.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiSortAdjustNode.java"/>
@@ -156,6 +156,7 @@
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiSequence.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiStencilProperty.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiEnvMappedTriShape.java"/>
+        <javaElement handleIdentifier="=ESMManager/src"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{RootCollisionNode.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiSourceCubeMap.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiRangeLODData.java"/>
