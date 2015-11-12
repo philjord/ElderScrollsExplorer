@@ -25,11 +25,14 @@ import esmj3d.data.shared.records.CommonREFR;
 import esmj3d.data.shared.records.GenericCONT;
 import esmj3d.data.shared.records.GenericDOOR;
 import esmj3d.data.shared.subrecords.XTEL;
+import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 import esmj3d.j3d.j3drecords.inst.J3dRECOStatInst;
 import esmj3d.j3d.j3drecords.type.J3dCONT;
 import esmj3d.j3d.j3drecords.type.J3dDOOR;
 import esmj3d.j3d.j3drecords.type.J3dRECOType;
+import esmj3d.j3d.j3drecords.type.J3dRECOTypeActionable;
+import esmj3d.j3d.j3drecords.type.J3dRECOTypeDynamic;
 
 public class ActionableMouseOverHandler extends MouseOverHandler
 {
@@ -105,9 +108,16 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 							XTEL xtel = commonREFR.XTEL;
 							if (xtel != null)
 							{
+								// clear previous outline first
+								if (currentActionTargetData.currentActionable != null)
+								{
+									J3dRECOInst j3dInstRECO = currentActionTargetData.currentActionable;
+									J3dRECOType j3dRECOType = j3dInstRECO.getJ3dRECOType();
+									j3dRECOType.setOutlined(false);
+								}
 								currentActionTargetData.clear();
 								HUDText.setText("");
-								
+
 								Vector3f t = getTrans(xtel.x, xtel.y, xtel.z);
 								// TODO: for now lift up, but when pelvis set right stop this
 								t.y += 0.75;
@@ -197,6 +207,14 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 									System.out.println("Big Fat container opening thingy now!");
 								}
+								else if (j3dRECOType instanceof J3dRECOTypeDynamic)
+								{
+									System.out.println("Picky uppy");
+								}
+								else if (j3dRECOType instanceof J3dRECOTypeActionable)
+								{
+									System.out.println("Use usey user");
+								}
 								//TODO: type   FLOR, MISC etc
 
 							}
@@ -236,11 +254,11 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 					if (bnm != null)
 					{
-
 						int recoId = clientPhysicsSystem.getPhysicsLocaleDynamics().getRecordId(bnm);
-
 						if (recoId != currentActionTargetData.recoId)
-						{								
+						{
+							currentActionTargetData.clear();
+
 							currentActionTargetData.recoId = recoId;
 						}
 
@@ -254,7 +272,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 							j3dInstRECO = SimpleBethCellManager.currentBethInteriorVisualBranch.getJ3dInstRECO(recoId);
 						}
 
-						if (j3dInstRECO != null && j3dInstRECO instanceof J3dRECOStatInst)
+						if (j3dInstRECO != null)
 						{
 
 							// if the mouse release listener is working we can't change the currentActionable until it's finished
@@ -288,9 +306,16 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 												// if not then set hudtext (in light grey) but don't allow actions
 												currentActionTargetData.hudText = "To " + currentActionTargetData.cellName;
 												if (currentActionTargetData.distance < INTERACT_MAX_DIST)
+												{
+													if (BethRenderSettings.isOutlineFocused())
+														j3dRECOType.setOutlined(true);
 													currentActionTargetData.currentActionable = j3dInstRECO;
+												}
 												else
+												{
+													j3dRECOType.setOutlined(false);
 													currentActionTargetData.currentActionable = null;
+												}
 											}
 											else if (commonREFR instanceof esmj3dtes3.data.records.REFR)
 											{
@@ -306,9 +331,17 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 													currentActionTargetData.hudText = "Travel to Morrowind";
 												}
 												if (currentActionTargetData.distance < INTERACT_MAX_DIST)
+												{
+													if (BethRenderSettings.isOutlineFocused())
+														j3dRECOType.setOutlined(true);
+
 													currentActionTargetData.currentActionable = j3dInstRECO;
+												}
 												else
+												{
+													j3dRECOType.setOutlined(false);
 													currentActionTargetData.currentActionable = null;
+												}
 											}
 										}
 										else
@@ -320,9 +353,17 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 											currentActionTargetData.hudText = (j3dDOOR.isOpen() ? "Close" : "Open") + ext;
 
 											if (currentActionTargetData.distance < INTERACT_MAX_DIST)
+											{
+												if (BethRenderSettings.isOutlineFocused())
+													j3dRECOType.setOutlined(true);
+
 												currentActionTargetData.currentActionable = j3dInstRECO;
+											}
 											else
-												currentActionTargetData.currentActionable = null; // nothing to action yet										
+											{
+												j3dRECOType.setOutlined(false);
+												currentActionTargetData.currentActionable = null; // nothing to action yet
+											}
 										}
 									}
 									else if (j3dRECOType instanceof J3dCONT)
@@ -336,9 +377,59 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 										currentActionTargetData.hudText = "Look in" + ext;
 
 										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
+										{
 											currentActionTargetData.currentActionable = j3dInstRECO;
+
+											if (BethRenderSettings.isOutlineFocused())
+												j3dRECOType.setOutlined(true);
+										}
 										else
-											currentActionTargetData.currentActionable = null; // nothing to action yet										
+										{
+											j3dRECOType.setOutlined(false);
+											currentActionTargetData.currentActionable = null; // nothing to action yet
+										}
+									}
+									else if (j3dRECOType instanceof J3dRECOTypeDynamic)
+									{
+										String ext = "";
+										if (j3dRECOType.shortName != null)
+											ext = " " + j3dRECOType.shortName;
+										currentActionTargetData.hudText = "Take" + ext;
+
+										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
+										{
+											currentActionTargetData.currentActionable = j3dInstRECO;
+
+											if (BethRenderSettings.isOutlineFocused())
+												j3dRECOType.setOutlined(true);
+										}
+										else
+										{
+											j3dRECOType.setOutlined(false);
+											currentActionTargetData.currentActionable = null; // nothing to action yet
+										}
+
+									}
+									else if (j3dRECOType instanceof J3dRECOTypeActionable)
+									{
+										String ext = "";
+										if (j3dRECOType.shortName != null)
+											ext = " " + j3dRECOType.shortName;
+										currentActionTargetData.hudText = "Use" + ext;
+
+										if (currentActionTargetData.distance < INTERACT_MAX_DIST)
+										{
+											currentActionTargetData.currentActionable = j3dInstRECO;
+
+											if (BethRenderSettings.isOutlineFocused())
+												j3dRECOType.setOutlined(true);
+										}
+										else
+										{
+											j3dRECOType.setOutlined(false);
+											currentActionTargetData.currentActionable = null; // nothing to action yet
+										}
+
 									}
 									else
 									{
@@ -393,6 +484,15 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 
 		public void clear()
 		{
+
+			// clear previous outline first
+			if (currentActionTargetData.currentActionable != null)
+			{
+				J3dRECOInst j3dInstRECO = currentActionTargetData.currentActionable;
+				J3dRECOType j3dRECOType = j3dInstRECO.getJ3dRECOType();
+				j3dRECOType.setOutlined(false);
+			}
+
 			hudText = "";
 			currentActionable = null;
 			distance = 999;

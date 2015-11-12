@@ -37,7 +37,7 @@ public class ShowOutlinesPanel extends JPanel
 
 	private JCheckBox outlinePartsTick = new JCheckBox("Outline Particles", BethRenderSettings.isOutlineParts());
 
-	private JCheckBox outlineFocusedTick = new JCheckBox("Outline Focused Object", BethRenderSettings.isOutlineParts());
+	private JCheckBox outlineFocusedTick = new JCheckBox("Outline Focused Object", BethRenderSettings.isOutlineFocused());
 
 	protected SimpleWalkSetup simpleWalkSetup;
 

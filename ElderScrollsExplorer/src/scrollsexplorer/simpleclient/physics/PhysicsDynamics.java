@@ -9,6 +9,8 @@ import javax.media.j3d.Transform3D;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
+import nif.NifFile;
+import nif.NifToJ3d;
 import nif.j3d.animation.J3dNiControllerManager;
 import nif.j3d.animation.J3dNiControllerSequence;
 import nifbullet.BulletNifModel;
@@ -209,21 +211,22 @@ public class PhysicsDynamics extends DynamicsEngine
 
 		if (physNifFile != null && physNifFile.length() > 0)
 		{
-			if (BulletNifModelClassifier.isStaticModel(physNifFile, meshSource))
+			NifFile nifFile = NifToJ3d.loadNiObjects(physNifFile, meshSource);
+			if (BulletNifModelClassifier.isStaticModel(nifFile))
 			{
 				// the nif file will have mass of 0 making this static
 				nb = new NBSimpleModel(physNifFile, meshSource, rootTrans);
 			}
-			else if (BulletNifModelClassifier.isKinematicModel(physNifFile, meshSource))
+			else if (BulletNifModelClassifier.isKinematicModel(nifFile))
 			{
 				// the nif file will have mass of 0 making this kinematic
 				nb = new NBSimpleModel(physNifFile, meshSource, rootTrans);
 			}
-			else if (BulletNifModelClassifier.isSimpleDynamicModel(physNifFile, meshSource, 0))
+			else if (BulletNifModelClassifier.isSimpleDynamicModel(nifFile, 0))
 			{
 				nb = createDynamic(j3dRECOInst, physNifFile);
 			}
-			else if (BulletNifModelClassifier.isComplexDynamic(physNifFile, meshSource))
+			else if (BulletNifModelClassifier.isComplexDynamic(nifFile))
 			{
 				//TODO: this bad boy right here
 				//System.out.println("phys skipping isComplexDynamic " + physNifFile);
@@ -337,6 +340,8 @@ public class PhysicsDynamics extends DynamicsEngine
 				//wow TES3 door have no animation, they look like they just artifically pivot around 
 				System.out.println("updateRECOToggleOpen door with no controller, probably travel door "
 						+ j3dRECOInst.getJ3dRECOType().getName());
+				
+				// drawers and chest in oblivion get the same issue
 			}
 		}
 
