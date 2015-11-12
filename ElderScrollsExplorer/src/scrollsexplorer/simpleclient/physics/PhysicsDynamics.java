@@ -209,7 +209,6 @@ public class PhysicsDynamics extends DynamicsEngine
 
 		if (physNifFile != null && physNifFile.length() > 0)
 		{
-
 			if (BulletNifModelClassifier.isStaticModel(physNifFile, meshSource))
 			{
 				// the nif file will have mass of 0 making this static
@@ -222,17 +221,19 @@ public class PhysicsDynamics extends DynamicsEngine
 			}
 			else if (BulletNifModelClassifier.isSimpleDynamicModel(physNifFile, meshSource, 0))
 			{
-				createDynamic(j3dRECOInst, physNifFile);
+				nb = createDynamic(j3dRECOInst, physNifFile);
 			}
 			else if (BulletNifModelClassifier.isComplexDynamic(physNifFile, meshSource))
 			{
 				//TODO: this bad boy right here
+				//System.out.println("phys skipping isComplexDynamic " + physNifFile);
 			}
 			else
 			{
 				//TODO: lots of plants have this check them out 
 				//System.out.println("crazy type? " + physNifFile);
 				// probably just smoke effect etc, complex dynamic rag doll
+				//System.out.println("phys skipping " + physNifFile);
 			}
 
 			if (nb != null)
