@@ -353,6 +353,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		for (File f : checkBsa.listFiles())
 		{
 			countOfBsa += f.getName().toLowerCase().endsWith(".bsa") ? 1 : 0;
+			countOfBsa += f.getName().toLowerCase().endsWith(".ba2") ? 1 : 0;
 		}
 
 		if (countOfBsa == 0)

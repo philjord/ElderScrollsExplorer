@@ -93,7 +93,7 @@ public class GameConfig
 		
 		allGameConfigs.add(new GameConfig("FO4: Fallout 4", //
 				new esmj3dfo4.j3d.cell.J3dCellFactory(),//
-				"textures\\sky\\SkyrimCloudsFill.DDS",//hahhah!
+				"textures\\sky\\CloudsLowerLight01_d.DDS",//hahhah!
 				1.8f, //
 				"FallOut4Folder",//
 				"Fallout4.esm",//
