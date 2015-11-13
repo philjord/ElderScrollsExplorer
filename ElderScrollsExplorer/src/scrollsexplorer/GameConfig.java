@@ -51,7 +51,7 @@ public class GameConfig
 
 	static
 	{
-		allGameConfigs.add(new GameConfig("TES:III Morrowind", //
+		allGameConfigs.add(new GameConfig("TESIII: Morrowind", //
 				new esmj3dtes3.j3d.cell.J3dCellFactory(),//
 				"textures\\tx_sky_clear.dds",//
 				3.00f, //
@@ -59,7 +59,7 @@ public class GameConfig
 				"Morrowind.esm",//
 				"morrowind"));
 
-		allGameConfigs.add(new GameConfig("TES:IV Oblivion", //
+		allGameConfigs.add(new GameConfig("TESIV: Oblivion", //
 				new esmj3dtes4.j3d.cell.J3dCellFactory(),//
 				"textures\\sky\\cloudsclear.dds",//
 				2.28f, //
@@ -67,15 +67,15 @@ public class GameConfig
 				"Oblivion.esm",//
 				"oblivion"));
 
-		allGameConfigs.add(new GameConfig("Fallout 3", //
+		allGameConfigs.add(new GameConfig("FO3: Fallout 3", //
 				new esmj3dfo3.j3d.cell.J3dCellFactory(),//
 				"textures\\sky\\urbancloudovercastlower01.dds",//
-				1.8f, //
+				2.28f, //
 				"FallOut3Folder",//
 				"Fallout3.esm",//
-				"fallout"));
+				"fallout3"));
 
-		allGameConfigs.add(new GameConfig("Fallout New Vegas", //
+		allGameConfigs.add(new GameConfig("FONV: Fallout New Vegas", //
 				new esmj3dfo3.j3d.cell.J3dCellFactory(),//
 				"textures\\sky\\urbancloudovercastlower01.dds",//
 				1.8f, //
@@ -83,13 +83,21 @@ public class GameConfig
 				"FalloutNV.esm",//
 				"falloutnv"));
 
-		allGameConfigs.add(new GameConfig("TES:V Skyrim", //
-				new esmj3dtes5.j3d.cell.J3dCellFactory(),//
+		allGameConfigs.add(new GameConfig("TESV: Skyrim", //
+				new esmj3dfo4.j3d.cell.J3dCellFactory(),//
 				"textures\\sky\\skyrimcloudsupper04.dds",//
 				1.8f, //
 				"SkyrimFolder",//
 				"Skyrim.esm",//
 				"skyrim"));
+		
+		allGameConfigs.add(new GameConfig("FO4: Fallout 4", //
+				new esmj3dfo4.j3d.cell.J3dCellFactory(),//
+				"textures\\sky\\SkyrimCloudsFill.DDS",//hahhah!
+				1.8f, //
+				"FallOut4Folder",//
+				"Fallout4.esm",//
+				"fallout4"));
 
 		allGameConfigs.add(new GameConfig("Hunter Sneaker", //
 				new esmj3dtes4.j3d.cell.J3dCellFactory(),//

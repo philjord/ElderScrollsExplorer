@@ -28,5 +28,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dtes3"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/jftp.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/commons-net-3.3.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dfo4"/>
 	<classpathentry kind="output" path="output"/>
 </classpath>

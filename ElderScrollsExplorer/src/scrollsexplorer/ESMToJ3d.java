@@ -69,7 +69,7 @@ public class ESMToJ3d
 					{
 						if (esmManager.getName().equals("Skyrim.esm"))
 						{
-							return new esmj3dtes5.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), childRecords, makePhys,
+							return new esmj3dfo4.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), childRecords, makePhys,
 									mediaSources);
 
 						}
@@ -105,7 +105,7 @@ public class ESMToJ3d
 					{
 						if (esmManager.getName().equals("Skyrim.esm"))
 						{
-							return new esmj3dtes5.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), childRecords, makePhys,
+							return new esmj3dfo4.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), childRecords, makePhys,
 									mediaSources);
 						}
 						else

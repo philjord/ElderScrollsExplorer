@@ -27,7 +27,7 @@ public class SetBethFoldersDialog extends JDialog
 
 	public SetBethFoldersDialog(Frame frame)
 	{
-		super(frame, "Game Data (Esm and Bsa) Folders", true);
+		super(frame, "Game Data (.bsa or .ba2 and .esm) Folders", true);
 		this.setLayout(new GridLayout(-1, 1));
 
 		for (final GameConfig gameConfig : GameConfig.allGameConfigs)
@@ -126,6 +126,7 @@ public class SetBethFoldersDialog extends JDialog
 			for (File f : pickedfolder.listFiles())
 			{
 				countOfBsa += f.getName().toLowerCase().endsWith(".bsa") ? 1 : 0;
+				countOfBsa += f.getName().toLowerCase().endsWith(".ba2") ? 1 : 0;
 			}
 
 			if (countOfBsa == 0)
