@@ -89,6 +89,7 @@
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiAVObject.java"/>
         <javaElement handleIdentifier="=3DTools/src"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiBinaryVoxelData.java"/>
+        <javaElement handleIdentifier="=esmj3dfo4/src"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiPhysXBodyDesc.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiPalette.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiIntegersExtraData.java"/>
