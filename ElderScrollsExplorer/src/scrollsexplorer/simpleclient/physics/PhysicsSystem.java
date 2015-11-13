@@ -14,7 +14,7 @@ import tools.PendingList;
 import tools.clock.PeriodicThread;
 import tools.clock.PeriodicallyUpdated;
 import tools3d.mixed3d2d.hud.hudelements.HUDPhysicsState.HUDPhysicsStateData;
-import tools3d.navigation.AvatarLocation;
+import tools3d.navigation.AvatarCollisionInfo;
 import utils.source.MeshSource;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
@@ -30,7 +30,7 @@ public class PhysicsSystem implements NbccProvider, HUDPhysicsStateData
 	// model update min time step
 	public long CLIENT_MIN_TIME_BETWEEN_BOUND_UPDATES_MS = 10;
 
-	private AvatarLocation avatarLocation;
+	private AvatarCollisionInfo avatarCollisionInfo;
 
 	private BranchGroup behaviourRoot;
 
@@ -59,9 +59,9 @@ public class PhysicsSystem implements NbccProvider, HUDPhysicsStateData
 	 * starts paused for loading
 	 */
 
-	public PhysicsSystem(InstRECOStore instRECOStore, AvatarLocation avatarLocation, BranchGroup behaviourRoot, MeshSource meshSource)
+	public PhysicsSystem(InstRECOStore instRECOStore, AvatarCollisionInfo avatarCollisionInfo, BranchGroup behaviourRoot, MeshSource meshSource)
 	{
-		this.avatarLocation = avatarLocation;
+		this.avatarCollisionInfo = avatarCollisionInfo;
 		this.behaviourRoot = behaviourRoot;
 		this.instRECOStore = instRECOStore;
 		this.meshSource = meshSource;
@@ -117,7 +117,7 @@ public class PhysicsSystem implements NbccProvider, HUDPhysicsStateData
 
 		if (cell != null && cid != -1)
 		{
-			physicsLocaleDynamics = new PhysicsDynamics(instRECOStore, gravity, behaviourRoot, avatarLocation, meshSource);
+			physicsLocaleDynamics = new PhysicsDynamics(instRECOStore, gravity, behaviourRoot, avatarCollisionInfo, meshSource);
 			loadJ3dCELL(cell);
 			System.out.println("Physics objects loaded for cell " + cellId);
 		}

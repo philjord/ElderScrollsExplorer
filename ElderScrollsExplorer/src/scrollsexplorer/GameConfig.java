@@ -54,7 +54,7 @@ public class GameConfig
 		allGameConfigs.add(new GameConfig("TESIII: Morrowind", //
 				new esmj3dtes3.j3d.cell.J3dCellFactory(),//
 				"textures\\tx_sky_clear.dds",//
-				3.00f, //
+				2.28f, //
 				"MorrowindFolder",//
 				"Morrowind.esm",//
 				"morrowind"));
@@ -78,7 +78,7 @@ public class GameConfig
 		allGameConfigs.add(new GameConfig("FONV: Fallout New Vegas", //
 				new esmj3dfo3.j3d.cell.J3dCellFactory(),//
 				"textures\\sky\\urbancloudovercastlower01.dds",//
-				1.8f, //
+				2.28f, //
 				"FalloutNVFolder",//
 				"FalloutNV.esm",//
 				"falloutnv"));
@@ -86,7 +86,7 @@ public class GameConfig
 		allGameConfigs.add(new GameConfig("TESV: Skyrim", //
 				new esmj3dfo4.j3d.cell.J3dCellFactory(),//
 				"textures\\sky\\skyrimcloudsupper04.dds",//
-				1.8f, //
+				2.28f, //
 				"SkyrimFolder",//
 				"Skyrim.esm",//
 				"skyrim"));
@@ -94,7 +94,7 @@ public class GameConfig
 		allGameConfigs.add(new GameConfig("FO4: Fallout 4", //
 				new esmj3dfo4.j3d.cell.J3dCellFactory(),//
 				"textures\\sky\\CloudsLowerLight01_d.DDS",//hahhah!
-				1.8f, //
+				2.28f, //
 				"FallOut4Folder",//
 				"Fallout4.esm",//
 				"fallout4"));

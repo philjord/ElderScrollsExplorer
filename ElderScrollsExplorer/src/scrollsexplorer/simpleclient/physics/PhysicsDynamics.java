@@ -20,6 +20,7 @@ import nifbullet.dyn.NBSimpleDynamicModel;
 import nifbullet.simple.NBSimpleModel;
 import nifbullet.util.debug.opengl.DebugOutput;
 import nifbullet.util.debug.opengl.LWJGL;
+import tools3d.navigation.AvatarCollisionInfo;
 import tools3d.navigation.AvatarLocation;
 import tools3d.utils.Utils3D;
 import utils.source.MeshSource;
@@ -57,7 +58,7 @@ public class PhysicsDynamics extends DynamicsEngine
 
 	private MeshSource meshSource;
 
-	public PhysicsDynamics(InstRECOStore instRecoToNif, Vector3f gravity, BranchGroup rootGroup, AvatarLocation avatarLocation,
+	public PhysicsDynamics(InstRECOStore instRecoToNif, Vector3f gravity, BranchGroup rootGroup, AvatarCollisionInfo avatarCollisionInfo,
 			MeshSource meshSource)
 	{
 		super(gravity);
@@ -71,10 +72,10 @@ public class PhysicsDynamics extends DynamicsEngine
 
 		rootGroup.addChild(dynamicsRootBranchGroup);
 
-		this.avatarLocation = avatarLocation;
+		this.avatarLocation = avatarCollisionInfo.getAvatarLocation();
 
 		Transform3D rootTrans = new Transform3D(avatarLocation.getTransform());
-		myNifBulletChar = new NBControlledChar(rootTrans);
+		myNifBulletChar = new NBControlledChar(rootTrans, avatarCollisionInfo.getAvatarYHeight(), avatarCollisionInfo.getAvatarXZRadius());
 		synchronized (dynamicsWorld)
 		{
 			clientNifBulletCharBinding = new ClientNifBulletCharBinding(avatarLocation, myNifBulletChar);
@@ -340,7 +341,7 @@ public class PhysicsDynamics extends DynamicsEngine
 				//wow TES3 door have no animation, they look like they just artifically pivot around 
 				System.out.println("updateRECOToggleOpen door with no controller, probably travel door "
 						+ j3dRECOInst.getJ3dRECOType().getName());
-				
+
 				// drawers and chest in oblivion get the same issue
 			}
 		}

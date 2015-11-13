@@ -412,7 +412,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	{
 		// set up and run the physics system************************************************
 
-		physicsSystem = new PhysicsSystem(simpleBethCellManager, avatarLocation, behaviourBranch, meshSource);
+		physicsSystem = new PhysicsSystem(simpleBethCellManager, avatarCollisionInfo, behaviourBranch, meshSource);
 
 		ScrollsExplorer.dashboard.setPhysicSystem(physicsSystem);
 
