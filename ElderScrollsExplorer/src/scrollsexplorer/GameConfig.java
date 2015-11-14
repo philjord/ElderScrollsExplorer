@@ -10,11 +10,11 @@ public class GameConfig
 
 	public String gameName;
 
-	//SimpleBethCellManager
 	public J3dICellFactory j3dCellFactory;
 
-	//SimpleBethCellManager	
 	public String skyTexture;
+
+	public String loadScreen;
 
 	public float avatarYHeight;
 
@@ -26,12 +26,13 @@ public class GameConfig
 
 	public String ftpFolderName;
 
-	public GameConfig(String gameName, J3dICellFactory j3dCellFactory, String skyTexture, float avatarYHeight, String folderKey,
-			String mainESMFile, String ftpFolderName)
+	public GameConfig(String gameName, J3dICellFactory j3dCellFactory, String skyTexture, String loadScreen, float avatarYHeight,
+			String folderKey, String mainESMFile, String ftpFolderName)
 	{
 		this.gameName = gameName;
 		this.j3dCellFactory = j3dCellFactory;
 		this.skyTexture = skyTexture;
+		this.loadScreen = loadScreen;
 		this.avatarYHeight = avatarYHeight;
 		this.folderKey = folderKey;
 		this.ftpFolderName = ftpFolderName;
@@ -54,6 +55,7 @@ public class GameConfig
 		allGameConfigs.add(new GameConfig("TESIII: Morrowind", //
 				new esmj3dtes3.j3d.cell.J3dCellFactory(),//
 				"textures\\tx_sky_clear.dds",//
+				"meshes\\i\\in_v_arena_01.nif",//
 				2.28f, //
 				"MorrowindFolder",//
 				"Morrowind.esm",//
@@ -62,6 +64,7 @@ public class GameConfig
 		allGameConfigs.add(new GameConfig("TESIV: Oblivion", //
 				new esmj3dtes4.j3d.cell.J3dCellFactory(),//
 				"textures\\sky\\cloudsclear.dds",//
+				"meshes\\architecture\\cloudrulertemple\\testcloudrulerint.nif",//
 				2.28f, //
 				"OblivionFolder",//
 				"Oblivion.esm",//
@@ -70,6 +73,7 @@ public class GameConfig
 		allGameConfigs.add(new GameConfig("FO3: Fallout 3", //
 				new esmj3dfo3.j3d.cell.J3dCellFactory(),//
 				"textures\\sky\\urbancloudovercastlower01.dds",//
+				"meshes\\interface\\loading\\loadinganim01.nif",//
 				2.28f, //
 				"FallOut3Folder",//
 				"Fallout3.esm",//
@@ -78,6 +82,7 @@ public class GameConfig
 		allGameConfigs.add(new GameConfig("FONV: Fallout New Vegas", //
 				new esmj3dfo3.j3d.cell.J3dCellFactory(),//
 				"textures\\sky\\urbancloudovercastlower01.dds",//
+				"meshes\\interface\\loading\\loadinganim01.nif",//
 				2.28f, //
 				"FalloutNVFolder",//
 				"FalloutNV.esm",//
@@ -86,14 +91,16 @@ public class GameConfig
 		allGameConfigs.add(new GameConfig("TESV: Skyrim", //
 				new esmj3dfo4.j3d.cell.J3dCellFactory(),//
 				"textures\\sky\\skyrimcloudsupper04.dds",//
+				"meshes\\loadscreenart\\loadscreenadventure01.nif",//
 				2.28f, //
 				"SkyrimFolder",//
 				"Skyrim.esm",//
 				"skyrim"));
-		
+
 		allGameConfigs.add(new GameConfig("FO4: Fallout 4", //
 				new esmj3dfo4.j3d.cell.J3dCellFactory(),//
-				"textures\\sky\\CloudsLowerLight01_d.DDS",//hahhah!
+				"textures\\sky\\skyrimcloudsupper04.dds",//hahhah!
+				"meshes\\LoadScreenArt\\Armor01PowerArmor1.nif",//
 				2.28f, //
 				"FallOut4Folder",//
 				"Fallout4.esm",//
@@ -102,45 +109,30 @@ public class GameConfig
 		allGameConfigs.add(new GameConfig("Hunter Sneaker", //
 				new esmj3dtes4.j3d.cell.J3dCellFactory(),//
 				"textures\\sky\\cloudsclear.dds",//
+				"meshes\\architecture\\cloudrulertemple\\testcloudrulerint.nif",//
 				2.28f, //
 				"HunterSneakerFolder",//
 				"OblivionHS.esm",//
 				"huntersneaker"));
 	}
-	/*
-	 * 1.8f
-	 * 	public static String MORROWIND_FOLDER_KEY = "MorrowindFolder";
+	//morrowind
+	//meshes\i\in_v_arena.nif
+	//meshes\i\in_de_shipwreckul_lg.nif
+	//meshes\i\in_dae_hall_l_stair_curve_01.nif
 
-	public static String OBLIVION_FOLDER_KEY = "OblivionFolder";
+	// obliv
+	//meshes\dungeons\chargen\prisonhall04.nif
+	//meshes\dungeons\cloudrulertemple\testcloudrulerint.nif
+	//meshes\dungeons\cathedral\cathedralstenintback01.nif
 
-	public static String FALLOUT3_FOLDER_KEY = "FallOut3Folder";
+	//FO3 + FONV
+	//meshes\interface\loading\loadinganim01.nif
 
-	public static String FALLOUTNV_FOLDER_KEY = "FalloutNVFolder";
+	//skyrim
+	// all from meshes\loadscreenart  with black background
 
-	public static String SKYRIM_FOLDER_KEY = "SkyrimFolder";
-	
-		Texture tex = null;
-		// load a texture image 		
-		if (textureSource.textureFileExists("textures\\sky\\skyrimcloudsupper04.dds"))
-		{
-			tex = textureSource.getTexture("textures\\sky\\skyrimcloudsupper04.dds");
-		}
-		else if (textureSource.textureFileExists("textures\\sky\\cloudsclear.dds"))
-		{
-			tex = textureSource.getTexture("textures\\sky\\cloudsclear.dds");
-		}
-		else if (textureSource.textureFileExists("textures\\sky\\urbancloudovercastlower01.dds"))
-	{
-		tex = textureSource.getTexture("textures\\sky\\urbancloudovercastlower01.dds");
-	}
-	else if (textureSource.textureFileExists("textures\\tx_sky_clear.dds"))
-	{
-		tex = textureSource.getTexture("textures\\tx_sky_clear.dds");
-	}
-	else
-	{
-		System.out.println("BUM, no tex fro sky");
-	}*/
+	//FO4
+	// all from meshes\loadscreenart  with black background
 
 	/**	
 	 

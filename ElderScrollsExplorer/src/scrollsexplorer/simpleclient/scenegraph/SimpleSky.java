@@ -7,6 +7,7 @@ import javax.media.j3d.Group;
 import javax.media.j3d.RenderingAttributes;
 import javax.media.j3d.Texture;
 
+import scrollsexplorer.GameConfig;
 import tools3d.utils.Utils3D;
 import utils.source.TextureSource;
 
@@ -15,6 +16,7 @@ import com.sun.j3d.utils.geometry.Sphere;
 
 public class SimpleSky extends BranchGroup
 {
+	private GameConfig gameConfig;
 
 	private BranchGroup backSkyBG = new BranchGroup();
 
@@ -25,8 +27,10 @@ public class SimpleSky extends BranchGroup
 	  * apply a texture image onto the inside of the Sphere
 	  * to serve as a graphical backdrop for the scene.
 	  */
-	public SimpleSky(TextureSource textureSource)
+	public SimpleSky(GameConfig gameConfig1, TextureSource textureSource)
 	{
+		this.gameConfig = gameConfig1;
+
 		this.setCapability(Group.ALLOW_CHILDREN_WRITE);
 		this.setCapability(Group.ALLOW_CHILDREN_EXTEND);
 
@@ -47,30 +51,11 @@ public class SimpleSky extends BranchGroup
 
 		Texture tex = null;
 		// load a texture image 		
-		if (textureSource.textureFileExists("textures\\sky\\skyrimcloudsupper04.dds"))
-		{
-			tex = textureSource.getTexture("textures\\sky\\skyrimcloudsupper04.dds");
-		}
-		else if (textureSource.textureFileExists("textures\\sky\\cloudsclear.dds"))
-		{
-			tex = textureSource.getTexture("textures\\sky\\cloudsclear.dds");
-		}
-		else if (textureSource.textureFileExists("textures\\sky\\urbancloudovercastlower01.dds"))
-		{
-			tex = textureSource.getTexture("textures\\sky\\urbancloudovercastlower01.dds");
-		}
-		else if (textureSource.textureFileExists("textures\\tx_sky_clear.dds"))
-		{
-			tex = textureSource.getTexture("textures\\tx_sky_clear.dds");
-		}
-		else
-		{
-			System.out.println("BUM, no tex fro sky");
-		}
+		tex = textureSource.getTexture(gameConfig.skyTexture);
 
 		// apply the texture to the Appearance
 		app.setTexture(tex);
-		
+
 		app.setRenderingAttributes(new RenderingAttributes());
 
 		// create the Sphere geometry with radius 1.0.

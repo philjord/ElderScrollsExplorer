@@ -11,18 +11,22 @@ import nif.NifJ3dVisRoot;
 import nif.NifToJ3d;
 import nif.j3d.J3dNiAVObject;
 import nif.j3d.animation.J3dNiControllerSequence;
+import scrollsexplorer.GameConfig;
 import utils.source.MediaSources;
 
 public class LoadScreen extends BranchGroup
 {
+	private GameConfig gameConfig;
+
 	private MediaSources mediaSources;
 
 	private BranchGroup currentLoadScreenBG;
 
 	private TransformGroup currentLoadScreenTG;
 
-	public LoadScreen(MediaSources mediaSources)
+	public LoadScreen(GameConfig gameConfig, MediaSources mediaSources)
 	{
+		this.gameConfig = gameConfig;
 		this.mediaSources = mediaSources;
 		this.setCapability(Group.ALLOW_CHILDREN_WRITE);
 		this.setCapability(Group.ALLOW_CHILDREN_EXTEND);
@@ -49,7 +53,7 @@ public class LoadScreen extends BranchGroup
 			Vector3f v = new Vector3f();
 			v.z = -4;
 
-			Quat4f q = new Quat4f(0,0,0,1);
+			Quat4f q = new Quat4f(0, 0, 0, 1);
 
 			Transform3D t = new Transform3D();
 			t.set(q, v, 1f);
@@ -58,33 +62,10 @@ public class LoadScreen extends BranchGroup
 
 			currentLoadScreenBG.addChild(currentLoadScreenTG);
 
-			if (!loadScene("meshes\\i\\in_v_arena_01.nif"))
-				//if (!loadScene("meshes\\i\\in_de_shipwreckul_lg.nif"))
-				//if (!loadScene("meshes\\i\\in_dae_hall_l_stair_curve_01.nif"))
-				//if (!loadScene("meshes\\architecture\\cathedral\\cathedralstenintback01.nif"))
-				if (!loadScene("meshes\\architecture\\cloudrulertemple\\testcloudrulerint.nif"))
-					//if (!loadScene("meshes\\dungeons\\chargen\\prisonhall04.nif"))
-					if (!loadScene("meshes\\interface\\loading\\loadinganim01.nif"))
-						loadScene("meshes\\loadscreenart\\loadscreenadventure01.nif");
+			if (!loadScene(gameConfig.loadScreen))
 
-			//morrowind
-			//meshes\i\in_v_arena.nif
-			//meshes\i\in_de_shipwreckul_lg.nif
-			//meshes\i\in_dae_hall_l_stair_curve_01.nif
-
-			// obliv
-			//meshes\dungeons\chargen\prisonhall04.nif
-			//meshes\dungeons\cloudrulertemple\testcloudrulerint.nif
-			//meshes\dungeons\cathedral\cathedralstenintback01.nif
-
-			//fallout + NV
-			//meshes\interface\loading\loadinganim01.nif
-
-			//skyrim
-			// all from meshes\loadscreenart  with black background
-
-			//TODO: note not on strucutre behavior, trouble?
-			addChild(currentLoadScreenBG);
+				//TODO: note not on strucutre behavior, trouble?
+				addChild(currentLoadScreenBG);
 		}
 
 	}
