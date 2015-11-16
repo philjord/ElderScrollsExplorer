@@ -9,8 +9,8 @@ import javax.vecmath.Vector3f;
 
 import nif.NifJ3dVisRoot;
 import nif.NifToJ3d;
+import nif.gui.util.ControllerInvokerThread;
 import nif.j3d.J3dNiAVObject;
-import nif.j3d.animation.J3dNiControllerSequence;
 import scrollsexplorer.GameConfig;
 import utils.source.MediaSources;
 
@@ -74,28 +74,20 @@ public class LoadScreen extends BranchGroup
 	{
 		if (mediaSources.getMeshSource().nifFileExists(nifFile))
 		{
-			NifJ3dVisRoot nvr = NifToJ3d.loadShapes(nifFile, mediaSources.getMeshSource(), mediaSources.getTextureSource());
-			if (nvr != null)
+			NifJ3dVisRoot nif = NifToJ3d.loadShapes(nifFile, mediaSources.getMeshSource(), mediaSources.getTextureSource());
+			if (nif != null)
 			{
-				J3dNiAVObject j3dNiAVObject = nvr.getVisualRoot();
+				J3dNiAVObject j3dNiAVObject = nif.getVisualRoot();
 
 				if (j3dNiAVObject != null)
 				{
-					currentLoadScreenTG.addChild(j3dNiAVObject);
-					//TODO: fire all idles one after the other I rekon
-					if (j3dNiAVObject.getJ3dNiControllerManager() != null)
+
+					if (nif.getVisualRoot().getJ3dNiControllerManager() != null)
 					{
-						String[] seqNames = j3dNiAVObject.getJ3dNiControllerManager().getAllSequences();
-						for (String seqName : seqNames)
-						{
-							if (seqName.toLowerCase().indexOf("idle") != -1)
-							{
-								J3dNiControllerSequence seq = j3dNiAVObject.getJ3dNiControllerManager().getSequence(seqName);
-								if (seq.isNotRunning())
-									seq.fireSequence();
-								break;
-							}
-						}
+						//note self cleaning uping
+						ControllerInvokerThread controllerInvokerThread = new ControllerInvokerThread(nif.getVisualRoot().getName(), nif
+								.getVisualRoot().getJ3dNiControllerManager(), null);
+						controllerInvokerThread.start();
 					}
 					return true;
 				}

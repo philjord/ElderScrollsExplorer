@@ -30,7 +30,23 @@ import javax.swing.table.TableRowSorter;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
+import com.gg.slider.SideBar;
+import com.gg.slider.SideBar.SideBarMode;
+import com.gg.slider.SidebarSection;
+
+import bsa.BSAFileSet;
+import bsa.source.BsaMeshSource;
+import bsa.source.BsaSoundSource;
+import bsa.source.BsaTextureSource;
+import client.BootStrap;
+import common.config.ConfigLoader;
+import esmj3d.j3d.BethRenderSettings;
+import esmmanager.common.PluginException;
+import esmmanager.common.data.plugin.PluginRecord;
+import esmmanager.loader.ESMManager;
+import esmmanager.loader.IESMManager;
 import nativeLinker.LWJGLLinker;
+import nif.BgsmSource;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
 import scrollsexplorer.simpleclient.settings.GraphicsSettingsPanel;
@@ -50,22 +66,6 @@ import utils.source.file.FileMediaRoots;
 import utils.source.file.FileMeshSource;
 import utils.source.file.FileSoundSource;
 import utils.source.file.FileTextureSource;
-import bsa.BSAFileSet;
-import bsa.source.BsaMeshSource;
-import bsa.source.BsaSoundSource;
-import bsa.source.BsaTextureSource;
-import client.BootStrap;
-
-import com.gg.slider.SideBar;
-import com.gg.slider.SideBar.SideBarMode;
-import com.gg.slider.SidebarSection;
-
-import common.config.ConfigLoader;
-import esmj3d.j3d.BethRenderSettings;
-import esmmanager.common.PluginException;
-import esmmanager.common.data.plugin.PluginRecord;
-import esmmanager.loader.ESMManager;
-import esmmanager.loader.IESMManager;
 
 public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener
 {
@@ -432,6 +432,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							textureSource = new FileTextureSource();
 							soundSource = new FileSoundSource();
 						}
+						
+						//Just for the crazy new fallout 4 system
+						BgsmSource.setBgsmSource(meshSource);
 
 						mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
