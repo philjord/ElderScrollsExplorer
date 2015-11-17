@@ -557,6 +557,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		//Arguments for goodness
 		//-Xmx1200m -Xms900m  -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -Dsun.java2d.noddraw=true
 		//-Dj3d.cacheAutoComputeBounds=true -Dj3d.sharedctx=true
+		//-Dj3d.stencilClear=true  -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -server -Djava.ext.dirs=.\none\
 
 		// some other interesting settings
 		//java -server -XX:CompileThreshold=2 -XX:+AggressiveOpts -XX:+UseFastAccessorMethods
