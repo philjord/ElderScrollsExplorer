@@ -19,6 +19,9 @@ To use this code you must have copies of the .esm and .bsa files from one (or mo
 
 * Skyrim  
 
+* Fallout 4 (basic) 
+
+
 
 If you don't have those game files this code will not do much for you (except be fun to read).
 
