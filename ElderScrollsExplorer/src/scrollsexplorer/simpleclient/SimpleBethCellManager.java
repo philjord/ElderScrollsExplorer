@@ -16,6 +16,7 @@ import scrollsexplorer.simpleclient.scenegraph.SimpleSky;
 import tools3d.navigation.AvatarLocation;
 import utils.source.MediaSources;
 import esmj3d.data.shared.subrecords.LString;
+import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dRECODynInst;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
@@ -259,6 +260,12 @@ public class SimpleBethCellManager implements InstRECOStore
 							PluginRecord cell = esmManager.getWRLD(currentCellFormId);
 							if (cell != null)
 							{
+								// outside is light
+								BethRenderSettings.setGlobalAmbLightLevel(50f / 100f);
+								simpleWalkSetup.setGlobalAmbLightLevel(50f / 100f);
+								BethRenderSettings.setGlobalDirLightLevel(75 / 100f);
+								simpleWalkSetup.setGlobalDirLightLevel(75 / 100f);
+								
 								currentBethWorldVisualBranch = new BethWorldVisualBranch(currentCellFormId, j3dCellFactory);
 								if (avatarLocation != null)
 								{
@@ -280,6 +287,10 @@ public class SimpleBethCellManager implements InstRECOStore
 							else
 							{
 								//must be interior?
+								// inside is dim
+								BethRenderSettings.setGlobalAmbLightLevel(30f / 100f);
+								simpleWalkSetup.setGlobalAmbLightLevel(15f / 100f);
+								
 								cell = esmManager.getInteriorCELL(currentCellFormId);
 								if (cell != null)
 								{
