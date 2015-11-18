@@ -59,6 +59,7 @@
         <javaElement handleIdentifier="=BSAManager/src"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiLight.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiTransformData.java"/>
+        <javaElement handleIdentifier="=jnif/src&lt;nif.niobject.bgsm"/>
         <javaElement handleIdentifier="=esmj3dfo3/src"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiPhysXTransformDest.java"/>
         <javaElement handleIdentifier="=jnif/src&lt;nif.niobject{NiMaterialProperty.java"/>
