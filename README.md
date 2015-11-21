@@ -87,29 +87,27 @@ Doors will teleport you to other cells if appropriate
 
 ####It does not have:  
 
-An avatar for your charater  
+- An avatar for your charater  
 
-AI of any sort for NPCs/CREAs 
+- AI of any sort for NPCs/CREAs 
 
-A decent interface  
+- Any game play elements  
 
-An inventory or any game play elements  
+- A decent interface  
 
-DLC content is not loaded  
+- DLC content is not loaded  
 
-BSA loading priority  
+- BSA loading priority  
 
-Sounds running properly  
+- Sounds running properly  
 
-ESM scripts ( so script based objects will probably always appear)  
+- Shadows  
 
-Shadows  
+- Game time  
 
-Game time  
+- A decent sky  
 
-A decent sky  
-
-Proper water surface  
+- Proper water surface  (it has water shaders that make it wobble)
 
 
  
@@ -118,77 +116,38 @@ Proper water surface
 
  
 
-Download eclipse IDE http://www.eclipse.org/downloads/  
-
-Unzip it (not into program files)  
-
-Install JDK 1.6 into eclipse http://www.oracle.com/technetwork/java/javase/downloads/index.html  
-JDK 1.7+ cause crashes on graphics setting changes therefore 1.6 is nicer.
-
-Get the code for the projects below into your workspace (a new workspace is probably cleanest)
-
-https://github.com/philjord/tools  
-
-https://github.com/philjord/3DTools  
-
-https://github.com/philjord/BSAManager  
-
-https://github.com/philjord/ESMManager
-
-https://github.com/philjord/jnif  
-
-https://github.com/philjord/jnifj3d  
-
-https://github.com/philjord/jbullet1.1 
-
-https://github.com/philjord/jnifjbullet  
-
-https://github.com/philjord/esmj3d  
-
-https://github.com/philjord/esmj3dfo3  
-
-https://github.com/philjord/esmj3dtes3
-
-https://github.com/philjord/esmj3dtes4 
-
-https://github.com/philjord/esmj3dtes5
-
-https://github.com/philjord/ElderScrollsExplorer 
-
-https://github.com/philjord/external_jars
-
-
-####The easiest way to get this code into eclipse is to:
-
-Open Eclipse
-
-Open the Git Repositories View (Window->Show View->Other->Team->Git Repositories)
-
-For each project listed above
-
-1. Click the URL
-2. Click the "copy to clipboard" button (found below "HTTPS clone URL" on the lower right)
-3. Switch to Ecipse 
-4. In the Git Repositories View click the "Clone a Git Repository" button in the upper right (blue curved arrow)
-5. It will auto fill from the clipboard
+1. Download eclipse IDE http://www.eclipse.org/downloads/  
+2. 2. Install it (It is not recomended to install under program files)  
+3. Make sure you have java installed, 1.6+
+4. Open eclipse and choose a workspace location
+5. Change to the workbench and open the Java view.
+6. Open the Git Repositories View (Window->Show View->Other->Team->Git Repositories)
+7. Click the "Clone a Git Repository" button in the upper right corner (blue curved arrow over a yellow barrel)
+8. Cut and paste the text below into the top field 
+https://github.com/philjord/ElderScrollsExplorer.git
 6. Click Next (no login info required)
 7. Click Next (leave master branch ticked)
-8. Change working directory if you wish and click Finish
+8. Change working directory if you wish 
+9. Ensure import all existing Eclipse Projects is ticked on
+10. Click Finish
+11. Wait for it to be pulled and imported
+12. In the project Explorer window right click the new project and select Import
+13. Select Team -> Team Project Set
+14. Tick File and browse to the projectSet.psf file in the root of the new project
+15. Click Finish
 
-
-You may have to fix up dependancies at this point or do other minor corrections based on your setup...
-
+Everything you need (apart from game data files) in now present
 All the required 3rd party library jars are in the project external_jars
 
-You are best off to set the workspace JRE to 1.6 to avoid graphics settings change crashes.
+
+###To run as a java application
 
 The Jbullet (http://jbullet.advel.cz) is an amazingly optomised project (that is very cool in it's own right). In order for it to compile you must right click the "build.xml" file in the root of the project and "Run As.." ->"Ant Build"
 
 It should output something about Instrumenting Stack
 
-Each time you clean the workspace you will need to repeat this, or put the jbullet1.1 output into a jar file.
+Each time you clean the workspace you will need to repeat this(Or put the jbullet1.1 output into a jar file and include it)
 
-###To run as a java application
 
 1. Go to Run->Run Configurations...
 
@@ -200,11 +159,17 @@ Each time you clean the workspace you will need to repeat this, or put the jbull
 
 5. For Main class use scrollsexplorer.ScrollsExplorer
 
-6. On Arguments tab-> VM arguments  
+6. On Arguments tab-> VM arguments cut and paste the ext below 
 -Xmx2400m -Xms1200m -Dj3d.cacheAutoComputeBounds=true -Dsun.java2d.noddraw=true -Dj3d.sharedctx=true -Dj3d.stencilClear=true  -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -server -Djava.ext.dirs=.\none\ 
 
 7. Click Run 
 
+
+
+###Once it runs properly
+Install JDK 1.6 into eclipse http://www.oracle.com/technetwork/java/javase/downloads/index.html  
+JDK 1.7+ cause crashes on graphics setting changes therefore 1.6 is nicer.
+You are best off to set the workspace JRE to 1.6 to avoid graphics settings change crashes.
 
 ####Troubles
 If you get Unsupported major.minor version 51.0  
