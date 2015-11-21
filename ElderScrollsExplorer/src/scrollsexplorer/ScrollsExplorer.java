@@ -555,7 +555,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		System.out.println("VERSION: " + versionString);
 		System.err.println("VERSION: " + versionString);
 
-		//jogl recomends for non phones 
+		//jogl recommends for non phones 
 		System.setProperty("jogl.disable.opengles", "true");
 		System.setProperty("sun.awt.noerasebackground", "true");
 
