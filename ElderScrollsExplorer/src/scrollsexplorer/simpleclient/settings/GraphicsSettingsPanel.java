@@ -16,9 +16,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import esmj3d.j3d.BethRenderSettings;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
 import tools.swing.VerticalFlowLayout;
-import esmj3d.j3d.BethRenderSettings;
 
 /**
  * @author Administrator
@@ -54,6 +54,8 @@ public class GraphicsSettingsPanel extends JPanel
 
 	private JCheckBox enablePhysicsTick = new JCheckBox("Enable Physics", true);
 
+	private JCheckBox flipParentEnableDefaultTick = new JCheckBox("Flip Parent Enable Default", BethRenderSettings.isFlipParentEnableDefault());
+
 	private SimpleWalkSetup simpleWalkSetup;
 
 	public GraphicsSettingsPanel(SimpleWalkSetup _simpleWalkSetup)
@@ -73,8 +75,7 @@ public class GraphicsSettingsPanel extends JPanel
 		bpan.add(highSettings);
 		add(bpan);
 
-		lowSettings.addActionListener(new ActionListener()
-		{
+		lowSettings.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -86,8 +87,7 @@ public class GraphicsSettingsPanel extends JPanel
 				objectFade.setValue(50);
 			}
 		});
-		medSettings.addActionListener(new ActionListener()
-		{
+		medSettings.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -99,8 +99,7 @@ public class GraphicsSettingsPanel extends JPanel
 				objectFade.setValue(100);
 			}
 		});
-		highSettings.addActionListener(new ActionListener()
-		{
+		highSettings.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -118,8 +117,7 @@ public class GraphicsSettingsPanel extends JPanel
 		FAR_LOAD_DISTSlider.setPaintTicks(true);
 		FAR_LOAD_DISTSlider.setPaintLabels(true);
 		add(FAR_LOAD_DISTSlider);
-		FAR_LOAD_DISTSlider.addChangeListener(new ChangeListener()
-		{
+		FAR_LOAD_DISTSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setFarLoadGridCount(FAR_LOAD_DISTSlider.getValue());
@@ -131,8 +129,7 @@ public class GraphicsSettingsPanel extends JPanel
 		NEAR_LOAD_DISTSlider.setPaintTicks(true);
 		NEAR_LOAD_DISTSlider.setPaintLabels(true);
 		add(NEAR_LOAD_DISTSlider);
-		NEAR_LOAD_DISTSlider.addChangeListener(new ChangeListener()
-		{
+		NEAR_LOAD_DISTSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setNearLoadGridCount(NEAR_LOAD_DISTSlider.getValue());
@@ -144,8 +141,7 @@ public class GraphicsSettingsPanel extends JPanel
 		LOD_LOAD_DIST_MAXSlider.setPaintTicks(true);
 		LOD_LOAD_DIST_MAXSlider.setPaintLabels(true);
 		add(LOD_LOAD_DIST_MAXSlider);
-		LOD_LOAD_DIST_MAXSlider.addChangeListener(new ChangeListener()
-		{
+		LOD_LOAD_DIST_MAXSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setLOD_LOAD_DIST_MAX(LOD_LOAD_DIST_MAXSlider.getValue());
@@ -157,8 +153,7 @@ public class GraphicsSettingsPanel extends JPanel
 		actorFade.setPaintTicks(true);
 		actorFade.setPaintLabels(true);
 		add(actorFade);
-		actorFade.addChangeListener(new ChangeListener()
-		{
+		actorFade.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setActorFade(actorFade.getValue());
@@ -169,8 +164,7 @@ public class GraphicsSettingsPanel extends JPanel
 		itemFade.setPaintTicks(true);
 		itemFade.setPaintLabels(true);
 		add(itemFade);
-		itemFade.addChangeListener(new ChangeListener()
-		{
+		itemFade.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setItemFade(itemFade.getValue());
@@ -181,8 +175,7 @@ public class GraphicsSettingsPanel extends JPanel
 		objectFade.setPaintTicks(true);
 		objectFade.setPaintLabels(true);
 		add(objectFade);
-		objectFade.addChangeListener(new ChangeListener()
-		{
+		objectFade.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setObjectFade(objectFade.getValue());
@@ -190,8 +183,7 @@ public class GraphicsSettingsPanel extends JPanel
 		});
 
 		add(showPhysicTick);
-		showPhysicTick.addActionListener(new ActionListener()
-		{
+		showPhysicTick.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -199,8 +191,7 @@ public class GraphicsSettingsPanel extends JPanel
 			}
 		});
 		add(showEditorMarkers);
-		showEditorMarkers.addActionListener(new ActionListener()
-		{
+		showEditorMarkers.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -208,8 +199,7 @@ public class GraphicsSettingsPanel extends JPanel
 			}
 		});
 		add(showDistantBuildingsTick);
-		showDistantBuildingsTick.addActionListener(new ActionListener()
-		{
+		showDistantBuildingsTick.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -217,8 +207,7 @@ public class GraphicsSettingsPanel extends JPanel
 			}
 		});
 		add(showDistantTreesTick);
-		showDistantTreesTick.addActionListener(new ActionListener()
-		{
+		showDistantTreesTick.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -227,12 +216,20 @@ public class GraphicsSettingsPanel extends JPanel
 		});
 
 		add(enablePhysicsTick);
-		enablePhysicsTick.addActionListener(new ActionListener()
-		{
+		enablePhysicsTick.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
 				simpleWalkSetup.setPhysicsEnabled(enablePhysicsTick.isSelected());
+			}
+		});
+
+		add(flipParentEnableDefaultTick);
+		flipParentEnableDefaultTick.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				BethRenderSettings.setFlipParentEnableDefault(flipParentEnableDefaultTick.isSelected());
 			}
 		});
 
