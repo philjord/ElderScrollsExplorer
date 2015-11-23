@@ -112,9 +112,10 @@ Doors will teleport you to other cells if appropriate
 
  
 
-###To build the code you must:  
+###To build the code:  
 
- 
+The example below has been tested on windows, though it should work the same on any platform.
+Note if you are already developing with Java and Eclipse, start with step 6 but I recomend you open a new workspace as there is a lot of code involved.
 
 1. Download eclipse IDE http://www.eclipse.org/downloads/  
 2. 2. Install it (It is not recomended to install under program files)  
