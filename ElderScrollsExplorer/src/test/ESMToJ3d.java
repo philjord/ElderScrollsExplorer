@@ -1,4 +1,4 @@
-package scrollsexplorer;
+package test;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,8 +17,7 @@ import esmmanager.loader.IESMManager;
 
 public class ESMToJ3d
 {
-	public static BranchGroup makeBGWRLDExtBlockCELL(ESMManager esmManager, int cellType, int wrldFormId, int x, int y, boolean makePhys,
-			MediaSources mediaSources)
+	public static BranchGroup makeBGWRLDExtBlockCELL(ESMManager esmManager, int cellType, int wrldFormId, int x, int y, boolean makePhys, MediaSources mediaSources)
 	{
 
 		int formId = esmManager.getWRLDExtBlockCELLId(wrldFormId, x, y);
@@ -69,29 +68,25 @@ public class ESMToJ3d
 					{
 						if (esmManager.getName().equals("Skyrim.esm"))
 						{
-							return new esmj3dfo4.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), childRecords, makePhys,
-									mediaSources);
+							return new esmj3dtes5.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), -1, childRecords, makePhys, mediaSources);
 
 						}
 						else
 						{
-							return new esmj3dfo3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), childRecords, makePhys,
-									mediaSources);
+							return new esmj3dfo3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), -1, childRecords, makePhys, mediaSources);
 						}
 					}
 					else if (version == 1.32f)
 					{
-						return new esmj3dfo3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), childRecords, makePhys, mediaSources);
+						return new esmj3dfo3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), -1, childRecords, makePhys, mediaSources);
 					}
 					else if (version == 1.0f || version == 0.8f)
 					{
-						return new esmj3dtes4.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), childRecords, makePhys,
-								mediaSources);
+						return new esmj3dtes4.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), -1, childRecords, makePhys, mediaSources);
 					}
 					else if (version == 1.2f)
 					{
-						return new esmj3dtes3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), childRecords, makePhys,
-								mediaSources);
+						return new esmj3dtes3.j3d.cell.J3dCELLTemporary(esmManager, new Record(record), childRecords, makePhys, mediaSources);
 					}
 					else
 					{
@@ -105,29 +100,24 @@ public class ESMToJ3d
 					{
 						if (esmManager.getName().equals("Skyrim.esm"))
 						{
-							return new esmj3dfo4.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), childRecords, makePhys,
-									mediaSources);
+							return new esmj3dtes5.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), -1, childRecords, makePhys, mediaSources);
 						}
 						else
 						{
-							return new esmj3dfo3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), childRecords, makePhys,
-									mediaSources);
+							return new esmj3dfo3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), -1, childRecords, makePhys, mediaSources);
 						}
 					}
 					else if (version == 1.32f)
 					{
-						return new esmj3dfo3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), childRecords, makePhys,
-								mediaSources);
+						return new esmj3dfo3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), -1, childRecords, makePhys, mediaSources);
 					}
 					else if (version == 1.0f || version == 0.8f)
 					{
-						return new esmj3dtes4.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), childRecords, makePhys,
-								mediaSources);
+						return new esmj3dtes4.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), -1, childRecords, makePhys, mediaSources);
 					}
 					else if (version == 1.2f)
 					{
-						return new esmj3dtes3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), childRecords, makePhys,
-								mediaSources);
+						return new esmj3dtes3.j3d.cell.J3dCELLPersistent(null, esmManager, new Record(record), childRecords, makePhys, mediaSources);
 					}
 					else
 					{
