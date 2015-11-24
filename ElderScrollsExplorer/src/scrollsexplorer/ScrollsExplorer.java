@@ -328,7 +328,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		mainPanel.repaint();
 	}
 
-	private boolean hasESMAndBSAFiles(GameConfig gameConfig)
+	private static boolean hasESMAndBSAFiles(GameConfig gameConfig)
 	{
 		// check to ensure the esm file and at least one bsa file are in the folder
 		File checkEsm = new File(gameConfig.scrollsFolder, gameConfig.mainESMFile);
@@ -390,6 +390,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							autoLoadStartCell = true;
 							prevCellformid = selectedGameConfig.startCellId;
 						}
+						
+						//TODO: auto start is now on, good? 
+						autoLoadStartCell = true;
 
 						new EsmSoundKeyToName(esmManager);
 						MeshSource meshSource;
@@ -498,7 +501,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 						if (autoLoadStartCell)
 						{
-							display(selectedGameConfig.startCellId);
+							display(prevCellformid);
 						}
 					}
 					else
