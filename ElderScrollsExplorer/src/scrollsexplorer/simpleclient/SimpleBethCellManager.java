@@ -380,6 +380,7 @@ public class SimpleBethCellManager implements InstRECOStore
 
 	public void showLoadScreen()
 	{
+		System.out.println("showing load screen");
 		simpleSky.setShowSky(false);
 		loadScreen.setShowLoadScreen(true);
 	}

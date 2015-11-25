@@ -71,10 +71,10 @@ import com.sun.j3d.utils.universe.ViewingPlatform;
 import esmj3d.j3d.BethRenderSettings;
 
 /**
- * A class to pull teh keyboard nav, bullet phys, nif displayable, canvas2d3d overlays, 
+ * A class to pull the keyboard nav, bullet phys, nif displayable, canvas2d3d overlays, 
  * physics display together, 
  * 
- * but no particular way to load nifs,esm,comms or anything else
+ * but no particular way to load nifs, esm, comms or anything else
  * 
  * @author philip
  *
@@ -149,8 +149,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private DirectionalLight dirLight = null;
 
-	private ComponentAdapter canvasResizeListener = new ComponentAdapter()
-	{
+	private ComponentAdapter canvasResizeListener = new ComponentAdapter() {
 		@Override
 		public void componentResized(ComponentEvent e)
 		{
@@ -167,8 +166,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	//Can't use as threading causes massive trouble for scene loading
 	//	private StructureUpdateBehavior structureUpdateBehavior;
 
-	private NbccProvider nbccProvider = new NbccProvider()
-	{
+	private NbccProvider nbccProvider = new NbccProvider() {
 		@Override
 		public NBControlledChar getNBControlledChar()
 		{
@@ -181,7 +179,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private ExitDialogPane3D exitDialogPane3D;
 
-	//We are nolonger in simple walk set up now!!!!
+	//We are no longer in simple walk set up now!!!!
 	private SimpleInventorySystem simpleInventorySystem;
 
 	public SimpleWalkSetup(String frameName)
@@ -247,7 +245,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		// dont' start mouse locked as its a pain
 		//mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
 
-		//add jump key and vis/phy toggle key listenres for fun ************************
+		//add jump key and vis/phy toggle key listeners for fun ************************
 		jumpKeyListener = new JumpKeyListener(nbccProvider);
 
 		//some hud gear
@@ -271,8 +269,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		warpPanel.setLayout(new FlowLayout());
 		warpPanel.add(warpField);
 		warpField.setSize(200, 20);
-		ActionListener warpActionListener = new ActionListener()
-		{
+		ActionListener warpActionListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -297,8 +294,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		universe.addToBehaviorBranch(behaviourBranch);
 
 		// Add a ShaderErrorListener
-		universe.addShaderErrorListener(new ShaderErrorListener()
-		{
+		universe.addShaderErrorListener(new ShaderErrorListener() {
 			public void errorOccurred(ShaderError error)
 			{
 				error.printVerbose();
@@ -309,8 +305,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		//Panel3D gear
 		fullScreenPanel3D = new Panel3D();
 		exitDialogPane3D = new ExitDialogPane3D(fullScreenPanel3D);
-		exitDialogPane3D.addActionListener(new ActionListener()
-		{
+		exitDialogPane3D.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -331,8 +326,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		});
 
 		simpleInventorySystem = new SimpleInventorySystem(fullScreenPanel3D);
-		simpleInventorySystem.addComponentListener(new ComponentAdapter()
-		{
+		simpleInventorySystem.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e)
 			{
@@ -422,13 +416,14 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		//hudPhysicsState.setHudPhysicsStateData(physicsSystem);
 
-		//cameraPanel.startRendering();//JRE7 crash bug work around, doesn't work some times:(
-		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
-				true, false, true);
+		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false, true,
+				false, true);
 		if (gs != null)
 		{
 			setupGraphicsSetting(gs);
 		}
+		
+		cameraPanel.startRendering();
 
 	}
 
@@ -459,7 +454,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 					hudPos.removeFromCanvas(canvas3D2D);
 					hudcompass.removeFromCanvas(canvas3D2D);
 					hudPhysicsState.removeFromCanvas(canvas3D2D);
-
+			
 					frame.getContentPane().remove((JPanel) cameraPanel);
 				}*/
 
@@ -519,8 +514,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 			//Panel3D gear
 			fullScreenPanel3D.setConfig(canvas3D2D);
-			exitDialogPane3D.setLocation((canvas3D2D.getWidth() / 2) - (exitDialogPane3D.getWidth() / 2), (canvas3D2D.getHeight() / 2)
-					- (exitDialogPane3D.getHeight() / 2));
+			exitDialogPane3D.setLocation((canvas3D2D.getWidth() / 2) - (exitDialogPane3D.getWidth() / 2),
+					(canvas3D2D.getHeight() / 2) - (exitDialogPane3D.getHeight() / 2));
 
 			//allow tab for mouse lock
 			canvas3D2D.setFocusTraversalKeysEnabled(false);
@@ -543,9 +538,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	public void resetGraphicsSetting()
 	{
-		//RAISE_BUG: java 1.7+ can't reuse a frame or teh generic video driver is used on teh second 
-		//glContext.makeCurrent call in the pipeline in createNewCOntext
-
 		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
 				false, true, true);
 		if (gs != null)
@@ -575,7 +567,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				cameraAdminMouseOverHandler.setConfig(null);
 				physicsSystem.pause();
 				//frame.setVisible(false);
-				//cameraPanel.stopRendering();// this kills the J3d stuff like changin the resolution
+				//cameraPanel.stopRendering();// this kills the J3d stuff like removeNotify did
 			}
 			enabled = enable;
 		}
@@ -719,7 +711,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		{
 			mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
 
-			// always clear teh tab message regardless
+			// always clear the tab message regardless
 			if (firstInstruction != null)
 			{
 				firstInstruction.removeFromCanvas();

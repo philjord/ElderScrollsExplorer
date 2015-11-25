@@ -213,7 +213,7 @@ public class ESMBSAExporter extends JFrame
 	private void setFolders()
 	{
 		SetBethFoldersDialog setBethFoldersDialog = new SetBethFoldersDialog(this);
-		setBethFoldersDialog.setSize(300, 250);
+		setBethFoldersDialog.setSize(300, 400);
 		setBethFoldersDialog.setVisible(true);
 		enableButtons();
 	}

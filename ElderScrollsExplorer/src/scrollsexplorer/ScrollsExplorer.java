@@ -49,6 +49,7 @@ import nativeLinker.LWJGLLinker;
 import nif.BgsmSource;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
+import scrollsexplorer.simpleclient.settings.GeneralSettingsPanel;
 import scrollsexplorer.simpleclient.settings.GraphicsSettingsPanel;
 import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
 import scrollsexplorer.simpleclient.settings.ShowOutlinesPanel;
@@ -80,6 +81,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private GraphicsSettingsPanel graphicsSettingsPanel;
 
 	private ShowOutlinesPanel showOutlinesPanel;
+
+	private GeneralSettingsPanel generalSettingsPanel;
 
 	private DefaultTableModel tableModel;
 
@@ -116,6 +119,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private UserGuideDisplay ugd = new UserGuideDisplay();
 
 	private Preferences prefs;
+
+	private boolean autoLoadStartCell = true;
 
 	public ScrollsExplorer()
 	{
@@ -222,8 +227,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 			simpleBethCellManager = new SimpleBethCellManager(simpleWalkSetup);
 
-			graphicsSettingsPanel = new GraphicsSettingsPanel(simpleWalkSetup);
+			graphicsSettingsPanel = new GraphicsSettingsPanel();
 			showOutlinesPanel = new ShowOutlinesPanel(simpleWalkSetup);
+			generalSettingsPanel = new GeneralSettingsPanel(this);
 			BethRenderSettings.addUpdateListener(this);
 
 			this.getContentPane().invalidate();
@@ -238,10 +244,12 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			//sideBar.addSection(ss1);
 			SidebarSection ss2 = new SidebarSection(sideBar, "Avartar", quickEdit, null);
 			sideBar.addSection(ss2);
-			SidebarSection ss3 = new SidebarSection(sideBar, "Graphics", graphicsSettingsPanel, null);
+			SidebarSection ss3 = new SidebarSection(sideBar, "General", generalSettingsPanel, null);
 			sideBar.addSection(ss3);
-			SidebarSection ss4 = new SidebarSection(sideBar, "Outlines", showOutlinesPanel, null);
+			SidebarSection ss4 = new SidebarSection(sideBar, "Graphics", graphicsSettingsPanel, null);
 			sideBar.addSection(ss4);
+			SidebarSection ss5 = new SidebarSection(sideBar, "Outlines", showOutlinesPanel, null);
+			sideBar.addSection(ss5);
 
 			this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 			this.getContentPane().add(sideBar, BorderLayout.WEST);
@@ -262,7 +270,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				}
 			});
 			setVisible(true);// need to be visible in case of set folders
-			// MY system for guaranteee rendering of a component (test this)
+			// My system for guarantees rendering of a component (test this)
 			this.setFont(this.getFont());
 			enableButtons();
 
@@ -284,8 +292,10 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	{
 		if (esmManager != null)
 		{
-			PropertyLoader.properties.setProperty("YawPitch" + esmManager.getName(), new YawPitch(simpleWalkSetup.getAvatarLocation().getTransform()).toString());
-			PropertyLoader.properties.setProperty("Trans" + esmManager.getName(), "" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));
+			PropertyLoader.properties.setProperty("YawPitch" + esmManager.getName(),
+					new YawPitch(simpleWalkSetup.getAvatarLocation().getTransform()).toString());
+			PropertyLoader.properties.setProperty("Trans" + esmManager.getName(),
+					"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));
 			PropertyLoader.properties.setProperty("CellId" + esmManager.getName(), "" + simpleBethCellManager.getCurrentCellFormId());
 		}
 		PropertyLoader.save();
@@ -299,7 +309,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private void setFolders()
 	{
 		SetBethFoldersDialog setBethFoldersDialog = new SetBethFoldersDialog(this);
-		setBethFoldersDialog.setSize(400, 350);
+		setBethFoldersDialog.setSize(400, 400);
 		setBethFoldersDialog.setVisible(true);
 		enableButtons();
 	}
@@ -379,20 +389,17 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					bsaFileSet = null;
 					if (esmManager != null)
 					{
-						YawPitch yp = YawPitch.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), new YawPitch().toString()));
-						Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(), selectedGameConfig.startLocation.toString()));
+						YawPitch yp = YawPitch
+								.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), new YawPitch().toString()));
+						Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
+								selectedGameConfig.startLocation.toString()));
 						int prevCellformid = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
 						simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
 
-						boolean autoLoadStartCell = false;
 						if (prevCellformid == -1)
 						{
-							autoLoadStartCell = true;
 							prevCellformid = selectedGameConfig.startCellId;
 						}
-						
-						//TODO: auto start is now on, good? 
-						autoLoadStartCell = true;
 
 						new EsmSoundKeyToName(esmManager);
 						MeshSource meshSource;
@@ -403,12 +410,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						{
 							if (bsaFileSet == null)
 							{
-								bsaFileSet = new BSAFileSet(new String[] { selectedGameConfig.scrollsFolder }, cbLoadAllMenuItem.isSelected(), false);
+								bsaFileSet = new BSAFileSet(new String[] { selectedGameConfig.scrollsFolder },
+										cbLoadAllMenuItem.isSelected(), false);
 							}
 
 							if (bsaFileSet.size() == 0)
 							{
-								JOptionPane.showMessageDialog(ScrollsExplorer.this, selectedGameConfig.scrollsFolder + " contains no *.bsa files nothing can be loaded");
+								JOptionPane.showMessageDialog(ScrollsExplorer.this,
+										selectedGameConfig.scrollsFolder + " contains no *.bsa files nothing can be loaded");
 								setFolders();
 								ScrollsExplorer.dashboard.setEsmLoading(-1);
 								return;
@@ -506,7 +515,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					}
 					else
 					{
-						JOptionPane.showMessageDialog(ScrollsExplorer.this, selectedGameConfig.mainESMFile + " is not in folder set for game " + selectedGameConfig.gameName);
+						JOptionPane.showMessageDialog(ScrollsExplorer.this,
+								selectedGameConfig.mainESMFile + " is not in folder set for game " + selectedGameConfig.gameName);
 						setFolders();
 					}
 					mainPanel.validate();
@@ -527,6 +537,26 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		Vector3f t = simpleWalkSetup.getAvatarLocation().get(new Vector3f());
 		Quat4f r = simpleWalkSetup.getAvatarLocation().get(new Quat4f());
 		simpleBethCellManager.setCurrentCellFormId(cellformid, t, r);
+	}
+
+	public boolean isAutoLoadStartCell()
+	{
+		return autoLoadStartCell;
+	}
+
+	public void setAutoLoadStartCell(boolean autoLoadStartCell)
+	{
+		this.autoLoadStartCell = autoLoadStartCell;
+	}
+
+	public SimpleBethCellManager getSimpleBethCellManager()
+	{
+		return simpleBethCellManager;
+	}
+
+	public SimpleWalkSetup getSimpleWalkSetup()
+	{
+		return simpleWalkSetup;
 	}
 
 	private static void setDebug(boolean b)

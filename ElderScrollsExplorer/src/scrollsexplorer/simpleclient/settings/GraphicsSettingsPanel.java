@@ -17,7 +17,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import esmj3d.j3d.BethRenderSettings;
-import scrollsexplorer.simpleclient.SimpleWalkSetup;
 import tools.swing.VerticalFlowLayout;
 
 /**
@@ -52,15 +51,11 @@ public class GraphicsSettingsPanel extends JPanel
 
 	private JCheckBox showDistantTreesTick = new JCheckBox("Distant Trees", BethRenderSettings.isShowDistantTrees());
 
-	private JCheckBox enablePhysicsTick = new JCheckBox("Enable Physics", true);
+	private JCheckBox flipParentEnableDefaultTick = new JCheckBox("Flip Parent Enable Default",
+			BethRenderSettings.isFlipParentEnableDefault());
 
-	private JCheckBox flipParentEnableDefaultTick = new JCheckBox("Flip Parent Enable Default", BethRenderSettings.isFlipParentEnableDefault());
-
-	private SimpleWalkSetup simpleWalkSetup;
-
-	public GraphicsSettingsPanel(SimpleWalkSetup _simpleWalkSetup)
+	public GraphicsSettingsPanel()
 	{
-		this.simpleWalkSetup = _simpleWalkSetup;
 		//this.setLayout(new GridLayout2(-1, 3));
 		this.setLayout(new VerticalFlowLayout());
 
@@ -212,15 +207,6 @@ public class GraphicsSettingsPanel extends JPanel
 			public void actionPerformed(ActionEvent arg0)
 			{
 				BethRenderSettings.setShowDistantTrees(showDistantTreesTick.isSelected());
-			}
-		});
-
-		add(enablePhysicsTick);
-		enablePhysicsTick.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				simpleWalkSetup.setPhysicsEnabled(enablePhysicsTick.isSelected());
 			}
 		});
 
