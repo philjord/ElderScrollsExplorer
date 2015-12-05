@@ -417,7 +417,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		//hudPhysicsState.setHudPhysicsStateData(physicsSystem);
 
 		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false, true,
-				false, true);
+				false, false);
 		if (gs != null)
 		{
 			setupGraphicsSetting(gs);
@@ -539,7 +539,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	public void resetGraphicsSetting()
 	{
 		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
-				false, true, true);
+				false, true, false);
 		if (gs != null)
 		{
 			setupGraphicsSetting(gs);
