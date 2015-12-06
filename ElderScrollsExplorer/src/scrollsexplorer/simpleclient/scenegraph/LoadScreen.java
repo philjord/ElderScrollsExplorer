@@ -62,10 +62,11 @@ public class LoadScreen extends BranchGroup
 
 			currentLoadScreenBG.addChild(currentLoadScreenTG);
 
-			if (!loadScene(gameConfig.loadScreen))
-
+			if (loadScene(gameConfig.loadScreen))
+			{
 				//TODO: note not on strucutre behavior, trouble?
-				addChild(currentLoadScreenBG);
+				addChild(currentLoadScreenBG);				
+			}
 		}
 
 	}
@@ -85,10 +86,12 @@ public class LoadScreen extends BranchGroup
 					if (nif.getVisualRoot().getJ3dNiControllerManager() != null)
 					{
 						//note self cleaning uping
-						ControllerInvokerThread controllerInvokerThread = new ControllerInvokerThread(nif.getVisualRoot().getName(), nif
-								.getVisualRoot().getJ3dNiControllerManager(), null);
+						ControllerInvokerThread controllerInvokerThread = new ControllerInvokerThread(nif.getVisualRoot().getName(),
+								nif.getVisualRoot().getJ3dNiControllerManager(), null);
 						controllerInvokerThread.start();
 					}
+					
+					currentLoadScreenTG.addChild(j3dNiAVObject);
 					return true;
 				}
 			}
