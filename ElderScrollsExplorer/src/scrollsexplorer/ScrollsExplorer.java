@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -311,7 +313,30 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		SetBethFoldersDialog setBethFoldersDialog = new SetBethFoldersDialog(this);
 		setBethFoldersDialog.setSize(400, 400);
 		setBethFoldersDialog.setVisible(true);
-		enableButtons();
+		setBethFoldersDialog.addComponentListener(new ComponentListener() {
+
+			@Override
+			public void componentResized(ComponentEvent e)
+			{				
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent e)
+			{
+			}
+
+			@Override
+			public void componentShown(ComponentEvent e)
+			{
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent e)
+			{
+				enableButtons();				
+			}
+		});
+		
 	}
 
 	private void enableButtons()
