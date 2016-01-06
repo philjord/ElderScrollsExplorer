@@ -11,7 +11,7 @@ public class BootStrap extends GeneralBootStrap
 
 	public static int MAJOR_VERSION = 2;
 
-	public static int MINOR_VERSION = 29;
+	public static int MINOR_VERSION = 31;
 
 	private static String downloadLocation = "https://sourceforge.net/projects/elderscrollsexplorer/files/latest/download";
 
