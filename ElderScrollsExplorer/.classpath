@@ -26,7 +26,7 @@
 	<classpathentry kind="lib" path="/external_jars/external jars/jftp.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/commons-net-3.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dfo4"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/java3d-utils"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/java3d-utils-and"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/vecmath"/>
 	<classpathentry kind="output" path="output"/>
 </classpath>
