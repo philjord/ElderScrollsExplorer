@@ -272,7 +272,7 @@ public class ESMTest
 		bg.addChild(transformGroup);
 		bg.addChild(ambLight);
 
-		MouseRotate mr = new MouseRotate(transformGroup);
+		MouseRotate mr = new MouseRotate(universe.getCanvas(), transformGroup);
 		mr.setSchedulingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.POSITIVE_INFINITY));
 		mr.setEnable(true);
 		bg.addChild(mr);
