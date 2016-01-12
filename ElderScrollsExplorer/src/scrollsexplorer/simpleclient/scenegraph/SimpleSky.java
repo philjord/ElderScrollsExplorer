@@ -3,21 +3,19 @@ package scrollsexplorer.simpleclient.scenegraph;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Background;
 import javax.media.j3d.BranchGroup;
-import javax.media.j3d.Geometry;
 import javax.media.j3d.GeometryArray;
 import javax.media.j3d.Group;
 import javax.media.j3d.J3DBuffer;
-import javax.media.j3d.QuadArray;
 import javax.media.j3d.RenderingAttributes;
 import javax.media.j3d.Texture;
 import javax.media.j3d.TriangleStripArray;
 
+import com.sun.j3d.utils.geometry.Primitive;
+import com.sun.j3d.utils.geometry.Sphere;
+
 import scrollsexplorer.GameConfig;
 import tools3d.utils.Utils3D;
 import utils.source.TextureSource;
-
-import com.sun.j3d.utils.geometry.Primitive;
-import com.sun.j3d.utils.geometry.Sphere;
 
 public class SimpleSky extends BranchGroup
 {
