@@ -3,10 +3,14 @@ package scrollsexplorer.simpleclient.scenegraph;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Background;
 import javax.media.j3d.BranchGroup;
+import javax.media.j3d.GLSLShaderProgram;
 import javax.media.j3d.GeometryArray;
 import javax.media.j3d.Group;
 import javax.media.j3d.J3DBuffer;
 import javax.media.j3d.RenderingAttributes;
+import javax.media.j3d.Shader;
+import javax.media.j3d.ShaderAppearance;
+import javax.media.j3d.SourceCodeShader;
 import javax.media.j3d.Texture;
 import javax.media.j3d.TriangleStripArray;
 
@@ -50,7 +54,7 @@ public class SimpleSky extends BranchGroup
 		BranchGroup bgGeometry = new BranchGroup();
 
 		// create an appearance for the Sphere
-		Appearance app = new Appearance();
+		Appearance app = makeAppearance();
 
 		Texture tex = null;
 		// load a texture image 		
@@ -59,14 +63,13 @@ public class SimpleSky extends BranchGroup
 		// apply the texture to the Appearance
 		app.setTexture(tex);
 
-		app.setRenderingAttributes(new RenderingAttributes());
-
 		// create the Sphere geometry with radius 1.0.
 		// we tell the Sphere to generate texture coordinates
 		// to enable the texture image to be rendered
 		// and because we are *inside* the Sphere we have to generate 
 		// Normal coordinates inwards or the Sphere will not be visible.
-		Sphere sphere = new Sphere(1.0f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.GENERATE_NORMALS_INWARD, app);
+		Sphere sphere = new Sphere(1.0f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.GENERATE_NORMALS_INWARD,
+				app);
 
 		// start wiring everything together,
 
@@ -88,7 +91,7 @@ public class SimpleSky extends BranchGroup
 		newGeo.setTexCoordRefBuffer(0, new J3DBuffer(Utils3D.makeFloatBuffer(textcoords)));
 
 		sphere.getShape().setGeometry(newGeo);
-		
+
 		// add the Sphere to its parent BranchGroup.
 		bgGeometry.addChild(sphere);
 
@@ -142,5 +145,28 @@ public class SimpleSky extends BranchGroup
 			}
 		}
 
+	}
+
+	private static Appearance makeAppearance()
+	{
+		ShaderAppearance app = new ShaderAppearance();
+		app.setMaterial(null);
+		app.setRenderingAttributes(new RenderingAttributes());
+
+		String vertexProgram = "uniform mat4 glProjectionMatrix;uniform mat4 glModelViewMatrix;varying vec2 glTexCoord0;"
+				+ "void main( void ){gl_Position = glProjectionMatrix * glModelViewMatrix * gl_Vertex;glTexCoord0 = gl_MultiTexCoord0.st;}";
+		String fragmentProgram = "uniform sampler2D baseMap;" + //
+				"varying vec2 glTexCoord0;" + //
+				"void main( void ){	vec4 baseMapTex = texture2D( baseMap, glTexCoord0.st );" + //
+				"	gl_FragColor = baseMapTex;}";
+
+		Shader[] shaders = new Shader[2];
+		shaders[0] = new SourceCodeShader(Shader.SHADING_LANGUAGE_GLSL, Shader.SHADER_TYPE_VERTEX, vertexProgram);
+		shaders[1] = new SourceCodeShader(Shader.SHADING_LANGUAGE_GLSL, Shader.SHADER_TYPE_FRAGMENT, fragmentProgram);
+
+		GLSLShaderProgram shaderProgram = new GLSLShaderProgram();
+		shaderProgram.setShaders(shaders);
+		app.setShaderProgram(shaderProgram);
+		return app;
 	}
 }
