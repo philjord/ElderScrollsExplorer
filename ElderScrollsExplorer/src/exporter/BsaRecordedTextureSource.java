@@ -1,6 +1,5 @@
 package exporter;
 
-import java.awt.Image;
 import java.io.InputStream;
 import java.util.HashSet;
 
@@ -26,13 +25,7 @@ public class BsaRecordedTextureSource extends BsaTextureSource
 		return super.getTexture(texName);
 	}
 	
-	@Override
-	public Image getImage(String imageName)
-	{
-		requestedFiles.add(imageName);
-		return super.getImage(imageName);
-	}
-	
+
 	@Override
 	public InputStream getInputStream(String texName)
 	{

@@ -14,13 +14,13 @@ import nifbullet.cha.NifBulletChar;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools3d.mixed3d2d.Canvas3D2D;
-import tools3d.mixed3d2d.hud.hudelements.HUDText;
 import tools3d.utils.Utils3D;
 import utils.ESConfig;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
 import com.bulletphysics.dynamics.RigidBody;
 
+import awt.tools3d.mixed3d2d.hud.hudelements.HUDText;
 import esmj3d.data.shared.records.CommonREFR;
 import esmj3d.data.shared.records.GenericCONT;
 import esmj3d.data.shared.records.GenericDOOR;

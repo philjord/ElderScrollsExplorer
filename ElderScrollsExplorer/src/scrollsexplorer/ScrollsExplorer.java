@@ -264,6 +264,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				}
 			});
 
+			//FIXME: I need to listen to the GLWindow with a windowListener
 			simpleWalkSetup.getJFrame().addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosing(WindowEvent arg0)

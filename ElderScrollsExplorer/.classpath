@@ -21,12 +21,12 @@
 	<classpathentry kind="lib" path="/external_jars/external jars/jogamp/jar/joal.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/jogamp/jar/jogl-all.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jnif"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/java3d/1.6.0-pre12/j3dcore.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dtes3"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/jftp.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/commons-net-3.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dfo4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/java3d-utils-and"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/vecmath"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/java3d-core-and"/>
 	<classpathentry kind="output" path="output"/>
 </classpath>

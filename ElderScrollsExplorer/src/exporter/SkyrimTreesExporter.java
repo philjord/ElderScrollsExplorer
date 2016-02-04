@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
+import awt.tools3d.resolution.QueryProperties;
 import nif.NifToJ3d;
 import scrollsexplorer.PropertyLoader;
-import tools3d.resolution.QueryProperties;
 import utils.source.EsmSoundKeyToName;
 import utils.source.MediaSources;
 import bsa.BSAFileSet;

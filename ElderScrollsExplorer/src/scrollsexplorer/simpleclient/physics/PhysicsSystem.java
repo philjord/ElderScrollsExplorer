@@ -13,12 +13,12 @@ import scrollsexplorer.simpleclient.physics.PhysicsDynamics.PhysicsStatus;
 import tools.PendingList;
 import tools.clock.PeriodicThread;
 import tools.clock.PeriodicallyUpdated;
-import tools3d.mixed3d2d.hud.hudelements.HUDPhysicsState.HUDPhysicsStateData;
 import tools3d.navigation.AvatarCollisionInfo;
 import utils.source.MeshSource;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
 
+import awt.tools3d.mixed3d2d.hud.hudelements.HUDPhysicsState.HUDPhysicsStateData;
 import esmj3d.j3d.cell.GridSpace;
 import esmj3d.j3d.cell.J3dCELLGeneral;
 import esmj3d.j3d.j3drecords.inst.J3dRECOInst;

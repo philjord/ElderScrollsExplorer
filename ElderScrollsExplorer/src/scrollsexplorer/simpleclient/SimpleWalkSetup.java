@@ -7,8 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.util.prefs.Preferences;
 
@@ -31,7 +29,20 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
-import nifbullet.JumpKeyListener;
+import com.jogamp.newt.event.KeyEvent;
+import com.jogamp.newt.event.KeyListener;
+import com.sun.j3d.utils.universe.ViewingPlatform;
+
+import awt.tools3d.mixed3d2d.hud.hudelements.HUDCompass;
+import awt.tools3d.mixed3d2d.hud.hudelements.HUDCrossHair;
+import awt.tools3d.mixed3d2d.hud.hudelements.HUDFPSCounter;
+import awt.tools3d.mixed3d2d.hud.hudelements.HUDPosition;
+import awt.tools3d.mixed3d2d.hud.hudelements.HUDText;
+import awt.tools3d.mixed3d2d.overlay.swing.Panel3D;
+import awt.tools3d.mixed3d2d.overlay.swing.util.ExitDialogPane3D;
+import awt.tools3d.resolution.GraphicsSettings;
+import awt.tools3d.resolution.ScreenResolution;
+import esmj3d.j3d.BethRenderSettings;
 import nifbullet.NavigationProcessorBullet;
 import nifbullet.NavigationProcessorBullet.NbccProvider;
 import nifbullet.cha.NBControlledChar;
@@ -47,28 +58,15 @@ import tools3d.camera.HMDCameraPanel;
 import tools3d.camera.HeadCamDolly;
 import tools3d.camera.ICameraPanel;
 import tools3d.mixed3d2d.Canvas3D2D;
-import tools3d.mixed3d2d.hud.hudelements.HUDCompass;
-import tools3d.mixed3d2d.hud.hudelements.HUDCrossHair;
-import tools3d.mixed3d2d.hud.hudelements.HUDFPSCounter;
-import tools3d.mixed3d2d.hud.hudelements.HUDPosition;
-import tools3d.mixed3d2d.hud.hudelements.HUDText;
-import tools3d.mixed3d2d.overlay.swing.Panel3D;
-import tools3d.mixed3d2d.overlay.swing.util.ExitDialogPane3D;
 import tools3d.navigation.AvatarCollisionInfo;
 import tools3d.navigation.AvatarLocation;
-import tools3d.navigation.NavigationInputAWTKey;
-import tools3d.navigation.NavigationInputAWTMouseLocked;
+import tools3d.navigation.NavigationInputNewtKey;
+import tools3d.navigation.NavigationInputNewtMouseLocked;
 import tools3d.navigation.NavigationTemporalBehaviour;
 import tools3d.ovr.OculusException;
-import tools3d.resolution.GraphicsSettings;
-import tools3d.resolution.ScreenResolution;
 import tools3d.universe.VisualPhysicalUniverse;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 import utils.source.MeshSource;
-
-import com.sun.j3d.utils.universe.ViewingPlatform;
-
-import esmj3d.j3d.BethRenderSettings;
 
 /**
  * A class to pull the keyboard nav, bullet phys, nif displayable, canvas2d3d overlays, 
@@ -107,13 +105,13 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private AvatarCollisionInfo avatarCollisionInfo = new AvatarCollisionInfo(avatarLocation, 0.5f, 1.8f, 0.35f, 0.8f);
 
-	private NavigationInputAWTKey keyNavigationInputAWT;
+	private NavigationInputNewtKey keyNavigationInputNewt;
 
-	private NavigationInputAWTMouseLocked mouseInputListener;
+	private NavigationInputNewtMouseLocked newtMouseInputListener;
 
-	private JumpKeyListener jumpKeyListener;
+	private NewtJumpKeyListener jumpKeyListener;
 
-	private MiscKeyHandler miscKeyHandler = new MiscKeyHandler();
+	private NewtMiscKeyHandler newtMiscKeyHandler = new NewtMiscKeyHandler();
 
 	private boolean showHavok = false;
 
@@ -237,16 +235,19 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		behaviourBranch.addChild(navigationTemporalBehaviour);
 
 		//add mouse and keyboard inputs ************************
-		keyNavigationInputAWT = new NavigationInputAWTKey(navigationProcessor);
-		NavigationInputAWTKey.VERTICAL_RATE = 50f;
+		keyNavigationInputNewt = new NavigationInputNewtKey(navigationProcessor);
+		NavigationInputNewtKey.VERTICAL_RATE = 50f;
 
-		mouseInputListener = new NavigationInputAWTMouseLocked();
-		mouseInputListener.setNavigationProcessor(navigationProcessor);
+		//mouseInputListener = new NavigationInputAWTMouseLocked();
+		//mouseInputListener.setNavigationProcessor(navigationProcessor);
+		newtMouseInputListener = new NavigationInputNewtMouseLocked();
+		newtMouseInputListener.setNavigationProcessor(navigationProcessor);
+
 		// dont' start mouse locked as its a pain
 		//mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
 
 		//add jump key and vis/phy toggle key listeners for fun ************************
-		jumpKeyListener = new JumpKeyListener(nbccProvider);
+		jumpKeyListener = new NewtJumpKeyListener(nbccProvider);
 
 		//some hud gear
 		fpsCounter = new HUDFPSCounter();
@@ -422,7 +423,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		{
 			setupGraphicsSetting(gs);
 		}
-		
+
 		cameraPanel.startRendering();
 
 	}
@@ -474,7 +475,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 					//disable pitch in body
 					navigationProcessor.setNoPitch(true);
 					navigationTemporalBehaviour.addNavigationProcessor(hcd);
-					cameraPanel.getCanvas3D2D().addKeyListener(new HMDKeyHandler(hcd));
+					cameraPanel.getCanvas3D2D().getGLWindow().addKeyListener(new HMDKeyHandler(hcd));
 				}
 				catch (OculusException e)
 				{
@@ -503,9 +504,10 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			cameraPanel.setSceneAntialiasingEnable(gs.isAaRequired());
 
 			Canvas3D2D canvas3D2D = cameraPanel.getCanvas3D2D();
-			canvas3D2D.addKeyListener(keyNavigationInputAWT);
-			canvas3D2D.addKeyListener(jumpKeyListener);
-			canvas3D2D.addKeyListener(miscKeyHandler);
+			canvas3D2D.getGLWindow().addKeyListener(keyNavigationInputNewt);
+			canvas3D2D.getGLWindow().addKeyListener(jumpKeyListener);
+			canvas3D2D.getGLWindow().addKeyListener(newtMiscKeyHandler);
+
 			fpsCounter.addToCanvas(canvas3D2D);
 			hudPos.addToCanvas(canvas3D2D);
 			hudcompass.addToCanvas(canvas3D2D);
@@ -580,7 +582,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		{
 			physicsSystem.getNBControlledChar().getCharacterController().setFreeFly(ff);
 		}
-		keyNavigationInputAWT.setAllowVerticalMovement(ff);
+		keyNavigationInputNewt.setAllowVerticalMovement(ff);
 	}
 
 	public PhysicsSystem getPhysicsSystem()
@@ -679,23 +681,23 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	{
 		if (a)
 		{
-			NavigationInputAWTKey.FORWARD_KEY = KeyEvent.VK_Z;
+			NavigationInputNewtKey.FORWARD_KEY = KeyEvent.VK_Z;
 			//NavigationInputAWTKey.FAST_KEY = KeyEvent.VK_E;
 			//NavigationInputAWTKey.BACK_KEY = KeyEvent.VK_S;
-			NavigationInputAWTKey.LEFT_KEY = KeyEvent.VK_Q;
+			NavigationInputNewtKey.LEFT_KEY = KeyEvent.VK_Q;
 			//NavigationInputAWTKey.RIGHT_KEY = KeyEvent.VK_D;
-			NavigationInputAWTKey.UP_KEY = KeyEvent.VK_A;
-			NavigationInputAWTKey.DOWN_KEY = KeyEvent.VK_W;
+			NavigationInputNewtKey.UP_KEY = KeyEvent.VK_A;
+			NavigationInputNewtKey.DOWN_KEY = KeyEvent.VK_W;
 		}
 		else
 		{
-			NavigationInputAWTKey.FORWARD_KEY = KeyEvent.VK_W;
+			NavigationInputNewtKey.FORWARD_KEY = KeyEvent.VK_W;
 			//NavigationInputAWTKey.FAST_KEY = KeyEvent.VK_E;
 			//NavigationInputAWTKey.BACK_KEY = KeyEvent.VK_S;
-			NavigationInputAWTKey.LEFT_KEY = KeyEvent.VK_A;
+			NavigationInputNewtKey.LEFT_KEY = KeyEvent.VK_A;
 			//NavigationInputAWTKey.RIGHT_KEY = KeyEvent.VK_D;
-			NavigationInputAWTKey.UP_KEY = KeyEvent.VK_Q;
-			NavigationInputAWTKey.DOWN_KEY = KeyEvent.VK_Z;
+			NavigationInputNewtKey.UP_KEY = KeyEvent.VK_Q;
+			NavigationInputNewtKey.DOWN_KEY = KeyEvent.VK_Z;
 		}
 	}
 
@@ -703,13 +705,15 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	{
 		if (!mouseLock)
 		{
-			mouseInputListener.setCanvas(null);
+			//mouseInputListener.setCanvas(null);
+			newtMouseInputListener.setWindow(null);
 
 			//note tab message only put up if tab used to unlock mouse
 		}
 		else
 		{
-			mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
+			//mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
+			newtMouseInputListener.setWindow(cameraPanel.getCanvas3D2D().getGLWindow());
 
 			// always clear the tab message regardless
 			if (firstInstruction != null)
@@ -719,7 +723,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		}
 	}
 
-	private class HMDKeyHandler extends KeyAdapter
+	private class HMDKeyHandler implements KeyListener
 	{
 		private HMDCamDolly hcd;
 
@@ -755,11 +759,19 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			}
 
 		}
+
+		@Override
+		public void keyReleased(KeyEvent e)
+		{
+
+		}
 	}
 
-	private class MiscKeyHandler extends KeyAdapter
+	
+
+	private class NewtMiscKeyHandler implements KeyListener
 	{
-		public MiscKeyHandler()
+		public NewtMiscKeyHandler()
 		{
 			/*System.out.println("Esc exit");
 			System.out.println("H toggle havok display");
@@ -769,9 +781,9 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			System.out.println("J display jbullet debug");*/
 		}
 
-		public void keyPressed(KeyEvent e)
+		public void keyPressed(com.jogamp.newt.event.KeyEvent e)
 		{
-			if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+			if (e.getKeyCode() == com.jogamp.newt.event.KeyEvent.VK_ESCAPE)
 			{
 				if (!exitDialogPane3D.isVisible())
 				{
@@ -786,26 +798,26 @@ public class SimpleWalkSetup implements LocationUpdateListener
 					setMouseLock(true);
 				}
 			}
-			else if (e.getKeyCode() == KeyEvent.VK_H)
+			else if (e.getKeyCode() == com.jogamp.newt.event.KeyEvent.VK_H)
 			{
 				toggleHavok();
 			}
-			else if (e.getKeyCode() == KeyEvent.VK_L)
+			else if (e.getKeyCode() == com.jogamp.newt.event.KeyEvent.VK_L)
 			{
 				toggleVisual();
 			}
-			else if (e.getKeyCode() == KeyEvent.VK_F)
+			else if (e.getKeyCode() == com.jogamp.newt.event.KeyEvent.VK_F)
 			{
 				freefly = !freefly;
 				setFreeFly(freefly);
 			}
-			else if (e.getKeyCode() == KeyEvent.VK_J)
+			else if (e.getKeyCode() == com.jogamp.newt.event.KeyEvent.VK_J)
 			{
 				physicsSystem.setDisplayDebug(true);
 			}
-			else if (e.getKeyCode() == KeyEvent.VK_TAB)
+			else if (e.getKeyCode() == com.jogamp.newt.event.KeyEvent.VK_TAB)
 			{
-				if (mouseInputListener.hasCanvas())
+				if (newtMouseInputListener.hasGLWindow())
 				{
 					setMouseLock(false);
 					if (firstInstruction != null)
@@ -817,12 +829,19 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				{
 					setMouseLock(true);
 				}
+
 			}
-			else if (e.getKeyCode() == KeyEvent.VK_I)
+			else if (e.getKeyCode() == com.jogamp.newt.event.KeyEvent.VK_I)
 			{
 				// simpleInventorySystem has a listener for the mouse lock
 				simpleInventorySystem.setVisible(!simpleInventorySystem.isVisible());
 			}
+		}
+
+		@Override
+		public void keyReleased(com.jogamp.newt.event.KeyEvent arg0)
+		{
+
 		}
 	}
 

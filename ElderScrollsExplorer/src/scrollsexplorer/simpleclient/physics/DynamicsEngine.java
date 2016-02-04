@@ -2,8 +2,6 @@ package scrollsexplorer.simpleclient.physics;
 
 import javax.vecmath.Vector3f;
 
-import tools3d.mixed3d2d.hud.hudelements.HUDPhysicsState.HUDPhysicsStateData;
-
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.broadphase.HashedOverlappingPairCache;
@@ -19,6 +17,8 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.extras.gimpact.GImpactCollisionAlgorithm;
 import com.bulletphysics.linearmath.Clock;
+
+import awt.tools3d.mixed3d2d.hud.hudelements.HUDPhysicsState.HUDPhysicsStateData;
 
 public abstract class DynamicsEngine implements HUDPhysicsStateData
 {
