@@ -88,6 +88,7 @@ public class SimpleSky extends BranchGroup
 		geo.getTextureCoordinates(0, 0, textcoords);
 		newGeo.setTexCoordRefBuffer(0, new J3DBuffer(Utils3D.makeFloatBuffer(textcoords)));
 
+		newGeo.setName("Sky Geo");
 		sphere.getShape().setGeometry(newGeo);
 
 		// add the Sphere to its parent BranchGroup.
