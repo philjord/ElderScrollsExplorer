@@ -1,7 +1,7 @@
 package scrollsexplorer.simpleclient.mouseover;
 
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
+ 
 
 import javax.media.j3d.Canvas3D;
 
@@ -13,6 +13,7 @@ import tools3d.mixed3d2d.Canvas3D2D;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
 import com.bulletphysics.dynamics.RigidBody;
+import com.jogamp.newt.event.MouseEvent;
 
 import awt.tools3d.mixed3d2d.hud.hudelements.HUDText;
 

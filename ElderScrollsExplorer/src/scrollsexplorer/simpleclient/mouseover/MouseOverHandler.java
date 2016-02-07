@@ -1,11 +1,5 @@
 package scrollsexplorer.simpleclient.mouseover;
 
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.PickRay;
 import javax.vecmath.Point3d;
@@ -19,10 +13,15 @@ import tools3d.mixed3d2d.CanvasPickRayGen;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
+import com.jogamp.newt.event.MouseAdapter;
+import com.jogamp.newt.event.MouseEvent;
+import com.jogamp.newt.event.WindowEvent;
+import com.jogamp.newt.event.WindowListener;
+import com.jogamp.newt.event.WindowUpdateEvent;
 
 //TODO: this and the copy in space trader could have the clientphysics replaced with a dynamicsworld object (if avaible?)
 //and this would be totally generic and able to be put in nifbullet
-public abstract class MouseOverHandler implements ComponentListener
+public abstract class MouseOverHandler implements WindowListener
 {
 	public static final float MAX_MOUSE_RAY_DIST = 100f;// max pick dist 100 meters?
 
@@ -38,8 +37,7 @@ public abstract class MouseOverHandler implements ComponentListener
 
 	private PeriodicThread mouseOverHandlerThread;
 
-	private MouseAdapter mouseAdapter = new MouseAdapter()
-	{
+	private MouseAdapter mouseAdapter = new MouseAdapter() {
 		public void mouseExited(MouseEvent e)
 		{
 			doMouseExited(e);
@@ -49,10 +47,7 @@ public abstract class MouseOverHandler implements ComponentListener
 		{
 			doMouseReleased(e);
 		}
-	};
 
-	private MouseMotionAdapter mouseMotionAdapter = new MouseMotionAdapter()
-	{
 		public void mouseMoved(MouseEvent e)
 		{
 			doMouseMoved(e);
@@ -64,8 +59,7 @@ public abstract class MouseOverHandler implements ComponentListener
 		this.clientPhysicsSystem = clientPhysicsSystem;
 
 		mouseOverHandlerThread = new PeriodicThread("Thread For " + this.getClass().getSimpleName(), MIN_TIME_BETWEEN_STEPS_MS,
-				new PeriodicallyUpdated()
-				{
+				new PeriodicallyUpdated() {
 					public void runUpdate()
 					{
 						try
@@ -96,10 +90,10 @@ public abstract class MouseOverHandler implements ComponentListener
 	public void doMouseMoved(MouseEvent e)
 	{
 		// record the mouse move for the picker to use when it next wakes up
-		lastMouseEvent = e;	
+		lastMouseEvent = e;
 	}
 
-	public void doMouseExited(@SuppressWarnings("unused") MouseEvent e)
+	public void doMouseExited(MouseEvent e)
 	{
 		lastMouseEvent = null;
 	}
@@ -111,9 +105,8 @@ public abstract class MouseOverHandler implements ComponentListener
 		// de-register on the old canvas
 		if (this.canvas3D != null)
 		{
-			canvas3D.removeMouseListener(mouseAdapter);
-			canvas3D.removeMouseMotionListener(mouseMotionAdapter);
-			canvas3D.removeComponentListener(this);
+			canvas3D.getGLWindow().removeMouseListener(mouseAdapter);
+			canvas3D.getGLWindow().removeWindowListener(this);
 		}
 
 		// set up new canvas
@@ -123,9 +116,8 @@ public abstract class MouseOverHandler implements ComponentListener
 			selectPickCanvas = new CanvasPickRayGen(canvas3D);
 			selectPickCanvas.setTolerance(0.0f);
 
-			canvas3D.addMouseListener(mouseAdapter);
-			canvas3D.addMouseMotionListener(mouseMotionAdapter);
-			canvas3D.addComponentListener(this);
+			canvas3D.getGLWindow().addMouseListener(mouseAdapter);
+			canvas3D.getGLWindow().addWindowListener(this);
 		}
 
 	}
@@ -176,24 +168,44 @@ public abstract class MouseOverHandler implements ComponentListener
 	}
 
 	@Override
-	public void componentResized(ComponentEvent e)
+	public void windowResized(WindowEvent e)
 	{
 		screenResized();
 	}
 
 	@Override
-	public void componentMoved(ComponentEvent e)
+	public void windowMoved(WindowEvent e)
 	{
 	}
 
 	@Override
-	public void componentShown(ComponentEvent e)
+	public void windowDestroyNotify(WindowEvent e)
 	{
-		screenResized();
+
 	}
 
 	@Override
-	public void componentHidden(ComponentEvent e)
+	public void windowDestroyed(WindowEvent e)
 	{
+
 	}
+
+	@Override
+	public void windowGainedFocus(WindowEvent e)
+	{
+
+	}
+
+	@Override
+	public void windowLostFocus(WindowEvent e)
+	{
+
+	}
+
+	@Override
+	public void windowRepaint(WindowUpdateEvent e)
+	{
+
+	}
+
 }

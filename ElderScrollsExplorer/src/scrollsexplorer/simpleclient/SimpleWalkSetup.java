@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.WindowEvent;
 import java.util.prefs.Preferences;
 
 import javax.media.j3d.AmbientLight;
@@ -34,12 +33,7 @@ import com.jogamp.newt.event.KeyListener;
 import com.sun.j3d.utils.universe.ViewingPlatform;
 
 import awt.tools3d.mixed3d2d.hud.hudelements.HUDCompass;
-import awt.tools3d.mixed3d2d.hud.hudelements.HUDCrossHair;
-import awt.tools3d.mixed3d2d.hud.hudelements.HUDFPSCounter;
-import awt.tools3d.mixed3d2d.hud.hudelements.HUDPosition;
 import awt.tools3d.mixed3d2d.hud.hudelements.HUDText;
-import awt.tools3d.mixed3d2d.overlay.swing.Panel3D;
-import awt.tools3d.mixed3d2d.overlay.swing.util.ExitDialogPane3D;
 import awt.tools3d.resolution.GraphicsSettings;
 import awt.tools3d.resolution.ScreenResolution;
 import esmj3d.j3d.BethRenderSettings;
@@ -47,7 +41,6 @@ import nifbullet.NavigationProcessorBullet;
 import nifbullet.NavigationProcessorBullet.NbccProvider;
 import nifbullet.cha.NBControlledChar;
 import scrollsexplorer.ScrollsExplorer;
-import scrollsexplorer.simpleclient.charactersheet.SimpleInventorySystem;
 import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
 import scrollsexplorer.simpleclient.mouseover.AdminMouseOverHandler;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
@@ -58,6 +51,9 @@ import tools3d.camera.HMDCameraPanel;
 import tools3d.camera.HeadCamDolly;
 import tools3d.camera.ICameraPanel;
 import tools3d.mixed3d2d.Canvas3D2D;
+import tools3d.mixed3d2d.curvehud.elements.HUDCrossHair;
+import tools3d.mixed3d2d.curvehud.elements.HUDFPSCounter;
+import tools3d.mixed3d2d.curvehud.elements.HUDPosition;
 import tools3d.navigation.AvatarCollisionInfo;
 import tools3d.navigation.AvatarLocation;
 import tools3d.navigation.NavigationInputNewtKey;
@@ -119,11 +115,11 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	private HUDFPSCounter fpsCounter;
 
-	private HUDPosition hudPos;
-
 	private HUDCompass hudcompass;
 
 	private HUDCrossHair hudCrossHair;
+
+	private HUDPosition hudPos;
 
 	//private HUDPhysicsState hudPhysicsState;
 
@@ -171,14 +167,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			return physicsSystem.getNBControlledChar();
 		}
 	};
-
-	//Panel3D gear
-	private Panel3D fullScreenPanel3D;
-
-	private ExitDialogPane3D exitDialogPane3D;
-
-	//We are no longer in simple walk set up now!!!!
-	private SimpleInventorySystem simpleInventorySystem;
 
 	public SimpleWalkSetup(String frameName)
 	{
@@ -303,52 +291,28 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			}
 		});
 
-		//Panel3D gear
-		fullScreenPanel3D = new Panel3D();
-		exitDialogPane3D = new ExitDialogPane3D(fullScreenPanel3D);
-		exitDialogPane3D.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				if (exitDialogPane3D.isExitConfirmed())
-				{
-					// allow listeners to clean up on exit (save setting etc)
-					// this will exit
-					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-				}
-				else
-				{
-					//hide dialog and lock mouse
-					exitDialogPane3D.setVisible(false);
-					setMouseLock(true);
-				}
-
-			}
-		});
-
-		simpleInventorySystem = new SimpleInventorySystem(fullScreenPanel3D);
-		simpleInventorySystem.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentShown(ComponentEvent e)
-			{
-				setMouseLock(false);
-			}
-
-			@Override
-			public void componentHidden(ComponentEvent e)
-			{
-				setMouseLock(true);
-			}
-		});
+		/*
+		
+				simpleInventorySystem = new SimpleInventorySystem(fullScreenPanel3D);
+				simpleInventorySystem.addComponentListener(new ComponentAdapter() {
+					@Override
+					public void componentShown(ComponentEvent e)
+					{
+						setMouseLock(false);
+					}
+		
+					@Override
+					public void componentHidden(ComponentEvent e)
+					{
+						setMouseLock(true);
+					}
+				});*/
 	}
 
 	protected void canvasResized()
 	{
-		Canvas3D2D c = cameraPanel.getCanvas3D2D();
-		exitDialogPane3D.setLocation((c.getWidth() / 2) - (exitDialogPane3D.getWidth() / 2),
-				(c.getHeight() / 2) - (exitDialogPane3D.getHeight() / 2));
+		//Canvas3D2D c = cameraPanel.getCanvas3D2D();
 
-		fullScreenPanel3D.redraw(true);
 	}
 
 	/**
@@ -498,7 +462,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 			avatarLocation.addAvatarLocationListener(cameraPanel.getDolly());
 			cameraPanel.getDolly().locationUpdated(avatarLocation.get(new Quat4f()), avatarLocation.get(new Vector3f()));
-			cameraPanel.getDolly().setHudShape(cameraPanel.getCanvas3D2D().getHudShapeRoot());
+			//cameraPanel.getDolly().setHudShape(cameraPanel.getCanvas3D2D().getHudShapeRoot());
 
 			DDSTextureLoader.setAnisotropicFilterDegree(gs.getAnisotropicFilterDegree());
 			cameraPanel.setSceneAntialiasingEnable(gs.isAaRequired());
@@ -513,11 +477,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			hudcompass.addToCanvas(canvas3D2D);
 			//hudPhysicsState.addToCanvas(canvas3D2D);
 			hudCrossHair.addToCanvas(canvas3D2D);
-
-			//Panel3D gear
-			fullScreenPanel3D.setConfig(canvas3D2D);
-			exitDialogPane3D.setLocation((canvas3D2D.getWidth() / 2) - (exitDialogPane3D.getWidth() / 2),
-					(canvas3D2D.getHeight() / 2) - (exitDialogPane3D.getHeight() / 2));
 
 			//allow tab for mouse lock
 			canvas3D2D.setFocusTraversalKeysEnabled(false);
@@ -767,8 +726,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		}
 	}
 
-	
-
 	private class NewtMiscKeyHandler implements KeyListener
 	{
 		public NewtMiscKeyHandler()
@@ -785,7 +742,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		{
 			if (e.getKeyCode() == com.jogamp.newt.event.KeyEvent.VK_ESCAPE)
 			{
-				if (!exitDialogPane3D.isVisible())
+				System.out.println("Need a new exit dialog system");
+				/*if (!exitDialogPane3D.isVisible())
 				{
 					//unlock mouse to interact
 					setMouseLock(false);
@@ -796,7 +754,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 					//hide dialog and lock mouse
 					exitDialogPane3D.setVisible(false);
 					setMouseLock(true);
-				}
+				}*/
 			}
 			else if (e.getKeyCode() == com.jogamp.newt.event.KeyEvent.VK_H)
 			{
@@ -834,7 +792,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			else if (e.getKeyCode() == com.jogamp.newt.event.KeyEvent.VK_I)
 			{
 				// simpleInventorySystem has a listener for the mouse lock
-				simpleInventorySystem.setVisible(!simpleInventorySystem.isVisible());
+				System.out.println("Need a new inventory system");
 			}
 		}
 
