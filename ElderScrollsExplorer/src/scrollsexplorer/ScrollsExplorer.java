@@ -9,8 +9,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,6 +34,12 @@ import javax.vecmath.Vector3f;
 import com.gg.slider.SideBar;
 import com.gg.slider.SideBar.SideBarMode;
 import com.gg.slider.SidebarSection;
+import com.jogamp.nativewindow.WindowClosingProtocol.WindowClosingMode;
+import com.jogamp.newt.event.MouseListener;
+import com.jogamp.newt.event.WindowAdapter;
+import com.jogamp.newt.event.WindowEvent;
+import com.jogamp.newt.event.WindowListener;
+import com.jogamp.newt.event.WindowUpdateEvent;
 
 import bsa.BSAFileSet;
 import bsa.source.BsaMeshSource;
@@ -256,22 +261,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 			this.getContentPane().add(sideBar, BorderLayout.WEST);
 
-			this.addWindowListener(new WindowAdapter() {
-				@Override
-				public void windowClosing(WindowEvent arg0)
-				{
-					closingTime();
-				}
-			});
+			/*			this.addWindowListener(new WindowAdapter() {
+							@Override
+							public void windowClosing(WindowEvent arg0)
+							{
+								closingTime();
+							}
+						});*/
 
-			//FIXME: I need to listen to the GLWindow with a windowListener
-			simpleWalkSetup.getJFrame().addWindowListener(new WindowAdapter() {
-				@Override
-				public void windowClosing(WindowEvent arg0)
-				{
-					closingTime();
-				}
-			});
 			setVisible(true);// need to be visible in case of set folders
 			// My system for guarantees rendering of a component (test this)
 			this.setFont(this.getFont());
@@ -318,7 +315,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 			@Override
 			public void componentResized(ComponentEvent e)
-			{				
+			{
 			}
 
 			@Override
@@ -334,10 +331,10 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			@Override
 			public void componentHidden(ComponentEvent e)
 			{
-				enableButtons();				
+				enableButtons();
 			}
 		});
-		
+
 	}
 
 	private void enableButtons()
@@ -468,6 +465,22 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 						simpleWalkSetup.configure(meshSource, simpleBethCellManager);
 						simpleWalkSetup.setEnabled(false);
+						 
+						//FIXME: stops working once fully running, but responds up to that point
+						// that is to say the button no longer sends anything through
+						// button won't work off the evetn thread, so I need to add my own system in and ignore the button
+						// button only runs if display is called on the window but that cuts FPS in half
+						simpleWalkSetup.getWindow().setDefaultCloseOperation(WindowClosingMode.DISPOSE_ON_CLOSE);
+						simpleWalkSetup.getWindow().addWindowListener(new WindowAdapter() {
+							@Override
+							public void windowDestroyed(WindowEvent arg0)
+							{
+								closingTime();							}
+
+						});
+						
+						 
+						
 
 						// I could use the j3dcellfactory now? with the cached cell records?
 						simpleBethCellManager.setSources(selectedGameConfig, esmManager, mediaSources);
