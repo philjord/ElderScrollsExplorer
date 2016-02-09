@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.prefs.Preferences;
 
 import awt.tools3d.resolution.QueryProperties;
+import bsa.gui.BSAFileSetWithStatus;
 import nif.NifToJ3d;
 import scrollsexplorer.PropertyLoader;
-import set.BSAFileSet;
 import tools.io.ConfigLoader;
 import utils.source.EsmSoundKeyToName;
 import utils.source.MediaSources;
@@ -31,14 +31,14 @@ public class SkyrimTreesExporter
 		IESMManager esmManager = ESMManager.getESMManager(mainESMFile);
 		new EsmSoundKeyToName(esmManager);
 
-		BSAFileSet bsaFileSet = null;
+		BSAFileSetWithStatus bsaFileSet = null;
 		BsaRecordedMeshSource meshSource;
 		BsaRecordedTextureSource textureSource;
 		BsaRecordedSoundSource soundSource;
 
 		String plusSkyrim = PropertyLoader.properties.getProperty("SkyrimFolder");
 
-		bsaFileSet = new BSAFileSet(new String[]
+		bsaFileSet = new BSAFileSetWithStatus(new String[]
 		{ plusSkyrim }, true, false);
 
 		meshSource = new BsaRecordedMeshSource(bsaFileSet);

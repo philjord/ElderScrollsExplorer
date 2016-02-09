@@ -5,15 +5,15 @@ import java.util.HashSet;
 import javax.media.j3d.MediaContainer;
 
 import utils.source.EsmSoundKeyToName;
+import bsa.gui.BSAFileSetWithStatus;
 import bsa.source.BsaSoundSource;
-import set.BSAFileSet;
 
 public class BsaRecordedSoundSource extends BsaSoundSource
 {
 
 	public HashSet<String> requestedFiles = new HashSet<String>();
 
-	public BsaRecordedSoundSource(BSAFileSet bsaFileSet, EsmSoundKeyToName esmSoundKeyToName)
+	public BsaRecordedSoundSource(BSAFileSetWithStatus bsaFileSet, EsmSoundKeyToName esmSoundKeyToName)
 	{
 		super(bsaFileSet, esmSoundKeyToName);
 	}

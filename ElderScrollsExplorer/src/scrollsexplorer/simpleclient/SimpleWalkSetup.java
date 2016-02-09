@@ -2,7 +2,6 @@ package scrollsexplorer.simpleclient;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,7 +20,6 @@ import javax.swing.JTextField;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point2f;
 import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
@@ -368,7 +366,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 		//TODO: these must come form a new one of those ^
 
 		DDSTextureLoader.setAnisotropicFilterDegree(8);
-		cameraPanel.getCanvas3D2D().getGLWindow().setSize(1600, 1200);
+		cameraPanel.getCanvas3D2D().getGLWindow().setSize(1200, 1000);
 
 		//frame.setSize(100,100);// oddly still needed
 

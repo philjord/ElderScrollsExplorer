@@ -31,6 +31,7 @@ import javax.swing.table.TableRowSorter;
 import archive.ArchiveEntry;
 import archive.ArchiveFile;
 import awt.tools3d.resolution.QueryProperties;
+import bsa.gui.BSAFileSetWithStatus;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmmanager.common.PluginException;
 import esmmanager.common.data.plugin.PluginRecord;
@@ -39,7 +40,6 @@ import esmmanager.loader.IESMManager;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
 import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
-import set.BSAFileSet;
 import tools.TitledPanel;
 import tools.io.ConfigLoader;
 import tools.io.FileCopy;
@@ -63,7 +63,7 @@ public class ESMBSAExporter extends JFrame
 
 	public IESMManager esmManager;
 
-	public BSAFileSet bsaFileSet;
+	public BSAFileSetWithStatus bsaFileSet;
 
 	private GameConfig selectedGameConfig = null;
 
@@ -275,7 +275,7 @@ public class ESMBSAExporter extends JFrame
 
 					// note skyrim added
 					if (bsaFileSet == null)
-						bsaFileSet = new BSAFileSet(new String[]
+						bsaFileSet = new BSAFileSetWithStatus(new String[]
 						{ selectedGameConfig.scrollsFolder }, true, false);
 
 					meshSource = new BsaRecordedMeshSource(bsaFileSet);
@@ -481,7 +481,7 @@ public class ESMBSAExporter extends JFrame
 
 	}
 
-	public static void copyToOutput(File outputFolder, MediaSources mediaSources, BSAFileSet bsaFileSet) throws IOException
+	public static void copyToOutput(File outputFolder, MediaSources mediaSources, BSAFileSetWithStatus bsaFileSet) throws IOException
 	{
 
 		System.out.println("Nifs");

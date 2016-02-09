@@ -3,7 +3,7 @@ package exporter;
 import java.util.HashSet;
 
 import nif.NifFile;
-import set.BSAFileSet;
+import bsa.gui.BSAFileSetWithStatus;
 import bsa.source.BsaMeshSource;
 
 public class BsaRecordedMeshSource extends BsaMeshSource
@@ -11,7 +11,7 @@ public class BsaRecordedMeshSource extends BsaMeshSource
 
 	public HashSet<String> requestedFiles = new HashSet<String>();
 
-	public BsaRecordedMeshSource(BSAFileSet bsaFileSet)
+	public BsaRecordedMeshSource(BSAFileSetWithStatus bsaFileSet)
 	{
 		super(bsaFileSet);
 	}

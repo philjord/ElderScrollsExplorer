@@ -5,15 +5,15 @@ import java.util.HashSet;
 
 import javax.media.j3d.Texture;
 
+import bsa.gui.BSAFileSetWithStatus;
 import bsa.source.BsaTextureSource;
-import set.BSAFileSet;
 
 public class BsaRecordedTextureSource extends BsaTextureSource
 {
 
 	public HashSet<String> requestedFiles = new HashSet<String>();
 
-	public BsaRecordedTextureSource(BSAFileSet bsaFileSet)
+	public BsaRecordedTextureSource(BSAFileSetWithStatus bsaFileSet)
 	{
 		super(bsaFileSet);
 	}

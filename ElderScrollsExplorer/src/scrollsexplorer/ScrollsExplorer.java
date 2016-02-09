@@ -37,6 +37,8 @@ import com.jogamp.nativewindow.WindowClosingProtocol.WindowClosingMode;
 import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 
+import archive.BSArchiveSet;
+import bsa.gui.BSAFileSetWithStatus;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
@@ -54,7 +56,6 @@ import scrollsexplorer.simpleclient.settings.GeneralSettingsPanel;
 import scrollsexplorer.simpleclient.settings.GraphicsSettingsPanel;
 import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
 import scrollsexplorer.simpleclient.settings.ShowOutlinesPanel;
-import set.BSAFileSet;
 import tools.TitledPanel;
 import tools.io.ConfigLoader;
 import tools.swing.UserGuideDisplay;
@@ -95,7 +96,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public IESMManager esmManager;
 
-	public BSAFileSet bsaFileSet;
+	public BSArchiveSet bsaFileSet;
 
 	private GameConfig selectedGameConfig = null;
 
@@ -431,7 +432,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						{
 							if (bsaFileSet == null)
 							{
-								bsaFileSet = new BSAFileSet(new String[] { selectedGameConfig.scrollsFolder },
+								bsaFileSet = new BSArchiveSet(new String[] { selectedGameConfig.scrollsFolder },
 										cbLoadAllMenuItem.isSelected(), false);
 							}
 
@@ -624,7 +625,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		System.err.println("VERSION: " + versionString);
 
 		//jogl recommends for non phones 
-		System.setProperty("jogl.disable.opengles", "true");
+		//System.setProperty("jogl.disable.opengles", "true");
 		System.setProperty("sun.awt.noerasebackground", "true");
 
 		ConfigLoader.loadConfig(args);
