@@ -1,6 +1,8 @@
 package scrollsexplorer;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import javax.vecmath.Quat4f;
@@ -38,7 +41,6 @@ import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 
 import archive.BSArchiveSet;
-import bsa.gui.BSAFileSetWithStatus;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
@@ -62,6 +64,7 @@ import tools.swing.UserGuideDisplay;
 import tools.swing.VerticalFlowLayout;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
+import tools3d.utils.scenegraph.LocationUpdateListener;
 import utils.source.EsmSoundKeyToName;
 import utils.source.MediaSources;
 import utils.source.MeshSource;
@@ -72,9 +75,9 @@ import utils.source.file.FileMeshSource;
 import utils.source.file.FileSoundSource;
 import utils.source.file.FileTextureSource;
 
-public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener
+public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener, LocationUpdateListener
 {
-	public static Dashboard dashboard = new Dashboard();
+	public  Dashboard dashboard = new Dashboard();
 
 	private SimpleBethCellManager simpleBethCellManager;
 
@@ -221,13 +224,13 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			simpleWalkSetup = new SimpleWalkSetup("SimpleBethCellManager");
 			simpleWalkSetup.setAzerty(cbAzertyKB.isSelected());
 			quickEdit.setLayout(new VerticalFlowLayout());
-			quickEdit.add(new TitledPanel("Location", simpleWalkSetup.getLocField()));
-			quickEdit.add(new TitledPanel("Go To", simpleWalkSetup.getWarpField()));
+			quickEdit.add(new TitledPanel("Location", locField));
+			quickEdit.add(new TitledPanel("Go To", locField));
 			mainPanel.add(buttonPanel, BorderLayout.NORTH);
 			table = new JTable();
 			mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
 
-			mainPanel.add(dashboard, BorderLayout.SOUTH);
+			mainPanel.add(dashboard.getMainPanel(), BorderLayout.SOUTH);
 
 			simpleBethCellManager = new SimpleBethCellManager(simpleWalkSetup);
 
@@ -280,6 +283,58 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		}
 		// MY system for guaranteee rendering of a component (test this)
 		this.setFont(this.getFont());
+
+		warpPanel.setLayout(new FlowLayout());
+		warpPanel.add(warpField);
+		warpField.setSize(200, 20);
+		ActionListener warpActionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				String warp = warpField.getText().trim();
+				String[] parts = warp.split("[^\\d-]+");
+
+				if (parts.length == 3)
+				{
+					simpleWalkSetup.warp(new Vector3f(Float.parseFloat(parts[0]), Float.parseFloat(parts[1]), Float.parseFloat(parts[2])));
+				}
+			}
+		};
+		warpField.addActionListener(warpActionListener);
+		JButton warpButton = new JButton("Go");
+		warpPanel.add(warpButton);
+		warpButton.addActionListener(warpActionListener);
+
+		simpleWalkSetup.getAvatarLocation().addAvatarLocationListener(this);
+	}
+
+	private JTextField locField = new JTextField("0000,0000,0000");
+
+	private JPanel warpPanel = new JPanel();
+
+	private JTextField warpField = new JTextField("                ");
+
+	public Component getLocField()
+	{
+		return locField;
+	}
+
+	public Component getWarpField()
+	{
+		return warpPanel;
+	}
+
+	private long lastLocationUpdate = 0;
+
+	@Override
+	public void locationUpdated(Quat4f rot, Vector3f trans)
+	{
+		if (System.currentTimeMillis() - lastLocationUpdate > 200)
+		{
+			//oddly this is mildly expensive so only update 5 times per second
+			locField.setText(("" + trans.x).split("\\.")[0] + "," + ("" + trans.y).split("\\.")[0] + "," + ("" + trans.z).split("\\.")[0]);
+			lastLocationUpdate = System.currentTimeMillis();
+		}
 	}
 
 	protected void showUserGuide()
@@ -405,7 +460,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			{
 				synchronized (selectedGameConfig)
 				{
-					ScrollsExplorer.dashboard.setEsmLoading(1);
+					IDashboard.dashboard.setEsmLoading(1);
 
 					esmManager = ESMManager.getESMManager(selectedGameConfig.getESMPath());
 					bsaFileSet = null;
@@ -441,7 +496,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 								JOptionPane.showMessageDialog(ScrollsExplorer.this,
 										selectedGameConfig.scrollsFolder + " contains no *.bsa files nothing can be loaded");
 								setFolders();
-								ScrollsExplorer.dashboard.setEsmLoading(-1);
+								IDashboard.dashboard.setEsmLoading(-1);
 								return;
 							}
 
@@ -560,7 +615,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					mainPanel.doLayout();
 					mainPanel.repaint();
 
-					ScrollsExplorer.dashboard.setEsmLoading(-1);
+					IDashboard.dashboard.setEsmLoading(-1);
 				}
 
 			}
