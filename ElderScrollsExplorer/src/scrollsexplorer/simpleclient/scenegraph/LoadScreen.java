@@ -9,8 +9,8 @@ import javax.vecmath.Vector3f;
 
 import nif.NifJ3dVisRoot;
 import nif.NifToJ3d;
-import nif.gui.util.ControllerInvokerThread;
 import nif.j3d.J3dNiAVObject;
+import nif.j3d.animation.J3dNiControllerManager;
 import scrollsexplorer.GameConfig;
 import utils.source.MediaSources;
 
@@ -65,7 +65,7 @@ public class LoadScreen extends BranchGroup
 			if (loadScene(gameConfig.loadScreen))
 			{
 				//TODO: note not on strucutre behavior, trouble?
-				addChild(currentLoadScreenBG);				
+				addChild(currentLoadScreenBG);
 			}
 		}
 
@@ -90,7 +90,7 @@ public class LoadScreen extends BranchGroup
 								nif.getVisualRoot().getJ3dNiControllerManager(), null);
 						controllerInvokerThread.start();
 					}
-					
+
 					currentLoadScreenTG.addChild(j3dNiAVObject);
 					return true;
 				}
@@ -99,4 +99,52 @@ public class LoadScreen extends BranchGroup
 
 		return false;
 	}
+
+	public class ControllerInvokerThread extends Thread
+	{
+		private J3dNiControllerManager cont;
+
+		private J3dNiControllerManager optionalCont;
+
+		public ControllerInvokerThread(String name, J3dNiControllerManager cont, J3dNiControllerManager optionalCont)
+		{
+
+			this.setDaemon(true);
+			this.setName("ControllerInvokerThread " + name);
+
+			this.cont = cont;
+			this.optionalCont = optionalCont;
+		}
+
+		@Override
+		public void run()
+		{
+			try
+			{
+				Thread.sleep(1000);
+
+				String[] actions = cont.getAllSequences();
+				while (cont.isLive())
+				{
+					for (int i = 0; i < actions.length; i++)
+					{
+						Thread.sleep((long) (Math.random() * 3000) + 1000);
+						System.out.println("firing " + actions[i]);
+
+						cont.getSequence(actions[i]).fireSequenceOnce();
+
+						if (optionalCont != null)
+							optionalCont.getSequence(actions[i]).fireSequenceOnce();
+
+						Thread.sleep(cont.getSequence(actions[i]).getLengthMS());
+					}
+				}
+			}
+			catch (InterruptedException e)
+			{
+			}
+		}
+
+	}
+
 }

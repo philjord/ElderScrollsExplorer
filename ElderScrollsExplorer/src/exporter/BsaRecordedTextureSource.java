@@ -5,8 +5,8 @@ import java.util.HashSet;
 
 import javax.media.j3d.Texture;
 
-import bsa.BSAFileSet;
 import bsa.source.BsaTextureSource;
+import set.BSAFileSet;
 
 public class BsaRecordedTextureSource extends BsaTextureSource
 {

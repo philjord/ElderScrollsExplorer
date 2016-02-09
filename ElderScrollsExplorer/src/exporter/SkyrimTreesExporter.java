@@ -7,10 +7,10 @@ import java.util.prefs.Preferences;
 import awt.tools3d.resolution.QueryProperties;
 import nif.NifToJ3d;
 import scrollsexplorer.PropertyLoader;
+import set.BSAFileSet;
+import tools.io.ConfigLoader;
 import utils.source.EsmSoundKeyToName;
 import utils.source.MediaSources;
-import bsa.BSAFileSet;
-import common.config.ConfigLoader;
 import esmmanager.loader.ESMManager;
 import esmmanager.loader.IESMManager;
 

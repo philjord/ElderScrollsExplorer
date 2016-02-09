@@ -1,7 +1,7 @@
 package scrollsexplorer.simpleclient;
 
-import java.awt.Point;
-import java.awt.Rectangle;
+import javaawt.Point;
+import javaawt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;

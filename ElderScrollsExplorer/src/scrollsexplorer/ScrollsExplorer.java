@@ -9,7 +9,6 @@ import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,18 +34,13 @@ import com.gg.slider.SideBar;
 import com.gg.slider.SideBar.SideBarMode;
 import com.gg.slider.SidebarSection;
 import com.jogamp.nativewindow.WindowClosingProtocol.WindowClosingMode;
-import com.jogamp.newt.event.MouseListener;
 import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
-import com.jogamp.newt.event.WindowListener;
-import com.jogamp.newt.event.WindowUpdateEvent;
 
-import bsa.BSAFileSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
 import client.BootStrap;
-import common.config.ConfigLoader;
 import esmj3d.j3d.BethRenderSettings;
 import esmmanager.common.PluginException;
 import esmmanager.common.data.plugin.PluginRecord;
@@ -60,7 +54,9 @@ import scrollsexplorer.simpleclient.settings.GeneralSettingsPanel;
 import scrollsexplorer.simpleclient.settings.GraphicsSettingsPanel;
 import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
 import scrollsexplorer.simpleclient.settings.ShowOutlinesPanel;
+import set.BSAFileSet;
 import tools.TitledPanel;
+import tools.io.ConfigLoader;
 import tools.swing.UserGuideDisplay;
 import tools.swing.VerticalFlowLayout;
 import tools3d.utils.YawPitch;
@@ -139,7 +135,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 			prefs = Preferences.userNodeForPackage(ScrollsExplorer.class);
 
-			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			this.getContentPane().setLayout(new BorderLayout(1, 1));
 			this.setSize(600, 800);
 
@@ -261,13 +257,15 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 			this.getContentPane().add(sideBar, BorderLayout.WEST);
 
-			/*			this.addWindowListener(new WindowAdapter() {
-							@Override
-							public void windowClosing(WindowEvent arg0)
-							{
-								closingTime();
-							}
-						});*/
+			this.addWindowListener(new java.awt.event.WindowAdapter() {
+				@Override
+				public void windowClosing(java.awt.event.WindowEvent arg0)
+				{
+					//Just until the real window listens to damn events properly!
+					closingTime();
+					System.exit(0);
+				}
+			});
 
 			setVisible(true);// need to be visible in case of set folders
 			// My system for guarantees rendering of a component (test this)
@@ -465,7 +463,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 						simpleWalkSetup.configure(meshSource, simpleBethCellManager);
 						simpleWalkSetup.setEnabled(false);
-						 
+
 						//FIXME: stops working once fully running, but responds up to that point
 						// that is to say the button no longer sends anything through
 						// button won't work off the evetn thread, so I need to add my own system in and ignore the button
@@ -473,14 +471,12 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						simpleWalkSetup.getWindow().setDefaultCloseOperation(WindowClosingMode.DISPOSE_ON_CLOSE);
 						simpleWalkSetup.getWindow().addWindowListener(new WindowAdapter() {
 							@Override
-							public void windowDestroyed(WindowEvent arg0)
+							public void windowDestroyNotify(WindowEvent arg0)
 							{
-								closingTime();							}
+								closingTime();
+							}
 
 						});
-						
-						 
-						
 
 						// I could use the j3dcellfactory now? with the cached cell records?
 						simpleBethCellManager.setSources(selectedGameConfig, esmManager, mediaSources);

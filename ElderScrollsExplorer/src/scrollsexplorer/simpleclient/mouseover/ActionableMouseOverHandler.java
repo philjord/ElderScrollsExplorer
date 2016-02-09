@@ -1,27 +1,15 @@
 package scrollsexplorer.simpleclient.mouseover;
 
-import java.awt.Rectangle;
- 
-
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.Transform3D;
+import javax.vecmath.Point2f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
-
-import nifbullet.BulletNifModel;
-import nifbullet.NBRigidBody;
-import nifbullet.cha.NifBulletChar;
-import scrollsexplorer.simpleclient.SimpleBethCellManager;
-import scrollsexplorer.simpleclient.physics.PhysicsSystem;
-import tools3d.mixed3d2d.Canvas3D2D;
-import tools3d.utils.Utils3D;
-import utils.ESConfig;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
 import com.bulletphysics.dynamics.RigidBody;
 import com.jogamp.newt.event.MouseEvent;
 
-import awt.tools3d.mixed3d2d.hud.hudelements.HUDText;
 import esmj3d.data.shared.records.CommonREFR;
 import esmj3d.data.shared.records.GenericCONT;
 import esmj3d.data.shared.records.GenericDOOR;
@@ -34,6 +22,15 @@ import esmj3d.j3d.j3drecords.type.J3dDOOR;
 import esmj3d.j3d.j3drecords.type.J3dRECOType;
 import esmj3d.j3d.j3drecords.type.J3dRECOTypeActionable;
 import esmj3d.j3d.j3drecords.type.J3dRECOTypeDynamic;
+import nifbullet.BulletNifModel;
+import nifbullet.NBRigidBody;
+import nifbullet.cha.NifBulletChar;
+import scrollsexplorer.simpleclient.SimpleBethCellManager;
+import scrollsexplorer.simpleclient.physics.PhysicsSystem;
+import tools3d.mixed3d2d.Canvas3D2D;
+import tools3d.mixed3d2d.curvehud.elements.HUDText;
+import tools3d.utils.Utils3D;
+import utils.ESConfig;
 
 public class ActionableMouseOverHandler extends MouseOverHandler
 {
@@ -73,7 +70,7 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 		if (canvas3D != null)
 		{
 
-			if (!canvas3D.getView().getCompatibilityModeEnable())
+			/*if (!canvas3D.getView().getCompatibilityModeEnable())
 			{
 				HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle((canvas3D.getWidth() / 2) - (hudWidth / 2),
 						(canvas3D.getHeight() / 2) - (hudHeight / 2), hudWidth, hudHeight), 16);
@@ -81,7 +78,8 @@ public class ActionableMouseOverHandler extends MouseOverHandler
 			else
 			{
 				HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle(0, 80, hudWidth, hudHeight), 16);
-			}
+			}*/
+			HUDText = new HUDText((Canvas3D2D) canvas3D, new Point2f(0f, 0f), 16);
 		}
 
 	}

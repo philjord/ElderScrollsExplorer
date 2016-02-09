@@ -1,21 +1,18 @@
 package scrollsexplorer.simpleclient.mouseover;
 
-import java.awt.Rectangle;
- 
-
 import javax.media.j3d.Canvas3D;
+import javax.vecmath.Point2f;
+
+import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
+import com.bulletphysics.dynamics.RigidBody;
+import com.jogamp.newt.event.MouseEvent;
 
 import nifbullet.BulletNifModel;
 import nifbullet.NBRigidBody;
 import nifbullet.cha.NifBulletChar;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools3d.mixed3d2d.Canvas3D2D;
-
-import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
-import com.bulletphysics.dynamics.RigidBody;
-import com.jogamp.newt.event.MouseEvent;
-
-import awt.tools3d.mixed3d2d.hud.hudelements.HUDText;
+import tools3d.mixed3d2d.curvehud.elements.HUDText;
 
 public class AdminMouseOverHandler extends MouseOverHandler
 {
@@ -50,8 +47,9 @@ public class AdminMouseOverHandler extends MouseOverHandler
 		// set up new canvas
 		if (canvas3D != null)
 		{
-			HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle((int) (canvas3D.getWidth() * 0.95f) - hudWidth,
-					(int) (canvas3D.getHeight() * 0.95f) - hudHeight, hudWidth, hudHeight), 10);
+			//HUDText = new HUDText((Canvas3D2D) canvas3D, new Rectangle((int) (canvas3D.getWidth() * 0.95f) - hudWidth,
+			//		(int) (canvas3D.getHeight() * 0.95f) - hudHeight, hudWidth, hudHeight), 10);
+			HUDText = new HUDText((Canvas3D2D) canvas3D, new Point2f(0.1f, -0.85f), 10);
 		}
 	}
 

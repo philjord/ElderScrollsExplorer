@@ -5,8 +5,8 @@ import java.util.HashSet;
 import javax.media.j3d.MediaContainer;
 
 import utils.source.EsmSoundKeyToName;
-import bsa.BSAFileSet;
 import bsa.source.BsaSoundSource;
+import set.BSAFileSet;
 
 public class BsaRecordedSoundSource extends BsaSoundSource
 {

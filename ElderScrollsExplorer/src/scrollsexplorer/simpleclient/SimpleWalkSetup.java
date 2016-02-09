@@ -19,7 +19,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.vecmath.Color3f;
+import javax.vecmath.Point2f;
 import javax.vecmath.Point3d;
+import javax.vecmath.Point3f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
@@ -29,7 +31,6 @@ import com.jogamp.newt.event.KeyListener;
 import com.sun.j3d.utils.universe.ViewingPlatform;
 
 import awt.tools3d.mixed3d2d.hud.hudelements.HUDCompass;
-import awt.tools3d.mixed3d2d.hud.hudelements.HUDText;
 import awt.tools3d.resolution.GraphicsSettings;
 import esmj3d.j3d.BethRenderSettings;
 import nifbullet.NavigationProcessorBullet;
@@ -49,6 +50,7 @@ import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.mixed3d2d.curvehud.elements.HUDCrossHair;
 import tools3d.mixed3d2d.curvehud.elements.HUDFPSCounter;
 import tools3d.mixed3d2d.curvehud.elements.HUDPosition;
+import tools3d.mixed3d2d.curvehud.elements.HUDText;
 import tools3d.navigation.AvatarCollisionInfo;
 import tools3d.navigation.AvatarLocation;
 import tools3d.navigation.NavigationInputNewtKey;
@@ -72,7 +74,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 {
 	public static boolean HMD_MODE = true;
 
-//	private JFrame frame = new JFrame();
+	//	private JFrame frame = new JFrame();
 
 	private boolean enabled = false;
 
@@ -137,8 +139,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 	private AmbientLight ambLight = null;
 
 	private DirectionalLight dirLight = null;
-
-	 
 
 	//Can't use as threading causes massive trouble for scene loading
 	//	private StructureUpdateBehavior structureUpdateBehavior;
@@ -292,7 +292,6 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				});*/
 	}
 
-	 
 	/**
 	 * Only for listening to shutdown
 	 * @return
@@ -359,24 +358,22 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 		//hudPhysicsState.setHudPhysicsStateData(physicsSystem);
 
-//	GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false, true,
-//				false, false);
-//		if (gs != null)
+		//	GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false, true,
+		//				false, false);
+		//		if (gs != null)
 		{
 			setupGraphicsSetting(null);
 		}
-		
+
 		//TODO: these must come form a new one of those ^
-		
+
 		DDSTextureLoader.setAnisotropicFilterDegree(8);
 		cameraPanel.getCanvas3D2D().getGLWindow().setSize(1600, 1200);
-		
+
 		//frame.setSize(100,100);// oddly still needed
-		
+
 		cameraPanel.startRendering();
-		
-		
-		
+
 	}
 
 	private void setupGraphicsSetting(GraphicsSettings gs)
@@ -451,8 +448,8 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			cameraPanel.getDolly().locationUpdated(avatarLocation.get(new Quat4f()), avatarLocation.get(new Vector3f()));
 			//cameraPanel.getDolly().setHudShape(cameraPanel.getCanvas3D2D().getHudShapeRoot());
 
-//			DDSTextureLoader.setAnisotropicFilterDegree(gs.getAnisotropicFilterDegree());
-//			cameraPanel.setSceneAntialiasingEnable(gs.isAaRequired());
+			//			DDSTextureLoader.setAnisotropicFilterDegree(gs.getAnisotropicFilterDegree());
+			//			cameraPanel.setSceneAntialiasingEnable(gs.isAaRequired());
 
 			Canvas3D2D canvas3D2D = cameraPanel.getCanvas3D2D();
 			canvas3D2D.getGLWindow().addKeyListener(keyNavigationInputNewt);
@@ -466,13 +463,13 @@ public class SimpleWalkSetup implements LocationUpdateListener
 			hudCrossHair.addToCanvas(canvas3D2D);
 
 			//allow tab for mouse lock
-//			canvas3D2D.setFocusTraversalKeysEnabled(false);
+			//			canvas3D2D.setFocusTraversalKeysEnabled(false);
 
-//			canvas3D2D.addComponentListener(canvasResizeListener);
+			//			canvas3D2D.addComponentListener(canvasResizeListener);
 
 			if (firstInstruction == null)
 			{
-				firstInstruction = new HUDText(canvas3D2D, new Rectangle(600, 60), 18);
+				firstInstruction = new HUDText(canvas3D2D, new Point2f(-0.95f, 0f), 18);
 				firstInstruction.setLocation(0, 200);
 				firstInstruction.setText("Press tab to look around, press tab again to release mouse");
 			}
@@ -486,12 +483,12 @@ public class SimpleWalkSetup implements LocationUpdateListener
 
 	public void resetGraphicsSetting()
 	{
-/*		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
-				false, true, false);
-		if (gs != null)
-		{
-			setupGraphicsSetting(gs);
-		}*/
+		/*		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(SimpleWalkSetup.class), frame, false,
+						false, true, false);
+				if (gs != null)
+				{
+					setupGraphicsSetting(gs);
+				}*/
 	}
 
 	public void setEnabled(boolean enable)
@@ -508,7 +505,7 @@ public class SimpleWalkSetup implements LocationUpdateListener
 				physicsSystem.unpause();
 				//frame.setVisible(true);
 				cameraPanel.startRendering();
-				
+
 				cameraPanel.getCanvas3D2D().addNotify();
 			}
 			else

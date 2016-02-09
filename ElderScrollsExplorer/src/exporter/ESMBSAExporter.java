@@ -28,25 +28,25 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-import scrollsexplorer.GameConfig;
-import scrollsexplorer.PropertyLoader;
-import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
-import tools.TitledPanel;
-import tools.swing.TitledJFileChooser;
-import tools.swing.VerticalFlowLayout;
-import utils.source.EsmSoundKeyToName;
-import utils.source.MediaSources;
 import archive.ArchiveEntry;
 import archive.ArchiveFile;
 import awt.tools3d.resolution.QueryProperties;
-import bsa.BSAFileSet;
-import common.Utils;
-import common.config.ConfigLoader;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmmanager.common.PluginException;
 import esmmanager.common.data.plugin.PluginRecord;
 import esmmanager.loader.ESMManager;
 import esmmanager.loader.IESMManager;
+import scrollsexplorer.GameConfig;
+import scrollsexplorer.PropertyLoader;
+import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
+import set.BSAFileSet;
+import tools.TitledPanel;
+import tools.io.ConfigLoader;
+import tools.io.FileCopy;
+import tools.swing.TitledJFileChooser;
+import tools.swing.VerticalFlowLayout;
+import utils.source.EsmSoundKeyToName;
+import utils.source.MediaSources;
 
 public class ESMBSAExporter extends JFrame
 {
@@ -515,7 +515,7 @@ public class ESMBSAExporter extends JFrame
 				dest.getParentFile().mkdirs();
 				dest.createNewFile();
 				System.out.print(" copying ");
-				Utils.copyInputStreamToFile(inputStream, dest);
+				FileCopy.copyInputStreamToFile(inputStream, dest);
 				System.out.print("done");
 
 			}
@@ -565,7 +565,7 @@ public class ESMBSAExporter extends JFrame
 				dest.getParentFile().mkdirs();
 				dest.createNewFile();
 				System.out.print(" copying ");
-				Utils.copyInputStreamToFile(inputStream, dest);
+				FileCopy.copyInputStreamToFile(inputStream, dest);
 				System.out.print("done");
 
 			}
@@ -605,7 +605,7 @@ public class ESMBSAExporter extends JFrame
 				dest.getParentFile().mkdirs();
 				dest.createNewFile();
 				System.out.print(" copying ");
-				Utils.copyInputStreamToFile(inputStream, dest);
+				FileCopy.copyInputStreamToFile(inputStream, dest);
 				System.out.print("done");
 
 			}

@@ -3,7 +3,7 @@ package exporter;
 import java.util.HashSet;
 
 import nif.NifFile;
-import bsa.BSAFileSet;
+import set.BSAFileSet;
 import bsa.source.BsaMeshSource;
 
 public class BsaRecordedMeshSource extends BsaMeshSource
