@@ -77,7 +77,7 @@ import utils.source.file.FileTextureSource;
 
 public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener, LocationUpdateListener
 {
-	public  Dashboard dashboard = new Dashboard();
+	public Dashboard dashboard = new Dashboard();
 
 	private SimpleBethCellManager simpleBethCellManager;
 
@@ -137,7 +137,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		{
 			PropertyLoader.load();
 
-			prefs = Preferences.userNodeForPackage(ScrollsExplorer.class);
+			prefs = Preferences.userNodeForPackage(ScrollsExplorerNewt.class);
 
 			this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			this.getContentPane().setLayout(new BorderLayout(1, 1));
@@ -267,6 +267,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				{
 					//Just until the real window listens to damn events properly!
 					closingTime();
+					simpleWalkSetup.closingTime();
 					System.exit(0);
 				}
 			});
