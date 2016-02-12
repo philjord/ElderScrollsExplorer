@@ -265,12 +265,13 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				@Override
 				public void windowClosing(java.awt.event.WindowEvent arg0)
 				{
-					//Just until the real window listens to damn events properly!
-					closingTime();
+					//Just until the real window listens to damn events properly!					
 					simpleWalkSetup.closingTime();
+					closingTime();
 					System.exit(0);
 				}
 			});
+			
 
 			setVisible(true);// need to be visible in case of set folders
 			// My system for guarantees rendering of a component (test this)
@@ -523,16 +524,30 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 						//FIXME: stops working once fully running, but responds up to that point
 						// that is to say the button no longer sends anything through
-						// button won't work off the evetn thread, so I need to add my own system in and ignore the button
+						// button won't work off the event thread, so I need to add my own system in and ignore the button
 						// button only runs if display is called on the window but that cuts FPS in half
 						simpleWalkSetup.getWindow().setDefaultCloseOperation(WindowClosingMode.DISPOSE_ON_CLOSE);
 						simpleWalkSetup.getWindow().addWindowListener(new WindowAdapter() {
 							@Override
 							public void windowDestroyNotify(WindowEvent arg0)
-							{
+							{								
+								simpleWalkSetup.closingTime();
 								closingTime();
+								System.exit(0);
 							}
 
+						});
+						simpleWalkSetup.getWindow().addKeyListener(new com.jogamp.newt.event.KeyAdapter() {
+							@Override
+							public void keyPressed(com.jogamp.newt.event.KeyEvent e)
+							{
+								if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+								{									
+									simpleWalkSetup.closingTime();
+									closingTime();
+									System.exit(0);
+								}
+							}
 						});
 
 						// I could use the j3dcellfactory now? with the cached cell records?
