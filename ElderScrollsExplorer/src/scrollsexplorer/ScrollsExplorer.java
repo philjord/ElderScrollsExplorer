@@ -54,6 +54,7 @@ import nativeLinker.LWJGLLinker;
 import nif.BgsmSource;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
+import scrollsexplorer.simpleclient.SimpleWalkSetupInterface;
 import scrollsexplorer.simpleclient.settings.GeneralSettingsPanel;
 import scrollsexplorer.simpleclient.settings.GraphicsSettingsPanel;
 import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
@@ -81,7 +82,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	private SimpleBethCellManager simpleBethCellManager;
 
-	private SimpleWalkSetup simpleWalkSetup;
+	private SimpleWalkSetupInterface simpleWalkSetup;
 
 	private static JTable table;
 
@@ -661,7 +662,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		return simpleBethCellManager;
 	}
 
-	public SimpleWalkSetup getSimpleWalkSetup()
+	public SimpleWalkSetupInterface getSimpleWalkSetup()
 	{
 		return simpleWalkSetup;
 	}

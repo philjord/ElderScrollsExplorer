@@ -13,9 +13,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import scrollsexplorer.simpleclient.SimpleWalkSetup;
 import tools.swing.VerticalFlowLayout;
 import esmj3d.j3d.BethRenderSettings;
+import scrollsexplorer.simpleclient.SimpleWalkSetupInterface;
 
 /**
  * @author Administrator
@@ -39,9 +39,9 @@ public class ShowOutlinesPanel extends JPanel
 
 	private JCheckBox outlineFocusedTick = new JCheckBox("Outline Focused Object", BethRenderSettings.isOutlineFocused());
 
-	protected SimpleWalkSetup simpleWalkSetup;
+	protected SimpleWalkSetupInterface simpleWalkSetup;
 
-	public ShowOutlinesPanel(SimpleWalkSetup _simpleWalkSetup)
+	public ShowOutlinesPanel(SimpleWalkSetupInterface _simpleWalkSetup)
 	{
 		this.simpleWalkSetup = _simpleWalkSetup;
 		//this.setLayout(new GridLayout2(-1, 3));
