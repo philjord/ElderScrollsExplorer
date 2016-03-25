@@ -111,4 +111,29 @@ public class Dashboard extends IDashboard
 		lodLoadingLabel.setOpaque(lodLoading > 0);
 		mainPanel.repaint();
 	}
+
+	public int getEsmLoading()
+	{
+		return esmLoading;
+	}
+
+	public int getCellLoading()
+	{
+		return cellLoading;
+	}
+
+	public int getNearLoading()
+	{
+		return nearLoading;
+	}
+
+	public int getFarLoading()
+	{
+		return farLoading;
+	}
+
+	public int getLodLoading()
+	{
+		return lodLoading;
+	}
 }
