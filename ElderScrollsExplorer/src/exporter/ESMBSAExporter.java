@@ -35,6 +35,7 @@ import bsa.gui.BSAFileSetWithStatus;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmmanager.common.PluginException;
 import esmmanager.common.data.plugin.PluginRecord;
+import esmmanager.loader.CELLPointer;
 import esmmanager.loader.ESMManager;
 import esmmanager.loader.IESMManager;
 import scrollsexplorer.GameConfig;
@@ -56,8 +57,7 @@ public class ESMBSAExporter extends JFrame
 
 	private static DefaultTableModel tableModel;
 
-	private static String[] columnNames = new String[]
-	{ " ", "Int/Ext", "Cell Id", "Name" };
+	private static String[] columnNames = new String[] { " ", "Int/Ext", "Cell Id", "Name" };
 
 	private MediaSources mediaSources;
 
@@ -111,8 +111,7 @@ public class ESMBSAExporter extends JFrame
 		menuBar.add(menu);
 
 		menu.add(setFolders);
-		setFolders.addActionListener(new ActionListener()
-		{
+		setFolders.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -132,8 +131,7 @@ public class ESMBSAExporter extends JFrame
 			buttonPanel.add(gameButton);
 			gameButton.setEnabled(false);
 			gameButtons.put(gameConfig, gameButton);
-			gameButton.addActionListener(new ActionListener()
-			{
+			gameButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
@@ -162,8 +160,7 @@ public class ESMBSAExporter extends JFrame
 		this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 		this.getContentPane().add(options, BorderLayout.WEST);
 
-		export.addActionListener(new ActionListener()
-		{
+		export.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -181,8 +178,7 @@ public class ESMBSAExporter extends JFrame
 		options.add(new JPanel());
 		options.add(new TitledPanel("Output Folder", outputPanel));
 
-		outputSetButton.addActionListener(new ActionListener()
-		{
+		outputSetButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -197,8 +193,7 @@ public class ESMBSAExporter extends JFrame
 			}
 		});
 
-		this.addWindowListener(new WindowAdapter()
-		{
+		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0)
 			{
@@ -258,8 +253,7 @@ public class ESMBSAExporter extends JFrame
 			gameButton.setEnabled(false);
 		}
 
-		Thread t = new Thread()
-		{
+		Thread t = new Thread() {
 			public void run()
 			{
 				synchronized (selectedGameConfig)
@@ -275,8 +269,7 @@ public class ESMBSAExporter extends JFrame
 
 					// note skyrim added
 					if (bsaFileSet == null)
-						bsaFileSet = new BSAFileSetWithStatus(new String[]
-						{ selectedGameConfig.scrollsFolder }, true, false);
+						bsaFileSet = new BSAFileSetWithStatus(new String[] { selectedGameConfig.scrollsFolder }, true, false);
 
 					meshSource = new BsaRecordedMeshSource(bsaFileSet);
 					textureSource = new BsaRecordedTextureSource(bsaFileSet);
@@ -287,8 +280,7 @@ public class ESMBSAExporter extends JFrame
 					j3dCellFactory = selectedGameConfig.j3dCellFactory;
 					j3dCellFactory.setSources(esmManager, mediaSources);
 
-					tableModel = new DefaultTableModel(columnNames, 0)
-					{
+					tableModel = new DefaultTableModel(columnNames, 0) {
 						@Override
 						public boolean isCellEditable(int row, int column)
 						{
@@ -311,15 +303,14 @@ public class ESMBSAExporter extends JFrame
 						for (Integer formId : esmManager.getAllWRLDTopGroupFormIds())
 						{
 							PluginRecord pr = esmManager.getWRLD(formId);
-							tableModel.addRow(new Object[]
-							{ false, "Ext", formId, pr });
+							tableModel.addRow(new Object[] { false, "Ext", formId, pr });
 						}
 
-						for (Integer formId : esmManager.getAllInteriorCELLFormIds())
+						for (CELLPointer cp : esmManager.getAllInteriorCELLFormIds())
 						{
+							int formId = cp.formId;
 							PluginRecord pr = esmManager.getInteriorCELL(formId);
-							tableModel.addRow(new Object[]
-							{ false, "Int", formId, pr });
+							tableModel.addRow(new Object[] { false, "Int", formId, pr });
 						}
 					}
 					catch (DataFormatException e1)
@@ -387,15 +378,13 @@ public class ESMBSAExporter extends JFrame
 							String lodWorldFormId = j3dCellFactory.getLODWorldName(formId);
 
 							//lods
-							int[] scales = new int[]
-							{ 32, 16, 8, 4 };
+							int[] scales = new int[] { 32, 16, 8, 4 };
 
 							//obliv only has one scale
 							float version = esmManager.getVersion();
 							if (version == 1.0f || version == 0.8f)
 							{
-								scales = new int[]
-								{ 32 };
+								scales = new int[] { 32 };
 							}
 
 							for (int scale : scales)
@@ -424,8 +413,8 @@ public class ESMBSAExporter extends JFrame
 									Object od = j3dCellFactory.makeBGWRLDDistant(formId, x, y, false);
 									Object ot = j3dCellFactory.makeBGWRLDTemporary(formId, x, y, false);
 									if (od != null || ot != null)
-										System.out.println("x " + x + " y " + y + " complete in "
-												+ (System.currentTimeMillis() - xyStartTime) + "ms");
+										System.out.println(
+												"x " + x + " y " + y + " complete in " + (System.currentTimeMillis() - xyStartTime) + "ms");
 
 								}
 							}

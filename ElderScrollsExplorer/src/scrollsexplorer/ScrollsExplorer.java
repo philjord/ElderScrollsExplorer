@@ -40,6 +40,7 @@ import com.jogamp.nativewindow.WindowClosingProtocol.WindowClosingMode;
 import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 
+import archive.ArchiveFile;
 import archive.BSArchiveSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
@@ -48,10 +49,12 @@ import client.BootStrap;
 import esmj3d.j3d.BethRenderSettings;
 import esmmanager.common.PluginException;
 import esmmanager.common.data.plugin.PluginRecord;
+import esmmanager.loader.CELLPointer;
 import esmmanager.loader.ESMManager;
 import esmmanager.loader.IESMManager;
 import nativeLinker.LWJGLLinker;
 import nif.BgsmSource;
+import scrollsexplorer.simpleclient.BethWorldVisualBranch;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
 import scrollsexplorer.simpleclient.SimpleWalkSetupInterface;
@@ -133,6 +136,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	public ScrollsExplorer()
 	{
 		super("ScrollsExplorer");
+
+		ArchiveFile.USE_FILE_MAPS = true;
+		ESMManager.USE_FILE_MAPS = true;
+		BethRenderSettings.setFarLoadGridCount(8);
+		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false;
+
+		ArchiveFile.USE_MINI_CHANNEL_MAPS = false;
+		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 
 		try
 		{
@@ -272,7 +283,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					System.exit(0);
 				}
 			});
-			
 
 			setVisible(true);// need to be visible in case of set folders
 			// My system for guarantees rendering of a component (test this)
@@ -531,7 +541,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						simpleWalkSetup.getWindow().addWindowListener(new WindowAdapter() {
 							@Override
 							public void windowDestroyNotify(WindowEvent arg0)
-							{								
+							{
 								simpleWalkSetup.closingTime();
 								closingTime();
 								System.exit(0);
@@ -543,7 +553,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							public void keyPressed(com.jogamp.newt.event.KeyEvent e)
 							{
 								if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-								{									
+								{
 									simpleWalkSetup.closingTime();
 									closingTime();
 									System.exit(0);
@@ -591,8 +601,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 									tableModel.addRow(new Object[] { "Ext", formId, pr });
 							}
 
-							for (Integer formId : esmManager.getAllInteriorCELLFormIds())
+							for (CELLPointer cp : esmManager.getAllInteriorCELLFormIds())
 							{
+								int formId = cp.formId;
 								PluginRecord pr = esmManager.getInteriorCELL(formId);
 								if (prevCellformid == formId)
 									tableModel.insertRow(0, new Object[] { "Int", formId, pr });
