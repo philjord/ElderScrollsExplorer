@@ -49,7 +49,7 @@ import client.BootStrap;
 import esmj3d.j3d.BethRenderSettings;
 import esmmanager.common.PluginException;
 import esmmanager.common.data.plugin.PluginRecord;
-import esmmanager.loader.CELLPointer;
+import esmmanager.loader.CELLDIALPointer;
 import esmmanager.loader.ESMManager;
 import esmmanager.loader.IESMManager;
 import nativeLinker.LWJGLLinker;
@@ -601,7 +601,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 									tableModel.addRow(new Object[] { "Ext", formId, pr });
 							}
 
-							for (CELLPointer cp : esmManager.getAllInteriorCELLFormIds())
+							for (CELLDIALPointer cp : esmManager.getAllInteriorCELLFormIds())
 							{
 								int formId = cp.formId;
 								PluginRecord pr = esmManager.getInteriorCELL(formId);

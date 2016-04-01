@@ -35,7 +35,7 @@ import bsa.gui.BSAFileSetWithStatus;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmmanager.common.PluginException;
 import esmmanager.common.data.plugin.PluginRecord;
-import esmmanager.loader.CELLPointer;
+import esmmanager.loader.CELLDIALPointer;
 import esmmanager.loader.ESMManager;
 import esmmanager.loader.IESMManager;
 import scrollsexplorer.GameConfig;
@@ -306,7 +306,7 @@ public class ESMBSAExporter extends JFrame
 							tableModel.addRow(new Object[] { false, "Ext", formId, pr });
 						}
 
-						for (CELLPointer cp : esmManager.getAllInteriorCELLFormIds())
+						for (CELLDIALPointer cp : esmManager.getAllInteriorCELLFormIds())
 						{
 							int formId = cp.formId;
 							PluginRecord pr = esmManager.getInteriorCELL(formId);
