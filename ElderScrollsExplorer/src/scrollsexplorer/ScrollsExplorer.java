@@ -501,7 +501,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							if (bsaFileSet == null)
 							{
 								bsaFileSet = new BSArchiveSet(new String[] { selectedGameConfig.scrollsFolder },
-										cbLoadAllMenuItem.isSelected(), false);
+										cbLoadAllMenuItem.isSelected());
 							}
 
 							if (bsaFileSet.size() == 0)
