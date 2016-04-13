@@ -1,5 +1,7 @@
 package exporter;
 
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.HashSet;
 
 import nif.NifFile;
@@ -21,5 +23,19 @@ public class BsaRecordedMeshSource extends BsaMeshSource
 	{
 		requestedFiles.add(nifName);
 		return super.getNifFile(nifName);
+	}
+	
+	@Override
+	public InputStream getInputStreamForFile(String fileName)
+	{
+		requestedFiles.add(fileName);
+		return super.getInputStreamForFile(fileName);
+	}
+	
+	@Override
+	public ByteBuffer getByteBuffer(String fileName)
+	{
+		requestedFiles.add(fileName);
+		return super.getByteBuffer(fileName);
 	}
 }

@@ -54,6 +54,7 @@ import esmmanager.loader.ESMManager;
 import esmmanager.loader.IESMManager;
 import nativeLinker.LWJGLLinker;
 import nif.BgsmSource;
+import nif.appearance.NiGeometryAppearanceFactoryShader;
 import scrollsexplorer.simpleclient.BethWorldVisualBranch;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
@@ -63,6 +64,7 @@ import scrollsexplorer.simpleclient.settings.GraphicsSettingsPanel;
 import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
 import scrollsexplorer.simpleclient.settings.ShowOutlinesPanel;
 import tools.TitledPanel;
+import tools.compressedtexture.CompressedTextureLoader;
 import tools.io.ConfigLoader;
 import tools.swing.UserGuideDisplay;
 import tools.swing.VerticalFlowLayout;
@@ -144,6 +146,10 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		ArchiveFile.USE_MINI_CHANNEL_MAPS = false;
 		ArchiveFile.USE_NON_NATIVE_ZIP = false;
+		
+		NiGeometryAppearanceFactoryShader.setAsDefault();
+		CompressedTextureLoader.setAnisotropicFilterDegree(8);
+		
 
 		try
 		{

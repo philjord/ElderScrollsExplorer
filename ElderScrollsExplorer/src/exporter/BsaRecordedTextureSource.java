@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.HashSet;
 
 import javax.media.j3d.Texture;
+import javax.media.j3d.TextureUnitState;
 
 import bsa.gui.BSAFileSetWithStatus;
 import bsa.source.BsaTextureSource;
@@ -31,5 +32,12 @@ public class BsaRecordedTextureSource extends BsaTextureSource
 	{
 		requestedFiles.add(texName);
 		return super.getInputStream(texName);
+	}
+	
+	@Override
+	public TextureUnitState getTextureUnitState(String texName)
+	{
+		requestedFiles.add(texName);
+		return super.getTextureUnitState(texName);		
 	}
 }
