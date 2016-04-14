@@ -146,12 +146,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		ArchiveFile.USE_MINI_CHANNEL_MAPS = false;
 		ArchiveFile.USE_NON_NATIVE_ZIP = false;
-		ArchiveFile.RETURN_MAPPED_BYTE_BUFFERS = true;
+		ArchiveFile.RETURN_MAPPED_BYTE_BUFFERS = false;
 		
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		CompressedTextureLoader.setAnisotropicFilterDegree(8);
 		
-
 		try
 		{
 			PropertyLoader.load();
