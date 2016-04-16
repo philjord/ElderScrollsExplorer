@@ -59,6 +59,7 @@ import scrollsexplorer.simpleclient.BethWorldVisualBranch;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
 import scrollsexplorer.simpleclient.SimpleWalkSetupInterface;
+import scrollsexplorer.simpleclient.physics.DynamicsEngine;
 import scrollsexplorer.simpleclient.settings.GeneralSettingsPanel;
 import scrollsexplorer.simpleclient.settings.GraphicsSettingsPanel;
 import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
@@ -147,10 +148,12 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		ArchiveFile.USE_MINI_CHANNEL_MAPS = false;
 		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 		ArchiveFile.RETURN_MAPPED_BYTE_BUFFERS = false;
-		
+
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		CompressedTextureLoader.setAnisotropicFilterDegree(8);
-		
+
+		DynamicsEngine.MAX_SUB_STEPS = 5;
+
 		try
 		{
 			PropertyLoader.load();
