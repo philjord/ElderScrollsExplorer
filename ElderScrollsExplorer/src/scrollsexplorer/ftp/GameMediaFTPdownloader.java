@@ -11,15 +11,15 @@ import java.util.prefs.Preferences;
 
 import javax.swing.JOptionPane;
 
-import tools.io.FileDownloadProgressThread;
-import tools.io.FileDownloadProgressThread.CancelCallBack;
-
 import com.enterprisedt.net.ftp.FTPClient;
 import com.enterprisedt.net.ftp.FTPConnectMode;
 import com.enterprisedt.net.ftp.FTPException;
 import com.enterprisedt.net.ftp.FTPFile;
 import com.enterprisedt.net.ftp.FTPMessageCollector;
 import com.enterprisedt.net.ftp.FTPTransferType;
+
+import tools.swing.FileDownloadProgressThread;
+import tools.swing.FileDownloadProgressThread.CancelCallBack;
 
 /**
  *  This class grabs game media from my ftp server, it asks for the password though...
