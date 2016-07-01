@@ -64,6 +64,7 @@ import scrollsexplorer.simpleclient.settings.GeneralSettingsPanel;
 import scrollsexplorer.simpleclient.settings.GraphicsSettingsPanel;
 import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
 import scrollsexplorer.simpleclient.settings.ShowOutlinesPanel;
+import scrollsexplorer.simpleclient.tes3.Tes3Extensions;
 import tools.compressedtexture.CompressedTextureLoader;
 import tools.io.ConfigLoader;
 import tools.swing.TitledPanel;
@@ -135,6 +136,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private Preferences prefs;
 
 	private boolean autoLoadStartCell = true;
+	
+	private Tes3Extensions tes3Extensions;
 
 	public ScrollsExplorer()
 	{
@@ -573,6 +576,13 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						// I could use the j3dcellfactory now? with the cached cell records?
 						simpleBethCellManager.setSources(selectedGameConfig, esmManager, mediaSources);
 
+						if (selectedGameConfig == GameConfig.allGameConfigs.get(0))
+						{
+							System.out.println("Adding Tes3 extensions");
+							tes3Extensions = new Tes3Extensions(selectedGameConfig, esmManager, mediaSources, simpleWalkSetup,
+									simpleBethCellManager);
+						}
+
 						tableModel = new DefaultTableModel(columnNames, 0) {
 							@Override
 							public boolean isCellEditable(int row, int column)
@@ -638,6 +648,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 						if (autoLoadStartCell)
 						{
+
 							display(prevCellformid);
 						}
 					}
@@ -720,7 +731,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		//System.setProperty("jogl.disable.opengles", "true");
 		System.setProperty("sun.awt.noerasebackground", "true");
 		System.setProperty("j3d.cacheAutoComputeBounds", "true");
-
 
 		ConfigLoader.loadConfig(args);
 
