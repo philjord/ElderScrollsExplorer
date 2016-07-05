@@ -562,11 +562,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							@Override
 							public void windowResized(final WindowEvent e)
 							{
-								J3dNiParticles.screenWidth = simpleWalkSetup.getWindow().getWidth();
+								J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
 							}
 
 						});						
-						J3dNiParticles.screenWidth = simpleWalkSetup.getWindow().getWidth();
+						J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
 						simpleWalkSetup.getWindow().addKeyListener(new com.jogamp.newt.event.KeyAdapter() {
 							@Override
 							public void keyPressed(com.jogamp.newt.event.KeyEvent e)
