@@ -55,6 +55,7 @@ import esmmanager.loader.IESMManager;
 import nativeLinker.LWJGLLinker;
 import nif.BgsmSource;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
+import nif.j3d.particles.tes3.J3dNiParticles;
 import scrollsexplorer.simpleclient.BethWorldVisualBranch;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
@@ -558,8 +559,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 								closingTime();
 								System.exit(0);
 							}
+							@Override
+							public void windowResized(final WindowEvent e)
+							{
+								J3dNiParticles.screenWidth = simpleWalkSetup.getWindow().getWidth();
+							}
 
-						});
+						});						
+						J3dNiParticles.screenWidth = simpleWalkSetup.getWindow().getWidth();
 						simpleWalkSetup.getWindow().addKeyListener(new com.jogamp.newt.event.KeyAdapter() {
 							@Override
 							public void keyPressed(com.jogamp.newt.event.KeyEvent e)
