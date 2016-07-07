@@ -45,6 +45,8 @@ public class GraphicsSettingsPanel extends JPanel
 
 	private JCheckBox showPhysicTick = new JCheckBox("Show Physics", BethRenderSettings.isShowPhysic());
 
+	private JCheckBox showPathGridTick = new JCheckBox("Show Path Grid", BethRenderSettings.isShowPathGrid());
+
 	private JCheckBox showEditorMarkers = new JCheckBox("Show Editor Markers", BethRenderSettings.isShowEditorMarkers());
 
 	private JCheckBox showDistantBuildingsTick = new JCheckBox("Distant Buildings", BethRenderSettings.isShowDistantBuildings());
@@ -113,6 +115,7 @@ public class GraphicsSettingsPanel extends JPanel
 		FAR_LOAD_DISTSlider.setPaintLabels(true);
 		add(FAR_LOAD_DISTSlider);
 		FAR_LOAD_DISTSlider.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setFarLoadGridCount(FAR_LOAD_DISTSlider.getValue());
@@ -125,6 +128,7 @@ public class GraphicsSettingsPanel extends JPanel
 		NEAR_LOAD_DISTSlider.setPaintLabels(true);
 		add(NEAR_LOAD_DISTSlider);
 		NEAR_LOAD_DISTSlider.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setNearLoadGridCount(NEAR_LOAD_DISTSlider.getValue());
@@ -137,6 +141,7 @@ public class GraphicsSettingsPanel extends JPanel
 		LOD_LOAD_DIST_MAXSlider.setPaintLabels(true);
 		add(LOD_LOAD_DIST_MAXSlider);
 		LOD_LOAD_DIST_MAXSlider.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setLOD_LOAD_DIST_MAX(LOD_LOAD_DIST_MAXSlider.getValue());
@@ -149,6 +154,7 @@ public class GraphicsSettingsPanel extends JPanel
 		actorFade.setPaintLabels(true);
 		add(actorFade);
 		actorFade.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setActorFade(actorFade.getValue());
@@ -160,6 +166,7 @@ public class GraphicsSettingsPanel extends JPanel
 		itemFade.setPaintLabels(true);
 		add(itemFade);
 		itemFade.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setItemFade(itemFade.getValue());
@@ -171,6 +178,7 @@ public class GraphicsSettingsPanel extends JPanel
 		objectFade.setPaintLabels(true);
 		add(objectFade);
 		objectFade.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setObjectFade(objectFade.getValue());
@@ -185,6 +193,16 @@ public class GraphicsSettingsPanel extends JPanel
 				BethRenderSettings.setShowPhysics(showPhysicTick.isSelected());
 			}
 		});
+
+		add(showPathGridTick);
+		showPathGridTick.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				BethRenderSettings.setShowPathGrid(showPathGridTick.isSelected());
+			}
+		});
+		
 		add(showEditorMarkers);
 		showEditorMarkers.addActionListener(new ActionListener() {
 			@Override
@@ -193,6 +211,7 @@ public class GraphicsSettingsPanel extends JPanel
 				BethRenderSettings.setShowEditorMarkers(showEditorMarkers.isSelected());
 			}
 		});
+		
 		add(showDistantBuildingsTick);
 		showDistantBuildingsTick.addActionListener(new ActionListener() {
 			@Override
@@ -201,6 +220,7 @@ public class GraphicsSettingsPanel extends JPanel
 				BethRenderSettings.setShowDistantBuildings(showDistantBuildingsTick.isSelected());
 			}
 		});
+		
 		add(showDistantTreesTick);
 		showDistantTreesTick.addActionListener(new ActionListener() {
 			@Override
