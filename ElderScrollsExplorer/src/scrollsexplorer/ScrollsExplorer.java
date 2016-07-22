@@ -62,6 +62,7 @@ import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
 import scrollsexplorer.simpleclient.SimpleWalkSetupInterface;
 import scrollsexplorer.simpleclient.physics.DynamicsEngine;
+import scrollsexplorer.simpleclient.settings.DistanceSettingsPanel;
 import scrollsexplorer.simpleclient.settings.GeneralSettingsPanel;
 import scrollsexplorer.simpleclient.settings.GraphicsSettingsPanel;
 import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
@@ -94,6 +95,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private SimpleWalkSetupInterface simpleWalkSetup;
 
 	private static JTable table;
+
+	private DistanceSettingsPanel distanceSettingsPanel;
 
 	private GraphicsSettingsPanel graphicsSettingsPanel;
 
@@ -138,7 +141,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private Preferences prefs;
 
 	private boolean autoLoadStartCell = true;
-	
+
 	private Tes3Extensions tes3Extensions;
 
 	public ScrollsExplorer()
@@ -260,6 +263,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 			simpleBethCellManager = new SimpleBethCellManager(simpleWalkSetup);
 
+			distanceSettingsPanel = new DistanceSettingsPanel();
 			graphicsSettingsPanel = new GraphicsSettingsPanel();
 			showOutlinesPanel = new ShowOutlinesPanel(simpleWalkSetup);
 			generalSettingsPanel = new GeneralSettingsPanel(this);
@@ -279,6 +283,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			sideBar.addSection(ss2);
 			SidebarSection ss3 = new SidebarSection(sideBar, "General", generalSettingsPanel, null);
 			sideBar.addSection(ss3);
+			SidebarSection ss4b = new SidebarSection(sideBar, "Distances", distanceSettingsPanel, null);
+			sideBar.addSection(ss4b);
 			SidebarSection ss4 = new SidebarSection(sideBar, "Graphics", graphicsSettingsPanel, null);
 			sideBar.addSection(ss4);
 			SidebarSection ss5 = new SidebarSection(sideBar, "Outlines", showOutlinesPanel, null);
@@ -493,15 +499,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					bsaFileSet = null;
 					if (esmManager != null)
 					{
-						
+
 						//TODO: all these should be connected strongly to GameConfig
 						if (esmManager.getName().indexOf("Morrowind") != -1)
-						{							
+						{
 							J3dLAND.setTes3();
 							BethRenderSettings.setTes3(true);
-						}						
-						
-						
+						}
+
 						YawPitch yp = YawPitch
 								.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), new YawPitch().toString()));
 						Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
@@ -569,13 +574,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 								closingTime();
 								System.exit(0);
 							}
+
 							@Override
 							public void windowResized(final WindowEvent e)
 							{
 								J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
 							}
 
-						});						
+						});
 						J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
 						simpleWalkSetup.getWindow().addKeyListener(new com.jogamp.newt.event.KeyAdapter() {
 							@Override
