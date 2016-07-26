@@ -543,7 +543,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 							meshSource = new BsaMeshSource(bsaFileSet);
 							textureSource = new BsaTextureSource(bsaFileSet);
-							soundSource = new BsaSoundSource(bsaFileSet, new EsmSoundKeyToName(esmManager));
+							soundSource = new BsaSoundSource(bsaFileSet, null);//new EsmSoundKeyToName(esmManager));
 						}
 						else
 						{
