@@ -508,7 +508,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						}
 
 						YawPitch yp = YawPitch
-								.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), new YawPitch().toString()));
+								.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), selectedGameConfig.startYP.toString()));
 						Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
 								selectedGameConfig.startLocation.toString()));
 						int prevCellformid = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
