@@ -754,6 +754,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		//System.setProperty("jogl.disable.opengles", "true");
 		System.setProperty("sun.awt.noerasebackground", "true");
 		System.setProperty("j3d.cacheAutoComputeBounds", "true");
+		System.setProperty("j3d.defaultReadCapability", "false");
 
 		ConfigLoader.loadConfig(args);
 
