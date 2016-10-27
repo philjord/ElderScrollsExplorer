@@ -74,7 +74,7 @@ If a dialog pops up saying "Unable to create DirectX D3D context."
 Jre 7 has a graphical bug that can cause a crash bug, with an error log like:
  DefaultRenderingErrorListener.errorOccurred:
 CONTEXT_CREATION_ERROR: Renderer: Error creating Canvas3D graphics context or bad pixelformat 
-Or javax.media.j3d.IllegalRenderingStateException: Java 3D ERROR : OpenGL 1.2 or better is required (GL_VERSION=1.1)
+Or org.jogamp.java3d.IllegalRenderingStateException: Java 3D ERROR : OpenGL 1.2 or better is required (GL_VERSION=1.1)
 Run check java to discover installed version, uninstalling java 7 or forcibly using java 1.6 jre ( by placing it into the folder this file is in ) are the only solutions 
 
 If you get an error like this:
