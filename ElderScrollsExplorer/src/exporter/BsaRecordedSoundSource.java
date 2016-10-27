@@ -2,7 +2,7 @@ package exporter;
 
 import java.util.HashSet;
 
-import javax.media.j3d.MediaContainer;
+import org.jogamp.java3d.MediaContainer;
 
 import utils.source.EsmSoundKeyToName;
 import bsa.gui.BSAFileSetWithStatus;

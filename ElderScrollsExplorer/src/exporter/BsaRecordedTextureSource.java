@@ -3,8 +3,8 @@ package exporter;
 import java.io.InputStream;
 import java.util.HashSet;
 
-import javax.media.j3d.Texture;
-import javax.media.j3d.TextureUnitState;
+import org.jogamp.java3d.Texture;
+import org.jogamp.java3d.TextureUnitState;
 
 import bsa.gui.BSAFileSetWithStatus;
 import bsa.source.BsaTextureSource;
