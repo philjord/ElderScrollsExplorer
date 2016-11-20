@@ -36,5 +36,6 @@
 	<classpathentry kind="lib" path="/external_jars/external jars/MpegAudioSPI1.9.5/mp3spi1.9.5.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/awtshim"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/java3d-compressedtexture"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/awtgeom"/>
 	<classpathentry kind="output" path="output"/>
 </classpath>
