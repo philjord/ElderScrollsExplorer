@@ -58,6 +58,7 @@ import nativeLinker.LWJGLLinker;
 import nif.BgsmSource;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.j3d.particles.tes3.J3dNiParticles;
+import nif.shaders.ShaderPrograms;
 import scrollsexplorer.simpleclient.BethWorldVisualBranch;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
@@ -160,6 +161,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		CompressedTextureLoader.setAnisotropicFilterDegree(8);
+				
+		// debug shaders like this to externalize from jars 
+		ShaderPrograms.fileSystemFolder = new File("C:/temp/shaders");
 
 		DynamicsEngine.MAX_SUB_STEPS = 5;
 
