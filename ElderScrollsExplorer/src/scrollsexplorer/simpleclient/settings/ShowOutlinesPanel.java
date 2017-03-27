@@ -29,6 +29,8 @@ public class ShowOutlinesPanel extends JPanel
 
 	private JCheckBox enablePlacedLights = new JCheckBox("Enable Placed Lights", BethRenderSettings.isEnablePlacedLights());
 
+	private JCheckBox outlineLightsTick = new JCheckBox("Outline Lights", BethRenderSettings.isOutlineLights());
+	
 	private JCheckBox outlineCharsTick = new JCheckBox("Outline Characters", BethRenderSettings.isOutlineChars());
 
 	private JCheckBox outlineDoorsTick = new JCheckBox("Outline Doors", BethRenderSettings.isOutlineDoors());
@@ -84,6 +86,17 @@ public class ShowOutlinesPanel extends JPanel
 				BethRenderSettings.setEnablePlacedLights(enablePlacedLights.isSelected());
 			}
 		});
+		
+		add(outlineLightsTick);
+		outlineLightsTick.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				BethRenderSettings.setOutlineLights(outlineLightsTick.isSelected());
+			}
+		});
+
 
 		add(outlineCharsTick);
 		outlineCharsTick.addActionListener(new ActionListener()
