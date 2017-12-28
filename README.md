@@ -72,7 +72,7 @@ The JBullet physics simulation created from them is working, including:
 
  
 
-####It does not have:  
+#### It does not have:  
 
 - Reasonable AI for NPCs/CREAs
 
@@ -96,12 +96,13 @@ The JBullet physics simulation created from them is working, including:
 
 
 #### What you can do
+
 - Currently you can activate doors and containers  
 - Doors will teleport you to other cells if appropriate  
 - Fly
 
 
-###To build the code:  
+### To build the code:  
 
 The example below has been tested on windows, though it should work similarly on any platform.
 Note if you are already developing with Java and Eclipse, start with step 6 but I recomend you open a new workspace as there is a lot of code involved.
@@ -130,8 +131,10 @@ Note if you are already developing with Java and Eclipse, start with step 6 but 
 
 Everything you need (apart from game data files) should now be present in your IDE, it is a long list of projects
 
-###To run as a java application
+### To run as a java application
+
 Before running it:
+
 The Jbullet (http://jbullet.advel.cz) is an amazingly optomised project (that is very cool in it's own right). In order for it to compile you must right click the "build.xml" file in the root of the project and "Run As.." ->"Ant Build"
 
 It should output something about Instrumenting Stack
@@ -159,21 +162,7 @@ To run the project:
 8.  Click Run 
 
 
-
-####Troubles
-This is likely:
-
 If you get a class not found called Stack, you probably didn't ant buil the xml file as above (or it failed)
-
-These are unlikely:
-
-If you get Unsupported major.minor version 51.0  
-Try project -> properties -> configure workspace settings -> Compiler compliance level: -> 1.6  
-
-If you get a texture mip map exception:
-
-Try the run configuration -> classpath -> ElderScrollsExplorer-> edit -> only include exported entries  
-
 
 
 Once it's running you must set your game folders (the ones containing the esm and bsa files) using the File menu in game, then read the user guide.
