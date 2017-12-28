@@ -4,7 +4,7 @@
 <project reference="1.0,https://github.com/philjord/3DTools.git,master,3DTools"/>
 <project reference="1.0,https://github.com/philjord/BSAManager.git,master,BSAManager"/>
 <project reference="1.0,https://github.com/philjord/ElderScrollsExplorer.git,master,ElderScrollsExplorer"/>
-<project reference="1.0,https://philjord@bitbucket.org/philjord/ElderScrollsExplorerBase,master,ElderScrollsExplorerBase"/>
+<project reference="1.0,https://bitbucket.org/philjord/ElderScrollsExplorerBase,master,."/>
 <project reference="1.0,https://github.com/philjord/esmj3d.git,master,esmj3d"/>
 <project reference="1.0,https://github.com/philjord/esmj3dfo3.git,master,esmj3dfo3"/>
 <project reference="1.0,https://github.com/philjord/esmj3dfo4.git,master,esmj3dfo4"/>
@@ -13,8 +13,8 @@
 <project reference="1.0,https://github.com/philjord/esmj3dtes5.git,master,esmj3dtes5"/>
 <project reference="1.0,https://github.com/philjord/ESMManager.git,master,ESMLoader"/>
 <project reference="1.0,https://github.com/philjord/java3d-core.git,dev1.7.0,."/>
-<project reference="1.0,https://philjord@bitbucket.org/philjord/java3d-core-and.git,master,."/>
-<project reference="1.0,https://philjord@bitbucket.org/philjord/java3d-utils-and.git,master,."/>
+<project reference="1.0,https://bitbucket.org/philjord/java3d-core-and.git,master,."/>
+<project reference="1.0,https://bitbucket.org/philjord/java3d-utils-and.git,master,."/>
 <project reference="1.0,https://github.com/philjord/jbullet1.1.git,master,jbullet1.1"/>
 <project reference="1.0,https://github.com/philjord/jnif,master,jnif"/>
 <project reference="1.0,https://github.com/philjord/jnifj3d.git,master,jnifj3d"/>
