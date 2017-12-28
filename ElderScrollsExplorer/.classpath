@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/3DTools"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jnifj3d"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3d"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dfo3"/>
@@ -8,7 +9,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dtes5"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ESMManager"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSAManager"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/3DTools"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jnifjbullet"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Tools"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jbullet1.1"/>
@@ -17,9 +17,7 @@
 	<classpathentry kind="lib" path="/external_jars/external jars/lwjgl-2.8.5/jar/lwjgl_util.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/lwjgl-2.8.5/jar/lwjgl.jar" sourcepath="E:/downloads&amp;installs/develop/java/jogamp/jogamp-all-platforms/jogl-java-src.zip"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/lwjglnative.jar"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/jogamp/jar/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/jogamp/jar/joal.jar"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/jogamp/jar/jogl-all.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jnif"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dtes3"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/jftp.jar"/>
@@ -34,7 +32,5 @@
 	<classpathentry kind="lib" path="/external_jars/external jars/MpegAudioSPI1.9.5/lib/jl1.0.1.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/MpegAudioSPI1.9.5/lib/tritonus_share.jar"/>
 	<classpathentry kind="lib" path="/external_jars/external jars/MpegAudioSPI1.9.5/mp3spi1.9.5.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/java3d-compressedtexture"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/java3d-awtfacade"/>
 	<classpathentry kind="output" path="output"/>
 </classpath>

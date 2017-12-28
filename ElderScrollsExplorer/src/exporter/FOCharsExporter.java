@@ -6,13 +6,13 @@ import java.util.prefs.Preferences;
 
 import awt.tools3d.resolution.QueryProperties;
 import bsa.gui.BSAFileSetWithStatus;
+import esmio.loader.ESMManager;
+import esmio.loader.IESMManager;
+import esmio.utils.source.EsmSoundKeyToName;
 import nif.NifToJ3d;
 import scrollsexplorer.PropertyLoader;
 import tools.io.ConfigLoader;
-import utils.source.EsmSoundKeyToName;
 import utils.source.MediaSources;
-import esmmanager.loader.ESMManager;
-import esmmanager.loader.IESMManager;
 
 //armor/
 //	bosscribe

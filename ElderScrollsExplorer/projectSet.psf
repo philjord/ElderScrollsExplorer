@@ -17,5 +17,6 @@
 <project reference="1.0,https://github.com/philjord/jnifj3d.git,master,jnifj3d"/>
 <project reference="1.0,https://github.com/philjord/jnifjbullet.git,master,jnifjbullet"/>
 <project reference="1.0,https://github.com/philjord/tools.git,master,Tools"/>
+<project reference="1.0,https://bitbucket.org/philjord/ESEAndroid.git,master,ESEAndroid"/>
 </provider>
 </psf>

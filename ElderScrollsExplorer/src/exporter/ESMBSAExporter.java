@@ -28,16 +28,17 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-import archive.ArchiveEntry;
-import archive.ArchiveFile;
 import awt.tools3d.resolution.QueryProperties;
 import bsa.gui.BSAFileSetWithStatus;
+import bsaio.ArchiveEntry;
+import bsaio.ArchiveFile;
+import esmio.common.PluginException;
+import esmio.common.data.plugin.PluginRecord;
+import esmio.loader.CELLDIALPointer;
+import esmio.loader.ESMManager;
+import esmio.loader.IESMManager;
+import esmio.utils.source.EsmSoundKeyToName;
 import esmj3d.j3d.cell.J3dICellFactory;
-import esmmanager.common.PluginException;
-import esmmanager.common.data.plugin.PluginRecord;
-import esmmanager.loader.CELLDIALPointer;
-import esmmanager.loader.ESMManager;
-import esmmanager.loader.IESMManager;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
 import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
@@ -46,7 +47,6 @@ import tools.io.FileCopy;
 import tools.swing.TitledJFileChooser;
 import tools.swing.TitledPanel;
 import tools.swing.VerticalFlowLayout;
-import utils.source.EsmSoundKeyToName;
 import utils.source.MediaSources;
 
 public class ESMBSAExporter extends JFrame
