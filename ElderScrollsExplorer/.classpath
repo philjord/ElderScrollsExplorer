@@ -13,15 +13,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Tools"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jbullet1.1"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/lwjgl-2.8.5/jar/jinput.jar"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/lwjgl-2.8.5/jar/lwjgl_util.jar"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/lwjgl-2.8.5/jar/lwjgl.jar" sourcepath="E:/downloads&amp;installs/develop/java/jogamp/jogamp-all-platforms/jogl-java-src.zip"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/lwjglnative.jar"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/jogamp/jar/joal.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jnif"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dtes3"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/jftp.jar"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/commons-net-3.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dfo4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/java3d-utils-and"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/vecmath"/>
@@ -29,8 +22,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/3DToolsDesktop"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/3DUtilsDesktop"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ESEAndroid"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/MpegAudioSPI1.9.5/lib/jl1.0.1.jar"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/MpegAudioSPI1.9.5/lib/tritonus_share.jar"/>
-	<classpathentry kind="lib" path="/external_jars/external jars/MpegAudioSPI1.9.5/mp3spi1.9.5.jar"/>
 	<classpathentry kind="output" path="output"/>
 </classpath>
