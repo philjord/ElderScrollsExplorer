@@ -123,14 +123,12 @@ Note if you are already developing with Java and Eclipse, start with step 6 but 
 12. Ensure "Import all existing Eclipse Projects" is ticked on
 13. Click Finish
 14. Wait for it to be pulled and imported
-15. In the project Explorer window right click the new project (ElderScrollsExplorer) and select Import
-16. Select Team -> Team Project Set
-17. Tick "File" and browse to the projectSet.psf file in the root of the new project
-18. Click Finish
+15. In the project Explorer window open the new project (ElderScrollsExplorer) 
+16. Right click on the file in the root called "projectSet.psf" and select Import
+17. Select Team -> Team Project Set
+18. It should be showing the selected file, click Finish
 
-Everything you need (apart from game data files) in now present
-
-All the required 3rd party library jars are in the project external_jars
+Everything you need (apart from game data files) should now be present in your IDE, it is a long list of projects
 
 ###To run as a java application
 Before running it:
@@ -162,13 +160,16 @@ To run the project:
 
 ####Troubles
 This is likely:
+
 If you get a class not found called Stack, you probably didn't ant buil the xml file as above (or it failed)
 
 These are unlikely:
+
 If you get Unsupported major.minor version 51.0  
 Try project -> properties -> configure workspace settings -> Compiler compliance level: -> 1.6  
 
-If you get a texture mip map exception
+If you get a texture mip map exception:
+
 Try the run configuration -> classpath -> ElderScrollsExplorer-> edit -> only include exported entries  
 
 
