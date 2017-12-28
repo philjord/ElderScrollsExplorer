@@ -30,12 +30,13 @@ This project pulls together many other projects based around building a game eng
 
 
 ###This is a test bed project
+
 It is really for building another game on top of but also proves the following:
 
 
 The file loaders are working
 
-- BS; nif, dds, sound
+- BSA; archives of nif, dds, sound
 
 - ESM; game world
 
@@ -57,9 +58,9 @@ The Java3d scene graphs created from them are working, including:
 
 - Various LOD strategies (billboards, switches, model swap outs)  
 
-- Shaders  (very basic)
+- Shaders (very basic)
 
-- Particle Systems  (very basic)
+- Particle Systems (very basic)
 
 The JBullet physics simulation created from them is working, including:  
 
@@ -73,9 +74,7 @@ The JBullet physics simulation created from them is working, including:
 
 ####It does not have:  
 
-- An avatar for your character  
-
-- AI of any sort for NPCs/CREAs 
+- Reasonable AI for NPCs/CREAs
 
 - Any game play elements  
 
@@ -117,20 +116,19 @@ Note if you are already developing with Java and Eclipse, start with step 6 but 
 8.  Cut and paste the text below into the top field
 
     https://github.com/philjord/ElderScrollsExplorer.git
+    
 9.  Click Next (no login info required)
 10. Click Next (leave master branch ticked)
 11. Change working directory if you wish 
 12. Ensure "Import all existing Eclipse Projects" is ticked on
 13. Click Finish
 14. Wait for it to be pulled and imported
-15. In the project Explorer window right click the new project (ElderScrollsExplorer) and select Import
-16. Select Team -> Team Project Set
-17. Tick "File" and browse to the projectSet.psf file in the root of the new project
-18. Click Finish
+15. In the project Explorer window open the new project (ElderScrollsExplorer) 
+16. Right click on the file in the root called "projectSet.psf" and select Import
+17. Select Team -> Team Project Set
+18. It should be showing the selected file, click Finish
 
-Everything you need (apart from game data files) in now present
-
-All the required 3rd party library jars are in the project external_jars
+Everything you need (apart from game data files) should now be present in your IDE, it is a long list of projects
 
 ###To run as a java application
 Before running it:
@@ -154,21 +152,26 @@ To run the project:
 
 6.  Cut and paste the text below into Arguments tab-> VM arguments
 
-    -Xmx2400m -Xms1200m -Dj3d.cacheAutoComputeBounds=true -Dsun.java2d.noddraw=true -Dj3d.sharedctx=true -Dj3d.stencilClear=true  -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -server -Djava.ext.dirs=.\none\ 
+    -Xmx12000m -Xms1000m  -Dsun.java2d.noddraw=true    -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -server -Djava.ext.dirs=.\none\
+    
+7. For Working Directory pick Other then click the Workspace button and select the ESEAndroid project (this allows shaders to be found)    
 
-7.  Click Run 
+8.  Click Run 
 
 
 
 ####Troubles
 This is likely:
+
 If you get a class not found called Stack, you probably didn't ant buil the xml file as above (or it failed)
 
 These are unlikely:
+
 If you get Unsupported major.minor version 51.0  
 Try project -> properties -> configure workspace settings -> Compiler compliance level: -> 1.6  
 
-If you get a texture mip map exception
+If you get a texture mip map exception:
+
 Try the run configuration -> classpath -> ElderScrollsExplorer-> edit -> only include exported entries  
 
 
