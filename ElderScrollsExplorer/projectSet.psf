@@ -4,7 +4,7 @@
 <project reference="1.0,https://github.com/philjord/3DTools.git,master,3DTools"/>
 <project reference="1.0,https://github.com/philjord/BSAManager.git,master,BSAManager"/>
 <project reference="1.0,https://github.com/philjord/ElderScrollsExplorer.git,master,ElderScrollsExplorer"/>
-<project reference="1.0,https://bitbucket.org/philjord/ElderScrollsExplorerBase,master,."/>
+<project reference="1.0,https://bitbucket.org/philjord/ElderScrollsExplorerBase,master,ElderScrollsExplorerBase"/>
 <project reference="1.0,https://github.com/philjord/esmj3d.git,master,esmj3d"/>
 <project reference="1.0,https://github.com/philjord/esmj3dfo3.git,master,esmj3dfo3"/>
 <project reference="1.0,https://github.com/philjord/esmj3dfo4.git,master,esmj3dfo4"/>
