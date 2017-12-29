@@ -19,8 +19,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/java3d-utils-and"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/vecmath"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/java3d-core-and"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/3DToolsDesktop"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/3DUtilsDesktop"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ElderScrollsExplorerBase"/>
 	<classpathentry kind="output" path="output"/>
 </classpath>
