@@ -19,19 +19,19 @@ To use this code you must have copies of the .esm and .bsa files from one (or mo
 
 * Skyrim  
 
-* Fallout 4 (This only work at a basic level for now) 
+* Fallout 4 (This only work at a basic level) 
 
 
 
 If you don't have those game files this code will not do much for you (except be fun to read).
 
 
-This project pulls together many other projects based around building a game engine on java3d and JBullet, an engine that imports the assets of the Bethesda games that have been built on the Gamebryo engine.
+This project pulls together many other projects based around building a game engine on Java3D and JBullet, and importing the assets of the Bethesda games that have been built on the Gamebryo engine.
 
 
-### This is a test bed project
+### This project has many sub parts
 
-It is really for building another game on top of but also proves the following:
+#### It shows the following:
 
 
 The file loaders are working
@@ -69,7 +69,6 @@ The JBullet physics simulation created from them is working, including:
 - Character controllers  
 
 - Skyrim compressed meshes  
-
  
 
 #### It does not have:  
@@ -157,12 +156,12 @@ To run the project:
 
     -Xmx12000m -Xms1000m  -Dsun.java2d.noddraw=true    -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -server -Djava.ext.dirs=.\none\
     
-7. For Working Directory pick Other then click the Workspace button and select the ESEAndroid project (this allows shaders to be found)    
+7. For Working Directory pick Other then click the Workspace button and select the ElderScrollsExplorerBase project (this allows shaders to be found)    
 
 8.  Click Run 
 
 
-If you get a class not found called Stack, you probably didn't ant buil the xml file as above (or it failed)
+If you get a class not found called Stack, you probably didn't ant build the xml file as above (or it failed)
 
 
 Once it's running you must set your game folders (the ones containing the esm and bsa files) using the File menu in game, then read the user guide.
