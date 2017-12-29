@@ -103,32 +103,36 @@ The JBullet physics simulation created from them is working, including:
 
 ### To build the code:  
 
-The example below has been tested on windows, though it should work similarly on any platform.
+The example below has been tested on Windows with Eclipse, though it should work similarly on any platform and IDE.
+
 Note if you are already developing with Java and Eclipse, start with step 6 but I recomend you open a new workspace as there is a lot of code involved.
 
-1.  Download eclipse IDE http://www.eclipse.org/downloads/  
+1.  Download eclipse IDE http://www.eclipse.org/downloads/  (Oxygen or later)
 2.  Install it (It is not recomended to install under program files)  
 3.  Make sure you have java installed at least 1.6 or later
 4.  Open eclipse and choose a workspace location
-5.  Change to the workbench and open the Java view.
+5.  Change to the workbench and open the Java perspective (Window -> Perspective -> Open Perspective -> Java).
 6.  Open the Git Repositories View (Window -> Show View -> Other -> Team -> Git Repositories)
-7.  Click the "Clone a Git Repository" button in the upper right corner (blue curved arrow over a yellow barrel)
-8.  Cut and paste the text below into the top field
+7.  Click the "Clone a Git Repository" link in the Git Repositories view (or the button in the upper right corner, a blue curved arrow over a yellow barrel).
+8.  Cut and paste the text below into the URI field
 
     https://github.com/philjord/ElderScrollsExplorer.git
     
 9.  Click Next (no login info required)
 10. Click Next (leave master branch ticked)
 11. Change working directory if you wish 
-12. Ensure "Import all existing Eclipse Projects" is ticked on
+12. Tick "Import all existing Eclipse Projects"
 13. Click Finish
 14. Wait for it to be pulled and imported
-15. In the project Explorer window open the new project (ElderScrollsExplorer) 
-16. Right click on the file in the root called "projectSet.psf" and select Import
-17. Select Team -> Team Project Set
-18. It should be showing the selected file, click Finish
+15. In the project Explorer window expand the new project (ElderScrollsExplorer) 
+16. Right click on the file in the root called "projectSet.psf" and select Import Project Set
+17. It will spend some time dowmloading the code and importing the projects (several minutes)
 
-Everything you need (apart from game data files) should now be present in your IDE, it is a long list of projects
+Everything you need (apart from game data files) should now be present in your IDE, it is a long list of projects.
+
+You you do any development it's important that no project except ElderScrollsExplorer uses any classes from java.awt.\* or javax.\*
+
+Also it's best to use jdk 1.6 to ensure compatibility with Android generally
 
 ### To run as a java application
 
