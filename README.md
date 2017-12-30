@@ -29,6 +29,12 @@ If you don't have those game files this code will not do much for you (except be
 This project pulls together many other projects based around building a game engine on Java3D and JBullet, and importing the assets of the Bethesda games that have been built on the Gamebryo engine.
 
 
+
+If you are interested there is an equivilent project for running on Android, it uses all the same dependencies as this project.
+
+https://bitbucket.org/philjord/elderscrollsexplorer-apk
+
+
 ### This project has many sub parts
 
 #### It shows the following:
@@ -111,56 +117,71 @@ Note if you are already developing with Java and Eclipse, start with step 6 but 
 2.  Install it (It is not recomended to install under program files)  
 3.  Make sure you have java installed at least 1.6 or later
 4.  Open eclipse and choose a workspace location
-5.  Change to the workbench and open the Java perspective (Window -> Perspective -> Open Perspective -> Java).
-6.  Open the Git Repositories View (Window -> Show View -> Other -> Team -> Git Repositories)
-7.  Click the "Clone a Git Repository" link in the Git Repositories view (or the button in the upper right corner, a blue curved arrow over a yellow barrel).
+5.  Close the welcome screen tab
+6.  From the menu select File -> Import -> Git -> Projects from Git 
+7.  Click Next 
+8.  Select Clone URI
+9.  Click Next
 8.  Cut and paste the text below into the URI field
 
     https://github.com/philjord/ElderScrollsExplorer.git
     
 9.  Click Next (no login info required)
 10. Click Next (leave master branch ticked)
-11. Change working directory if you wish 
-12. Tick "Import all existing Eclipse Projects"
-13. Click Finish
-14. Wait for it to be pulled and imported
-15. In the project Explorer window expand the new project (ElderScrollsExplorer) 
-16. Right click on the file in the root called "projectSet.psf" and select Import Project Set
-17. It will spend some time dowmloading the code and importing the projects (several minutes)
+11. Change working directory if you wish, click Next 
+12. Ensure "Import existing Eclipse Projects" is selected
+13. Click Next
+14. Ensure ElderScrollsExplorer is ticked
+15. Click Finish
+16. Wait for it to be pulled and imported
+17. In the Project Explorer window expand the new project (ElderScrollsExplorer) 
+18. Right click on "projectSet.psf" -> Import Project Set...
+19. It will spend some time downloading the code and importing the projects (several minutes)
+20. Open the Java perspective (Window -> Perspective -> Open Perspective -> Java).
+21. Now setup your workspace as you prefer
 
 Everything you need (apart from game data files) should now be present in your IDE, it is a long list of projects.
 
-You you do any development it's important that no project except ElderScrollsExplorer uses any classes from java.awt.\* or javax.\*
 
-Also it's best to use jdk 1.6 to ensure compatibility with Android generally
+To ensure compatibility with the Android runtime it's important that no project except ElderScrollsExplorer uses any classes from java.awt.\* or javax.\*
+
+Also it's best to use jdk 1.6 at this point
 
 ### To run as a java application
 
 Before running it:
 
-The Jbullet (http://jbullet.advel.cz) is an amazingly optomised project (that is very cool in it's own right). In order for it to compile you must right click the "build.xml" file in the root of the project and "Run As.." ->"Ant Build"
+The Jbullet (http://jbullet.advel.cz) is an amazingly optomised project (that is very cool in it's own right). In order for it to compile you must
 
-It should output something about Instrumenting Stack
+Right click the "build.xml" file in the root of the project and "Run As.." ->"Ant Build" (not "Ant Build...")
 
-Note: Each time you clean the workspace you will need to repeat this(Or put the jbullet1.1 output into a jar file and include it)
+It should output "[instrument-stack] Stack instrumented XX classes" and "BUILD SUCCESSFUL"
+
+Note: Each time you clean the workspace you will need to repeat this(Or put the jbullet1.1 output into a jar file and include it in the other projects)
+
+ java.lang.VerifyError: Stack map does not match the one at exception handler
+java version "1.8.0_131" 
+
 
 To run the project:
 
-1.  Go to Run->Run Configurations...
+1.  From the menu select Run->Run Configurations...
 
-2.  New Launch Configuration
+Select Java Application
 
-3.  Give it a name
+2.  Click the "New launch configuration" button at the top (Document icon with a plus)
 
-4.  For project use the ElderScrollsExplorer
+3.  REplace teh text in the Name field e.g. "ElderScollerExplorer"
 
-5.  For Main class use scrollsexplorer.ScrollsExplorer
+4.  For project browse and select ElderScrollsExplorer
 
-6.  Cut and paste the text below into Arguments tab-> VM arguments
+5.  For Main class search and select ScrollsExplorer - scrollsexplorer
+
+6.  Change to the ARguements tab and cut and paste the text below into VM arguments (Not Program arguments)
 
     -Xmx12000m -Xms1000m  -Dsun.java2d.noddraw=true    -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -server -Djava.ext.dirs=.\none\
     
-7. For Working Directory pick Other then click the Workspace button and select the ElderScrollsExplorerBase project (this allows shaders to be found)    
+7. For Working Directory select Other then click the Workspace button and select the ElderScrollsExplorerBase project (this allows shaders to be found)    
 
 8.  Click Run 
 
@@ -168,11 +189,12 @@ To run the project:
 If you get a class not found called Stack, you probably didn't ant build the xml file as above (or it failed)
 
 
-Once it's running you must set your game folders (the ones containing the esm and bsa files) using the File menu in game, then read the user guide.
+Once it's running you must set your game folders (the ones containing the esm and bsa files) using the File menu in game. 
 
  
 
-Good luck, feel free to contact me with questions...
+
+Good luck, feel free to contact me with questions.
 
  
 
