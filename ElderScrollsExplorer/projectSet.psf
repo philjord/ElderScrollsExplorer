@@ -12,7 +12,6 @@
 <project reference="1.0,https://github.com/philjord/esmj3dtes4.git,master,esmj3dtes4"/>
 <project reference="1.0,https://github.com/philjord/esmj3dtes5.git,master,esmj3dtes5"/>
 <project reference="1.0,https://github.com/philjord/ESMManager.git,master,ESMLoader"/>
-<project reference="1.0,https://github.com/philjord/java3d-core.git,dev1.7.0,."/>
 <project reference="1.0,https://bitbucket.org/philjord/java3d-core-and.git,master,."/>
 <project reference="1.0,https://bitbucket.org/philjord/java3d-utils-and.git,master,."/>
 <project reference="1.0,https://github.com/philjord/jbullet1.1.git,master,jbullet1.1"/>
@@ -21,5 +20,6 @@
 <project reference="1.0,https://github.com/philjord/jnifjbullet.git,master,jnifjbullet"/>
 <project reference="1.0,https://github.com/philjord/tools.git,master,Tools"/>
 <project reference="1.0,https://github.com/philjord/vecmath,andy,."/>
+<project reference="1.0,https://github.com/philjord/java3d-core.git,.,."/>
 </provider>
 </psf>
