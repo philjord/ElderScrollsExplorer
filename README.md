@@ -137,8 +137,9 @@ Note if you are already developing with Java and Eclipse, start with step 6 but 
 17. In the Project Explorer window expand the new project (ElderScrollsExplorer) 
 18. Right click on "projectSet.psf" -> Import Project Set...
 19. It will spend some time downloading the code and importing the projects (several minutes)
-20. Open the Java perspective (Window -> Perspective -> Open Perspective -> Java).
-21. Now setup your workspace as you prefer
+20. At the end (due to the limitations of project set importing) it will fail to import the java3d-core project with an error message to that effect. To import that project, in the Git Repositories view (Window -> Show View -> Other... -> Git -> Git Repositories) right click on the java3d-core repository and select Import Projects... (it will find the maven project) then click Finish.
+21. Open the Java perspective (Window -> Perspective -> Open Perspective -> Java).
+22. Now setup your workspace as you prefer
 
 Everything you need (apart from game data files) should now be present in your IDE, it is a long list of projects.
 
