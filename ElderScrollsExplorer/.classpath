@@ -35,5 +35,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/java3d-utils"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
