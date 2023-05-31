@@ -69,6 +69,7 @@ import scrollsexplorer.simpleclient.physics.DynamicsEngine;
 import scrollsexplorer.simpleclient.settings.DistanceSettingsPanel;
 import scrollsexplorer.simpleclient.settings.GeneralSettingsPanel;
 import scrollsexplorer.simpleclient.settings.GraphicsSettingsPanel;
+import scrollsexplorer.simpleclient.settings.MemoryStatusPanel;
 import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
 import scrollsexplorer.simpleclient.settings.ShowOutlinesPanel;
 import scrollsexplorer.simpleclient.tes3.Tes3Extensions;
@@ -105,6 +106,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private ShowOutlinesPanel showOutlinesPanel;
 
 	private GeneralSettingsPanel generalSettingsPanel;
+	
+	private MemoryStatusPanel memoryStatusPanel;
 
 	private DefaultTableModel tableModel;
 
@@ -272,6 +275,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			graphicsSettingsPanel = new GraphicsSettingsPanel();
 			showOutlinesPanel = new ShowOutlinesPanel(simpleWalkSetup);
 			generalSettingsPanel = new GeneralSettingsPanel(this);
+			memoryStatusPanel = new MemoryStatusPanel();
 			BethRenderSettings.addUpdateListener(this);
 
 			this.getContentPane().invalidate();
@@ -294,6 +298,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			sideBar.addSection(ss4);
 			SidebarSection ss5 = new SidebarSection(sideBar, "Outlines", showOutlinesPanel, null);
 			sideBar.addSection(ss5);
+			SidebarSection ss6 = new SidebarSection(sideBar, "Memory", memoryStatusPanel, null);
+			sideBar.addSection(ss6);
+			
 
 			this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 			this.getContentPane().add(sideBar, BorderLayout.WEST);

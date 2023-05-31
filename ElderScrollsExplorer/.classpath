@@ -26,7 +26,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dtes3"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dfo4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/java3d-utils-and"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/vecmath"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/java3d-core-and"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/java3d-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ElderScrollsExplorerBase"/>
@@ -36,5 +35,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/java3d-utils"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/vecmath"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
