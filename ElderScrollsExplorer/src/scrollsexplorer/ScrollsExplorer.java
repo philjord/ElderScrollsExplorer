@@ -46,12 +46,13 @@ import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
 import bsaio.ArchiveFile;
-import bsaio.BSArchiveSet;
+import bsaio.BSArchiveSetFile;
 import client.BootStrap;
 import esmio.common.PluginException;
 import esmio.common.data.plugin.PluginRecord;
 import esmio.loader.CELLDIALPointer;
 import esmio.loader.ESMManager;
+import esmio.loader.ESMManagerFile;
 import esmio.loader.IESMManager;
 import esmio.utils.source.EsmSoundKeyToName;
 import esmj3d.j3d.BethRenderSettings;
@@ -117,7 +118,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public IESMManager esmManager;
 
-	public BSArchiveSet bsaFileSet;
+	public BSArchiveSetFile bsaFileSet;
 
 	private GameConfig selectedGameConfig = null;
 
@@ -507,7 +508,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				{
 					IDashboard.dashboard.setEsmLoading(1);
 
-					esmManager = ESMManager.getESMManager(selectedGameConfig.getESMPath());
+					esmManager = ESMManagerFile.getESMManager(selectedGameConfig.getESMPath());
 					bsaFileSet = null;
 					if (esmManager != null)
 					{
@@ -540,7 +541,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						{
 							if (bsaFileSet == null)
 							{
-								bsaFileSet = new BSArchiveSet(new String[] { selectedGameConfig.scrollsFolder },
+								bsaFileSet = new BSArchiveSetFile(new String[] { selectedGameConfig.scrollsFolder },
 										cbLoadAllMenuItem.isSelected());
 							}
 
