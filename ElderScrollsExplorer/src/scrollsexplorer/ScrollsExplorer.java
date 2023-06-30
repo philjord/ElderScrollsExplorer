@@ -61,7 +61,6 @@ import nativeLinker.LWJGLLinker;
 import nif.BgsmSource;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.j3d.particles.tes3.J3dNiParticles;
-import nif.shaders.ShaderPrograms;
 import scrollsexplorer.simpleclient.BethWorldVisualBranch;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
@@ -166,9 +165,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		CompressedTextureLoader.setAnisotropicFilterDegree(8);
 				
-		// debug shaders like this to externalize from jars 
-		ShaderPrograms.fileSystemFolder = new File("C:/temp/shaders");
-
 		DynamicsEngine.MAX_SUB_STEPS = 5;
 
 		try
@@ -327,7 +323,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		{
 			e1.printStackTrace();
 		}
-		// MY system for guaranteee rendering of a component (test this)
+		// MY system for guarantee rendering of a component (test this)
 		this.setFont(this.getFont());
 
 		warpPanel.setLayout(new FlowLayout());
@@ -502,6 +498,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		simpleWalkSetup.getAvatarCollisionInfo().setAvatarYHeight(selectedGameConfig.avatarYHeight);
 
 		Thread t = new Thread() {
+			@Override
 			public void run()
 			{
 				synchronized (selectedGameConfig)
