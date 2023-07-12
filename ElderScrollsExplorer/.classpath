@@ -6,6 +6,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/pjnz/git/awtshim-desktop/awtshim-desktop/output/awtshim-desktop.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/3DTools"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jnifj3d"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3d"/>
