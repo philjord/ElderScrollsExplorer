@@ -165,10 +165,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 		ArchiveFile.RETURN_MAPPED_BYTE_BUFFERS = false;
 		
-		
-		// these 5 test the "no dds support" issue and solution on phones
 		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.DDS;
-		CompressedTextureLoader.RETURN_DECOMPRESSED_DDS = true;
 		javaawt.image.BufferedImage.installBufferedImageDelegate(VMBufferedImage.class);
 		javaawt.imageio.ImageIO.installBufferedImageImpl(VMImageIO.class);
 		javaawt.EventQueue.installEventQueueImpl(VMEventQueue.class);
