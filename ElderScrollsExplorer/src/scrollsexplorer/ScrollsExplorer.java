@@ -49,8 +49,9 @@ import bsaio.ArchiveFile;
 import bsaio.BSArchiveSetFile;
 import client.BootStrap;
 import esmio.common.PluginException;
+import esmio.common.data.plugin.IMaster;
 import esmio.common.data.plugin.PluginRecord;
-import esmio.loader.CELLDIALPointer;
+import esmio.loader.FormToFilePointer;
 import esmio.loader.ESMManager;
 import esmio.loader.ESMManagerFile;
 import esmio.loader.IESMManager;
@@ -114,7 +115,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	private DefaultTableModel tableModel;
 
-	private String[] columnNames = new String[] { "Int/Ext", "Cell Id", "Name" };
+	private String[] columnNames = new String[] { "File", "Int/Ext", "Cell Id", "Name" };
 
 	private MediaSources mediaSources;
 
@@ -512,11 +513,21 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				synchronized (selectedGameConfig)
 				{
 					IDashboard.dashboard.setEsmLoading(1);
-
-					esmManager = ESMManagerFile.getESMManager(selectedGameConfig.getESMPath());
+					
+					System.out.println("ESM Master File loading: " + selectedGameConfig.getESMPath());
+					esmManager = ESMManagerFile.getESMManager(selectedGameConfig.getESMPath());					
 					bsaFileSet = null;
 					if (esmManager != null)
 					{
+						//Lets load up the esp files too! search the same folder
+						File dir = new File(selectedGameConfig.getESMPath()).getParentFile();
+						for(File f: dir.listFiles()) {
+							if(f.getName().endsWith(".esp") ||
+									(f.getName().endsWith(".esm") && !f.getName().equals(esmManager.getName()))) {
+								System.out.println("ESM File loading: " + f.getAbsolutePath());
+								esmManager.addMaster(f.getAbsolutePath());
+							}
+						}
 
 						//TODO: all these should be connected strongly to GameConfig
 						if (esmManager.getName().indexOf("Morrowind") != -1)
@@ -634,7 +645,10 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							@Override
 							public Class<? extends Object> getColumnClass(int c)
 							{
-								return getValueAt(0, c).getClass();
+								if(getValueAt(0, c) != null )
+									return getValueAt(0, c).getClass();
+								else
+									return Object.class;
 							}
 						};
 
@@ -643,7 +657,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							@Override
 							public void mouseClicked(MouseEvent e)
 							{
-								display(((Integer) tableModel.getValueAt(table.convertRowIndexToModel(table.getSelectedRow()), 1)));
+								display(((Integer) tableModel.getValueAt(table.convertRowIndexToModel(table.getSelectedRow()), 2)));
 							}
 
 						});
@@ -652,24 +666,46 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 						try
 						{
-							for (Integer formId : esmManager.getAllWRLDTopGroupFormIds())
-							{
-								PluginRecord pr = esmManager.getWRLD(formId);
-								if (prevCellformid == formId)
-									tableModel.insertRow(0, new Object[] { "Ext", formId, pr });
-								else
-									tableModel.addRow(new Object[] { "Ext", formId, pr });
-							}
+							// show which esm files have this cell referred
+							HashMap<Integer, StringBuffer> loadedIds = new HashMap<Integer, StringBuffer>();
+							
+							for(IMaster master : esmManager.getMasters() ) { 
+								//TODO: tribunal and bloodmoon are finding nothing but 0??
+								for (Integer formId : master.getAllWRLDTopGroupFormIds()) {	
+									StringBuffer sb = loadedIds.get(formId);
+									if(sb == null) {
+										sb = new StringBuffer(master.getName());
+										PluginRecord pr = master.getWRLD(formId);
+										if (prevCellformid == formId)
+											tableModel.insertRow(0, new Object[] { sb, "Ext", formId, pr });
+										else
+											tableModel.addRow(new Object[] { sb, "Ext", formId, pr });
+										
+										loadedIds.put(formId, sb);
+									} else {
+										sb.append( "/" + master.getName());
+									}
+										
+								}
 
-							for (CELLDIALPointer cp : esmManager.getAllInteriorCELLFormIds())
-							{
-								int formId = cp.formId;
-								PluginRecord pr = esmManager.getInteriorCELL(formId);
-								if (prevCellformid == formId)
-									tableModel.insertRow(0, new Object[] { "Int", formId, pr });
-								else
-									tableModel.addRow(new Object[] { "Int", formId, pr });
-							}
+								for (FormToFilePointer cp : master.getAllInteriorCELLFormIds())
+								{
+									int formId = cp.formId;
+									StringBuffer sb = loadedIds.get(formId);
+									if(sb == null) {
+										sb = new StringBuffer(master.getName());
+										PluginRecord pr = master.getInteriorCELL(formId);
+										if (prevCellformid == formId)
+											tableModel.insertRow(0, new Object[] { sb, "Int", formId, pr });
+										else
+											tableModel.addRow(new Object[] { sb, "Int", formId, pr });
+										
+										loadedIds.put(formId, sb);
+									} else {
+										sb.append( "/" + master.getName());
+									}
+								}
+							}						
 						}
 						catch (DataFormatException e1)
 						{
@@ -683,9 +719,10 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						{
 							e1.printStackTrace();
 						}
+						
 
-						table.getColumnModel().getColumn(0).setMaxWidth(30);
-						table.getColumnModel().getColumn(1).setMaxWidth(60);
+						table.getColumnModel().getColumn(1).setMaxWidth(30);
+						table.getColumnModel().getColumn(2).setMaxWidth(60);
 
 						if (autoLoadStartCell)
 						{
