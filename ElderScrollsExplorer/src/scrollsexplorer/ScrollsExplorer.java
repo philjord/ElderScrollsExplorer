@@ -166,7 +166,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 		ArchiveFile.RETURN_MAPPED_BYTE_BUFFERS = false;
 		
-		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.DDS;
+		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.KTX;
+		
 		javaawt.image.BufferedImage.installBufferedImageDelegate(VMBufferedImage.class);
 		javaawt.imageio.ImageIO.installBufferedImageImpl(VMImageIO.class);
 		javaawt.EventQueue.installEventQueueImpl(VMEventQueue.class);
@@ -268,7 +269,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			simpleWalkSetup.setAzerty(cbAzertyKB.isSelected());
 			quickEdit.setLayout(new VerticalFlowLayout());
 			quickEdit.add(new TitledPanel("Location", locField));
-			quickEdit.add(new TitledPanel("Go To", locField));
+			quickEdit.add(new TitledPanel("Go To", warpPanel));
 			mainPanel.add(buttonPanel, BorderLayout.NORTH);
 			table = new JTable();
 			mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
