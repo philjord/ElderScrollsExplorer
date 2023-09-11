@@ -150,9 +150,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private Preferences prefs;
 
 	private boolean autoLoadStartCell = true;
+	
+	private boolean LOAD_ESP_FILES = false;
 
 	private Tes3Extensions tes3Extensions;
-
+	
 	public ScrollsExplorer()
 	{
 		super("ScrollsExplorer");
@@ -166,7 +168,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 		ArchiveFile.RETURN_MAPPED_BYTE_BUFFERS = false;
 		
-		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.KTX;
+		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.ALL;
 		
 		javaawt.image.BufferedImage.installBufferedImageDelegate(VMBufferedImage.class);
 		javaawt.imageio.ImageIO.installBufferedImageImpl(VMImageIO.class);
@@ -520,13 +522,16 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					bsaFileSet = null;
 					if (esmManager != null)
 					{
-						//Lets load up the esp files too! search the same folder
-						File dir = new File(selectedGameConfig.getESMPath()).getParentFile();
-						for(File f: dir.listFiles()) {
-							if(f.getName().endsWith(".esp") ||
-									(f.getName().endsWith(".esm") && !f.getName().equals(esmManager.getName()))) {
-								System.out.println("ESM File loading: " + f.getAbsolutePath());
-								esmManager.addMaster(f.getAbsolutePath());
+						
+						if(LOAD_ESP_FILES) {
+							//Lets load up the esp files too! search the same folder
+							File dir = new File(selectedGameConfig.getESMPath()).getParentFile();
+							for(File f: dir.listFiles()) {
+								if(f.getName().endsWith(".esp") ||
+										(f.getName().endsWith(".esm") && !f.getName().equals(esmManager.getName()))) {
+									System.out.println("ESM File loading: " + f.getAbsolutePath());
+									esmManager.addMaster(f.getAbsolutePath());
+								}
 							}
 						}
 
