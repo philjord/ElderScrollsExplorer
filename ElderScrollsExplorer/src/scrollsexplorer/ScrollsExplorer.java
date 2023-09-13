@@ -285,6 +285,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			showOutlinesPanel = new ShowOutlinesPanel(simpleWalkSetup);
 			generalSettingsPanel = new GeneralSettingsPanel(this);
 			memoryStatusPanel = new MemoryStatusPanel();
+			
+			BethRenderSettings.setFogEnabled(false);
+			
 			BethRenderSettings.addUpdateListener(this);
 
 			this.getContentPane().invalidate();

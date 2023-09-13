@@ -18,9 +18,9 @@ import tools.swing.VerticalFlowLayout;
  */
 public class DistanceSettingsPanel extends JPanel
 {
-	private JSlider FAR_LOAD_DISTSlider = new JSlider(0, 64, BethRenderSettings.getFarLoadGridCount());
-
 	private JSlider NEAR_LOAD_DISTSlider = new JSlider(0, 16, BethRenderSettings.getNearLoadGridCount());
+	
+	private JSlider FAR_LOAD_DISTSlider = new JSlider(0, 64, BethRenderSettings.getFarLoadGridCount());
 
 	private JSlider LOD_LOAD_DIST_MAXSlider = new JSlider(0, 192, BethRenderSettings.getLOD_LOAD_DIST_MAX());
 
@@ -29,23 +29,12 @@ public class DistanceSettingsPanel extends JPanel
 	private JSlider itemFade = new JSlider(0, BethRenderSettings.ITEM_FADE_MAX, BethRenderSettings.ITEM_FADE_DEFAULT);
 
 	private JSlider objectFade = new JSlider(0, BethRenderSettings.OBJECT_FADE_MAX, BethRenderSettings.OBJECT_FADE_DEFAULT);
+	
+	private JSlider fogDist = new JSlider(BethRenderSettings.FOG_DIST_MIN, 1000, BethRenderSettings.FOG_DIST_DEFAULT);
 
 	public DistanceSettingsPanel()
 	{
 		this.setLayout(new VerticalFlowLayout());
-
-		FAR_LOAD_DISTSlider.setBorder(new TitledBorder("Far Load Grids"));
-		FAR_LOAD_DISTSlider.setMajorTickSpacing(8);
-		FAR_LOAD_DISTSlider.setPaintTicks(true);
-		FAR_LOAD_DISTSlider.setPaintLabels(true);
-		add(FAR_LOAD_DISTSlider);
-		FAR_LOAD_DISTSlider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e)
-			{
-				BethRenderSettings.setFarLoadGridCount(FAR_LOAD_DISTSlider.getValue());
-			}
-		});
 
 		NEAR_LOAD_DISTSlider.setBorder(new TitledBorder("Near Load Grids"));
 		NEAR_LOAD_DISTSlider.setMajorTickSpacing(2);
@@ -57,6 +46,19 @@ public class DistanceSettingsPanel extends JPanel
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setNearLoadGridCount(NEAR_LOAD_DISTSlider.getValue());
+			}
+		});
+		
+		FAR_LOAD_DISTSlider.setBorder(new TitledBorder("Far Load Grids"));
+		FAR_LOAD_DISTSlider.setMajorTickSpacing(8);
+		FAR_LOAD_DISTSlider.setPaintTicks(true);
+		FAR_LOAD_DISTSlider.setPaintLabels(true);
+		add(FAR_LOAD_DISTSlider);
+		FAR_LOAD_DISTSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				BethRenderSettings.setFarLoadGridCount(FAR_LOAD_DISTSlider.getValue());
 			}
 		});
 
@@ -107,6 +109,22 @@ public class DistanceSettingsPanel extends JPanel
 			public void stateChanged(ChangeEvent e)
 			{
 				BethRenderSettings.setObjectFade(objectFade.getValue());
+			}
+		});
+		
+		
+		
+		
+		fogDist.setBorder(new TitledBorder("Fog Dist"));
+		fogDist.setMajorTickSpacing(200);
+		fogDist.setPaintTicks(true);
+		fogDist.setPaintLabels(true);
+		add(fogDist);
+		fogDist.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				BethRenderSettings.setFogDist(fogDist.getValue());
 			}
 		});
 
