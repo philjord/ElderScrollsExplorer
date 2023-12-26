@@ -48,14 +48,14 @@ import bsa.source.BsaTextureSource;
 import bsaio.ArchiveFile;
 import bsaio.BSArchiveSetFile;
 import client.BootStrap;
-import esmio.common.PluginException;
-import esmio.common.data.plugin.IMaster;
-import esmio.common.data.plugin.PluginRecord;
-import esmio.loader.FormToFilePointer;
-import esmio.loader.ESMManager;
-import esmio.loader.ESMManagerFile;
-import esmio.loader.IESMManager;
-import esmio.utils.source.EsmSoundKeyToName;
+import esfilemanager.common.PluginException;
+import esfilemanager.common.data.plugin.IMaster;
+import esfilemanager.common.data.plugin.PluginRecord;
+import esfilemanager.loader.ESMManager;
+import esfilemanager.loader.ESMManagerFile;
+import esfilemanager.loader.FormToFilePointer;
+import esfilemanager.loader.IESMManager;
+import esfilemanager.utils.source.EsmSoundKeyToName;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
 import javaawt.VMEventQueue;
@@ -168,7 +168,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 		ArchiveFile.RETURN_MAPPED_BYTE_BUFFERS = false;
 		
-		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.ALL;
+		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.DDS;
 		
 		javaawt.image.BufferedImage.installBufferedImageDelegate(VMBufferedImage.class);
 		javaawt.imageio.ImageIO.installBufferedImageImpl(VMImageIO.class);
