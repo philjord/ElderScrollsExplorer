@@ -11,7 +11,9 @@
 <project reference="1.0,https://github.com/philjord/esmj3dtes3.git,master,esmj3dtes3"/>
 <project reference="1.0,https://github.com/philjord/esmj3dtes4.git,master,esmj3dtes4"/>
 <project reference="1.0,https://github.com/philjord/esmj3dtes5.git,master,esmj3dtes5"/>
-<project reference="1.0,https://github.com/philjord/ESMManager.git,master,ESMLoader"/>
+<project reference="1.0,https://github.com/philjord/ESFileManager.git,master,ESFileManager"/>
+<project reference="1.0,https://github.com/philjord/vecmath,maser,vecmath"/>
+<project reference="1.0,https://github.com/philjord/java3d-core.git,master,java3d-core"/>
 <project reference="1.0,https://bitbucket.org/philjord/java3d-core-and.git,master,java3d-core-and"/>
 <project reference="1.0,https://bitbucket.org/philjord/java3d-utils-and.git,master,java3d-utils-and"/>
 <project reference="1.0,https://github.com/philjord/jbullet1.1.git,master,jbullet1.1"/>
@@ -19,7 +21,5 @@
 <project reference="1.0,https://github.com/philjord/jnifj3d.git,master,jnifj3d"/>
 <project reference="1.0,https://github.com/philjord/jnifjbullet.git,master,jnifjbullet"/>
 <project reference="1.0,https://github.com/philjord/tools.git,master,tools"/>
-<project reference="1.0,https://github.com/philjord/vecmath,maser,vecmath"/>
-<project reference="1.0,https://github.com/philjord/java3d-core.git,master,java3d-core"/>
 </provider>
 </psf>
