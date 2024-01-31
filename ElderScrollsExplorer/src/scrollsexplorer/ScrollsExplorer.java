@@ -19,6 +19,7 @@ import java.util.zip.DataFormatException;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -55,6 +56,7 @@ import esfilemanager.loader.ESMManager;
 import esfilemanager.loader.ESMManagerFile;
 import esfilemanager.loader.FormToFilePointer;
 import esfilemanager.loader.IESMManager;
+import esfilemanager.tes3.MasterFile;
 import esfilemanager.utils.source.EsmSoundKeyToName;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
@@ -144,6 +146,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	public JMenuItem setGraphics = new JMenuItem("Set Graphics");
 
 	public JMenuItem showUserGuide = new JMenuItem("User Guide");
+	
+	public JMenuItem loadSaveGame = new JMenuItem("Load Save Game");
 
 	private UserGuideDisplay ugd = new UserGuideDisplay();
 
@@ -155,20 +159,24 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	private Tes3Extensions tes3Extensions;
 	
+	
+	
 	public ScrollsExplorer()
 	{
 		super("ScrollsExplorer");
 
-		ArchiveFile.USE_FILE_MAPS = true;
-		ESMManager.USE_FILE_MAPS = true;
 		BethRenderSettings.setFarLoadGridCount(8);
-		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false;
-
-		ArchiveFile.USE_MINI_CHANNEL_MAPS = false;
-		ArchiveFile.USE_NON_NATIVE_ZIP = false;
-		ArchiveFile.RETURN_MAPPED_BYTE_BUFFERS = false;
+		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false; 
 		
-		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.DDS;
+		ESMManager.USE_FILE_MAPS = false; 
+		ESMManager.USE_MINI_CHANNEL_MAPS = true;
+		ESMManager.USE_NON_NATIVE_ZIP = false;
+
+		ArchiveFile.USE_FILE_MAPS = false; 
+		ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
+		ArchiveFile.USE_NON_NATIVE_ZIP = false;
+		
+		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.KTX;
 		
 		javaawt.image.BufferedImage.installBufferedImageDelegate(VMBufferedImage.class);
 		javaawt.imageio.ImageIO.installBufferedImageImpl(VMImageIO.class);
@@ -233,6 +241,17 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					simpleWalkSetup.resetGraphicsSetting();
 				}
 			});
+			
+			fileMenu.add(loadSaveGame);
+			loadSaveGame.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0)
+				{
+					loadSaveGame();
+				}			
+			});
+			loadSaveGame.setEnabled(false);
+			
 			JMenu helpMenu = new JMenu("Help");
 			helpMenu.setMnemonic(KeyEvent.VK_H);
 			menuBar.add(helpMenu);
@@ -245,6 +264,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					showUserGuide();
 				}
 			});
+			
+			
 
 			this.setJMenuBar(menuBar);
 			//this.getContentPane().add(mainPanel, BorderLayout.CENTER);
@@ -324,7 +345,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 					//Just until the real window listens to damn events properly!					
 					simpleWalkSetup.closingTime();
 					closingTime();
-					System.exit(0);
+					//System.exit(0);
 				}
 			});
 
@@ -363,6 +384,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		warpButton.addActionListener(warpActionListener);
 
 		simpleWalkSetup.getAvatarLocation().addAvatarLocationListener(this);
+		
+		
 	}
 
 	private JTextField locField = new JTextField("0000,0000,0000");
@@ -608,9 +631,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							@Override
 							public void windowDestroyNotify(WindowEvent arg0)
 							{
-								simpleWalkSetup.closingTime();
-								closingTime();
-								System.exit(0);
+								//simpleWalkSetup.closingTime();
+								//closingTime();
+								//System.exit(0);
 							}
 
 							@Override
@@ -627,9 +650,10 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							{
 								if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
 								{
-									simpleWalkSetup.closingTime();
-									closingTime();
-									System.exit(0);
+									//simpleWalkSetup.closingTime();
+									//closingTime();
+									//System.exit(0);
+									ScrollsExplorer.this.dispose();
 								}
 							}
 						});
@@ -666,7 +690,15 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							@Override
 							public void mouseClicked(MouseEvent e)
 							{
-								display(((Integer) tableModel.getValueAt(table.convertRowIndexToModel(table.getSelectedRow()), 2)));
+								int cellFormId = ((Integer) tableModel.getValueAt(table.convertRowIndexToModel(table.getSelectedRow()), 2));
+								YawPitch yp = new YawPitch();
+								Vector3f trans = new Vector3f();
+										
+								// firstly set our location to a door in the newly clicked cell (cos where else is sensible?)
+								ScrollsExplorerNewt.findADoor(cellFormId, selectedGameConfig, esmManager, trans, yp);
+		                        simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
+								display(cellFormId);
+
 							}
 
 						});
@@ -732,6 +764,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 						table.getColumnModel().getColumn(1).setMaxWidth(30);
 						table.getColumnModel().getColumn(2).setMaxWidth(60);
+						
+						loadSaveGame.setEnabled(true);
 
 						if (autoLoadStartCell)
 						{
@@ -797,6 +831,48 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		}
 	}
+	
+	private void loadSaveGame() {
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fc.setSelectedFile(new File(prefs.get("Save-"+selectedGameConfig.gameName, "")));
+		fc.setDialogTitle("Select save file");
+		int result = fc.showOpenDialog(null);
+		if (result == JFileChooser.APPROVE_OPTION)
+		{
+			File f = fc.getSelectedFile();
+			prefs.put("Save-"+selectedGameConfig.gameName, f.getAbsolutePath());
+			
+			if (esmManager.getName().indexOf("Morrowind") != -1) {
+				try {
+					MasterFile ess = new MasterFile(f);
+					ess.load();
+					System.out.println("woop!");
+					
+					
+					/*GMDT (124 bytes)
+					float Unknown[6]
+						- Unknown values rot loc?
+					char  CellName[64]
+						- Current cell name of character?
+					float Unknown
+					char CharacterName[32]*/
+					
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (PluginException e) {
+					e.printStackTrace();
+				}
+			} else {
+				System.out.println("Sorry only Morrowind for now");
+			}			
+		}
+		 
+		
+	}
+	
+	
 
 	public static void main(String[] args)
 	{
@@ -835,6 +911,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		}
 
 		new ScrollsExplorer();
+	 
 	}
+	
+	
+	
+	
 
 }

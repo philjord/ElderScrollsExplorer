@@ -38,5 +38,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/java3d-utils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/vecmath"/>
 	<classpathentry kind="lib" path="/jbullet1.1/dist/jbullet1.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dstar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
