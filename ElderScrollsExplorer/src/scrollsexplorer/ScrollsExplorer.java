@@ -46,13 +46,11 @@ import com.jogamp.newt.event.WindowEvent;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
-import bsaio.ArchiveFile;
 import bsaio.BSArchiveSetFile;
 import client.BootStrap;
 import esfilemanager.common.PluginException;
 import esfilemanager.common.data.plugin.IMaster;
 import esfilemanager.common.data.plugin.PluginRecord;
-import esfilemanager.loader.ESMManager;
 import esfilemanager.loader.ESMManagerFile;
 import esfilemanager.loader.FormToFilePointer;
 import esfilemanager.loader.IESMManager;
@@ -167,14 +165,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		BethRenderSettings.setFarLoadGridCount(8);
 		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false; 
-		
-		ESMManager.USE_FILE_MAPS = false; 
-		ESMManager.USE_MINI_CHANNEL_MAPS = true;
-		ESMManager.USE_NON_NATIVE_ZIP = false;
-
-		ArchiveFile.USE_FILE_MAPS = false; 
-		ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
-		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 		
 		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.KTX;
 		
