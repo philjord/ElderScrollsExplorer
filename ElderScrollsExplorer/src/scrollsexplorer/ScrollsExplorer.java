@@ -9,13 +9,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.prefs.Preferences;
-import java.util.zip.DataFormatException;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -27,10 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 
 import org.jogamp.java3d.compressedtexture.CompressedTextureLoader;
 import org.jogamp.vecmath.Quat4f;
@@ -49,10 +43,7 @@ import bsa.source.BsaTextureSource;
 import bsaio.BSArchiveSetFile;
 import client.BootStrap;
 import esfilemanager.common.PluginException;
-import esfilemanager.common.data.plugin.IMaster;
-import esfilemanager.common.data.plugin.PluginRecord;
 import esfilemanager.loader.ESMManagerFile;
-import esfilemanager.loader.FormToFilePointer;
 import esfilemanager.loader.IESMManager;
 import esfilemanager.tes3.MasterFile;
 import esfilemanager.utils.source.EsmSoundKeyToName;
@@ -93,92 +84,87 @@ import utils.source.file.FileMeshSource;
 import utils.source.file.FileSoundSource;
 import utils.source.file.FileTextureSource;
 
-public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener, LocationUpdateListener
-{
-	public Dashboard dashboard = new Dashboard();
+public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener, LocationUpdateListener {
+	public Dashboard						dashboard			= new Dashboard();
 
-	private SimpleBethCellManager simpleBethCellManager;
+	private SimpleBethCellManager			simpleBethCellManager;
 
-	private SimpleWalkSetupInterface simpleWalkSetup;
+	private SimpleWalkSetupInterface		simpleWalkSetup;
 
-	private static JTable table;
+	private static ESMCellTable				table;
 
-	private DistanceSettingsPanel distanceSettingsPanel;
+	private DistanceSettingsPanel			distanceSettingsPanel;
 
-	private GraphicsSettingsPanel graphicsSettingsPanel;
+	private GraphicsSettingsPanel			graphicsSettingsPanel;
 
-	private ShowOutlinesPanel showOutlinesPanel;
+	private ShowOutlinesPanel				showOutlinesPanel;
 
-	private GeneralSettingsPanel generalSettingsPanel;
-	
-	private MemoryStatusPanel memoryStatusPanel;
+	private GeneralSettingsPanel			generalSettingsPanel;
 
-	private DefaultTableModel tableModel;
+	private MemoryStatusPanel				memoryStatusPanel;
 
-	private String[] columnNames = new String[] { "File", "Int/Ext", "Cell Id", "Name" };
+	//	private DefaultTableModel tableModel;
 
-	private MediaSources mediaSources;
+	//	private String[] columnNames = new String[] { "File", "Int/Ext", "Cell Id", "Name" };
 
-	public IESMManager esmManager;
+	private MediaSources					mediaSources;
 
-	public BSArchiveSetFile bsaFileSet;
+	public IESMManager						esmManager;
 
-	private GameConfig selectedGameConfig = null;
+	public BSArchiveSetFile					bsaFileSet;
 
-	private HashMap<GameConfig, JButton> gameButtons = new HashMap<GameConfig, JButton>();
+	private GameConfig						selectedGameConfig	= null;
 
-	public JPanel mainPanel = new JPanel();
+	private HashMap<GameConfig, JButton>	gameButtons			= new HashMap<GameConfig, JButton>();
 
-	public JPanel buttonPanel = new JPanel();
+	public JPanel							mainPanel			= new JPanel();
 
-	public JPanel quickEdit = new JPanel();
+	public JPanel							buttonPanel			= new JPanel();
 
-	public JCheckBoxMenuItem cbLoadAllMenuItem = new JCheckBoxMenuItem("Load all BSA Archives", true);
+	public JPanel							quickEdit			= new JPanel();
 
-	public JCheckBoxMenuItem cbBsaMenuItem = new JCheckBoxMenuItem("Use BSA not Files", true);
+	public JCheckBoxMenuItem				cbLoadAllMenuItem	= new JCheckBoxMenuItem("Load all BSA Archives", true);
 
-	public JCheckBoxMenuItem cbAzertyKB = new JCheckBoxMenuItem("Azerty", false);
+	public JCheckBoxMenuItem				cbBsaMenuItem		= new JCheckBoxMenuItem("Use BSA not Files", true);
 
-	public JMenuItem setFolders = new JMenuItem("Set Folders");
+	public JCheckBoxMenuItem				cbAzertyKB			= new JCheckBoxMenuItem("Azerty", false);
 
-	public JMenuItem setGraphics = new JMenuItem("Set Graphics");
+	public JMenuItem						setFolders			= new JMenuItem("Set Folders");
 
-	public JMenuItem showUserGuide = new JMenuItem("User Guide");
-	
-	public JMenuItem loadSaveGame = new JMenuItem("Load Save Game");
+	public JMenuItem						setGraphics			= new JMenuItem("Set Graphics");
 
-	private UserGuideDisplay ugd = new UserGuideDisplay();
+	public JMenuItem						showUserGuide		= new JMenuItem("User Guide");
 
-	private Preferences prefs;
+	public JMenuItem						loadSaveGame		= new JMenuItem("Load Save Game");
 
-	private boolean autoLoadStartCell = true;
-	
-	private boolean LOAD_ESP_FILES = false;
+	private UserGuideDisplay				ugd					= new UserGuideDisplay();
 
-	private Tes3Extensions tes3Extensions;
-	
-	
-	
-	public ScrollsExplorer()
-	{
+	private Preferences						prefs;
+
+	private boolean							autoLoadStartCell	= true;
+
+	private boolean							LOAD_ESP_FILES		= false;
+
+	private Tes3Extensions					tes3Extensions;
+
+	public ScrollsExplorer() {
 		super("ScrollsExplorer");
 
 		BethRenderSettings.setFarLoadGridCount(8);
-		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false; 
-		
+		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false;
+
 		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.KTX;
-		
+
 		javaawt.image.BufferedImage.installBufferedImageDelegate(VMBufferedImage.class);
 		javaawt.imageio.ImageIO.installBufferedImageImpl(VMImageIO.class);
 		javaawt.EventQueue.installEventQueueImpl(VMEventQueue.class);
 
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		CompressedTextureLoader.setAnisotropicFilterDegree(8);
-				
+
 		DynamicsEngine.MAX_SUB_STEPS = 5;
 
-		try
-		{
+		try {
 			PropertyLoader.load();
 
 			prefs = Preferences.userNodeForPackage(ScrollsExplorerNewt.class);
@@ -208,8 +194,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			fileMenu.add(cbAzertyKB);
 			cbAzertyKB.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent arg0)
-				{
+				public void actionPerformed(ActionEvent arg0) {
 					simpleWalkSetup.setAzerty(cbAzertyKB.isSelected());
 				}
 			});
@@ -217,8 +202,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			fileMenu.add(setFolders);
 			setFolders.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent arg0)
-				{
+				public void actionPerformed(ActionEvent arg0) {
 					setFolders();
 				}
 			});
@@ -226,22 +210,20 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			fileMenu.add(setGraphics);
 			setGraphics.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent arg0)
-				{
+				public void actionPerformed(ActionEvent arg0) {
 					simpleWalkSetup.resetGraphicsSetting();
 				}
 			});
-			
+
 			fileMenu.add(loadSaveGame);
 			loadSaveGame.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent arg0)
-				{
+				public void actionPerformed(ActionEvent arg0) {
 					loadSaveGame();
-				}			
+				}
 			});
 			loadSaveGame.setEnabled(false);
-			
+
 			JMenu helpMenu = new JMenu("Help");
 			helpMenu.setMnemonic(KeyEvent.VK_H);
 			menuBar.add(helpMenu);
@@ -249,13 +231,10 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			helpMenu.add(showUserGuide);
 			showUserGuide.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent arg0)
-				{
+				public void actionPerformed(ActionEvent arg0) {
 					showUserGuide();
 				}
 			});
-			
-			
 
 			this.setJMenuBar(menuBar);
 			//this.getContentPane().add(mainPanel, BorderLayout.CENTER);
@@ -263,16 +242,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 			buttonPanel.setLayout(new GridLayout(-1, 3));
 
-			for (final GameConfig gameConfig : GameConfig.allGameConfigs)
-			{
+			for (final GameConfig gameConfig : GameConfig.allGameConfigs) {
 				JButton gameButton = new JButton(gameConfig.gameName);
 				buttonPanel.add(gameButton);
 				gameButton.setEnabled(false);
 				gameButtons.put(gameConfig, gameButton);
 				gameButton.addActionListener(new ActionListener() {
 					@Override
-					public void actionPerformed(ActionEvent e)
-					{
+					public void actionPerformed(ActionEvent e) {
 						setSelectedGameConfig(gameConfig);
 					}
 				});
@@ -284,7 +261,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			quickEdit.add(new TitledPanel("Location", locField));
 			quickEdit.add(new TitledPanel("Go To", warpPanel));
 			mainPanel.add(buttonPanel, BorderLayout.NORTH);
-			table = new JTable();
+			table = new ESMCellTable(this);
 			mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
 
 			mainPanel.add(dashboard.getMainPanel(), BorderLayout.SOUTH);
@@ -296,9 +273,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			showOutlinesPanel = new ShowOutlinesPanel(simpleWalkSetup);
 			generalSettingsPanel = new GeneralSettingsPanel(this);
 			memoryStatusPanel = new MemoryStatusPanel();
-			
+
 			BethRenderSettings.setFogEnabled(false);
-			
+
 			BethRenderSettings.addUpdateListener(this);
 
 			this.getContentPane().invalidate();
@@ -323,15 +300,13 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			sideBar.addSection(ss5);
 			SidebarSection ss6 = new SidebarSection(sideBar, "Memory", memoryStatusPanel, null);
 			sideBar.addSection(ss6);
-			
 
 			this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 			this.getContentPane().add(sideBar, BorderLayout.WEST);
 
 			this.addWindowListener(new java.awt.event.WindowAdapter() {
 				@Override
-				public void windowClosing(java.awt.event.WindowEvent arg0)
-				{
+				public void windowClosing(java.awt.event.WindowEvent arg0) {
 					//Just until the real window listens to damn events properly!					
 					simpleWalkSetup.closingTime();
 					closingTime();
@@ -344,9 +319,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			this.setFont(this.getFont());
 			enableButtons();
 
-		}
-		catch (IOException e1)
-		{
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		// MY system for guarantee rendering of a component (test this)
@@ -357,14 +330,13 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		warpField.setSize(200, 20);
 		ActionListener warpActionListener = new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
+			public void actionPerformed(ActionEvent arg0) {
 				String warp = warpField.getText().trim();
 				String[] parts = warp.split("[^\\d-]+");
 
-				if (parts.length == 3)
-				{
-					simpleWalkSetup.warp(new Vector3f(Float.parseFloat(parts[0]), Float.parseFloat(parts[1]), Float.parseFloat(parts[2])));
+				if (parts.length == 3) {
+					simpleWalkSetup.warp(new Vector3f(Float.parseFloat(parts[0]), Float.parseFloat(parts[1]),
+							Float.parseFloat(parts[2])));
 				}
 			}
 		};
@@ -374,53 +346,47 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		warpButton.addActionListener(warpActionListener);
 
 		simpleWalkSetup.getAvatarLocation().addAvatarLocationListener(this);
-		
-		
+
 	}
 
-	private JTextField locField = new JTextField("0000,0000,0000");
+	private JTextField	locField	= new JTextField("0000,0000,0000");
 
-	private JPanel warpPanel = new JPanel();
+	private JPanel		warpPanel	= new JPanel();
 
-	private JTextField warpField = new JTextField("                ");
+	private JTextField	warpField	= new JTextField("                ");
 
-	public Component getLocField()
-	{
+	public Component getLocField() {
 		return locField;
 	}
 
-	public Component getWarpField()
-	{
+	public Component getWarpField() {
 		return warpPanel;
 	}
 
 	private long lastLocationUpdate = 0;
 
 	@Override
-	public void locationUpdated(Quat4f rot, Vector3f trans)
-	{
-		if (System.currentTimeMillis() - lastLocationUpdate > 200)
-		{
+	public void locationUpdated(Quat4f rot, Vector3f trans) {
+		if (System.currentTimeMillis() - lastLocationUpdate > 200) {
 			//oddly this is mildly expensive so only update 5 times per second
-			locField.setText(("" + trans.x).split("\\.")[0] + "," + ("" + trans.y).split("\\.")[0] + "," + ("" + trans.z).split("\\.")[0]);
+			locField.setText(("" + trans.x).split("\\.")[0] + "," + ("" + trans.y).split("\\.")[0] + ","
+								+ ("" + trans.z).split("\\.")[0]);
 			lastLocationUpdate = System.currentTimeMillis();
 		}
 	}
 
-	protected void showUserGuide()
-	{
+	protected void showUserGuide() {
 		ugd.display(this, "docs\\userGuide.htm");
 	}
 
-	public void closingTime()
-	{
-		if (esmManager != null)
-		{
+	public void closingTime() {
+		if (esmManager != null) {
 			PropertyLoader.properties.setProperty("YawPitch" + esmManager.getName(),
 					new YawPitch(simpleWalkSetup.getAvatarLocation().getTransform()).toString());
 			PropertyLoader.properties.setProperty("Trans" + esmManager.getName(),
 					"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));
-			PropertyLoader.properties.setProperty("CellId" + esmManager.getName(), "" + simpleBethCellManager.getCurrentCellFormId());
+			PropertyLoader.properties.setProperty("CellId" + esmManager.getName(),
+					"" + simpleBethCellManager.getCurrentCellFormId());
 		}
 		PropertyLoader.save();
 
@@ -430,52 +396,45 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	}
 
-	private void setFolders()
-	{
+	private void setFolders() {
 		SetBethFoldersDialog setBethFoldersDialog = new SetBethFoldersDialog(this);
 		setBethFoldersDialog.setSize(400, 400);
 		setBethFoldersDialog.setVisible(true);
 		setBethFoldersDialog.addComponentListener(new ComponentListener() {
 
 			@Override
-			public void componentResized(ComponentEvent e)
-			{
+			public void componentResized(ComponentEvent e) {
 			}
 
 			@Override
-			public void componentMoved(ComponentEvent e)
-			{
+			public void componentMoved(ComponentEvent e) {
 			}
 
 			@Override
-			public void componentShown(ComponentEvent e)
-			{
+			public void componentShown(ComponentEvent e) {
 			}
 
 			@Override
-			public void componentHidden(ComponentEvent e)
-			{
+			public void componentHidden(ComponentEvent e) {
 				enableButtons();
 			}
 		});
 
 	}
 
-	private void enableButtons()
-	{
+	private void enableButtons() {
 		boolean noFoldersSet = true;
-		for (GameConfig gameConfig : GameConfig.allGameConfigs)
-		{
+		for (GameConfig gameConfig : GameConfig.allGameConfigs) {
 			JButton gameButton = gameButtons.get(gameConfig);
 			// must have no game selected and have a folder and folder must ahve right files
-			boolean enable = selectedGameConfig == null && gameConfig.scrollsFolder != null && hasESMAndBSAFiles(gameConfig);
+			boolean enable = selectedGameConfig == null && gameConfig.scrollsFolder != null
+								&& hasESMAndBSAFiles(gameConfig);
 			gameButton.setEnabled(enable);
 			noFoldersSet = noFoldersSet && gameConfig.scrollsFolder == null;
 		}
 
 		//in case of nothing selected show dialog, funny infinite loop for recidivist non-setters
-		if (noFoldersSet)
-		{
+		if (noFoldersSet) {
 			showUserGuide();
 			setFolders();
 		}
@@ -485,25 +444,21 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		mainPanel.repaint();
 	}
 
-	private static boolean hasESMAndBSAFiles(GameConfig gameConfig)
-	{
+	private static boolean hasESMAndBSAFiles(GameConfig gameConfig) {
 		// check to ensure the esm file and at least one bsa file are in the folder
 		File checkEsm = new File(gameConfig.scrollsFolder, gameConfig.mainESMFile);
-		if (!checkEsm.exists())
-		{
+		if (!checkEsm.exists()) {
 			return false;
 		}
 
 		int countOfBsa = 0;
 		File checkBsa = new File(gameConfig.scrollsFolder);
-		for (File f : checkBsa.listFiles())
-		{
+		for (File f : checkBsa.listFiles()) {
 			countOfBsa += f.getName().toLowerCase().endsWith(".bsa") ? 1 : 0;
 			countOfBsa += f.getName().toLowerCase().endsWith(".ba2") ? 1 : 0;
 		}
 
-		if (countOfBsa == 0)
-		{
+		if (countOfBsa == 0) {
 			return false;
 		}
 
@@ -511,40 +466,35 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	}
 
 	@Override
-	public void renderSettingsUpdated()
-	{
+	public void renderSettingsUpdated() {
 		simpleBethCellManager.updateBranches();
 	}
 
 	/**
 	 
 	 */
-	private void setSelectedGameConfig(GameConfig newGameConfig)
-	{
+	private void setSelectedGameConfig(GameConfig newGameConfig) {
 		selectedGameConfig = newGameConfig;
 		enableButtons();
 		simpleWalkSetup.getAvatarCollisionInfo().setAvatarYHeight(selectedGameConfig.avatarYHeight);
 
 		Thread t = new Thread() {
 			@Override
-			public void run()
-			{
-				synchronized (selectedGameConfig)
-				{
+			public void run() {
+				synchronized (selectedGameConfig) {
 					IDashboard.dashboard.setEsmLoading(1);
-					
+
 					System.out.println("ESM Master File loading: " + selectedGameConfig.getESMPath());
-					esmManager = ESMManagerFile.getESMManager(selectedGameConfig.getESMPath());					
+					esmManager = ESMManagerFile.getESMManager(selectedGameConfig.getESMPath());
 					bsaFileSet = null;
-					if (esmManager != null)
-					{
-						
-						if(LOAD_ESP_FILES) {
+					if (esmManager != null) {
+
+						if (LOAD_ESP_FILES) {
 							//Lets load up the esp files too! search the same folder
 							File dir = new File(selectedGameConfig.getESMPath()).getParentFile();
-							for(File f: dir.listFiles()) {
-								if(f.getName().endsWith(".esp") ||
-										(f.getName().endsWith(".esm") && !f.getName().equals(esmManager.getName()))) {
+							for (File f : dir.listFiles()) {
+								if (f.getName().endsWith(".esp")
+									|| (f.getName().endsWith(".esm") && !f.getName().equals(esmManager.getName()))) {
 									System.out.println("ESM File loading: " + f.getAbsolutePath());
 									esmManager.addMaster(f.getAbsolutePath());
 								}
@@ -552,21 +502,20 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						}
 
 						//TODO: all these should be connected strongly to GameConfig
-						if (esmManager.getName().indexOf("Morrowind") != -1)
-						{
+						if (esmManager.getName().indexOf("Morrowind") != -1) {
 							J3dLAND.setTes3();
 							BethRenderSettings.setTes3(true);
 						}
 
-						YawPitch yp = YawPitch
-								.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), selectedGameConfig.startYP.toString()));
-						Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
-								selectedGameConfig.startLocation.toString()));
-						int prevCellformid = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
+						YawPitch yp = YawPitch.parse(PropertyLoader.properties
+								.getProperty("YawPitch" + esmManager.getName(), selectedGameConfig.startYP.toString()));
+						Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty(
+								"Trans" + esmManager.getName(), selectedGameConfig.startLocation.toString()));
+						int prevCellformid = Integer
+								.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
 						simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
 
-						if (prevCellformid == -1)
-						{
+						if (prevCellformid == -1) {
 							prevCellformid = selectedGameConfig.startCellId;
 						}
 
@@ -575,18 +524,16 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						TextureSource textureSource;
 						SoundSource soundSource;
 
-						if (cbBsaMenuItem.isSelected())
-						{
-							if (bsaFileSet == null)
-							{
-								bsaFileSet = new BSArchiveSetFile(new String[] { selectedGameConfig.scrollsFolder },
+						if (cbBsaMenuItem.isSelected()) {
+							if (bsaFileSet == null) {
+								bsaFileSet = new BSArchiveSetFile(new String[] {selectedGameConfig.scrollsFolder},
 										cbLoadAllMenuItem.isSelected());
 							}
 
-							if (bsaFileSet.size() == 0)
-							{
-								JOptionPane.showMessageDialog(ScrollsExplorer.this,
-										selectedGameConfig.scrollsFolder + " contains no *.bsa files nothing can be loaded");
+							if (bsaFileSet.size() == 0) {
+								JOptionPane.showMessageDialog(
+										ScrollsExplorer.this, selectedGameConfig.scrollsFolder
+																+ " contains no *.bsa files nothing can be loaded");
 								setFolders();
 								IDashboard.dashboard.setEsmLoading(-1);
 								return;
@@ -595,10 +542,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							meshSource = new BsaMeshSource(bsaFileSet);
 							textureSource = new BsaTextureSource(bsaFileSet);
 							soundSource = new BsaSoundSource(bsaFileSet, null);//new EsmSoundKeyToName(esmManager));
-						}
-						else
-						{
-							FileMediaRoots.setMediaRoots(new String[] { selectedGameConfig.scrollsFolder });
+						} else {
+							FileMediaRoots.setMediaRoots(new String[] {selectedGameConfig.scrollsFolder});
 							meshSource = new FileMeshSource();
 							textureSource = new FileTextureSource();
 							soundSource = new FileSoundSource();
@@ -619,16 +564,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						simpleWalkSetup.getWindow().setDefaultCloseOperation(WindowClosingMode.DISPOSE_ON_CLOSE);
 						simpleWalkSetup.getWindow().addWindowListener(new WindowAdapter() {
 							@Override
-							public void windowDestroyNotify(WindowEvent arg0)
-							{
+							public void windowDestroyNotify(WindowEvent arg0) {
 								//simpleWalkSetup.closingTime();
 								//closingTime();
 								//System.exit(0);
 							}
 
 							@Override
-							public void windowResized(final WindowEvent e)
-							{
+							public void windowResized(final WindowEvent e) {
 								J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
 							}
 
@@ -636,10 +579,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
 						simpleWalkSetup.getWindow().addKeyListener(new com.jogamp.newt.event.KeyAdapter() {
 							@Override
-							public void keyPressed(com.jogamp.newt.event.KeyEvent e)
-							{
-								if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-								{
+							public void keyPressed(com.jogamp.newt.event.KeyEvent e) {
+								if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 									//simpleWalkSetup.closingTime();
 									//closingTime();
 									//System.exit(0);
@@ -651,122 +592,23 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						// I could use the j3dcellfactory now? with the cached cell records?
 						simpleBethCellManager.setSources(selectedGameConfig, esmManager, mediaSources);
 
-						if (selectedGameConfig == GameConfig.allGameConfigs.get(0))
-						{
+						if (selectedGameConfig == GameConfig.allGameConfigs.get(0)) {
 							System.out.println("Adding Tes3 extensions");
-							tes3Extensions = new Tes3Extensions(selectedGameConfig, esmManager, mediaSources, simpleWalkSetup,
-									simpleBethCellManager);
+							tes3Extensions = new Tes3Extensions(selectedGameConfig, esmManager, mediaSources,
+									simpleWalkSetup, simpleBethCellManager);
 						}
+						table.loadTableCells(selectedGameConfig, prevCellformid);
 
-						tableModel = new DefaultTableModel(columnNames, 0) {
-							@Override
-							public boolean isCellEditable(int row, int column)
-							{
-								return false; // disallow editing of the table
-							}
-
-							@Override
-							public Class<? extends Object> getColumnClass(int c)
-							{
-								if(getValueAt(0, c) != null )
-									return getValueAt(0, c).getClass();
-								else
-									return Object.class;
-							}
-						};
-
-						table.setModel(tableModel);
-						table.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseClicked(MouseEvent e)
-							{
-								int cellFormId = ((Integer) tableModel.getValueAt(table.convertRowIndexToModel(table.getSelectedRow()), 2));
-								YawPitch yp = new YawPitch();
-								Vector3f trans = new Vector3f();
-										
-								// firstly set our location to a door in the newly clicked cell (cos where else is sensible?)
-								ScrollsExplorerNewt.findADoor(cellFormId, selectedGameConfig, esmManager, trans, yp);
-		                        simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
-								display(cellFormId);
-
-							}
-
-						});
-
-						table.setRowSorter(new TableRowSorter<DefaultTableModel>(tableModel));
-
-						try
-						{
-							// show which esm files have this cell referred
-							HashMap<Integer, StringBuffer> loadedIds = new HashMap<Integer, StringBuffer>();
-							
-							for(IMaster master : esmManager.getMasters() ) { 
-								//TODO: tribunal and bloodmoon are finding nothing but 0??
-								for (Integer formId : master.getAllWRLDTopGroupFormIds()) {	
-									StringBuffer sb = loadedIds.get(formId);
-									if(sb == null) {
-										sb = new StringBuffer(master.getName());
-										PluginRecord pr = master.getWRLD(formId);
-										if (prevCellformid == formId)
-											tableModel.insertRow(0, new Object[] { sb, "Ext", formId, pr });
-										else
-											tableModel.addRow(new Object[] { sb, "Ext", formId, pr });
-										
-										loadedIds.put(formId, sb);
-									} else {
-										sb.append( "/" + master.getName());
-									}
-										
-								}
-
-								for (FormToFilePointer cp : master.getAllInteriorCELLFormIds())
-								{
-									int formId = cp.formId;
-									StringBuffer sb = loadedIds.get(formId);
-									if(sb == null) {
-										sb = new StringBuffer(master.getName());
-										PluginRecord pr = master.getInteriorCELL(formId);
-										if (prevCellformid == formId)
-											tableModel.insertRow(0, new Object[] { sb, "Int", formId, pr });
-										else
-											tableModel.addRow(new Object[] { sb, "Int", formId, pr });
-										
-										loadedIds.put(formId, sb);
-									} else {
-										sb.append( "/" + master.getName());
-									}
-								}
-							}						
-						}
-						catch (DataFormatException e1)
-						{
-							e1.printStackTrace();
-						}
-						catch (IOException e1)
-						{
-							e1.printStackTrace();
-						}
-						catch (PluginException e1)
-						{
-							e1.printStackTrace();
-						}
-						
-
-						table.getColumnModel().getColumn(1).setMaxWidth(30);
-						table.getColumnModel().getColumn(2).setMaxWidth(60);
-						
 						loadSaveGame.setEnabled(true);
 
-						if (autoLoadStartCell)
-						{
+						if (autoLoadStartCell) {
 
 							display(prevCellformid);
 						}
-					}
-					else
-					{
+					} else {
 						JOptionPane.showMessageDialog(ScrollsExplorer.this,
-								selectedGameConfig.mainESMFile + " is not in folder set for game " + selectedGameConfig.gameName);
+								selectedGameConfig.mainESMFile	+ " is not in folder set for game "
+																			+ selectedGameConfig.gameName);
 						setFolders();
 					}
 					mainPanel.validate();
@@ -782,64 +624,57 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		t.start();
 	}
 
-	private void display(final int cellformid)
-	{
+	void display(final int cellformid) {
 		Vector3f t = simpleWalkSetup.getAvatarLocation().get(new Vector3f());
 		Quat4f r = simpleWalkSetup.getAvatarLocation().get(new Quat4f());
 		simpleBethCellManager.setCurrentCellFormId(cellformid, t, r);
 	}
 
-	public boolean isAutoLoadStartCell()
-	{
+	public boolean isAutoLoadStartCell() {
 		return autoLoadStartCell;
 	}
 
-	public void setAutoLoadStartCell(boolean autoLoadStartCell)
-	{
+	public void setAutoLoadStartCell(boolean autoLoadStartCell) {
 		this.autoLoadStartCell = autoLoadStartCell;
 	}
 
-	public SimpleBethCellManager getSimpleBethCellManager()
-	{
+	public SimpleBethCellManager getSimpleBethCellManager() {
 		return simpleBethCellManager;
 	}
 
-	public SimpleWalkSetupInterface getSimpleWalkSetup()
-	{
+	public SimpleWalkSetupInterface getSimpleWalkSetup() {
 		return simpleWalkSetup;
 	}
 
-	private static void setDebug(boolean b)
-	{
-		if (b)
-		{
+	public IESMManager getEsmManager() {
+		return esmManager;
+	}
+
+	private static void setDebug(boolean b) {
+		if (b) {
 			System.out.println("DEBUG ON");
 			// leave settings alone for optional debug parts
-		}
-		else
-		{
+		} else {
 
 		}
 	}
-	
+
 	private void loadSaveGame() {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		fc.setSelectedFile(new File(prefs.get("Save-"+selectedGameConfig.gameName, "")));
+		fc.setSelectedFile(new File(prefs.get("Save-" + selectedGameConfig.gameName, "")));
 		fc.setDialogTitle("Select save file");
 		int result = fc.showOpenDialog(null);
-		if (result == JFileChooser.APPROVE_OPTION)
-		{
+		if (result == JFileChooser.APPROVE_OPTION) {
 			File f = fc.getSelectedFile();
-			prefs.put("Save-"+selectedGameConfig.gameName, f.getAbsolutePath());
-			
+			prefs.put("Save-" + selectedGameConfig.gameName, f.getAbsolutePath());
+
 			if (esmManager.getName().indexOf("Morrowind") != -1) {
 				try {
 					MasterFile ess = new MasterFile(f);
 					ess.load();
 					System.out.println("woop!");
-					
-					
+
 					/*GMDT (124 bytes)
 					float Unknown[6]
 						- Unknown values rot loc?
@@ -847,8 +682,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						- Current cell name of character?
 					float Unknown
 					char CharacterName[32]*/
-					
-					
+
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (PluginException e) {
@@ -856,16 +690,12 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				}
 			} else {
 				System.out.println("Sorry only Morrowind for now");
-			}			
+			}
 		}
-		 
-		
-	}
-	
-	
 
-	public static void main(String[] args)
-	{
+	}
+
+	public static void main(String[] args) {
 		//Arguments for goodness
 		//-Xmx1200m -Xms900m  -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -Dsun.java2d.noddraw=true
 		//-Dj3d.cacheAutoComputeBounds=true -Dj3d.sharedctx=true
@@ -891,21 +721,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		// always load lwjgl for jbullet debug
 		new LWJGLLinker();
 
-		if (args.length > 0 && args[0].equals("debug"))
-		{
+		if (args.length > 0 && args[0].equals("debug")) {
 			ScrollsExplorer.setDebug(true);
-		}
-		else
-		{
+		} else {
 			ScrollsExplorer.setDebug(false);
 		}
 
 		new ScrollsExplorer();
-	 
+
 	}
-	
-	
-	
-	
 
 }
