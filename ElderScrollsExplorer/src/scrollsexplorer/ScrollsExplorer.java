@@ -151,7 +151,12 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		super("ScrollsExplorer");
 
 		BethRenderSettings.setFarLoadGridCount(8);
-		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false;
+		
+		//FIXME:    BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true; makes the record below not load!
+		//if(j3dRECOInst.getRecordId() == 2348)
+		//	System.out.println("boom 2348! " + j3dRECOInst.getJ3dRECOType());
+		
+		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;  
 
 		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.KTX;
 
