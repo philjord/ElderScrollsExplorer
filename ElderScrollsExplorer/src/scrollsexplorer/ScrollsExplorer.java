@@ -156,7 +156,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		//if(j3dRECOInst.getRecordId() == 2348)
 		//	System.out.println("boom 2348! " + j3dRECOInst.getJ3dRECOType());
 		
-		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;  
+		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false;  
 
 		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.KTX;
 
