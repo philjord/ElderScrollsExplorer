@@ -150,7 +150,12 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	public ScrollsExplorer() {
 		super("ScrollsExplorer");
 
-		BethRenderSettings.setFarLoadGridCount(8);
+		// debug for memory leaks
+		BethWorldVisualBranch.SHOW_DEBUG_MAKERS = true;
+		BethRenderSettings.setFarLoadGridCount(0);
+		BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
+		BethRenderSettings.setNearLoadGridCount(1);
+
 		
 		//FIXME:    BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true; makes the record below not load!
 		//if(j3dRECOInst.getRecordId() == 2348)
