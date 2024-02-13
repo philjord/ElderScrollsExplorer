@@ -15,6 +15,7 @@ import javax.swing.event.ChangeListener;
 
 import tools.swing.VerticalFlowLayout;
 import esmj3d.j3d.BethRenderSettings;
+import scrollsexplorer.simpleclient.BethWorldVisualBranch;
 import scrollsexplorer.simpleclient.SimpleWalkSetupInterface;
 
 /**
@@ -40,6 +41,9 @@ public class ShowOutlinesPanel extends JPanel
 	private JCheckBox outlinePartsTick = new JCheckBox("Outline Particles", BethRenderSettings.isOutlineParts());
 
 	private JCheckBox outlineFocusedTick = new JCheckBox("Outline Focused Object", BethRenderSettings.isOutlineFocused());
+	
+	private JCheckBox showDebugCellGridTick = new JCheckBox("Show Debug Cell Grid", false);
+	
 
 	protected SimpleWalkSetupInterface simpleWalkSetup;
 
@@ -147,6 +151,19 @@ public class ShowOutlinesPanel extends JPanel
 				BethRenderSettings.setOutlineFocused(outlineFocusedTick.isSelected());
 			}
 		});
+		
+		add(showDebugCellGridTick);
+		showDebugCellGridTick.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				BethWorldVisualBranch.SHOW_DEBUG_MAKERS = showDebugCellGridTick.isSelected();
+			}
+		});
+		
+		
+		
 	}
 
 }
