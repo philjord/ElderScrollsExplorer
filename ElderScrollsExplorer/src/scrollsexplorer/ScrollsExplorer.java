@@ -49,6 +49,8 @@ import esfilemanager.tes3.MasterFile;
 import esfilemanager.utils.source.EsmSoundKeyToName;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
+import esmj3d.j3d.j3drecords.type.J3dRECOType;
+import esmj3d.j3d.trees.TreeMaker;
 import javaawt.VMEventQueue;
 import javaawt.image.VMBufferedImage;
 import javaawt.imageio.VMImageIO;
@@ -149,19 +151,29 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public ScrollsExplorer() {
 		super("ScrollsExplorer");
-
+		
+		BethRenderSettings.setFarLoadGridCount(16);
+		BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
+		BethRenderSettings.setNearLoadGridCount(4);
+		
+		
+		
 		// debug for memory leaks
-		BethWorldVisualBranch.SHOW_DEBUG_MAKERS = true;
+/*		BethWorldVisualBranch.SHOW_DEBUG_MAKERS = true;
 		BethRenderSettings.setFarLoadGridCount(0);
 		BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
-		BethRenderSettings.setNearLoadGridCount(1);
-
+		BethRenderSettings.setNearLoadGridCount(0);*/
 		
-		//FIXME:    BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true; makes the record below not load!
-		//if(j3dRECOInst.getRecordId() == 2348)
-		//	System.out.println("boom 2348! " + j3dRECOInst.getJ3dRECOType());
-		
-		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false;  
+	//	J3dNiTransformInterpolator.CACHE_WEAK = false;
+	//	NiGeometryAppearanceFixed.CACHE_WEAK = false;
+	//	J3dNiBSplineCompTransformInterpolator.CACHE_WEAK = false;
+	//	BhkShapeToCollisionShape.CACHE_WEAK = false;
+	//	RootCollisionNodeToCollisionShape.CACHE_WEAK = false;
+	//	J3dNiPathInterpolator.CACHE_WEAK = false;
+	//	J3dRECOType.SHARE_MODELS = false;
+	//	TreeMaker.SHARE_MODELS = false;
+	
+		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false;  // true for this should now work, there was a bug p.x,p.x rather than p.x,-p.z
 
 		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.KTX;
 
@@ -515,6 +527,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						if (esmManager.getName().indexOf("Morrowind") != -1) {
 							J3dLAND.setTes3();
 							BethRenderSettings.setTes3(true);
+						} else if (selectedGameConfig.folderKey.startsWith("FallOut4")) {
+						
+							BethRenderSettings.setFarLoadGridCount(8);
+							BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
+							BethRenderSettings.setNearLoadGridCount(2);
 						}
 
 						YawPitch yp = YawPitch.parse(PropertyLoader.properties
