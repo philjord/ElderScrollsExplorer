@@ -98,12 +98,21 @@ public class ESMCellTable extends JTable {
 					if (sb == null) {
 						sb = new StringBuffer(master.getName());
 						PluginRecord pr = master.getInteriorCELL(formId);
-						if (prevCellformid == formId)
-							tableModel.insertRow(0, new Object[] {sb, "Int", formId, pr});
-						else
-							tableModel.addRow(new Object[] {sb, "Int", formId, pr});
-
-						loadedIds.put(formId, sb);
+						
+						//Fallout4 has lots of unnamed cells that seem generally bu and lots of COPY1234 also bum, and PackIn...
+						// presumably there's some sort of folder structure I'm missing?
+						
+						
+						if(!pr.getEditorID().equals("")
+								&& !pr.getEditorID().startsWith("COPY")
+								&& !pr.getEditorID().startsWith("PackIn")) {						
+							if (prevCellformid == formId)
+								tableModel.insertRow(0, new Object[] {sb, "Int", formId, pr});
+							else
+								tableModel.addRow(new Object[] {sb, "Int", formId, pr});
+	
+							loadedIds.put(formId, sb);
+						}
 					} else {
 						sb.append("/" + master.getName());
 					}
