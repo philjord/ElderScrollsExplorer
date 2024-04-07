@@ -37,6 +37,7 @@ import com.jogamp.nativewindow.WindowClosingProtocol.WindowClosingMode;
 import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 
+import bsa.source.BsaMaterialsSource;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
@@ -49,8 +50,6 @@ import esfilemanager.tes3.MasterFile;
 import esfilemanager.utils.source.EsmSoundKeyToName;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
-import esmj3d.j3d.j3drecords.type.J3dRECOType;
-import esmj3d.j3d.trees.TreeMaker;
 import javaawt.VMEventQueue;
 import javaawt.image.VMBufferedImage;
 import javaawt.imageio.VMImageIO;
@@ -550,6 +549,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						MeshSource meshSource;
 						TextureSource textureSource;
 						SoundSource soundSource;
+						BgsmSource materialsSource;
 
 						if (cbBsaMenuItem.isSelected()) {
 							if (bsaFileSet == null) {
@@ -569,15 +569,17 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							meshSource = new BsaMeshSource(bsaFileSet);
 							textureSource = new BsaTextureSource(bsaFileSet);
 							soundSource = new BsaSoundSource(bsaFileSet, null);//new EsmSoundKeyToName(esmManager));
+							materialsSource = new BsaMaterialsSource(bsaFileSet);
 						} else {
 							FileMediaRoots.setMediaRoots(new String[] {selectedGameConfig.scrollsFolder});
 							meshSource = new FileMeshSource();
 							textureSource = new FileTextureSource();
 							soundSource = new FileSoundSource();
+							materialsSource = new BgsmSource();
 						}
 
 						//Just for the crazy new fallout 4 system
-						BgsmSource.setBgsmSource(meshSource);
+						BgsmSource.setBgsmSource(materialsSource);
 
 						mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
