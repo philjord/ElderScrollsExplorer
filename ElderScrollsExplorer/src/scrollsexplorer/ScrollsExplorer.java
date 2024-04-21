@@ -631,7 +631,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						loadSaveGame.setEnabled(true);
 
 						if (autoLoadStartCell) {
-
 							display(prevCellformid);
 						}
 					} else {
