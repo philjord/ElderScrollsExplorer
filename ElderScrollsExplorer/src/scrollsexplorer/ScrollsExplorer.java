@@ -41,6 +41,7 @@ import bsa.source.BsaMaterialsSource;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
+import bsaio.ArchiveInputStream;
 import bsaio.BSArchiveSetFile;
 import client.BootStrap;
 import esfilemanager.common.PluginException;
@@ -174,7 +175,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	
 		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false;  // true for this should now work, there was a bug p.x,p.x rather than p.x,-p.z
 
-		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.KTX;
+		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.ALL;// just for debug of FO76
 
 		javaawt.image.BufferedImage.installBufferedImageDelegate(VMBufferedImage.class);
 		javaawt.imageio.ImageIO.installBufferedImageImpl(VMImageIO.class);
@@ -330,8 +331,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				public void windowClosing(java.awt.event.WindowEvent arg0) {
 					//Just until the real window listens to damn events properly!					
 					simpleWalkSetup.closingTime();
+					simpleBethCellManager.closingTime();
 					closingTime();
-					//System.exit(0);
+
 				}
 			});
 
@@ -414,7 +416,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		prefs.put("use.bsa", Boolean.toString(cbBsaMenuItem.isSelected()));
 		prefs.put("load.all", Boolean.toString(cbLoadAllMenuItem.isSelected()));
 		prefs.put("use.azerty", Boolean.toString(cbAzertyKB.isSelected()));
-
+		
+		//FIXME: something is keeping me alive ! started about when I added proper thread pools to bethworld vis loading, but it's not them
+		// maybe there's a thread in the bytebuffer pool code in the sa load?
+		//ArchiveInputStream.pool.close();//no it's not that
+		System.exit(0);
 	}
 
 	private void setFolders() {
@@ -499,7 +505,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		enableButtons();
 		simpleWalkSetup.getAvatarCollisionInfo().setAvatarYHeight(selectedGameConfig.avatarYHeight);
 
-		Thread t = new Thread() {
+		Thread t = new Thread("ESM Master File load") {
 			@Override
 			public void run() {
 				synchronized (selectedGameConfig) {
