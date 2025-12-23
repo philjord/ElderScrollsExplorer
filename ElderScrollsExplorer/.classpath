@@ -26,17 +26,12 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/jnif"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dtes3"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dfo4"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/java3d-utils-and"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/java3d-core-and"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/java3d-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ElderScrollsExplorerBase"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/java3d-utils"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/vecmath"/>
 	<classpathentry kind="lib" path="/jbullet1.1/dist/jbullet1.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dstar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/esmj3dfo76"/>
