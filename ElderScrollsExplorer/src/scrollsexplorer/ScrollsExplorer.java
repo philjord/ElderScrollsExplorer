@@ -105,10 +105,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	private MemoryStatusPanel				memoryStatusPanel;
 
-	//	private DefaultTableModel tableModel;
-
-	//	private String[] columnNames = new String[] { "File", "Int/Ext", "Cell Id", "Name" };
-
 	private MediaSources					mediaSources;
 
 	public IESMManager						esmManager;
@@ -125,11 +121,17 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public JPanel							quickEdit			= new JPanel();
 
+	private JMenu							fileMenu			= new JMenu("File");
+	private JMenu							tableMenu			= new JMenu("Table");
+	private JMenu							helpMenu			= new JMenu("Help");
+
 	public JCheckBoxMenuItem				cbLoadAllMenuItem	= new JCheckBoxMenuItem("Load all BSA Archives", true);
 
 	public JCheckBoxMenuItem				cbBsaMenuItem		= new JCheckBoxMenuItem("Use BSA not Files", true);
 
 	public JCheckBoxMenuItem				cbAzertyKB			= new JCheckBoxMenuItem("Azerty", false);
+
+	public JCheckBoxMenuItem				cbHideWIPCells		= new JCheckBoxMenuItem("Hide WIP Cells", false);
 
 	public JMenuItem						setFolders			= new JMenuItem("Set Folders");
 
@@ -151,29 +153,27 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public ScrollsExplorer() {
 		super("ScrollsExplorer");
-		
+
 		BethRenderSettings.setFarLoadGridCount(16);
 		BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
 		BethRenderSettings.setNearLoadGridCount(4);
-		
-		
-		
+
 		// debug for memory leaks
-/*		BethWorldVisualBranch.SHOW_DEBUG_MAKERS = true;
-		BethRenderSettings.setFarLoadGridCount(0);
-		BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
-		BethRenderSettings.setNearLoadGridCount(0);*/
-		
-	//	J3dNiTransformInterpolator.CACHE_WEAK = false;
-	//	NiGeometryAppearanceFixed.CACHE_WEAK = false;
-	//	J3dNiBSplineCompTransformInterpolator.CACHE_WEAK = false;
-	//	BhkShapeToCollisionShape.CACHE_WEAK = false;
-	//	RootCollisionNodeToCollisionShape.CACHE_WEAK = false;
-	//	J3dNiPathInterpolator.CACHE_WEAK = false;
-	//	J3dRECOType.SHARE_MODELS = false;
-	//	TreeMaker.SHARE_MODELS = false;
-	
-		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false;  // true for this should now work, there was a bug p.x,p.x rather than p.x,-p.z
+		/*		BethWorldVisualBranch.SHOW_DEBUG_MAKERS = true;
+				BethRenderSettings.setFarLoadGridCount(0);
+				BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
+				BethRenderSettings.setNearLoadGridCount(0);*/
+
+		//	J3dNiTransformInterpolator.CACHE_WEAK = false;
+		//	NiGeometryAppearanceFixed.CACHE_WEAK = false;
+		//	J3dNiBSplineCompTransformInterpolator.CACHE_WEAK = false;
+		//	BhkShapeToCollisionShape.CACHE_WEAK = false;
+		//	RootCollisionNodeToCollisionShape.CACHE_WEAK = false;
+		//	J3dNiPathInterpolator.CACHE_WEAK = false;
+		//	J3dRECOType.SHARE_MODELS = false;
+		//	TreeMaker.SHARE_MODELS = false;
+
+		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false; // true for this should now work, there was a bug p.x,p.x rather than p.x,-p.z
 
 		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.ALL;// just for debug of FO76
 
@@ -199,16 +199,28 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 			JMenuBar menuBar = new JMenuBar();
 			menuBar.setOpaque(true);
-			JMenu fileMenu = new JMenu("File");
+
 			fileMenu.setMnemonic(KeyEvent.VK_F);
 			menuBar.add(fileMenu);
 
 			boolean loadAll = Boolean.parseBoolean(prefs.get("load.all", "true"));
 			cbLoadAllMenuItem.setSelected(loadAll);
+			cbLoadAllMenuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					prefs.put("load.all", Boolean.toString(cbLoadAllMenuItem.isSelected()));
+				}
+			});
 			fileMenu.add(cbLoadAllMenuItem);
 
 			boolean useBsa = Boolean.parseBoolean(prefs.get("use.bsa", "true"));
 			cbBsaMenuItem.setSelected(useBsa);
+			cbBsaMenuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					prefs.put("use.bsa", Boolean.toString(cbBsaMenuItem.isSelected()));
+				}
+			});
 			fileMenu.add(cbBsaMenuItem);
 
 			boolean useAzerty = Boolean.parseBoolean(prefs.get("use.azerty", "false"));
@@ -216,8 +228,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			fileMenu.add(cbAzertyKB);
 			cbAzertyKB.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent arg0) {
+				public void actionPerformed(ActionEvent e) {
 					simpleWalkSetup.setAzerty(cbAzertyKB.isSelected());
+					prefs.put("use.azerty", Boolean.toString(cbAzertyKB.isSelected()));
 				}
 			});
 
@@ -246,7 +259,24 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			});
 			loadSaveGame.setEnabled(false);
 
-			JMenu helpMenu = new JMenu("Help");
+			tableMenu.setMnemonic(KeyEvent.VK_T);
+			menuBar.add(tableMenu);
+
+			boolean hideWIPCells = Boolean.parseBoolean(prefs.get("hide.WIP.Cells", "false"));
+			cbHideWIPCells.setSelected(hideWIPCells);
+			tableMenu.add(cbHideWIPCells);
+			cbHideWIPCells.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// table reload now
+					table.HIDE_WIP_CELLS = cbHideWIPCells.isSelected();
+					prefs.put("hide.WIP.Cells", Boolean.toString(cbHideWIPCells.isSelected()));
+					//TODO: this isn't prevFormCellId like the normal clicker
+					if (selectedGameConfig != null)
+						table.loadTableCells(selectedGameConfig, selectedGameConfig.startCellId);
+				}
+			});
+
 			helpMenu.setMnemonic(KeyEvent.VK_H);
 			menuBar.add(helpMenu);
 
@@ -259,8 +289,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			});
 
 			this.setJMenuBar(menuBar);
-			//this.getContentPane().add(mainPanel, BorderLayout.CENTER);
-			//this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
 			buttonPanel.setLayout(new GridLayout(-1, 3));
 
@@ -284,6 +312,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			quickEdit.add(new TitledPanel("Go To", warpPanel));
 			mainPanel.add(buttonPanel, BorderLayout.NORTH);
 			table = new ESMCellTable(this);
+			table.HIDE_WIP_CELLS = cbHideWIPCells.isSelected();
 			mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
 
 			mainPanel.add(dashboard.getMainPanel(), BorderLayout.SOUTH);
@@ -413,10 +442,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		}
 		PropertyLoader.save();
 
-		prefs.put("use.bsa", Boolean.toString(cbBsaMenuItem.isSelected()));
-		prefs.put("load.all", Boolean.toString(cbLoadAllMenuItem.isSelected()));
-		prefs.put("use.azerty", Boolean.toString(cbAzertyKB.isSelected()));
-		
 		//FIXME: something is keeping me alive ! started about when I added proper thread pools to bethworld vis loading, but it's not them
 		// maybe there's a thread in the bytebuffer pool code in the sa load?
 		//ArchiveInputStream.pool.close();//no it's not that
@@ -497,9 +522,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		simpleBethCellManager.updateBranches();
 	}
 
-	/**
-	 
-	 */
+
 	private void setSelectedGameConfig(GameConfig newGameConfig) {
 		selectedGameConfig = newGameConfig;
 		enableButtons();
@@ -533,7 +556,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							J3dLAND.setTes3();
 							BethRenderSettings.setTes3(true);
 						} else if (selectedGameConfig.folderKey.startsWith("FallOut4")) {
-						
+
 							BethRenderSettings.setFarLoadGridCount(8);
 							BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
 							BethRenderSettings.setNearLoadGridCount(2);
@@ -684,6 +707,10 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		return esmManager;
 	}
 
+	public GameConfig getSelectedGameConfig() {
+		return this.selectedGameConfig;
+	}
+
 	private static void setDebug(boolean b) {
 		if (b) {
 			System.out.println("DEBUG ON");
@@ -740,9 +767,9 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		//-Dj3d.implicitAntialiasing=true check it why not set? MacOSX needs for AA, if set always AA
 
-		String versionString = BootStrap.ZIP_PREFIX + "-" + BootStrap.MAJOR_VERSION + "-" + BootStrap.MINOR_VERSION;
-		System.out.println("VERSION: " + versionString);
-		System.err.println("VERSION: " + versionString);
+		//String versionString = BootStrap.ZIP_PREFIX + "-" + BootStrap.MAJOR_VERSION + "-" + BootStrap.MINOR_VERSION;
+		//System.out.println("VERSION: " + versionString);
+		//System.err.println("VERSION: " + versionString);
 
 		System.setProperty("sun.awt.noerasebackground", "true");
 		System.setProperty("j3d.cacheAutoComputeBounds", "true");

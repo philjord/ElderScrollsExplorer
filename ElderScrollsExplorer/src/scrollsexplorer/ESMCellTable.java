@@ -21,11 +21,12 @@ import tools3d.utils.YawPitch;
 
 public class ESMCellTable extends JTable {
 
-	private ScrollsExplorer scrollsExplorer;
+	protected boolean			HIDE_WIP_CELLS	= false;
+
+	private ScrollsExplorer		scrollsExplorer;
 	private DefaultTableModel	tableModel;
 
-	private String[]			columnNames	= new String[] {"File", "Int/Ext", "Cell Id", "Name"};
- 
+	private String[]			columnNames		= new String[] {"File", "Int/Ext", "Cell Id", "Name"};
 
 	public ESMCellTable(ScrollsExplorer scrollsExplorer) {
 		this.scrollsExplorer = scrollsExplorer;
@@ -45,10 +46,8 @@ public class ESMCellTable extends JTable {
 		};
 
 		this.setModel(tableModel);
-	}
 
- 
-	public void loadTableCells(final GameConfig newGameConfig, int prevCellformid) {
+		this.setRowSorter(new TableRowSorter<DefaultTableModel>(tableModel));
 
 		this.addMouseListener(new MouseAdapter() {
 			@Override
@@ -59,15 +58,20 @@ public class ESMCellTable extends JTable {
 				Vector3f trans = new Vector3f();
 
 				// firstly set our location to a door in the newly clicked cell (cos where else is sensible?)
-				ScrollsExplorerNewt.findADoor(cellFormId, newGameConfig, scrollsExplorer.getEsmManager(), trans, yp);
+				ScrollsExplorerNewt.findADoor(cellFormId, scrollsExplorer.getSelectedGameConfig(),
+						scrollsExplorer.getEsmManager(), trans, yp);
 				scrollsExplorer.getSimpleWalkSetup().getAvatarLocation().set(yp.get(new Quat4f()), trans);
 				scrollsExplorer.display(cellFormId);
 
 			}
 
 		});
+	}
 
-		this.setRowSorter(new TableRowSorter<DefaultTableModel>(tableModel));
+	public void loadTableCells(GameConfig newGameConfig, int prevCellformid) {
+
+		// if we are already laoded start by unloading
+		tableModel.getDataVector().clear();
 
 		try {
 			// show which esm files have this cell referred
@@ -75,11 +79,27 @@ public class ESMCellTable extends JTable {
 
 			for (IMaster master : scrollsExplorer.getEsmManager().getMasters()) {
 				//TODO: tribunal and bloodmoon are finding nothing but 0??
+
+				// add Ext
 				for (Integer formId : master.getAllWRLDTopGroupFormIds()) {
 					StringBuffer sb = loadedIds.get(formId);
 					if (sb == null) {
 						sb = new StringBuffer(master.getName());
 						PluginRecord pr = master.getWRLD(formId);
+
+						if (HIDE_WIP_CELLS) {
+							//Fallout4 has lots of unnamed cells that seem generally bu and lots of COPY1234 also bum, and PackIn...
+							// presumably there's some sort of folder structure I'm missing?
+							if (pr.getEditorID().startsWith("COPY") || pr.getEditorID().startsWith("PackIn"))
+								continue;
+
+							//Fallout76
+							if (pr.getEditorID().length() == 0	|| pr.getEditorID().startsWith("Test")
+								|| pr.getEditorID().startsWith("TEST") || pr.getEditorID().startsWith("Debug")
+								|| pr.getEditorID().startsWith("zCUT"))
+								continue;
+						}
+
 						if (prevCellformid == formId)
 							tableModel.insertRow(0, new Object[] {sb, "Ext", formId, pr});
 						else
@@ -87,38 +107,49 @@ public class ESMCellTable extends JTable {
 
 						loadedIds.put(formId, sb);
 					} else {
+						// so this makes the File column value for this row be updated with both esm names
 						sb.append("/" + master.getName());
 					}
 
 				}
 
+				//add Int
 				for (FormToFilePointer cp : master.getAllInteriorCELLFormIds()) {
 					int formId = cp.formId;
 					StringBuffer sb = loadedIds.get(formId);
+					// check if this id has already been put in the table, if not...
 					if (sb == null) {
 						sb = new StringBuffer(master.getName());
 						PluginRecord pr = master.getInteriorCELL(formId);
-						
-						//Fallout4 has lots of unnamed cells that seem generally bu and lots of COPY1234 also bum, and PackIn...
-						// presumably there's some sort of folder structure I'm missing?
-						
-						
-						if(!pr.getEditorID().equals("")
-								&& !pr.getEditorID().startsWith("COPY")
-								&& !pr.getEditorID().startsWith("PackIn")) {						
-							if (prevCellformid == formId)
-								tableModel.insertRow(0, new Object[] {sb, "Int", formId, pr});
-							else
-								tableModel.addRow(new Object[] {sb, "Int", formId, pr});
-	
-							loadedIds.put(formId, sb);
+
+						if (HIDE_WIP_CELLS) {
+							//Fallout4 has lots of unnamed cells that seem generally bu and lots of COPY1234 also bum, and PackIn...
+							// presumably there's some sort of folder structure I'm missing?
+							if (pr.getEditorID().startsWith("COPY") || pr.getEditorID().startsWith("PackIn"))
+								continue;
+
+							//Fallout76
+							if (pr.getEditorID().length() == 0	|| pr.getEditorID().startsWith("Test")
+								|| pr.getEditorID().startsWith("TEST") || pr.getEditorID().startsWith("Debug")
+								|| pr.getEditorID().startsWith("zCUT"))
+								continue;
 						}
+
+						if (prevCellformid == formId)
+							tableModel.insertRow(0, new Object[] {sb, "Int", formId, pr});
+						else
+							tableModel.addRow(new Object[] {sb, "Int", formId, pr});
+
+						loadedIds.put(formId, sb);
 					} else {
+						// otherwise make the File column value for this row be updated with both esm names
 						sb.append("/" + master.getName());
 					}
 				}
 			}
-		} catch (DataFormatException e1) {
+		} catch (
+
+		DataFormatException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
 			e1.printStackTrace();
