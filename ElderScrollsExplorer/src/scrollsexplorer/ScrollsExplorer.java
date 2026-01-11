@@ -41,9 +41,7 @@ import bsa.source.BsaMaterialsSource;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
-import bsaio.ArchiveInputStream;
 import bsaio.BSArchiveSetFile;
-import client.BootStrap;
 import esfilemanager.common.PluginException;
 import esfilemanager.loader.ESMManagerFile;
 import esfilemanager.loader.IESMManager;
@@ -55,7 +53,6 @@ import javaawt.VMEventQueue;
 import javaawt.image.VMBufferedImage;
 import javaawt.imageio.VMImageIO;
 import nativeLinker.LWJGLLinker;
-import nif.BgsmSource;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.j3d.particles.tes3.J3dNiParticles;
 import scrollsexplorer.simpleclient.BethWorldVisualBranch;
@@ -77,10 +74,12 @@ import tools.swing.VerticalFlowLayout;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
 import tools3d.utils.scenegraph.LocationUpdateListener;
+import utils.source.BgsmSource;
 import utils.source.MediaSources;
 import utils.source.MeshSource;
 import utils.source.SoundSource;
 import utils.source.TextureSource;
+import utils.source.file.FileBgsmSource;
 import utils.source.file.FileMediaRoots;
 import utils.source.file.FileMeshSource;
 import utils.source.file.FileSoundSource;
@@ -604,7 +603,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							meshSource = new FileMeshSource();
 							textureSource = new FileTextureSource();
 							soundSource = new FileSoundSource();
-							materialsSource = new BgsmSource();
+							materialsSource = new FileBgsmSource();
 						}
 
 						//Just for the crazy new fallout 4 system
