@@ -74,12 +74,12 @@ import tools.swing.VerticalFlowLayout;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
 import tools3d.utils.scenegraph.LocationUpdateListener;
-import utils.source.BgsmSource;
+import utils.source.MaterialsSource;
 import utils.source.MediaSources;
 import utils.source.MeshSource;
 import utils.source.SoundSource;
 import utils.source.TextureSource;
-import utils.source.file.FileBgsmSource;
+import utils.source.file.FileMaterialsSource;
 import utils.source.file.FileMediaRoots;
 import utils.source.file.FileMeshSource;
 import utils.source.file.FileSoundSource;
@@ -577,7 +577,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						MeshSource meshSource;
 						TextureSource textureSource;
 						SoundSource soundSource;
-						BgsmSource materialsSource;
+						MaterialsSource materialsSource;
 
 						if (cbBsaMenuItem.isSelected()) {
 							if (bsaFileSet == null) {
@@ -603,11 +603,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 							meshSource = new FileMeshSource();
 							textureSource = new FileTextureSource();
 							soundSource = new FileSoundSource();
-							materialsSource = new FileBgsmSource();
+							materialsSource = new FileMaterialsSource();
 						}
 
 						//Just for the crazy new fallout 4 system
-						BgsmSource.setBgsmSource(materialsSource);
+						MaterialsSource.setBgsmSource(materialsSource);
 
 						mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
