@@ -608,7 +608,8 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 						//Just for the crazy new fallout 4 system
 						MaterialsSource.setBgsmSource(materialsSource);
-
+						MeshSource.setMeshSource(meshSource);
+						
 						mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
 						simpleWalkSetup.configure(meshSource, simpleBethCellManager);
