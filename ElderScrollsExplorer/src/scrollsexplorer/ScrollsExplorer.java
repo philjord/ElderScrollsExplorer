@@ -12,7 +12,6 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.prefs.Preferences;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -86,7 +85,7 @@ import utils.source.file.FileSoundSource;
 import utils.source.file.FileTextureSource;
 
 public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener, LocationUpdateListener {
-	public Dashboard						dashboard			= new Dashboard();
+	public Dashboard						dashboard				= new Dashboard();
 
 	private SimpleBethCellManager			simpleBethCellManager;
 
@@ -110,43 +109,44 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	public BSArchiveSetFile					bsaFileSet;
 
-	private GameConfig						selectedGameConfig	= null;
+	private GameConfig						selectedGameConfig		= null;
 
-	private HashMap<GameConfig, JButton>	gameButtons			= new HashMap<GameConfig, JButton>();
+	private HashMap<GameConfig, JButton>	gameButtons				= new HashMap<GameConfig, JButton>();
 
-	public JPanel							mainPanel			= new JPanel();
+	public JPanel							mainPanel				= new JPanel();
 
-	public JPanel							buttonPanel			= new JPanel();
+	public JPanel							buttonPanel				= new JPanel();
 
-	public JPanel							quickEdit			= new JPanel();
+	public JPanel							quickEdit				= new JPanel();
 
-	private JMenu							fileMenu			= new JMenu("File");
-	private JMenu							tableMenu			= new JMenu("Table");
-	private JMenu							helpMenu			= new JMenu("Help");
+	private JMenu							fileMenu				= new JMenu("File");
+	private JMenu							tableMenu				= new JMenu("Table");
+	private JMenu							helpMenu				= new JMenu("Help");
 
-	public JCheckBoxMenuItem				cbLoadAllMenuItem	= new JCheckBoxMenuItem("Load all BSA Archives", true);
+	public JCheckBoxMenuItem				cbLoadAllMenuItem		= new JCheckBoxMenuItem("Load all BSA Archives",
+			true);
 
-	public JCheckBoxMenuItem				cbBsaMenuItem		= new JCheckBoxMenuItem("Use BSA not Files", true);
+	public JCheckBoxMenuItem				cbBsaMenuItem			= new JCheckBoxMenuItem("Use BSA not Files", true);
 
-	public JCheckBoxMenuItem				cbAzertyKB			= new JCheckBoxMenuItem("Azerty", false);
+	public JCheckBoxMenuItem				cbAzertyKB				= new JCheckBoxMenuItem("Azerty", false);
 
-	public JCheckBoxMenuItem				cbHideWIPCells		= new JCheckBoxMenuItem("Hide WIP Cells", false);
+	public JCheckBoxMenuItem				cbHideWIPCells			= new JCheckBoxMenuItem("Hide WIP Cells", false);
 
-	public JMenuItem						setFolders			= new JMenuItem("Set Folders");
+	public JMenuItem						setFolders				= new JMenuItem("Set Folders");
 
-	public JMenuItem						setGraphics			= new JMenuItem("Set Graphics");
+	public JMenuItem						setGraphics				= new JMenuItem("Set Graphics");
 
-	public JMenuItem						showUserGuide		= new JMenuItem("User Guide");
+	public JMenuItem						showUserGuide			= new JMenuItem("User Guide");
 
-	public JMenuItem						loadSaveGame		= new JMenuItem("Load Save Game");
+	public JMenuItem						loadSaveGame			= new JMenuItem("Load Save Game");
 
-	private UserGuideDisplay				ugd					= new UserGuideDisplay();
+	private UserGuideDisplay				ugd						= new UserGuideDisplay();
 
-	private Preferences						prefs;
+	private boolean							autoLoadStartCell		= true;
 
-	private boolean							autoLoadStartCell	= true;
+	private boolean							autoLoadLastGameConfig	= false;
 
-	private boolean							LOAD_ESP_FILES		= false;
+	private boolean							LOAD_ESP_FILES			= false;
 
 	private Tes3Extensions					tes3Extensions;
 
@@ -186,9 +186,13 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		DynamicsEngine.MAX_SUB_STEPS = 5;
 
 		try {
-			PropertyLoader.load();
+			PropertyLoader.load();			
 
-			prefs = Preferences.userNodeForPackage(ScrollsExplorerNewt.class);
+			//boolean isAutoLoadLastCell = prefs.getBoolean("isAutoLoadStartCell", false);
+			boolean isAutoLoadLastCell = PropertyLoader.getBoolean("isAutoLoadStartCell", false);
+			autoLoadStartCell = isAutoLoadLastCell;
+			boolean isAutoLoadLastGameConfig = PropertyLoader.getBoolean("isAutoLoadLastGameConfig", false);
+			autoLoadLastGameConfig = isAutoLoadLastGameConfig;
 
 			this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			this.getContentPane().setLayout(new BorderLayout(1, 1));
@@ -202,34 +206,34 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			fileMenu.setMnemonic(KeyEvent.VK_F);
 			menuBar.add(fileMenu);
 
-			boolean loadAll = Boolean.parseBoolean(prefs.get("load.all", "true"));
+			boolean loadAll = PropertyLoader.getBoolean("load.all", true);
 			cbLoadAllMenuItem.setSelected(loadAll);
 			cbLoadAllMenuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					prefs.put("load.all", Boolean.toString(cbLoadAllMenuItem.isSelected()));
+					PropertyLoader.put("load.all", cbLoadAllMenuItem.isSelected());
 				}
 			});
 			fileMenu.add(cbLoadAllMenuItem);
 
-			boolean useBsa = Boolean.parseBoolean(prefs.get("use.bsa", "true"));
+			boolean useBsa = PropertyLoader.getBoolean("use.bsa", true);
 			cbBsaMenuItem.setSelected(useBsa);
 			cbBsaMenuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					prefs.put("use.bsa", Boolean.toString(cbBsaMenuItem.isSelected()));
+					PropertyLoader.put("use.bsa", cbBsaMenuItem.isSelected());
 				}
 			});
 			fileMenu.add(cbBsaMenuItem);
 
-			boolean useAzerty = Boolean.parseBoolean(prefs.get("use.azerty", "false"));
+			boolean useAzerty = PropertyLoader.getBoolean("use.azerty", false);
 			cbAzertyKB.setSelected(useAzerty);
 			fileMenu.add(cbAzertyKB);
 			cbAzertyKB.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					simpleWalkSetup.setAzerty(cbAzertyKB.isSelected());
-					prefs.put("use.azerty", Boolean.toString(cbAzertyKB.isSelected()));
+					PropertyLoader.put("use.azerty", cbAzertyKB.isSelected());
 				}
 			});
 
@@ -261,7 +265,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			tableMenu.setMnemonic(KeyEvent.VK_T);
 			menuBar.add(tableMenu);
 
-			boolean hideWIPCells = Boolean.parseBoolean(prefs.get("hide.WIP.Cells", "false"));
+			boolean hideWIPCells = PropertyLoader.getBoolean("hide.WIP.Cells", false);
 			cbHideWIPCells.setSelected(hideWIPCells);
 			tableMenu.add(cbHideWIPCells);
 			cbHideWIPCells.addActionListener(new ActionListener() {
@@ -269,7 +273,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				public void actionPerformed(ActionEvent e) {
 					// table reload now
 					table.HIDE_WIP_CELLS = cbHideWIPCells.isSelected();
-					prefs.put("hide.WIP.Cells", Boolean.toString(cbHideWIPCells.isSelected()));
+					PropertyLoader.put("hide.WIP.Cells", cbHideWIPCells.isSelected());
 					//TODO: this isn't prevFormCellId like the normal clicker
 					if (selectedGameConfig != null)
 						table.loadTableCells(selectedGameConfig, selectedGameConfig.startCellId);
@@ -299,9 +303,12 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 				gameButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						if (autoLoadLastGameConfig) {
+							PropertyLoader.put("autoLoadLastGameConfig", gameConfig.gameName);
+						}
 						setSelectedGameConfig(gameConfig);
 					}
-				});
+				});				
 			}
 
 			simpleWalkSetup = new SimpleWalkSetup("SimpleBethCellManager");
@@ -398,6 +405,15 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		simpleWalkSetup.getAvatarLocation().addAvatarLocationListener(this);
 
+		if (autoLoadLastGameConfig) {
+			String autoLoadGameConfigName = PropertyLoader.get("autoLoadLastGameConfig", null);
+			for (final GameConfig gameConfig : GameConfig.allGameConfigs) {
+				if (gameConfig.gameName.equals(autoLoadGameConfigName)) {
+					setSelectedGameConfig(gameConfig);
+				}
+			}
+		}
+
 	}
 
 	private JTextField	locField	= new JTextField("0000,0000,0000");
@@ -477,11 +493,13 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		boolean noFoldersSet = true;
 		for (GameConfig gameConfig : GameConfig.allGameConfigs) {
 			JButton gameButton = gameButtons.get(gameConfig);
-			// must have no game selected and have a folder and folder must ahve right files
-			boolean enable = selectedGameConfig == null && gameConfig.scrollsFolder != null
-								&& hasESMAndBSAFiles(gameConfig);
-			gameButton.setEnabled(enable);
-			noFoldersSet = noFoldersSet && gameConfig.scrollsFolder == null;
+			if (gameButton != null) {
+				// must have no game selected and have a folder and folder must have right files
+				boolean enable = selectedGameConfig == null && gameConfig.scrollsFolder != null
+									&& hasESMAndBSAFiles(gameConfig);
+				gameButton.setEnabled(enable);
+				noFoldersSet = noFoldersSet && gameConfig.scrollsFolder == null;
+			}
 		}
 
 		//in case of nothing selected show dialog, funny infinite loop for recidivist non-setters
@@ -520,7 +538,6 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	public void renderSettingsUpdated() {
 		simpleBethCellManager.updateBranches();
 	}
-
 
 	private void setSelectedGameConfig(GameConfig newGameConfig) {
 		selectedGameConfig = newGameConfig;
@@ -609,7 +626,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						//Just for the crazy new fallout 4 system
 						MaterialsSource.setBgsmSource(materialsSource);
 						MeshSource.setMeshSource(meshSource);
-						
+
 						mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
 						simpleWalkSetup.configure(meshSource, simpleBethCellManager);
@@ -692,7 +709,17 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	}
 
 	public void setAutoLoadStartCell(boolean autoLoadStartCell) {
+		PropertyLoader.put("isAutoLoadStartCell", autoLoadStartCell);
 		this.autoLoadStartCell = autoLoadStartCell;
+	}
+
+	public boolean isAutoLoadLastGameConfig() {
+		return autoLoadLastGameConfig;
+	}
+
+	public void setAutoLoadLastGameConfig(boolean autoLoadLastGameConfig) {
+		PropertyLoader.put("isAutoLoadLastGameConfig", autoLoadLastGameConfig);
+		this.autoLoadLastGameConfig = autoLoadLastGameConfig;
 	}
 
 	public SimpleBethCellManager getSimpleBethCellManager() {
@@ -723,12 +750,12 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 	private void loadSaveGame() {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		fc.setSelectedFile(new File(prefs.get("Save-" + selectedGameConfig.gameName, "")));
+		fc.setSelectedFile(new File(PropertyLoader.get("Save-" + selectedGameConfig.gameName, "")));
 		fc.setDialogTitle("Select save file");
 		int result = fc.showOpenDialog(null);
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File f = fc.getSelectedFile();
-			prefs.put("Save-" + selectedGameConfig.gameName, f.getAbsolutePath());
+			PropertyLoader.put("Save-" + selectedGameConfig.gameName, f.getAbsolutePath());
 
 			if (esmManager.getName().indexOf("Morrowind") != -1) {
 				try {
