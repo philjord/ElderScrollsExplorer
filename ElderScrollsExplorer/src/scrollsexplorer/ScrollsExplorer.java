@@ -174,7 +174,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false; // true for this should now work, there was a bug p.x,p.x rather than p.x,-p.z
 
-		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.ALL;// just for debug of FO76
+		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.DDS;// just for debug of FO76
 
 		javaawt.image.BufferedImage.installBufferedImageDelegate(VMBufferedImage.class);
 		javaawt.imageio.ImageIO.installBufferedImageImpl(VMImageIO.class);
