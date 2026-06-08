@@ -98,6 +98,10 @@ public class ESMCellTable extends JTable {
 								|| pr.getEditorID().startsWith("TEST") || pr.getEditorID().startsWith("Debug")
 								|| pr.getEditorID().startsWith("zCUT"))
 								continue;
+							
+							//Starfield
+							if (pr.getEditorID().startsWith("OE") || pr.getEditorID().startsWith("Overlay"))
+								continue;
 						}
 
 						if (prevCellformid == formId)
