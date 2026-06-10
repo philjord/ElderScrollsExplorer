@@ -341,7 +341,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			this.invalidate();
 			this.validate();
 			this.doLayout();
-
+			
 			SideBar sideBar = new SideBar(SideBarMode.TOP_LEVEL, true, 200, true);
 			//SidebarSection ss1 = new SidebarSection(sideBar, "dashboard", dashboard, null);
 			//sideBar.addSection(ss1);

@@ -137,6 +137,10 @@ public class ESMCellTable extends JTable {
 								|| pr.getEditorID().startsWith("TEST") || pr.getEditorID().startsWith("Debug")
 								|| pr.getEditorID().startsWith("zCUT"))
 								continue;
+							
+							//Starfield
+							if (pr.getEditorID().startsWith("OE") || pr.getEditorID().startsWith("Overlay"))
+								continue;
 						}
 
 						if (prevCellformid == formId)
@@ -160,9 +164,10 @@ public class ESMCellTable extends JTable {
 		} catch (PluginException e1) {
 			e1.printStackTrace();
 		}
-
+		
+		this.getColumnModel().getColumn(0).setPreferredWidth(30);
 		this.getColumnModel().getColumn(1).setMaxWidth(30);
 		this.getColumnModel().getColumn(2).setMaxWidth(60);
-
+		this.getColumnModel().getColumn(3).setPreferredWidth(400);
 	}
 }
