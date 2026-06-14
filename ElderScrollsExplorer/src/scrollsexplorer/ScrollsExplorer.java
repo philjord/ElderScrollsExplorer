@@ -8,11 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
@@ -22,6 +25,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
@@ -40,6 +44,7 @@ import bsa.source.BsaMaterialsSource;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
+import bsa.source.BsaTextureSource.CompressedTextureLoaderETCPackDDS;
 import bsaio.BSArchiveSetFile;
 import esfilemanager.common.PluginException;
 import esfilemanager.loader.ESMManagerFile;
@@ -84,7 +89,7 @@ import utils.source.file.FileMeshSource;
 import utils.source.file.FileSoundSource;
 import utils.source.file.FileTextureSource;
 
-public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener, LocationUpdateListener {
+public class ScrollsExplorer extends JFrame implements BethRenderSettings.UpdateListener, LocationUpdateListener, ItemListener {
 	public Dashboard						dashboard				= new Dashboard();
 
 	private SimpleBethCellManager			simpleBethCellManager;
@@ -174,7 +179,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false; // true for this should now work, there was a bug p.x,p.x rather than p.x,-p.z
 
-		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.DDS;// just for debug of FO76
+		
 
 		javaawt.image.BufferedImage.installBufferedImageDelegate(VMBufferedImage.class);
 		javaawt.imageio.ImageIO.installBufferedImageImpl(VMImageIO.class);
@@ -279,6 +284,36 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						table.loadTableCells(selectedGameConfig, selectedGameConfig.startCellId);
 				}
 			});
+			
+			JMenu menuNif = new JMenu("Nif");
+			ButtonGroup bg1 = new ButtonGroup();
+			
+			JRadioButtonMenuItem useOnlyKTXMenuItem = new JRadioButtonMenuItem("Use only KTX");
+			useOnlyKTXMenuItem.setActionCommand("useOnlyKTXMenuItem");
+			useOnlyKTXMenuItem.addItemListener(this);
+			bg1.add(useOnlyKTXMenuItem);
+			menuNif.add(useOnlyKTXMenuItem);
+			JRadioButtonMenuItem useOnlyDDSMenuItem = new JRadioButtonMenuItem("Use only DDS");
+			useOnlyDDSMenuItem.setActionCommand("useOnlyDDSMenuItem");
+			useOnlyDDSMenuItem.addItemListener(this);
+			bg1.add(useOnlyDDSMenuItem);
+			menuNif.add(useOnlyDDSMenuItem);
+			JRadioButtonMenuItem anyTextureMenuItem = new JRadioButtonMenuItem("Any Texture");
+			anyTextureMenuItem.setActionCommand("anyTextureMenuItem");
+			anyTextureMenuItem.addItemListener(this);
+			bg1.add(anyTextureMenuItem);
+			menuNif.add(anyTextureMenuItem);
+			
+			String allowableTextureType = PropertyLoader.properties.getProperty("AllowableTextureType");
+			if (allowableTextureType == null || allowableTextureType.equals("anyTextureMenuItem")) {
+				anyTextureMenuItem.setSelected(true);
+			} else if (allowableTextureType.equals("useOnlyKTXMenuItem")) {
+				useOnlyKTXMenuItem.setSelected(true);
+			} else if (allowableTextureType.equals("useOnlyDDSMenuItem")) {
+				useOnlyDDSMenuItem.setSelected(true);
+			}
+
+			menuBar.add(menuNif);
 
 			helpMenu.setMnemonic(KeyEvent.VK_H);
 			menuBar.add(helpMenu);
@@ -534,6 +569,43 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 		return true;
 	}
 
+	//used by checkboxes/radio buttons
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		String action = ((JMenuItem)e.getItemSelectable()).getActionCommand();
+		if ((action.equals("useOnlyKTXMenuItem")	|| action.equals("useOnlyDDSMenuItem")
+				|| action.equals("anyTextureMenuItem"))
+			&& e.getStateChange() == ItemEvent.SELECTED) {
+			setAllowableTextureType(action);
+		} else if (action.equals("convertDDStoKTXMenuItem")) {
+			boolean convertDDStoKTX = e.getStateChange() == ItemEvent.SELECTED;
+			CompressedTextureLoaderETCPackDDS.CONVERT_DDS_TO_ETC2 = convertDDStoKTX;
+			CompressedTextureLoader.clearCache();
+			PropertyLoader.properties.setProperty("convertDDStoKTX", Boolean.toString(convertDDStoKTX));
+			PropertyLoader.save();
+		} else if (action.equals("autoOpenArchiveMenuItem")) {
+			PropertyLoader.properties.setProperty("autoOpenArchive",
+					Boolean.toString(e.getStateChange() == ItemEvent.SELECTED));
+		} else if (action.equals("autoDisplayMenuItem")) {
+			PropertyLoader.properties.setProperty("autoDisplay",
+					Boolean.toString(e.getStateChange() == ItemEvent.SELECTED));
+		}
+
+	}
+
+	private static void setAllowableTextureType(String action) {
+		if (action.equals("useOnlyKTXMenuItem")) {
+			BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.KTX;
+		} else if (action.equals("useOnlyDDSMenuItem")) {
+			BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.DDS;
+		} else if (action.equals("anyTextureMenuItem")) {
+			BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.ALL;
+		}
+		System.out.println("setAllowableTextureType " + action);
+		PropertyLoader.properties.setProperty("AllowableTextureType", action);
+		PropertyLoader.save();
+	}
+	
 	@Override
 	public void renderSettingsUpdated() {
 		simpleBethCellManager.updateBranches();
