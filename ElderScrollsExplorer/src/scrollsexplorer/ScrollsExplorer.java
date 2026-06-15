@@ -71,6 +71,7 @@ import scrollsexplorer.simpleclient.settings.MemoryStatusPanel;
 import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
 import scrollsexplorer.simpleclient.settings.ShowOutlinesPanel;
 import scrollsexplorer.simpleclient.tes3.Tes3Extensions;
+import texture.CompressedTextureLoaderExt;
 import tools.io.ConfigLoader;
 import tools.swing.TitledPanel;
 import tools.swing.UserGuideDisplay;
@@ -312,6 +313,14 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			} else if (allowableTextureType.equals("useOnlyDDSMenuItem")) {
 				useOnlyDDSMenuItem.setSelected(true);
 			}
+			
+			JCheckBoxMenuItem dropMip0MenuItem = new JCheckBoxMenuItem("Drop Mip 0");
+			dropMip0MenuItem.setActionCommand("dropMip0MenuItem");
+			dropMip0MenuItem.addItemListener(this);	
+			boolean dropMip0 = PropertyLoader.getBoolean("dropMip0", false);
+			dropMip0MenuItem.setSelected(dropMip0);
+			menuNif.add(dropMip0MenuItem);
+			
 
 			menuBar.add(menuNif);
 
@@ -582,15 +591,20 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 			CompressedTextureLoaderETCPackDDS.CONVERT_DDS_TO_ETC2 = convertDDStoKTX;
 			CompressedTextureLoader.clearCache();
 			PropertyLoader.properties.setProperty("convertDDStoKTX", Boolean.toString(convertDDStoKTX));
-			PropertyLoader.save();
 		} else if (action.equals("autoOpenArchiveMenuItem")) {
 			PropertyLoader.properties.setProperty("autoOpenArchive",
 					Boolean.toString(e.getStateChange() == ItemEvent.SELECTED));
 		} else if (action.equals("autoDisplayMenuItem")) {
 			PropertyLoader.properties.setProperty("autoDisplay",
 					Boolean.toString(e.getStateChange() == ItemEvent.SELECTED));
+		} else if (action.equals("dropMip0MenuItem")) {
+			boolean dropMip0 = e.getStateChange() == ItemEvent.SELECTED;
+			CompressedTextureLoaderExt.DROP_0_MIP = dropMip0;
+			PropertyLoader.properties.setProperty("dropMip0", Boolean.toString(dropMip0));
 		}
 
+		PropertyLoader.save();
+		
 	}
 
 	private static void setAllowableTextureType(String action) {
