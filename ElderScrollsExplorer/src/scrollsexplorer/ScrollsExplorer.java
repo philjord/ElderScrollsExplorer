@@ -58,7 +58,7 @@ import javaawt.image.VMBufferedImage;
 import javaawt.imageio.VMImageIO;
 import nativeLinker.LWJGLLinker;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
-import nif.j3d.particles.tes3.J3dNiParticles;
+import nif.j3d.particles.J3dNiParticleSystem;
 import scrollsexplorer.simpleclient.BethWorldVisualBranch;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetup;
@@ -733,11 +733,11 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 							@Override
 							public void windowResized(final WindowEvent e) {
-								J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
+								J3dNiParticleSystem.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
 							}
 
 						});
-						J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
+						J3dNiParticleSystem.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
 						simpleWalkSetup.getWindow().addKeyListener(new com.jogamp.newt.event.KeyAdapter() {
 							@Override
 							public void keyPressed(com.jogamp.newt.event.KeyEvent e) {
