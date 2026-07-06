@@ -18,19 +18,19 @@ import tools.swing.VerticalFlowLayout;
  */
 public class DistanceSettingsPanel extends JPanel
 {
-	private JSlider NEAR_LOAD_DISTSlider = new JSlider(0, 16, BethRenderSettings.getNearLoadGridCount());
+	public JSlider NEAR_LOAD_DISTSlider = new JSlider(0, 16, BethRenderSettings.getNearLoadGridCount());
 	
-	private JSlider FAR_LOAD_DISTSlider = new JSlider(0, 64, BethRenderSettings.getFarLoadGridCount());
+	public JSlider FAR_LOAD_DISTSlider = new JSlider(0, 64, BethRenderSettings.getFarLoadGridCount());
 
-	private JSlider LOD_LOAD_DIST_MAXSlider = new JSlider(0, 192, BethRenderSettings.getLOD_LOAD_DIST_MAX());
+	public JSlider LOD_LOAD_DIST_MAXSlider = new JSlider(0, 192, BethRenderSettings.getLOD_LOAD_DIST_MAX());
 
-	private JSlider actorFade = new JSlider(0, BethRenderSettings.ACTOR_FADE_MAX, BethRenderSettings.ACTOR_FADE_DEFAULT);
+	public JSlider actorFade = new JSlider(0, BethRenderSettings.ACTOR_FADE_MAX, BethRenderSettings.ACTOR_FADE_DEFAULT);
 
-	private JSlider itemFade = new JSlider(0, BethRenderSettings.ITEM_FADE_MAX, BethRenderSettings.ITEM_FADE_DEFAULT);
+	public JSlider itemFade = new JSlider(0, BethRenderSettings.ITEM_FADE_MAX, BethRenderSettings.ITEM_FADE_DEFAULT);
 
-	private JSlider objectFade = new JSlider(0, BethRenderSettings.OBJECT_FADE_MAX, BethRenderSettings.OBJECT_FADE_DEFAULT);
+	public JSlider objectFade = new JSlider(0, BethRenderSettings.OBJECT_FADE_MAX, BethRenderSettings.OBJECT_FADE_DEFAULT);
 	
-	private JSlider fogDist = new JSlider(BethRenderSettings.FOG_DIST_MIN, 1000, BethRenderSettings.FOG_DIST_DEFAULT);
+	public JSlider fogDist = new JSlider(BethRenderSettings.FOG_DIST_MIN, 1000, BethRenderSettings.FOG_DIST_DEFAULT);
 
 	public DistanceSettingsPanel()
 	{

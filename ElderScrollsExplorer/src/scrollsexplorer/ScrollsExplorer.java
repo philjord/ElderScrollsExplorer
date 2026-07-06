@@ -654,14 +654,22 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						}
 
 						//TODO: all these should be connected strongly to GameConfig
+						
+						//If not listed they are 
+						// FAR_LOAD_GRID_COUNT = 16
+						//NEAR_LOAD_GRID_COUNT = 4
+						// LOD_LOAD_DIST_MAX = 128
+						
 						if (esmManager.getName().indexOf("Morrowind") != -1) {
 							J3dLAND.setTes3();
 							BethRenderSettings.setTes3(true);
-						} else if (selectedGameConfig.folderKey.startsWith("FallOut4")) {
-
-							BethRenderSettings.setFarLoadGridCount(8);
-							BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
-							BethRenderSettings.setNearLoadGridCount(2);
+						} else if (selectedGameConfig.folderKey.startsWith("FallOut4")
+									|| selectedGameConfig.folderKey.startsWith("FallOut76")
+									|| selectedGameConfig.folderKey.startsWith("Starfield")) {
+							// set the slider so that fires the change and also shows it in the GUI
+							ScrollsExplorer.this.distanceSettingsPanel.FAR_LOAD_DISTSlider.setValue(4); // for 9x9=81 grids
+							ScrollsExplorer.this.distanceSettingsPanel.NEAR_LOAD_DISTSlider.setValue(2); // for 5x5 25 grids
+							ScrollsExplorer.this.distanceSettingsPanel.LOD_LOAD_DIST_MAXSlider.setValue(32);
 						}
 
 						YawPitch yp = YawPitch.parse(PropertyLoader.properties
