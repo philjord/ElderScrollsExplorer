@@ -22,33 +22,42 @@ import scrollsexplorer.simpleclient.SimpleWalkSetupInterface;
  * @author Administrator
  *
  */
-public class ShowOutlinesPanel extends JPanel
-{
-	private JSlider globalAmbLightLevel = new JSlider(0, 100, (int) (BethRenderSettings.getGlobalAmbLightLevel() * 100));
+public class ShowOutlinesPanel extends JPanel {
+	private JSlider						globalAmbLightLevel		= new JSlider(0, 100,
+			(int)(BethRenderSettings.getGlobalAmbLightLevel() * 100));
 
-	private JSlider globalDirLightLevel = new JSlider(0, 100, (int) (BethRenderSettings.getGlobalDirLightLevel() * 100));
+	private JSlider						globalDirLightLevel		= new JSlider(0, 100,
+			(int)(BethRenderSettings.getGlobalDirLightLevel() * 100));
 
-	private JCheckBox enablePlacedLights = new JCheckBox("Enable Placed Lights", BethRenderSettings.isEnablePlacedLights());
+	private JCheckBox					enableDirLight			= new JCheckBox("Enable Dir Light",
+			BethRenderSettings.isEnableDirLight());
 
-	private JCheckBox outlineLightsTick = new JCheckBox("Outline Lights", BethRenderSettings.isOutlineLights());
-	
-	private JCheckBox outlineCharsTick = new JCheckBox("Outline Characters", BethRenderSettings.isOutlineChars());
+	private JCheckBox					enablePlacedLights		= new JCheckBox("Enable Placed Lights",
+			BethRenderSettings.isEnablePlacedLights());
 
-	private JCheckBox outlineDoorsTick = new JCheckBox("Outline Doors", BethRenderSettings.isOutlineDoors());
+	private JCheckBox					outlineLightsTick		= new JCheckBox("Outline Lights",
+			BethRenderSettings.isOutlineLights());
 
-	private JCheckBox outlineContsTick = new JCheckBox("Outline Containers", BethRenderSettings.isOutlineConts());
+	private JCheckBox					outlineCharsTick		= new JCheckBox("Outline Characters",
+			BethRenderSettings.isOutlineChars());
 
-	private JCheckBox outlinePartsTick = new JCheckBox("Outline Particles", BethRenderSettings.isOutlineParts());
+	private JCheckBox					outlineDoorsTick		= new JCheckBox("Outline Doors",
+			BethRenderSettings.isOutlineDoors());
 
-	private JCheckBox outlineFocusedTick = new JCheckBox("Outline Focused Object", BethRenderSettings.isOutlineFocused());
-	
-	private JCheckBox showDebugCellGridTick = new JCheckBox("Show Debug Cell Grid", false);
-	
+	private JCheckBox					outlineContsTick		= new JCheckBox("Outline Containers",
+			BethRenderSettings.isOutlineConts());
 
-	protected SimpleWalkSetupInterface simpleWalkSetup;
+	private JCheckBox					outlinePartsTick		= new JCheckBox("Outline Particles",
+			BethRenderSettings.isOutlineParts());
 
-	public ShowOutlinesPanel(SimpleWalkSetupInterface _simpleWalkSetup)
-	{
+	private JCheckBox					outlineFocusedTick		= new JCheckBox("Outline Focused Object",
+			BethRenderSettings.isOutlineFocused());
+
+	private JCheckBox					showDebugCellGridTick	= new JCheckBox("Show Debug Cell Grid", false);
+
+	protected SimpleWalkSetupInterface	simpleWalkSetup;
+
+	public ShowOutlinesPanel(SimpleWalkSetupInterface _simpleWalkSetup) {
 		this.simpleWalkSetup = _simpleWalkSetup;
 		//this.setLayout(new GridLayout2(-1, 3));
 		this.setLayout(new VerticalFlowLayout());
@@ -58,10 +67,9 @@ public class ShowOutlinesPanel extends JPanel
 		globalAmbLightLevel.setPaintTicks(true);
 		globalAmbLightLevel.setPaintLabels(true);
 		add(globalAmbLightLevel);
-		globalAmbLightLevel.addChangeListener(new ChangeListener()
-		{
-			public void stateChanged(ChangeEvent e)
-			{
+		globalAmbLightLevel.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
 				BethRenderSettings.setGlobalAmbLightLevel(globalAmbLightLevel.getValue() / 100f);
 				simpleWalkSetup.setGlobalAmbLightLevel(globalAmbLightLevel.getValue() / 100f);
 			}
@@ -72,98 +80,87 @@ public class ShowOutlinesPanel extends JPanel
 		globalDirLightLevel.setPaintTicks(true);
 		globalDirLightLevel.setPaintLabels(true);
 		add(globalDirLightLevel);
-		globalDirLightLevel.addChangeListener(new ChangeListener()
-		{
-			public void stateChanged(ChangeEvent e)
-			{
+		globalDirLightLevel.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
 				BethRenderSettings.setGlobalDirLightLevel(globalDirLightLevel.getValue() / 100f);
 				simpleWalkSetup.setGlobalDirLightLevel(globalDirLightLevel.getValue() / 100f);
 			}
 		});
 
-		add(enablePlacedLights);
-		enablePlacedLights.addActionListener(new ActionListener()
-		{
+		add(enableDirLight);
+		enableDirLight.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
+			public void actionPerformed(ActionEvent arg0) {
+				BethRenderSettings.setGlobalDirLightEnabled(enableDirLight.isSelected());
+				simpleWalkSetup.setGlobalDirLightEnabled(enableDirLight.isSelected());
+			}
+		});
+
+		add(enablePlacedLights);
+		enablePlacedLights.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
 				BethRenderSettings.setEnablePlacedLights(enablePlacedLights.isSelected());
 			}
 		});
-		
+
 		add(outlineLightsTick);
-		outlineLightsTick.addActionListener(new ActionListener()
-		{
+		outlineLightsTick.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
+			public void actionPerformed(ActionEvent arg0) {
 				BethRenderSettings.setOutlineLights(outlineLightsTick.isSelected());
 			}
 		});
 
-
 		add(outlineCharsTick);
-		outlineCharsTick.addActionListener(new ActionListener()
-		{
+		outlineCharsTick.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
+			public void actionPerformed(ActionEvent arg0) {
 				BethRenderSettings.setOutlineChars(outlineCharsTick.isSelected());
 			}
 		});
 
 		add(outlineDoorsTick);
-		outlineDoorsTick.addActionListener(new ActionListener()
-		{
+		outlineDoorsTick.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
+			public void actionPerformed(ActionEvent arg0) {
 				BethRenderSettings.setOutlineDoors(outlineDoorsTick.isSelected());
 			}
 		});
 
 		add(outlineContsTick);
-		outlineContsTick.addActionListener(new ActionListener()
-		{
+		outlineContsTick.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
+			public void actionPerformed(ActionEvent arg0) {
 				BethRenderSettings.setOutlineConts(outlineContsTick.isSelected());
 			}
 		});
 
 		add(outlinePartsTick);
-		outlinePartsTick.addActionListener(new ActionListener()
-		{
+		outlinePartsTick.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
+			public void actionPerformed(ActionEvent arg0) {
 				BethRenderSettings.setOutlineParts(outlinePartsTick.isSelected());
 			}
 		});
 
 		add(outlineFocusedTick);
-		outlineFocusedTick.addActionListener(new ActionListener()
-		{
+		outlineFocusedTick.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
+			public void actionPerformed(ActionEvent arg0) {
 				BethRenderSettings.setOutlineFocused(outlineFocusedTick.isSelected());
 			}
 		});
-		
+
 		add(showDebugCellGridTick);
-		showDebugCellGridTick.addActionListener(new ActionListener()
-		{
+		showDebugCellGridTick.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
+			public void actionPerformed(ActionEvent arg0) {
 				BethWorldVisualBranch.SHOW_DEBUG_MAKERS = showDebugCellGridTick.isSelected();
 			}
 		});
-		
-		
-		
+
 	}
 
 }

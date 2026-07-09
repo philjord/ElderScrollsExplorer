@@ -70,6 +70,7 @@ import scrollsexplorer.simpleclient.settings.GraphicsSettingsPanel;
 import scrollsexplorer.simpleclient.settings.MemoryStatusPanel;
 import scrollsexplorer.simpleclient.settings.SetBethFoldersDialog;
 import scrollsexplorer.simpleclient.settings.ShowOutlinesPanel;
+import scrollsexplorer.simpleclient.tes3.JustATorch;
 import scrollsexplorer.simpleclient.tes3.Tes3Extensions;
 import texture.CompressedTextureLoaderExt;
 import tools.io.ConfigLoader;
@@ -154,7 +155,7 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 
 	private boolean							LOAD_ESP_FILES			= false;
 
-	private Tes3Extensions					tes3Extensions;
+	private JustATorch						tes3Extensions; // can be tes3 or otherwise as needed
 
 	public ScrollsExplorer() {
 		super("ScrollsExplorer");
@@ -761,11 +762,18 @@ public class ScrollsExplorer extends JFrame implements BethRenderSettings.Update
 						// I could use the j3dcellfactory now? with the cached cell records?
 						simpleBethCellManager.setSources(selectedGameConfig, esmManager, mediaSources);
 
+						
+						// FIXME: just to see if torches work at all
 						if (selectedGameConfig == GameConfig.allGameConfigs.get(0)) {
 							System.out.println("Adding Tes3 extensions");
 							tes3Extensions = new Tes3Extensions(selectedGameConfig, esmManager, mediaSources,
 									simpleWalkSetup, simpleBethCellManager);
+						} else {
+							System.out.println("Adding just a torch");
+							tes3Extensions = new JustATorch(selectedGameConfig, esmManager, mediaSources,
+									simpleWalkSetup, simpleBethCellManager);
 						}
+						
 						table.loadTableCells(selectedGameConfig, prevCellformid);
 
 						loadSaveGame.setEnabled(true);
