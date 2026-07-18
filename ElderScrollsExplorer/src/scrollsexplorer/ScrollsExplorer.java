@@ -2,8 +2,10 @@ package scrollsexplorer;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -192,6 +194,8 @@ public class ScrollsExplorer
 
 		try {
 			PropertyLoader.load();
+			
+			
 
 			//FIXME: the properties loading should be done by the GlobalGameSettings itself
 			//boolean isAutoLoadLastCell = prefs.getBoolean("isAutoLoadStartCell", false);
@@ -199,10 +203,29 @@ public class ScrollsExplorer
 			GlobalGameSettings.setAutoLoadLastCell(isAutoLoadLastCell);
 			boolean isAutoLoadLastGameConfig = PropertyLoader.getBoolean("isAutoLoadLastGameConfig", false);
 			GlobalGameSettings.setAutoLoadLastGameConfig(isAutoLoadLastGameConfig);
+			
+			
+			 
+			String propValue = PropertyLoader.get("window.main.position", null);
+			if (propValue != null) {
+				int sep = propValue.indexOf(',');
+				int frameX = Integer.parseInt(propValue.substring(0, sep));
+				int frameY = Integer.parseInt(propValue.substring(sep + 1));
+				setLocation(frameX, frameY);
+			}
+			int frameWidth = 800;
+			int frameHeight = 640;
+			propValue = PropertyLoader.get("window.main.size", null);
+			if (propValue != null) {
+				int sep = propValue.indexOf(',');
+				frameWidth = Integer.parseInt(propValue.substring(0, sep));
+				frameHeight = Integer.parseInt(propValue.substring(sep + 1));
+			}			
 
 			this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			this.getContentPane().setLayout(new BorderLayout(1, 1));
-			this.setSize(600, 800);
+			this.setPreferredSize(new Dimension(frameWidth, frameHeight));
+			this.setSize(new Dimension(frameWidth, frameHeight));
 
 			mainPanel.setLayout(new BorderLayout());
 
@@ -501,13 +524,21 @@ public class ScrollsExplorer
 					"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));
 			PropertyLoader.properties.setProperty("CellId" + esmManager.getName(),
 					"" + simpleBethCellManager.getCurrentCellFormId());
+			
 		}
+		 			
+
+		Point p = getLocation();
+		Dimension d = getSize();
+		System.out.println("window.main.position " + p.x + "," + p.y);
+		System.out.println("window.main.size " + d.width + "," + d.height);
+		PropertyLoader.properties.setProperty("window.main.position", "" + p.x + "," + p.y);
+		PropertyLoader.properties.setProperty("window.main.size", "" + d.width + "," + d.height);
+		
+		
 		PropertyLoader.save();
 
-		//FIXME: something is keeping me alive ! started about when I added proper thread pools to bethworld vis loading, but it's not them
-		// maybe there's a thread in the bytebuffer pool code in the sa load?
-		//ArchiveInputStream.pool.close();//no it's not that
-		System.exit(0);
+		//System.exit(0);
 	}
 
 	private void setFolders() {
