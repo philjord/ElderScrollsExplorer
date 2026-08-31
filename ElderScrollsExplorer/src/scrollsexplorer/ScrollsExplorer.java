@@ -31,7 +31,6 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import org.jogamp.java3d.compressedtexture.CompressedTextureLoader;
 import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3f;
 
@@ -188,7 +187,7 @@ public class ScrollsExplorer
 		javaawt.EventQueue.installEventQueueImpl(VMEventQueue.class);
 
 		NiGeometryAppearanceFactoryShader.setAsDefault();
-		CompressedTextureLoader.setAnisotropicFilterDegree(8);
+		CompressedTextureLoaderExt.setAnisotropicFilterDegree(8);
 
 		DynamicsEngine.MAX_SUB_STEPS = 5;
 
@@ -623,7 +622,7 @@ public class ScrollsExplorer
 		} else if (action.equals("convertDDStoKTXMenuItem")) {
 			boolean convertDDStoKTX = e.getStateChange() == ItemEvent.SELECTED;
 			CompressedTextureLoaderETCPackDDS.CONVERT_DDS_TO_ETC2 = convertDDStoKTX;
-			CompressedTextureLoader.clearCache();
+			CompressedTextureLoaderExt.clearCache();
 			PropertyLoader.properties.setProperty("convertDDStoKTX", Boolean.toString(convertDDStoKTX));
 		} else if (action.equals("autoOpenArchiveMenuItem")) {
 			PropertyLoader.properties.setProperty("autoOpenArchive",
