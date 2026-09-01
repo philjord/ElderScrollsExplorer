@@ -54,6 +54,7 @@ import esfilemanager.tes3.MasterFile;
 import esfilemanager.utils.source.EsmSoundKeyToName;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
+import esmj3d.j3d.j3drecords.type.J3dGeneralLIGH;
 import javaawt.VMEventQueue;
 import javaawt.image.VMBufferedImage;
 import javaawt.imageio.VMImageIO;
@@ -707,6 +708,11 @@ public class ScrollsExplorer
 							ScrollsExplorer.this.distanceSettingsPanel.FAR_LOAD_DISTSlider.setValue(4); // for 9x9=81 grids
 							ScrollsExplorer.this.distanceSettingsPanel.NEAR_LOAD_DISTSlider.setValue(2); // for 5x5 25 grids
 							ScrollsExplorer.this.distanceSettingsPanel.LOD_LOAD_DIST_MAXSlider.setValue(32);
+						}
+						
+						if(selectedGameConfig.folderKey.startsWith("FallOut")
+									|| selectedGameConfig.folderKey.startsWith("Starfield")) {
+							J3dGeneralLIGH.lightsFlicker = false;
 						}
 
 						YawPitch yp = YawPitch.parse(PropertyLoader.properties
