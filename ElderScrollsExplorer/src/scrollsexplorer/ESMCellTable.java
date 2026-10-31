@@ -58,8 +58,14 @@ public class ESMCellTable extends JTable {
 				Vector3f trans = new Vector3f();
 
 				// firstly set our location to a door in the newly clicked cell (cos where else is sensible?)
-				ScrollsExplorerNewt.findADoor(cellFormId, scrollsExplorer.getSelectedGameConfig(),
-						scrollsExplorer.getEsmManager(), trans, yp);
+
+				// if we don't have a fixed start point then  need to set Trans to a door somewhere?
+				if (ScrollsExplorerNewt.fixedStartTrans == null) {
+					ScrollsExplorerNewt.findADoor(cellFormId, scrollsExplorer.getSelectedGameConfig(),
+							scrollsExplorer.getEsmManager(), trans, yp);
+				} else {
+					trans.set(ScrollsExplorerNewt.fixedStartTrans);
+				}
 				scrollsExplorer.getSimpleWalkSetup().getAvatarLocation().set(yp.get(new Quat4f()), trans);
 				scrollsExplorer.display(cellFormId);
 
@@ -98,7 +104,7 @@ public class ESMCellTable extends JTable {
 								|| pr.getEditorID().startsWith("TEST") || pr.getEditorID().startsWith("Debug")
 								|| pr.getEditorID().startsWith("zCUT"))
 								continue;
-							
+
 							//Starfield
 							if (pr.getEditorID().startsWith("OE") || pr.getEditorID().startsWith("Overlay"))
 								continue;
@@ -137,7 +143,7 @@ public class ESMCellTable extends JTable {
 								|| pr.getEditorID().startsWith("TEST") || pr.getEditorID().startsWith("Debug")
 								|| pr.getEditorID().startsWith("zCUT"))
 								continue;
-							
+
 							//Starfield
 							if (pr.getEditorID().startsWith("OE") || pr.getEditorID().startsWith("Overlay"))
 								continue;
@@ -164,7 +170,7 @@ public class ESMCellTable extends JTable {
 		} catch (PluginException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		this.getColumnModel().getColumn(0).setPreferredWidth(30);
 		this.getColumnModel().getColumn(1).setMaxWidth(30);
 		this.getColumnModel().getColumn(2).setMaxWidth(60);

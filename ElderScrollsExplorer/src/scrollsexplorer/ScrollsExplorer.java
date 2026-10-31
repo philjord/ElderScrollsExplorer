@@ -1,7 +1,6 @@
 package scrollsexplorer;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -30,6 +29,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3f;
@@ -131,7 +132,7 @@ public class ScrollsExplorer
 
 	public JPanel							buttonPanel			= new JPanel();
 
-	public JPanel							quickEdit			= new JPanel();
+	public JPanel							quickEdit			= new JPanel();											// character location etc
 
 	private JMenu							fileMenu			= new JMenu("File");
 	private JMenu							tableMenu			= new JMenu("Table");
@@ -157,7 +158,20 @@ public class ScrollsExplorer
 
 	private boolean							LOAD_ESP_FILES		= false;
 
-	private JustATorch						tes3Extensions;																// can be tes3 or otherwise as needed
+	private JustATorch						tes3Extensions;
+
+	private JTextField						locField			= new JTextField("0000,0000,0000");
+
+	private JPanel							warpPanel			= new JPanel();
+
+	private JTextField						warpField			= new JTextField("                ");
+
+	private JPanel							fixedstartLocPanel	= new JPanel();
+
+	private JTextField						fixedstartLocField	= new JTextField("                ");
+
+	private long							lastLocationUpdate	= 0;
+	// can be tes3 or otherwise as needed
 
 	public ScrollsExplorer() {
 		super("ScrollsExplorer");
@@ -194,8 +208,6 @@ public class ScrollsExplorer
 
 		try {
 			PropertyLoader.load();
-			
-			
 
 			//FIXME: the properties loading should be done by the GlobalGameSettings itself
 			//boolean isAutoLoadLastCell = prefs.getBoolean("isAutoLoadStartCell", false);
@@ -203,9 +215,7 @@ public class ScrollsExplorer
 			GlobalGameSettings.setAutoLoadLastCell(isAutoLoadLastCell);
 			boolean isAutoLoadLastGameConfig = PropertyLoader.getBoolean("isAutoLoadLastGameConfig", false);
 			GlobalGameSettings.setAutoLoadLastGameConfig(isAutoLoadLastGameConfig);
-			
-			
-			 
+
 			String propValue = PropertyLoader.get("window.main.position", null);
 			if (propValue != null) {
 				int sep = propValue.indexOf(',');
@@ -220,7 +230,7 @@ public class ScrollsExplorer
 				int sep = propValue.indexOf(',');
 				frameWidth = Integer.parseInt(propValue.substring(0, sep));
 				frameHeight = Integer.parseInt(propValue.substring(sep + 1));
-			}			
+			}
 
 			this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			this.getContentPane().setLayout(new BorderLayout(1, 1));
@@ -382,7 +392,9 @@ public class ScrollsExplorer
 			simpleWalkSetup.setAzerty(cbAzertyKB.isSelected());
 			quickEdit.setLayout(new VerticalFlowLayout());
 			quickEdit.add(new TitledPanel("Location", locField));
+			locField.setMinimumSize(new Dimension(400, 20));
 			quickEdit.add(new TitledPanel("Go To", warpPanel));
+			quickEdit.add(new TitledPanel("FixedStartLocation", fixedstartLocPanel));
 			mainPanel.add(buttonPanel, BorderLayout.NORTH);
 			table = new ESMCellTable(this);
 			table.HIDE_WIP_CELLS = cbHideWIPCells.isSelected();
@@ -455,12 +467,13 @@ public class ScrollsExplorer
 
 		warpPanel.setLayout(new FlowLayout());
 		warpPanel.add(warpField);
-		warpField.setSize(200, 20);
+		warpField.setMinimumSize(new Dimension(400, 20));
+		warpField.setSize(400, 20);
 		ActionListener warpActionListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String warp = warpField.getText().trim();
-				String[] parts = warp.split("[^\\d-]+");
+				String[] parts = warp.split("[^\\d-.]+");
 
 				if (parts.length == 3) {
 					simpleWalkSetup.warp(new Vector3f(Float.parseFloat(parts[0]), Float.parseFloat(parts[1]),
@@ -473,6 +486,42 @@ public class ScrollsExplorer
 		warpPanel.add(warpButton);
 		warpButton.addActionListener(warpActionListener);
 
+		fixedstartLocPanel.setLayout(new FlowLayout());
+		fixedstartLocPanel.add(fixedstartLocField);
+		fixedstartLocField.setMinimumSize(new Dimension(400, 20));
+		fixedstartLocField.setSize(400, 20);
+		if (ScrollsExplorerNewt.fixedStartTrans != null) {
+			Vector3f ft = ScrollsExplorerNewt.fixedStartTrans;
+			fixedstartLocField.setText(ft.x + ", " + ft.y + ", " + ft.z);
+		}
+		fixedstartLocField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				update();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				update();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				update();
+			}
+
+			public void update() {
+				String fls = fixedstartLocField.getText().trim();
+				String[] parts = fls.split("[^\\d-.]+");
+
+				if (parts.length == 3) {
+					ScrollsExplorerNewt.fixedStartTrans = new Vector3f(Float.parseFloat(parts[0]),
+							Float.parseFloat(parts[1]), Float.parseFloat(parts[2]));
+				} else {
+					ScrollsExplorerNewt.fixedStartTrans = null;
+				}
+			}
+		});
 		simpleWalkSetup.getAvatarLocation().addAvatarLocationListener(this);
 
 		if (GlobalGameSettings.isAutoLoadLastGameConfig()) {
@@ -485,22 +534,6 @@ public class ScrollsExplorer
 		}
 
 	}
-
-	private JTextField	locField	= new JTextField("0000,0000,0000");
-
-	private JPanel		warpPanel	= new JPanel();
-
-	private JTextField	warpField	= new JTextField("                ");
-
-	public Component getLocField() {
-		return locField;
-	}
-
-	public Component getWarpField() {
-		return warpPanel;
-	}
-
-	private long lastLocationUpdate = 0;
 
 	@Override
 	public void locationUpdated(Quat4f rot, Vector3f trans) {
@@ -524,9 +557,16 @@ public class ScrollsExplorer
 					"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));
 			PropertyLoader.properties.setProperty("CellId" + esmManager.getName(),
 					"" + simpleBethCellManager.getCurrentCellFormId());
-			
+			if (ScrollsExplorerNewt.fixedStartTrans != null) {
+				PropertyLoader.properties.setProperty(
+						"FixLoc" + esmManager.getName(),
+						ScrollsExplorerNewt.fixedStartTrans.x	+ ", "
+															+ ScrollsExplorerNewt.fixedStartTrans.y + ", "
+															+ ScrollsExplorerNewt.fixedStartTrans.z);
+			} else {
+				PropertyLoader.properties.setProperty("FixLoc" + esmManager.getName(), "");
+			}
 		}
-		 			
 
 		Point p = getLocation();
 		Dimension d = getSize();
@@ -534,8 +574,7 @@ public class ScrollsExplorer
 		System.out.println("window.main.size " + d.width + "," + d.height);
 		PropertyLoader.properties.setProperty("window.main.position", "" + p.x + "," + p.y);
 		PropertyLoader.properties.setProperty("window.main.size", "" + d.width + "," + d.height);
-		
-		
+
 		PropertyLoader.save();
 
 		//System.exit(0);
@@ -709,9 +748,9 @@ public class ScrollsExplorer
 							ScrollsExplorer.this.distanceSettingsPanel.NEAR_LOAD_DISTSlider.setValue(2); // for 5x5 25 grids
 							ScrollsExplorer.this.distanceSettingsPanel.LOD_LOAD_DIST_MAXSlider.setValue(32);
 						}
-						
-						if(selectedGameConfig.folderKey.startsWith("FallOut")
-									|| selectedGameConfig.folderKey.startsWith("Starfield")) {
+
+						if (selectedGameConfig.folderKey.startsWith("FallOut")
+							|| selectedGameConfig.folderKey.startsWith("Starfield")) {
 							J3dGeneralLIGH.lightsFlicker = false;
 						}
 
@@ -725,6 +764,18 @@ public class ScrollsExplorer
 
 						if (prevCellformid == -1) {
 							prevCellformid = selectedGameConfig.startCellId;
+						}
+
+						String flString = PropertyLoader.properties.getProperty("FixLoc" + esmManager.getName(), "");
+						String[] parts = flString.split("[^\\d-.]+");
+
+						if (parts.length == 3) {
+							ScrollsExplorerNewt.fixedStartTrans = new Vector3f(Float.parseFloat(parts[0]),
+									Float.parseFloat(parts[1]), Float.parseFloat(parts[2]));
+							fixedstartLocField.setText(flString);
+						} else {
+							ScrollsExplorerNewt.fixedStartTrans = null;
+							PropertyLoader.properties.setProperty("FixLoc" + esmManager.getName(), "");
 						}
 
 						new EsmSoundKeyToName(esmManager);
